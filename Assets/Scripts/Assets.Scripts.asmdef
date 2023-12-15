@@ -1,0 +1,16 @@
+{
+    "name": "Assets.Scripts",
+    "rootNamespace": "",
+    "references": [
+        "GUID:d15875e667ec13246a941984a2ba07ff"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
