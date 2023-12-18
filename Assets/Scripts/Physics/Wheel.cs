@@ -21,9 +21,9 @@ public class Wheel : MonoBehaviour
     }
 
 
-    public void Accelerate(float force)
+    public void AccelerateByTorque(float torqueForce)
     {
-        wheelCollider.motorTorque = force;
+        wheelCollider.motorTorque = torqueForce;
     }
 
     public void Brake(float force)
