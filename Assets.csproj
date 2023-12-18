@@ -43,6 +43,7 @@
   <ItemGroup>
      <Folder Include="Assets" />
      <Folder Include="Assets\External Packages\Farm Assets" />
+     <Folder Include="Assets\Terrain" />
      <Folder Include="Assets\External Packages\3D Icons\Prefabs" />
      <None Include="Assets\Assets.asmdef" />
      <Folder Include="Assets\External Packages\3D Icons" />
@@ -51,12 +52,14 @@
      <Folder Include="Assets\External Packages\Farm Assets\Materials\Alts" />
      <Folder Include="Assets\External Packages\Farm Assets\Materials\Misc" />
      <Folder Include="Assets\External Packages\3D Icons\Materials" />
+     <Folder Include="Assets\Terrain\Ground062S_1K-JPG" />
      <Folder Include="Assets\External Packages\Farm Assets\Materials" />
      <Folder Include="Assets\External Packages\3D Icons\Scenes" />
      <Folder Include="Assets\External Packages\Farm Assets\Prefabs\Plants" />
      <Folder Include="Assets\External Packages\Farm Assets\Models" />
      <Folder Include="Assets\Settings" />
      <Folder Include="Assets\External Packages\Farm Assets\Prefabs\Characters" />
+     <Folder Include="Assets\Materials" />
      <Folder Include="Assets\External Packages\Farm Assets\Prefabs\Props" />
      <Folder Include="Assets\External Packages\Farm Assets\Models\CollisionConvex" />
      <Folder Include="Assets\My Prefabs" />
@@ -67,6 +70,10 @@
      <Folder Include="Assets\External Packages\Farm Assets\Prefabs\FX" />
      <Folder Include="Assets\Scenes" />
      <Folder Include="Assets\External Packages\3D Icons\Models" />
+     <Folder Include="Assets\UI\UI Futuristic" />
+     <Folder Include="Assets\Terrain\Grass" />
+     <Folder Include="Assets\UI\UI Buttons and Dialogs" />
+     <Folder Include="Assets\UI" />
      <Folder Include="Assets\External Packages\Farm Assets\Prefabs\Buildings" />
      <Folder Include="Assets\External Packages\Farm Assets\Models\CollisionCustom" />
      <Folder Include="Assets\External Packages\Farm Assets\Prefabs" />

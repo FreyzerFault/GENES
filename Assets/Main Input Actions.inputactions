@@ -1,5 +1,5 @@
 {
-    "name": "Vehicle Input Actions",
+    "name": "Main Input Actions",
     "maps": [
         {
             "name": "Tractor",
@@ -185,6 +185,154 @@
                     "processors": "",
                     "groups": "",
                     "action": "Brake",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "Camera",
+            "id": "dbc75dac-cf5a-4768-9c0e-eda28f6c826e",
+            "actions": [
+                {
+                    "name": "Next Camera",
+                    "type": "Button",
+                    "id": "620a15c3-8f1e-4ebc-80ca-ccf0d6634add",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Cam 1",
+                    "type": "Button",
+                    "id": "9329f8fd-af4c-432e-8f4c-61d5f4863e93",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Cam 2",
+                    "type": "Button",
+                    "id": "e66572cb-f1af-45e3-b690-60fd05227f0b",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Cam 3",
+                    "type": "Button",
+                    "id": "7840120d-4f24-4b81-b197-e3f46dc78537",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Cam 4",
+                    "type": "Button",
+                    "id": "64470ce3-e72b-46c9-8aa0-b45ad60eb657",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Cam 5",
+                    "type": "Button",
+                    "id": "1a8d3ab7-1c7d-4d25-bd7d-eb9cb79bed9c",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Cam 6",
+                    "type": "Button",
+                    "id": "3a1b8f26-d5e5-4d54-8ad5-8840cdfdf6b9",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "d4359dd3-fb7e-4a0c-87a9-c0edbbd0bef7",
+                    "path": "<Keyboard>/tab",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Next Camera",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "3de73611-532a-4186-9afb-16d511818f68",
+                    "path": "<Keyboard>/1",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Cam 1",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "9d3323f5-a6aa-4c4d-b047-8742cced9a77",
+                    "path": "<Keyboard>/2",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Cam 2",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f91354a2-ad8e-47b5-b173-21d7d7d25ed6",
+                    "path": "<Keyboard>/3",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Cam 3",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "5fd0f46b-4896-41a0-8794-8f42ef62ee99",
+                    "path": "<Keyboard>/4",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Cam 4",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e9e16378-0bad-400e-beb1-c2d083278f0a",
+                    "path": "<Keyboard>/5",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Cam 5",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e81fd887-d581-4c61-81ac-d2acb72110f0",
+                    "path": "<Keyboard>/6",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Cam 6",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
