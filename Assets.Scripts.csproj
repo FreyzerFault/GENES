@@ -47,6 +47,7 @@
   <ItemGroup>
      <Compile Include="Assets\Scripts\Utils\Singleton.cs" />
      <Compile Include="Assets\Scripts\GameManager.cs" />
+     <Compile Include="Assets\Scripts\CameraManager.cs" />
      <None Include="Assets\Scripts\Assets.Scripts.asmdef" />
      <Folder Include="Assets\Scripts" />
      <Folder Include="Assets\Scripts\Utils" />
