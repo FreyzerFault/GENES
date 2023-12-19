@@ -714,6 +714,10 @@
      </Reference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="Assets.csproj">
+      <Project>{fc483a6a-6a5c-9bcb-9cad-1ef50cf04080}</Project>
+      <Name>Assets</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

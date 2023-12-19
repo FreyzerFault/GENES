@@ -1,46 +1,117 @@
+using EditorCools;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class Minimap : MonoBehaviour
 {
-    [SerializeField] private Vector2 mapRes = new(512, 512);
+    public float zoomScale = 2;
+    public Gradient heightGradient = new();
+
+    [SerializeField] private RectTransform debugSprite1;
+    [SerializeField] private RectTransform debugSprite2;
+
+    [SerializeField] private GameObject player;
     private RawImage _image;
-    private Terrain _terrain;
+    private RectTransform _playerPointInMap;
+    private TerrainData _terrainData;
+
+    private float Width => _image.rectTransform.rect.width;
+    private float Height => _image.rectTransform.rect.height;
+
+    private Vector3 MapCeroCero => new(
+        _image.rectTransform.position.x - Width / 4,
+        _image.rectTransform.position.y - Height / 4,
+        0
+    );
+
+    private Vector3 LocalPlayerPosInMap => new(
+        player.transform.position.x / _terrainData.size.x * Width / 4,
+        player.transform.position.z / _terrainData.size.z * Height / 4,
+        0
+    );
 
     private void Awake()
     {
-        _terrain = FindObjectOfType<Terrain>();
-        _image = GetComponent<RawImage>();
-
-        RenderTerrain();
+        _terrainData ??= FindObjectOfType<Terrain>().terrainData;
+        _image ??= GetComponent<RawImage>();
+        UpdateMap();
     }
 
+    private void Update()
+    {
+        UpdatePlayerPoint();
+        ZoomToPlayer();
+    }
+
+
+    [Button("Update Map")]
+    private void UpdateMap()
+    {
+        RenderTerrain();
+        ZoomToPlayer();
+        UpdatePlayerPoint();
+    }
+
+
+    [Button("Update Player Point")]
+    private void UpdatePlayerPoint()
+    {
+        player ??= GameObject.FindGameObjectWithTag("Player");
+        _playerPointInMap = GetComponentInChildren<Image>().rectTransform;
+
+        var rotationAngle = 90 + player.transform.eulerAngles.y;
+        _playerPointInMap.SetPositionAndRotation(MapCeroCero + LocalPlayerPosInMap,
+            Quaternion.AngleAxis(rotationAngle, Vector3.back));
+    }
+
+    [Button("Zoom to PLayer")]
+    private void ZoomToPlayer()
+    {
+        _terrainData ??= FindObjectOfType<Terrain>().terrainData;
+        _image ??= GetComponent<RawImage>();
+
+        // Centrar el Player en el centro
+        var playerToCenter = new Vector3(Width / 2, Height / 2, 0) - LocalPlayerPosInMap;
+        _image.rectTransform.anchoredPosition = new Vector3(
+            playerToCenter.x, playerToCenter.y, transform.position.z
+        );
+
+        debugSprite1.transform.position = _image.rectTransform.position +
+                                          new Vector3(_image.rectTransform.anchoredPosition.x,
+                                              _image.rectTransform.anchoredPosition.y, 0);
+        debugSprite2.transform.position =
+            _image.rectTransform.position;
+
+        // Escalar el mapa relativo al centro donde está el Player
+        _image.rectTransform.localScale = new Vector3(zoomScale, zoomScale, 1);
+
+        // var zoomCornerNormalized = (playerInMapLocalPos - MapResZoomed / 2) / MapResZoomed;
+        // zoomCornerNormalized.y = 1 - zoomCornerNormalized.y;
+        // var zoomRect = new Rect(zoomCornerNormalized, new Vector2(zoom, zoom));
+        // _image.uvRect = zoomRect;
+    }
+
+    [Button("Render Terrain")]
     private void RenderTerrain()
     {
-        var terrainData = _terrain.terrainData;
+        var terrainData = _terrainData;
         var width = terrainData.size.x;
         var height = terrainData.size.z;
-        var heightMap = terrainData.GetHeights(0, 0, (int)mapRes.x, (int)mapRes.y);
+        var heightMap = terrainData.GetHeights(0, 0, (int)Width, (int)Height);
 
         // Heightmap to Texture
-        var texture = new Texture2D((int)mapRes.x, (int)mapRes.y);
+        var texture = new Texture2D((int)Width, (int)Height);
         MinMaxHeight(heightMap, terrainData.size.y, out var min, out var max);
 
-        for (var y = 0; y < mapRes.y; y++)
-        for (var x = 0; x < mapRes.x; x++)
+
+        for (var y = 0; y < Height; y++)
+        for (var x = 0; x < Width; x++)
         {
-            var heightValue = heightMap[x, y];
+            var heightValue = heightMap[y, x];
             var heightNormalized = Mathf.InverseLerp(min, max, heightValue);
 
             // texture.SetPixel(x, y, new Color(heightNormalized, heightNormalized, heightNormalized, 1));
-            if (heightNormalized > 0.5)
-                texture.SetPixel(x, y, Color.Lerp(new Color(73, 36, 36), Color.black, heightNormalized));
-            else if (heightNormalized > 0.2)
-                texture.SetPixel(x, y, Color.Lerp(Color.green, new Color(73, 36, 36), heightNormalized));
-            else if (heightNormalized > 0.1)
-                texture.SetPixel(x, y, Color.Lerp(Color.blue, Color.green, heightNormalized));
-            else
-                texture.SetPixel(x, y, Color.Lerp(Color.cyan, Color.blue, heightNormalized));
+            texture.SetPixel(x, y, heightGradient.Evaluate(heightNormalized));
         }
 
         texture.Apply();
@@ -57,24 +128,6 @@ public class Minimap : MonoBehaviour
         {
             max = Mathf.Max(height, max);
             min = Mathf.Min(height, min);
-        }
-    }
-
-    // Max & Min Components of Color
-    private void MinMaxColorComponents(Color[] colorData, out Color min, out Color max)
-    {
-        max = new Color(0, 0, 0, 0);
-        min = new Color(255, 255, 255, 255);
-        foreach (var color in colorData)
-        {
-            max.r = Mathf.Max(color.r, max.r);
-            max.g = Mathf.Max(color.g, max.g);
-            max.b = Mathf.Max(color.b, max.b);
-            max.a = Mathf.Max(color.a, max.a);
-            min.r = Mathf.Min(color.r, min.r);
-            min.g = Mathf.Min(color.g, min.g);
-            min.b = Mathf.Min(color.b, min.b);
-            min.a = Mathf.Min(color.a, min.a);
         }
     }
 }
