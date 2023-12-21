@@ -6,13 +6,13 @@ public class MapController : MonoBehaviour
     [SerializeField] private GameObject minimapParent;
     [SerializeField] private GameObject fullScreenMapParent;
 
-    [SerializeField] private Minimap minimap;
-    [SerializeField] private Minimap fullScreenMap;
+    [SerializeField] private MapRenderer minimap;
+    [SerializeField] private MapRenderer fullscreenMap;
 
     private void Awake()
     {
-        minimap = minimapParent.GetComponentInChildren<Minimap>();
-        fullScreenMap = fullScreenMapParent.GetComponentInChildren<Minimap>();
+        minimap = minimapParent.GetComponentInChildren<MapRenderer>();
+        fullscreenMap = fullScreenMapParent.GetComponentInChildren<MapRenderer>();
     }
 
     // INPUTS

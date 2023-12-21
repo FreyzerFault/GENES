@@ -3,8 +3,8 @@ using UnityEngine;
 
 public class CameraManager : MonoBehaviour
 {
+    [SerializeField] private CinemachineVirtualCamera[] _cams;
     private ICinemachineCamera _activeCam;
-    private CinemachineVirtualCamera[] _cams;
     private int _currentCamIndex;
 
     private void Awake()
@@ -38,31 +38,31 @@ public class CameraManager : MonoBehaviour
 
     private void OnCam1()
     {
-        ChangeToCam(1);
+        ChangeToCam(0);
     }
 
     private void OnCam2()
     {
-        ChangeToCam(2);
+        ChangeToCam(1);
     }
 
     private void OnCam3()
     {
-        ChangeToCam(3);
+        ChangeToCam(2);
     }
 
     private void OnCam4()
     {
-        ChangeToCam(4);
+        ChangeToCam(3);
     }
 
     private void OnCam5()
     {
-        ChangeToCam(5);
+        ChangeToCam(4);
     }
 
     private void OnCam6()
     {
-        ChangeToCam(6);
+        ChangeToCam(5);
     }
 }

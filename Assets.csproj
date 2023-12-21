@@ -50,6 +50,7 @@
      <Compile Include="Assets\EditorCools\DropdownStringAttribute\Editor\DropdownAttributePropertyDrawer.cs" />
      <Compile Include="Assets\EditorCools\InspectorButton\ButtonAttribute.cs" />
      <Compile Include="Assets\EditorCools\InspectorButton\Editor\ObjectEditor.cs" />
+     <Compile Include="Assets\UI\ImageChangeColor.cs" />
      <Compile Include="Assets\EditorCools\InspectorButton\Editor\ButtonsDrawer.cs" />
      <Compile Include="Assets\EditorCools\Vector2MinMax\MinMaxSliderAttribute.cs" />
      <Compile Include="Assets\EditorCools\DropdownStringAttribute\DropdownAttribute.cs" />
