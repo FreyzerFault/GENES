@@ -337,6 +337,96 @@
                     "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "Map",
+            "id": "ff1c7dcd-b09d-4dda-bad4-63ea46e6ae01",
+            "actions": [
+                {
+                    "name": "Toggle Map",
+                    "type": "Button",
+                    "id": "aed4cab0-3a1c-43c9-b3ea-d8cbc1a853df",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Zoom In Out",
+                    "type": "Value",
+                    "id": "c7228b88-f1d0-4367-b923-61cfa9bb102a",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "Draw Point",
+                    "type": "Value",
+                    "id": "be3575ad-9ae1-417f-b7bd-efe32b2e4fc1",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "2cb1707e-f9d4-474f-b0b0-f39e8775a4cc",
+                    "path": "<Keyboard>/m",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Toggle Map",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "In Out",
+                    "id": "1e7ed069-cc21-4f99-b859-2c0aecd875a1",
+                    "path": "1DAxis",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Zoom In Out",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "negative",
+                    "id": "000270e8-e75c-4dc5-9988-5911f82b565d",
+                    "path": "<Keyboard>/#(-)",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Zoom In Out",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "positive",
+                    "id": "3ce8589a-02e9-48d9-a795-9590cefbca4c",
+                    "path": "<Keyboard>/#(`+)",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Zoom In Out",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "98db20e3-8062-4c20-a373-cddddcd06362",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Draw Point",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": []

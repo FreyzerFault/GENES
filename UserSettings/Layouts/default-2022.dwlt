@@ -43,7 +43,7 @@ MonoBehaviour:
     width: 1600
     height: 817
   m_ShowMode: 4
-  m_Title: Hierarchy
+  m_Title: Scene
   m_RootView: {fileID: 11}
   m_MinSize: {x: 875, y: 300}
   m_MaxSize: {x: 10000, y: 10000}
@@ -124,7 +124,7 @@ MonoBehaviour:
   m_MinSize: {x: 100, y: 100}
   m_MaxSize: {x: 8096, y: 16192}
   vertical: 1
-  controlID: 20
+  controlID: 68
 --- !u!114 &6
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -149,7 +149,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 100}
   m_MaxSize: {x: 16192, y: 16192}
   vertical: 0
-  controlID: 102
+  controlID: 103
 --- !u!114 &7
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -251,7 +251,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 100}
   m_MaxSize: {x: 16192, y: 16192}
   vertical: 1
-  controlID: 101
+  controlID: 102
 --- !u!114 &11
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -348,7 +348,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 50}
   m_MaxSize: {x: 24288, y: 8096}
   vertical: 0
-  controlID: 160
+  controlID: 161
 --- !u!114 &15
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -732,9 +732,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: 203.15167, y: 677.4609, z: -158.67587}
+    m_Target: {x: 191.5615, y: 673.60913, z: 0}
     speed: 2
-    m_Value: {x: 203.15167, y: 677.4609, z: -158.67587}
+    m_Value: {x: 577.2012, y: 426.0942, z: -1.4037781}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -780,17 +780,17 @@ MonoBehaviour:
     m_GridAxis: 1
     m_gridOpacity: 0.5
   m_Rotation:
-    m_Target: {x: 0.2594608, y: 0.015934886, z: -0.004280886, w: 0.96561664}
+    m_Target: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
     speed: 2
-    m_Value: {x: 0.25945982, y: 0.015934825, z: -0.00428087, w: 0.96561295}
+    m_Value: {x: 0.70710665, y: -0.000000012371562, z: 1.4846553e-10, w: 0.707107}
   m_Size:
-    m_Target: 200.44121
+    m_Target: 210.47867
     speed: 2
-    m_Value: 200.44121
+    m_Value: 256.1249
   m_Ortho:
-    m_Target: 1
+    m_Target: 0
     speed: 2
-    m_Value: 1
+    m_Value: 0
   m_CameraSettings:
     m_Speed: 1.2403798
     m_SpeedNormalized: 0.6199999
@@ -954,7 +954,7 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/UI/UI Buttons and Dialogs/PNG
+    - Assets/UI
     m_Globs: []
     m_OriginalText: 
     m_ImportLogFlags: 0
@@ -962,16 +962,16 @@ MonoBehaviour:
   m_ViewMode: 1
   m_StartGridSize: 82
   m_LastFolders:
-  - Assets/UI/UI Buttons and Dialogs/PNG
+  - Assets/UI
   m_LastFoldersGridSize: 82
   m_LastProjectPath: C:\Users\dalcanta\Unity Projects\Proyecto Campo
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: 507c0000
-    m_LastClickedID: 31824
-    m_ExpandedIDs: 00000000f8750000fa750000fc750000fe7500001c760000d677000000ca9a3b
+    m_SelectedIDs: 64760000
+    m_LastClickedID: 30308
+    m_ExpandedIDs: 0000000046760000487600004a760000647600009a9e000000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -999,7 +999,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 00000000f8750000fa750000fc750000fe75000000760000
+    m_ExpandedIDs: 0000000046760000487600004a760000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1051,7 +1051,7 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
     m_NewAssetIndexInList: -1
-    m_ScrollPosition: {x: 0, y: 2040}
+    m_ScrollPosition: {x: 0, y: 0}
     m_GridSize: 82
   m_SkipHiddenPackages: 0
   m_DirectoriesAreaWidth: 183
@@ -1125,8 +1125,8 @@ MonoBehaviour:
     m_OverlaysVisible: 1
   m_ActionMapsTreeState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: e5f0c050
-    m_LastClickedID: 1354821861
+    m_SelectedIDs: acff0b59
+    m_LastClickedID: 1493958572
     m_ExpandedIDs: 00000000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
@@ -1147,8 +1147,8 @@ MonoBehaviour:
     m_SearchString: 
   m_ActionsTreeState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: 8472318e
-    m_LastClickedID: -1909362044
+    m_SelectedIDs: 1a346ea8
+    m_LastClickedID: -1469172710
     m_ExpandedIDs: f16c4ea2c40f553b1209224ae5f0c050a1210e67
     m_RenameOverlay:
       m_UserAcceptedRename: 0
@@ -1171,7 +1171,7 @@ MonoBehaviour:
     m_AdvancedDropdownState:
       states:
       - itemId: 371857150
-        selectedIndex: 2
+        selectedIndex: 4
         scroll: {x: 0, y: 0}
       - itemId: -582599340
         selectedIndex: -1
@@ -1207,6 +1207,27 @@ MonoBehaviour:
         selectedIndex: -1
         scroll: {x: 0, y: 0}
       - itemId: 998472819
+        selectedIndex: -1
+        scroll: {x: 0, y: 0}
+      - itemId: -1184013745
+        selectedIndex: -1
+        scroll: {x: 0, y: 0}
+      - itemId: -376880915
+        selectedIndex: 3
+        scroll: {x: 0, y: 0}
+      - itemId: -630248049
+        selectedIndex: -1
+        scroll: {x: 0, y: 0}
+      - itemId: 1899133596
+        selectedIndex: -1
+        scroll: {x: 0, y: 0}
+      - itemId: -1542029941
+        selectedIndex: 8
+        scroll: {x: 0, y: 81.5}
+      - itemId: -1155931529
+        selectedIndex: -1
+        scroll: {x: 0, y: 0}
+      - itemId: 1976236353
         selectedIndex: -1
         scroll: {x: 0, y: 0}
     m_ManualPathEditMode: 0
@@ -1367,6 +1388,45 @@ MonoBehaviour:
       \"path\": \"<Keyboard>/6\",\n                    \"interactions\": \"\",\n                   
       \"processors\": \"\",\n                    \"groups\": \"\",\n                   
       \"action\": \"Cam 6\",\n                    \"isComposite\": false,\n                   
+      \"isPartOfComposite\": false\n                }\n            ]\n        },\n       
+      {\n            \"name\": \"Map\",\n            \"id\": \"ff1c7dcd-b09d-4dda-bad4-63ea46e6ae01\",\n           
+      \"actions\": [\n                {\n                    \"name\": \"Toggle Map\",\n                   
+      \"type\": \"Button\",\n                    \"id\": \"aed4cab0-3a1c-43c9-b3ea-d8cbc1a853df\",\n                   
+      \"expectedControlType\": \"Button\",\n                    \"processors\": \"\",\n                   
+      \"interactions\": \"\",\n                    \"initialStateCheck\": false\n               
+      },\n                {\n                    \"name\": \"Zoom In Out\",\n                   
+      \"type\": \"Value\",\n                    \"id\": \"c7228b88-f1d0-4367-b923-61cfa9bb102a\",\n                   
+      \"expectedControlType\": \"Button\",\n                    \"processors\": \"\",\n                   
+      \"interactions\": \"\",\n                    \"initialStateCheck\": true\n               
+      },\n                {\n                    \"name\": \"Draw Point\",\n                   
+      \"type\": \"Value\",\n                    \"id\": \"be3575ad-9ae1-417f-b7bd-efe32b2e4fc1\",\n                   
+      \"expectedControlType\": \"Button\",\n                    \"processors\": \"\",\n                   
+      \"interactions\": \"\",\n                    \"initialStateCheck\": true\n               
+      }\n            ],\n            \"bindings\": [\n                {\n                   
+      \"name\": \"\",\n                    \"id\": \"2cb1707e-f9d4-474f-b0b0-f39e8775a4cc\",\n                   
+      \"path\": \"<Keyboard>/m\",\n                    \"interactions\": \"\",\n                   
+      \"processors\": \"\",\n                    \"groups\": \"\",\n                   
+      \"action\": \"Toggle Map\",\n                    \"isComposite\": false,\n                   
+      \"isPartOfComposite\": false\n                },\n                {\n                   
+      \"name\": \"In Out\",\n                    \"id\": \"1e7ed069-cc21-4f99-b859-2c0aecd875a1\",\n                   
+      \"path\": \"1DAxis\",\n                    \"interactions\": \"\",\n                   
+      \"processors\": \"\",\n                    \"groups\": \"\",\n                   
+      \"action\": \"Zoom In Out\",\n                    \"isComposite\": true,\n                   
+      \"isPartOfComposite\": false\n                },\n                {\n                   
+      \"name\": \"negative\",\n                    \"id\": \"000270e8-e75c-4dc5-9988-5911f82b565d\",\n                   
+      \"path\": \"<Keyboard>/#(-)\",\n                    \"interactions\": \"\",\n                   
+      \"processors\": \"\",\n                    \"groups\": \"\",\n                   
+      \"action\": \"Zoom In Out\",\n                    \"isComposite\": false,\n                   
+      \"isPartOfComposite\": true\n                },\n                {\n                   
+      \"name\": \"positive\",\n                    \"id\": \"3ce8589a-02e9-48d9-a795-9590cefbca4c\",\n                   
+      \"path\": \"<Keyboard>/#(`+)\",\n                    \"interactions\": \"\",\n                   
+      \"processors\": \"\",\n                    \"groups\": \"\",\n                   
+      \"action\": \"Zoom In Out\",\n                    \"isComposite\": false,\n                   
+      \"isPartOfComposite\": true\n                },\n                {\n                   
+      \"name\": \"\",\n                    \"id\": \"98db20e3-8062-4c20-a373-cddddcd06362\",\n                   
+      \"path\": \"<Mouse>/leftButton\",\n                    \"interactions\": \"\",\n                   
+      \"processors\": \"\",\n                    \"groups\": \"\",\n                   
+      \"action\": \"Draw Point\",\n                    \"isComposite\": false,\n                   
       \"isPartOfComposite\": false\n                }\n            ]\n        }\n   
       ],\n    \"controlSchemes\": []\n}"
     m_IsDirty: 0
@@ -1421,9 +1481,9 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 
-      m_LastClickedID: 0
-      m_ExpandedIDs: 36d9f8ff0ae1f8ffcae4f8fff02af9fffafaffff62740000b8740000c6740000d6740000
+      m_SelectedIDs: 2e750000
+      m_LastClickedID: 29998
+      m_ExpandedIDs: f8a5fffffaa5ffff06bcffff08bcfffffafaffff76740000da740000e4740000fe7400000e75000014750000
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
