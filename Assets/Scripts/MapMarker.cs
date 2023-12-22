@@ -1,38 +1,34 @@
+using JetBrains.Annotations;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class MapMarker : MonoBehaviour
+public class MapMarker
 {
-    [SerializeField] private TMP_Text label;
-    [SerializeField] private Image markerSprite;
+    private readonly Color defaultColor = Color.white;
+    public Color color;
 
-    public Color Color => markerSprite.color;
-    public string LabelText => label.text;
+    public string labelText;
 
-    private void Awake()
+    public Vector2 normalizedPosition;
+    public Vector3 worldPosition;
+
+    public MapMarker(Vector2 normalizedPosition, Vector3 worldPosition, [CanBeNull] string label, Color? color = null)
     {
-        label ??= GetComponentInChildren<TMP_Text>();
-        markerSprite ??= GetComponentInChildren<Image>();
+        this.normalizedPosition = normalizedPosition;
+        this.worldPosition = worldPosition;
+        this.color = color ?? defaultColor;
+        labelText = label ?? worldPosition.ToString();
     }
 
-    public void SetMarkerColor(Color color)
+    public void UpdateMarkerUI(GameObject markerUI)
     {
-        markerSprite.color = color;
-    }
+        // Set Color & Label of Marker
+        var sprite = markerUI.GetComponentInChildren<Image>();
+        var label = markerUI.GetComponentInChildren<TMP_Text>();
 
-    public void SetLabelText(string text)
-    {
-        label.text = text;
-    }
-
-    public void SetLabelColor(Color color)
-    {
+        sprite.color = color;
         label.color = color;
-    }
-
-    public void ToggleLabel()
-    {
-        label.gameObject.SetActive(!label.gameObject.activeSelf);
+        label.text = labelText;
     }
 }

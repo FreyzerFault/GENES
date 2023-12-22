@@ -48,6 +48,7 @@
      <Compile Include="Assets\Scripts\Utils\Singleton.cs" />
      <Compile Include="Assets\Scripts\MapMarkerGenerator.cs" />
      <Compile Include="Assets\Scripts\Map Controller.cs" />
+     <Compile Include="Assets\Scripts\HeightMap.cs" />
      <Compile Include="Assets\Scripts\MapMarker.cs" />
      <Compile Include="Assets\Scripts\GameManager.cs" />
      <Compile Include="Assets\Scripts\CameraManager.cs" />
@@ -726,6 +727,10 @@
     <ProjectReference Include="Assets.csproj">
       <Project>{fc483a6a-6a5c-9bcb-9cad-1ef50cf04080}</Project>
       <Name>Assets</Name>
+    </ProjectReference>
+    <ProjectReference Include="Assets.ExternalPackages.csproj">
+      <Project>{f87886c9-513b-8dc8-0583-172d83e79925}</Project>
+      <Name>Assets.ExternalPackages</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
