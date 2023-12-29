@@ -1,16 +1,18 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using EditorCools;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 using UnityEngine.UI.Extensions;
 using Gradient = UnityEngine.Gradient;
 
 namespace Map
 {
-    public class MapRenderer : MonoBehaviour, IPointerMoveHandler, IPointerClickHandler
+    public class MapRenderer : MonoBehaviour, IPointerMoveHandler, IPointerClickHandler, IPointerExitHandler, IPointerEnterHandler
     {
         [SerializeField] private HeightMap map;
 
@@ -19,9 +21,13 @@ namespace Map
 
         // MARKERS
         [SerializeField] private bool removeMarkersMode;
+        public bool RemoveMarkersMode
+        {
+            get => removeMarkersMode;
+            set => removeMarkersMode = value;
+        }
 
-        [SerializeField] private MapMarkerGenerator markerGenerator;
-        [SerializeField] private GameObject markerPrefab;
+        [FormerlySerializedAs("markerGenerator")] [SerializeField] private MapMarkerManager markerManager;
         [SerializeField] private Transform parentUI;
 
         // LINE
@@ -32,7 +38,7 @@ namespace Map
         [SerializeField] private RectTransform mouseLabel;
 
         private RawImage _image;
-        private RectTransform _playerSprite;
+        [SerializeField] private RectTransform _playerSprite;
 
 
         private float ImageWidth => _image.rectTransform.rect.width;
@@ -48,6 +54,7 @@ namespace Map
             }
         }
 
+        // ================================== UNITY ==================================
         private void Awake()
         {
             Initialize();
@@ -63,20 +70,27 @@ namespace Map
         // ================================== MOUSE EVENTS ==================================
         public void OnPointerClick(PointerEventData eventData)
         {
+            // Posicion de 0 a 1
             var normalizedPosition = GetNormalizedPosition(eventData.position);
 
             if (removeMarkersMode)
-            {
-                var marker = markerGenerator.RemovePoint(normalizedPosition);
-                if (marker != null) UpdateMarkersInUI();
-            }
+                RemoveMarker(normalizedPosition);
             else
-            {
                 // Añade o Selecciona un punto
-                markerGenerator.AddPoint(normalizedPosition, out MapMarker marker, out _, out _, out bool collision);
-                
-                UpdateMarkersInUI();
-            }
+                AddOrSelectMarker(normalizedPosition);
+        }
+        
+        
+        public void OnPointerEnter(PointerEventData eventData)
+        {
+            mouseLabel.gameObject.SetActive(true);
+            mouseCursorMarker.gameObject.SetActive(true);
+        }
+
+        public void OnPointerExit(PointerEventData eventData)
+        {
+            mouseLabel.gameObject.SetActive(false);
+            mouseCursorMarker.gameObject.SetActive(false);
         }
 
         public void OnPointerMove(PointerEventData eventData)
@@ -85,6 +99,8 @@ namespace Map
             if (mouseCursorMarker != null)
                 mouseCursorMarker.position = eventData.position;
         }
+        
+        // ================================== INITIALIZATION ==================================
 
 
         private void Initialize()
@@ -147,57 +163,66 @@ namespace Map
 
 
         // ================================== MARKERS ==================================
-        public void ToggleMarkers(bool value)
-        {
-            parentUI.gameObject.SetActive(value);
-        }
 
-        public void SetRemoveMode(bool value)
+        private void AddOrSelectMarker(Vector2 normalizedPos)
         {
-            removeMarkersMode = value;
-        }
+            markerManager.AddPoint(normalizedPos, out MapMarkerData markerData, out bool collision);
 
-        public void ClearAllPoints()
+            if (collision)
+            {
+                // TODO - Seleccionar Marker
+            }
+            else
+                UpdateMarkers();
+        }
+        
+        private void RemoveMarker(Vector2 normalizedPos)
         {
-            foreach (Transform markerUI in parentUI) Destroy(markerUI.gameObject);
-            List<Vector2> pointList = new List<Vector2>(lineRenderer.Points);
-            pointList.Clear();
-            lineRenderer.Points = pointList.ToArray();
-            markerGenerator.ClearAllPoints();
+            var marker = markerManager.RemovePoint(normalizedPos);
+            if (marker != null) UpdateMarkers();
         }
+        
+        private void ClearMarkers() => GetComponentsInChildren<MapMarker>().ToList().ForEach(marker => Destroy(marker.gameObject));
 
-        // RENDER MARKERS
-        private void UpdateMarkersInUI()
+        public void UpdateMarkers()
         {
             // Clear Markers UI
-            foreach (Transform child in parentUI) Destroy(child.gameObject);
+            ClearMarkers();
 
-            Vector2 imageSize = GetComponent<RectTransform>().rect.size;
-            for (int i = 0; i < markerGenerator.MarkerPoints.Count; i++)
+            // Se instancian de nuevo
+            // Y se actualizan sus etiquetas en orden
+            for (int i = 0; i < markerManager.Markers.Count; i++)
             {
-                MapMarker marker = markerGenerator.MarkerPoints[i];
+                MapMarkerData marker = markerManager.Markers[i];
                 marker.labelText = $"{i} - {marker.worldPosition}";
-                GameObject markerUIObj = Instantiate(markerPrefab, parentUI);
-                markerUIObj.GetComponent<RectTransform>().localPosition = GetPointInMap(marker.normalizedPosition);
-                marker.UpdateMarkerUI(markerUIObj);
+                InstantiateMarker(marker);
             }
 
             UpdateLine();
         }
 
+        private void InstantiateMarker(MapMarkerData markerData)
+        {
+            MapMarker marker = Instantiate(markerManager.MarkerPrefab, parentUI).GetComponent<MapMarker>();
+            marker.SetData(markerData);
+            marker.GetComponent<RectTransform>().localPosition = GetLocalPointInMap(markerData.normalizedPosition);
+        }
+        
+        public void ToggleMarkers(bool value) => parentUI.gameObject.SetActive(value);
+
+
         // ================================== LINE RENDERER ==================================
-        private void UpdateLine()
+        private void ClearLine()
         {
             List<Vector2> pointList = new List<Vector2>(lineRenderer.Points);
             pointList.Clear();
             lineRenderer.Points = pointList.ToArray();
-            
-            markerGenerator.MarkerPoints.ForEach(marker =>
-            {
-                pointList.Add(GetPointInMap(marker.normalizedPosition));
-            });
-            
-            lineRenderer.Points = pointList.ToArray();
+        }
+        private void UpdateLine()
+        {
+            lineRenderer.Points = markerManager.Markers.ConvertAll(
+                    marker => GetLocalPointInMap(marker.normalizedPosition)
+                ).ToArray();
         }
         
         // ================================== UTILS ==================================
@@ -208,13 +233,13 @@ namespace Map
             return (localPos + ImageSize / 2) / ImageSize;
         }
 
-        private Vector2 GetPointInMap(Vector2 normalizedPos)
+        private Vector2 GetLocalPointInMap(Vector2 normalizedPos)
         {
             Vector2 imageSize = GetComponent<RectTransform>().rect.size;
             return (normalizedPos - new Vector2(0.5f, 0.5f)) * imageSize;
         }
 
-        // ================================== BUTTONS ==================================
+        // ================================== BUTTONS on INSPECTOR ==================================
         [Button("Update Map")]
         private void UpdateMapButton()
         {
@@ -245,5 +270,6 @@ namespace Map
             Initialize();
             RenderTerrain();
         }
+
     }
 }

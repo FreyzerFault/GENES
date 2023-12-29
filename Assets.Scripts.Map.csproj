@@ -48,8 +48,8 @@
     <Compile Include="Assets\Scripts\Map\MapRenderer.cs" />
     <Compile Include="Assets\Scripts\Map\MapMarker.cs" />
     <Compile Include="Assets\Scripts\Map\HeightMap.cs" />
+    <Compile Include="Assets\Scripts\Map\MapMarkerManager.cs" />
     <Compile Include="Assets\Scripts\Map\Map Controller.cs" />
-    <Compile Include="Assets\Scripts\Map\MapMarkerGenerator.cs" />
     <None Include="Assets\Scripts\Map\Assets.Scripts.Map.asmdef" />
     <Reference Include="UnityEngine">
       <HintPath>C:\Program Files\Unity\Hub\Editor\2022.3.16f1\Editor\Data\Managed\UnityEngine\UnityEngine.dll</HintPath>
@@ -720,6 +720,10 @@
     <ProjectReference Include="UnityUIExtensions.csproj">
       <Project>{4b06f23d-5e15-1f2c-044c-5b76847e3552}</Project>
       <Name>UnityUIExtensions</Name>
+    </ProjectReference>
+    <ProjectReference Include="Assets.Scripts.csproj">
+      <Project>{c598f215-6716-6b93-fc56-8b55cb542e19}</Project>
+      <Name>Assets.Scripts</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

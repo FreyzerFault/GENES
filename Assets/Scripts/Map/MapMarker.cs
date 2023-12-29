@@ -1,43 +1,80 @@
 using JetBrains.Annotations;
 using TMPro;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace Map
 {
-    public class MapMarker
+    
+    
+    public class MapMarker : MonoBehaviour
     {
-        public bool selected = false;
         
-        private readonly Color _defaultColor = Color.white;
-        private Color selectedColor = Color.cyan;
-        public Color color;
+        private MapMarkerData _data;
 
-        public string labelText;
+        private Image _image;
+        private TMP_Text _text;
 
+        
+        private void Start()
+        {
+            _text = GetComponentInChildren<TMP_Text>();
+            _image = GetComponentInChildren<Image>();
+            
+            _text.text = _data.labelText;
+            _image.color = _data.color;
+        }
+        
+        public void SetData(MapMarkerData data) => _data = data;
+
+        public GUID Id => _data.id;
+        
+        public Color Color
+        {
+            get => _data.color;
+            set
+            {
+                _data.color = value;
+                _image.color = value;
+            }
+        } 
+        
+        public string Label
+        {
+            get => _data.labelText;
+            set
+            {
+                _data.labelText = value;
+                _text.text = value;
+            }
+        }
+    }
+
+    
+    
+    public struct MapMarkerData
+    {
+        private static readonly Color DefaultColor = Color.white;
+
+        public readonly GUID id;
+        
         public Vector2 normalizedPosition;
         public Vector3 worldPosition;
+        
+        public Color color;
+        public string labelText;
 
-        public MapMarker(Vector2 normalizedPosition, Vector3 worldPosition, [CanBeNull] string label, Color? color = null)
+
+        public MapMarkerData(Vector2 normalizedPosition, Vector3 worldPosition, [CanBeNull] string label, Color? color = null)
         {
             this.normalizedPosition = normalizedPosition;
             this.worldPosition = worldPosition;
-            this.color = color ?? _defaultColor;
+            
+            this.color = color ?? DefaultColor;
             labelText = label ?? worldPosition.ToString();
-        }
 
-        public void UpdateMarkerUI(GameObject markerUI)
-        {
-            // Set Color & Label of Marker
-            var sprite = markerUI.GetComponentInChildren<Image>();
-            var label = markerUI.GetComponentInChildren<TMP_Text>();
-
-            if (selected)
-                sprite.color = selectedColor;
-            else
-                sprite.color = color;
-            label.color = color;
-            label.text = labelText;
+            id = GUID.Generate();
         }
     }
 }
