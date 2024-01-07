@@ -1,3 +1,4 @@
+using System;
 using JetBrains.Annotations;
 using TMPro;
 using UnityEditor;
@@ -6,8 +7,6 @@ using UnityEngine.UI;
 
 namespace Map
 {
-    
-    
     public class MapMarker : MonoBehaviour
     {
         
@@ -52,7 +51,7 @@ namespace Map
     }
 
     
-    
+    [Serializable]
     public struct MapMarkerData
     {
         private static readonly Color DefaultColor = Color.white;

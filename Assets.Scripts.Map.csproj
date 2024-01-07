@@ -47,9 +47,9 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\Map\MapRenderer.cs" />
     <Compile Include="Assets\Scripts\Map\MapMarker.cs" />
-    <Compile Include="Assets\Scripts\Map\HeightMap.cs" />
-    <Compile Include="Assets\Scripts\Map\MapMarkerManager.cs" />
+    <Compile Include="Assets\Scripts\Map\MapMarkerManagerSO.cs" />
     <Compile Include="Assets\Scripts\Map\Map Controller.cs" />
+    <Compile Include="Assets\Scripts\Map\MapManager.cs" />
     <None Include="Assets\Scripts\Map\Assets.Scripts.Map.asmdef" />
     <Reference Include="UnityEngine">
       <HintPath>C:\Program Files\Unity\Hub\Editor\2022.3.16f1\Editor\Data\Managed\UnityEngine\UnityEngine.dll</HintPath>

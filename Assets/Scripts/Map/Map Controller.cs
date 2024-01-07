@@ -38,8 +38,7 @@ namespace Map
 
         private void OnZoomInOut(InputValue value)
         {
-            var zoom = value.Get<float>() / 10f;
-            minimap.zoomScale += zoom;
+            minimap.ZoomScale += value.Get<float>() / 10f;
         }
     }
 }

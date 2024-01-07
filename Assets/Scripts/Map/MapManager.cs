@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Map
 {
-    public class HeightMap : MonoBehaviour
+    public class MapManager : Singleton<MapManager>
     {
         [SerializeField] private Terrain terrain;
         [SerializeField] private Transform playerInWorld;
@@ -38,8 +38,9 @@ namespace Map
         public Quaternion PlayerRotationForUI =>
             Quaternion.AngleAxis(90 + playerInWorld.transform.eulerAngles.y, Vector3.back);
 
-        private void Awake()
+        private new void Awake()
         {
+            base.Awake();
             Initialize();
         }
 
