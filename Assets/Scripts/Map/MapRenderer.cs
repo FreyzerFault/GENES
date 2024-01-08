@@ -1,39 +1,24 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using EditorCools;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 using UnityEngine.UI.Extensions;
 using Gradient = UnityEngine.Gradient;
 
 namespace Map
 {
-    public class MapRenderer : MonoBehaviour, IPointerMoveHandler, IPointerClickHandler, IPointerExitHandler, IPointerEnterHandler
+    public class MapRenderer : MonoBehaviour, IPointerMoveHandler, IPointerClickHandler, IPointerExitHandler,
+        IPointerEnterHandler
     {
         [SerializeField] private float zoomScale = 2;
-        public float ZoomScale
-        {
-            get => zoomScale;
-            set  {
-                zoomScale = value;
-                OnZoom();
-            }
-        }
-        
+
         public Gradient heightGradient = new();
 
         // MARKERS
         [SerializeField] private MapMarkerManagerSO markerManager;
-        [Serializable]enum MarkerMode { Add, Remove, Select, None }
         [SerializeField] private MarkerMode markerMode = MarkerMode.None;
-        public bool RemoveMarkersMode
-        {
-            get => markerMode == MarkerMode.Remove;
-            set => markerMode = value ? MarkerMode.Remove : MarkerMode.Add;
-        }
 
         [SerializeField] private Transform mapMarkersParent;
 
@@ -44,9 +29,25 @@ namespace Map
         // Objetos que siguen al cursor
         [SerializeField] private RectTransform mouseCursorMarker;
         [SerializeField] private RectTransform mouseLabel;
+        [SerializeField] private RectTransform _playerSprite;
 
         private RawImage _image;
-        [SerializeField] private RectTransform _playerSprite;
+
+        public float ZoomScale
+        {
+            get => zoomScale;
+            set
+            {
+                zoomScale = value;
+                Zoom();
+            }
+        }
+
+        public bool RemoveMarkersMode
+        {
+            get => markerMode == MarkerMode.Remove;
+            set => markerMode = value ? MarkerMode.Remove : MarkerMode.Add;
+        }
 
 
         private float ImageWidth => _image.rectTransform.rect.width;
@@ -55,8 +56,9 @@ namespace Map
 
         private Vector2 OriginPoint
         {
-            get { 
-                Vector3[] corners = new Vector3[4];
+            get
+            {
+                var corners = new Vector3[4];
                 _image.rectTransform.GetWorldCorners(corners);
                 return corners[0];
             }
@@ -67,7 +69,7 @@ namespace Map
         {
             Initialize();
             RenderTerrain();
-            OnZoom();
+            Zoom();
         }
 
         private void Update()
@@ -79,14 +81,14 @@ namespace Map
         public void OnPointerClick(PointerEventData eventData)
         {
             if (markerMode == MarkerMode.None) return;
-            
+
             // Posicion de 0 a 1
             var normalizedPosition = GetNormalizedPosition(eventData.position);
 
             switch (markerMode)
             {
                 case MarkerMode.Add:
-                    markerManager.AddPoint(normalizedPosition, out MapMarkerData _, out bool _);
+                    markerManager.AddPoint(normalizedPosition, out var _, out var _);
                     break;
                 case MarkerMode.Remove:
                     markerManager.RemovePoint(normalizedPosition);
@@ -96,7 +98,7 @@ namespace Map
                     break;
             }
         }
-        
+
         public void OnPointerEnter(PointerEventData eventData)
         {
             if (mouseLabel != null)
@@ -119,19 +121,19 @@ namespace Map
             if (mouseCursorMarker != null)
                 mouseCursorMarker.position = eventData.position;
         }
-        
+
         // ================================== INITIALIZATION ==================================
-        
+
         private void Initialize()
         {
             _image ??= GetComponent<RawImage>();
             _playerSprite ??= GetComponentInChildren<Image>().rectTransform;
-            
-            
+
+
             // MARKERS
             UpdateMarkers();
-            markerManager.OnMarkerAdded.AddListener((_) => UpdateMarkers());
-            markerManager.OnMarkerRemoved.AddListener((_) => UpdateMarkers());
+            markerManager.OnMarkerAdded.AddListener(_ => UpdateMarkers());
+            markerManager.OnMarkerRemoved.AddListener(_ => UpdateMarkers());
             markerManager.OnMarkersClear.AddListener(UpdateMarkers);
         }
 
@@ -139,13 +141,8 @@ namespace Map
         private void RenderTerrain()
         {
             // Create Texture of Map
-            _image.texture = MapManager.Instance.GetTexture((int)ImageWidth, (int)ImageHeight, heightGradient);
-
-            // Scale Texture with UV
-            // var uvRect = _image.uvRect;
-            // uvRect.width = map.TerrainWidth / ImageWidth;
-            // uvRect.height = map.TerrainHeight / ImageHeight;
-            // _image.uvRect = uvRect;
+            _image.texture =
+                MapManager.Instance.TerrainData.ToTexture((int)ImageWidth, (int)ImageHeight, heightGradient);
         }
 
         // ================================== PLAYER POINT ==================================
@@ -160,17 +157,17 @@ namespace Map
         private void CenterPlayerInZoomedMap()
         {
             // Centrar el Player en el centro del minimapa por medio de su pivot
-            Vector2 pivot = MapManager.Instance.PlayerNormalizedPosition;
-            
+            var pivot = MapManager.Instance.PlayerNormalizedPosition;
+
             // Tamaño del minimapa escalado y Normalizado
             var mapSizeScaled = ImageSize * zoomScale;
-            Vector2 displacement = ImageSize / 2;
-            
+            var displacement = ImageSize / 2;
+
             // La distancia a los bordes del minimapa no puede ser menor a la mitad del minimapa
-            Vector2 distanceToBotLeft = MapManager.Instance.PlayerDistanceToBotLeftBorder * mapSizeScaled;
+            var distanceToBotLeft = MapManager.Instance.PlayerDistanceToBotLeftBorder * mapSizeScaled;
             displacement.x = Mathf.Min(distanceToBotLeft.x, displacement.x);
             displacement.y = Mathf.Min(distanceToBotLeft.y, displacement.y);
-            
+
             // var displacement = new Vector2(Mathf.Max(minDistanceNormalized.x, ImageSize.x / 2),
             //     Mathf.Max(minDistanceNormalized.y, ImageSize.y / 2));
             // if (MapManager.Instance.PlayerDistanceToBotLeftBorder.x < minDistanceNormalized.x)
@@ -181,27 +178,30 @@ namespace Map
             //     pivot = new Vector2(1 - minDistanceNormalized.x, pivot.y);
             // if (MapManager.Instance.PlayerDistanceToTopRightBorder.y < minDistanceNormalized.y)
             //     pivot = new Vector2(pivot.x, 1 - minDistanceNormalized.y);
-            
+
             // Pivot reajustado
             _image.rectTransform.pivot = pivot;
             _image.rectTransform.anchoredPosition = displacement;
         }
-        
-        public void OnZoom()
+
+        public void Zoom()
         {
             // Escalar el mapa relativo al centro donde está el Player
             _image.rectTransform.localScale = new Vector3(zoomScale, zoomScale, 1);
 
             // La flecha del player se escala al revés para que no se vea afectada por el zoom
             _playerSprite.localScale = new Vector3(1 / zoomScale, 1 / zoomScale, 1);
-            
+
             UpdateMarkers();
         }
 
 
         // ================================== MARKERS ==================================
-        
-        private void ClearMarkers() => GetComponentsInChildren<MapMarker>().ToList().ForEach(marker => Destroy(marker.gameObject));
+
+        private void ClearMarkers()
+        {
+            GetComponentsInChildren<MapMarker>().ToList().ForEach(marker => Destroy(marker.gameObject));
+        }
 
         public void UpdateMarkers()
         {
@@ -210,9 +210,9 @@ namespace Map
 
             // Se instancian de nuevo
             // Y se actualizan sus etiquetas en orden
-            for (int i = 0; i < markerManager.MarkersCount; i++)
+            for (var i = 0; i < markerManager.MarkersCount; i++)
             {
-                MapMarkerData marker = markerManager.Markers[i];
+                var marker = markerManager.Markers[i];
                 marker.labelText = $"{i} - {marker.worldPosition}";
                 InstantiateMarker(marker);
             }
@@ -222,37 +222,40 @@ namespace Map
 
         private void InstantiateMarker(MapMarkerData markerData)
         {
-            MapMarker marker = Instantiate(markerManager.markerPrefab, mapMarkersParent).GetComponent<MapMarker>();
+            var marker = Instantiate(markerManager.markerPrefab, mapMarkersParent).GetComponent<MapMarker>();
             marker.SetData(markerData);
-            RectTransform markerRect = marker.GetComponent<RectTransform>();
+            var markerRect = marker.GetComponent<RectTransform>();
             // marker.GetComponent<RectTransform>().localPosition = GetLocalPointInMap(markerData.normalizedPosition);
             markerRect.anchorMax = new Vector2(0, 0);
             markerRect.anchorMin = new Vector2(0, 0);
             // markerRect.pivot = markerData.normalizedPosition;
             markerRect.anchoredPosition = GetLocalPointInMap(markerData.normalizedPosition);
-            
+
             markerRect.localScale /= zoomScale;
         }
-        
-        public void ToggleMarkers(bool value) => mapMarkersParent.gameObject.SetActive(value);
+
+        public void ToggleMarkers(bool value)
+        {
+            mapMarkersParent.gameObject.SetActive(value);
+        }
 
 
         // ================================== LINE RENDERER ==================================
         private void UpdateLine()
         {
             lineRenderer.Points = markerManager.Markers.ToList().ConvertAll(
-                    marker => GetLocalPointInMap(marker.normalizedPosition)
-                ).ToArray();
-            
+                marker => GetLocalPointInMap(marker.normalizedPosition)
+            ).ToArray();
+
             // Thickness
             lineRenderer.LineThickness = lineDefaultThickness / zoomScale;
         }
-        
+
         // ================================== UTILS ==================================
         private Vector2 GetNormalizedPosition(Vector2 screenPos)
         {
             RectTransformUtility.ScreenPointToLocalPointInRectangle(GetComponent<RectTransform>(), screenPos,
-                null, out Vector2 localPos);
+                null, out var localPos);
             return localPos / ImageSize;
         }
 
@@ -267,7 +270,7 @@ namespace Map
         {
             Initialize();
             RenderTerrain();
-            OnZoom();
+            Zoom();
             UpdatePlayerPoint();
         }
 
@@ -283,7 +286,7 @@ namespace Map
         private void ZoomToPlayerButton()
         {
             Initialize();
-            OnZoom();
+            Zoom();
         }
 
         [Button("Render Terrain")]
@@ -293,5 +296,13 @@ namespace Map
             RenderTerrain();
         }
 
+        [Serializable]
+        private enum MarkerMode
+        {
+            Add,
+            Remove,
+            Select,
+            None
+        }
     }
 }

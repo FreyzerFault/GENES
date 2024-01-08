@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using EditorCools;
 using UnityEngine;
@@ -13,16 +12,16 @@ namespace Map
         public GameObject markerPrefab;
 
         public MapMarkerData[] Markers;
-    
+
         // Máximo Radio en el que se considera que dos marcadores colisionan
         [SerializeField] private float pointCollisionRadius = 0.05f;
-        
-        public int MarkersCount => Markers.Length;
-    
+
         [NonSerialized] public UnityEvent<MapMarkerData> OnMarkerAdded;
-        [NonSerialized] public UnityEvent<MapMarkerData> OnMarkerSelected;
         [NonSerialized] public UnityEvent<MapMarkerData> OnMarkerRemoved;
         [NonSerialized] public UnityEvent OnMarkersClear;
+        [NonSerialized] public UnityEvent<MapMarkerData> OnMarkerSelected;
+
+        public int MarkersCount => Markers.Length;
 
         private void OnEnable()
         {
@@ -35,26 +34,44 @@ namespace Map
 
         private int FindMarkerIndex(Vector2 normalizedPos)
         {
-            return Markers.ToList().FindIndex(marker =>
-                Vector2.Distance(marker.normalizedPosition, normalizedPos) < pointCollisionRadius);
+            return Markers.ToList().FindIndex(marker => marker.IsAtPoint(normalizedPos, pointCollisionRadius));
         }
-    
-        public void AddPoint(Vector2 normalizedPos, out MapMarkerData marker,out bool collision)
-        {
-            var worldPos = MapManager.Instance.GetWorldPosition(normalizedPos);
 
-            var collisionIndex = FindMarkerIndex(normalizedPos);
+        private int FindClosestMarkerIndex(Vector2 normalizedPos)
+        {
+            var index = -1;
+            var minDistance = float.MaxValue;
+            for (var i = 0; i < MarkersCount; i++)
+            {
+                if (!Markers[i].IsAtPoint(normalizedPos, pointCollisionRadius)) continue;
+                var distance = Markers[i].DistanceTo(normalizedPos);
+                if (distance < minDistance)
+                {
+                    minDistance = distance;
+                    index = i;
+                }
+            }
+
+            return index;
+        }
+
+        public void AddPoint(Vector2 normalizedPos, out MapMarkerData marker, out bool collision)
+        {
+            var worldPos = MapManager.Instance.TerrainData.GetWorldPosition(normalizedPos);
+            worldPos.y += 0.5f;
+
+            var collisionIndex = FindClosestMarkerIndex(normalizedPos);
 
             if (collisionIndex == -1)
             {
                 // No hay ninguna colision => Se añade el punto
-                string label = "" + (MarkersCount - 1) + ": " + worldPos;
+                var label = "" + (MarkersCount - 1) + ": " + worldPos;
                 marker = new MapMarkerData(normalizedPos, worldPos, label);
-                
-                List<MapMarkerData> list = Markers.ToList();
+
+                var list = Markers.ToList();
                 list.Add(marker);
                 Markers = list.ToArray();
-                
+
                 collision = false;
 
                 Log("Point added in " + worldPos);
@@ -71,17 +88,17 @@ namespace Map
             Log("Point selected in " + worldPos);
             OnMarkerSelected.Invoke(marker);
         }
-    
+
         public MapMarkerData? RemovePoint(Vector2 normalizedPos)
         {
-            var worldPos = MapManager.Instance.GetWorldPosition(normalizedPos);
-            var index = FindMarkerIndex(normalizedPos);
+            var worldPos = MapManager.Instance.TerrainData.GetWorldPosition(normalizedPos);
+            var index = FindClosestMarkerIndex(normalizedPos);
 
             // No encuentra punto
             if (index == -1) return null;
 
             var marker = Markers[index];
-            List<MapMarkerData> list = Markers.ToList();
+            var list = Markers.ToList();
             list.RemoveAt(index);
             Markers = list.ToArray();
 
@@ -97,7 +114,10 @@ namespace Map
             Markers = Array.Empty<MapMarkerData>();
             OnMarkersClear.Invoke();
         }
-        
-        private void Log(string msg) => Debug.Log("<color=green>Map Marker Generator: </color>" + msg);
+
+        private void Log(string msg)
+        {
+            Debug.Log("<color=green>Map Marker Generator: </color>" + msg);
+        }
     }
 }
