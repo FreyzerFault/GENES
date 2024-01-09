@@ -45,8 +45,6 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\2022.3.16f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.Properties.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\External Packages\Simple Water Shader\Info\Scripts\Readme.cs" />
-    <Compile Include="Assets\External Packages\Simple Water Shader\Info\Scripts\Editor\ReadmeEditor.cs" />
     <Compile Include="Assets\External Packages\BezierCurves\Editor\BezierPointEditor.cs" />
     <Compile Include="Assets\External Packages\BezierCurves\Scripts\BezierPoint.cs" />
     <Compile Include="Assets\External Packages\BezierCurves\Scripts\BezierCurve.cs" />

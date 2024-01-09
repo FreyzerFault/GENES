@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Serialization;
 
 namespace Map
 {
@@ -8,13 +9,15 @@ namespace Map
         [SerializeField] private GameObject minimapParent;
         [SerializeField] private GameObject fullScreenMapParent;
 
-        [SerializeField] private MapRenderer minimap;
-        [SerializeField] private MapRenderer fullscreenMap;
+        [SerializeField] private MapUIRenderer minimap;
+
+        [FormerlySerializedAs("fullscreenMap")] [SerializeField]
+        private MapUIRenderer fullscreenMapUI;
 
         private void Awake()
         {
-            minimap = minimapParent.GetComponentInChildren<MapRenderer>();
-            fullscreenMap = fullScreenMapParent.GetComponentInChildren<MapRenderer>();
+            minimap = minimapParent.GetComponentInChildren<MapUIRenderer>();
+            fullscreenMapUI = fullScreenMapParent.GetComponentInChildren<MapUIRenderer>();
         }
 
         // INPUTS

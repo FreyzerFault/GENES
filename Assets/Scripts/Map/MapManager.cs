@@ -4,6 +4,8 @@ namespace Map
 {
     public class MapManager : Singleton<MapManager>
     {
+        public MapMarkerManagerSO markerManager;
+
         public Terrain terrain;
         [SerializeField] private Transform playerInWorld;
 

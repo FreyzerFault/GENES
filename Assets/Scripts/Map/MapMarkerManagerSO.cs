@@ -9,12 +9,16 @@ namespace Map
     [CreateAssetMenu(fileName = "MapMarkerManager", menuName = "Map/MapMarkerManager")]
     public class MapMarkerManagerSO : ScriptableObject
     {
-        public GameObject markerPrefab;
-
         public MapMarkerData[] Markers;
+
+        // UI Markers
+        public GameObject markerUIPrefab;
 
         // Máximo Radio en el que se considera que dos marcadores colisionan
         [SerializeField] private float pointCollisionRadius = 0.05f;
+
+        // Offset de altura para que clipee con el terreno
+        public float heightOffset = 0.5f;
 
         [NonSerialized] public UnityEvent<MapMarkerData> OnMarkerAdded;
         [NonSerialized] public UnityEvent<MapMarkerData> OnMarkerRemoved;
@@ -26,11 +30,15 @@ namespace Map
         private void OnEnable()
         {
             Markers ??= Array.Empty<MapMarkerData>();
+
+
+            // EVENTS
             OnMarkerAdded = new UnityEvent<MapMarkerData>();
             OnMarkerSelected = new UnityEvent<MapMarkerData>();
             OnMarkerRemoved = new UnityEvent<MapMarkerData>();
             OnMarkersClear = new UnityEvent();
         }
+
 
         private int FindMarkerIndex(Vector2 normalizedPos)
         {
@@ -58,7 +66,7 @@ namespace Map
         public void AddPoint(Vector2 normalizedPos, out MapMarkerData marker, out bool collision)
         {
             var worldPos = MapManager.Instance.TerrainData.GetWorldPosition(normalizedPos);
-            worldPos.y += 0.5f;
+            worldPos.y += heightOffset;
 
             var collisionIndex = FindClosestMarkerIndex(normalizedPos);
 
@@ -96,6 +104,7 @@ namespace Map
 
             // No encuentra punto
             if (index == -1) return null;
+
 
             var marker = Markers[index];
             var list = Markers.ToList();

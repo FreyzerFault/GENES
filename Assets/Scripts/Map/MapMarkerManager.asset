@@ -12,18 +12,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bdd4675c5ff291a48bd2bf8caf582ec4, type: 3}
   m_Name: MapMarkerManager
   m_EditorClassIdentifier: 
-  markerPrefab: {fileID: 7675491264772692944, guid: 5444bb0f9a82ae04eb7be11bf137c20d, type: 3}
   Markers:
-  - normalizedPosition: {x: 0.5576885, y: 0.46731663}
-    worldPosition: {x: 286, y: 0.16666667, z: 240}
+  - normalizedPosition: {x: 0.1251659, y: 0.26829267}
+    worldPosition: {x: 125.16589, y: 100.3, z: 268.29266}
     color: {r: 1, g: 1, b: 1, a: 1}
-    labelText: '0: (286.00, 0.17, 240.00)'
-  - normalizedPosition: {x: 0.27581334, y: 0.7219135}
-    worldPosition: {x: 141, y: 0.13742904, z: 370}
+    labelText: '-1: (125.17, 100.30, 268.29)'
+  - normalizedPosition: {x: 0.17980005, y: 0.24097559}
+    worldPosition: {x: 179.80005, y: 97.56632, z: 240.97559}
     color: {r: 1, g: 1, b: 1, a: 1}
-    labelText: '1: (141.00, 0.14, 370.00)'
-  - normalizedPosition: {x: 0.75166726, y: 0.4915641}
-    worldPosition: {x: 386, y: 0.16666667, z: 252}
+    labelText: '0: (179.80, 97.57, 240.98)'
+  - normalizedPosition: {x: 0.2188244, y: 0.13170731}
+    worldPosition: {x: 218.8244, y: 100.3, z: 131.7073}
     color: {r: 1, g: 1, b: 1, a: 1}
-    labelText: '1: (386.00, 0.17, 252.00)'
+    labelText: '1: (218.82, 100.30, 131.71)'
+  - normalizedPosition: {x: 0.13297077, y: 0.13170731}
+    worldPosition: {x: 132.97076, y: 102.24611, z: 131.7073}
+    color: {r: 1, g: 1, b: 1, a: 1}
+    labelText: '2: (132.97, 102.25, 131.71)'
+  markerUIPrefab: {fileID: 7675491264772692944, guid: 5444bb0f9a82ae04eb7be11bf137c20d, type: 3}
   pointCollisionRadius: 0.05
+  heightOffset: 0.15

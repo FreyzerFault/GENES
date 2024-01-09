@@ -5,9 +5,9 @@ using UnityEngine;
 [CanEditMultipleObjects]
 public class BezierPointEditor : Editor
 {
+    private readonly HandleFunction[] handlers = { HandleConnected, HandleBroken, HandleAbsent };
     private SerializedProperty handle1Prop;
     private SerializedProperty handle2Prop;
-    private readonly HandleFunction[] handlers = { HandleConnected, HandleBroken, HandleAbsent };
 
     private SerializedProperty handleTypeProp;
 
@@ -25,7 +25,8 @@ public class BezierPointEditor : Editor
     private void OnSceneGUI()
     {
         Handles.color = Color.green;
-        var fmh_28_66_638388323699096612 = point.transform.rotation; var newPosition = Handles.FreeMoveHandle(point.position,
+        var fmh_28_66_638388323699096612 = point.transform.rotation;
+        var newPosition = Handles.FreeMoveHandle(point.position,
             HandleUtility.GetHandleSize(point.position) * 0.2f, Vector3.zero, Handles.CubeHandleCap);
         if (point.position != newPosition) point.position = newPosition;
 
@@ -121,22 +122,24 @@ public class BezierPointEditor : Editor
     {
         Handles.color = Color.cyan;
 
-        var fmh_124_66_638388323699125598 = p.transform.rotation; var newGlobal1 = Handles.FreeMoveHandle(p.globalHandle1,
+        var fmh_124_66_638388323699125598 = p.transform.rotation;
+        var newGlobal1 = Handles.FreeMoveHandle(p.globalHandle1,
             HandleUtility.GetHandleSize(p.globalHandle1) * 0.15f, Vector3.zero, Handles.SphereHandleCap);
 
         if (newGlobal1 != p.globalHandle1)
         {
-            Undo.RegisterUndo(p, "Move Handle");
+            Undo.RegisterCompleteObjectUndo(p, "Move Handle");
             p.globalHandle1 = newGlobal1;
             p.globalHandle2 = -(newGlobal1 - p.position) + p.position;
         }
 
-        var fmh_134_66_638388323699129350 = p.transform.rotation; var newGlobal2 = Handles.FreeMoveHandle(p.globalHandle2,
+        var fmh_134_66_638388323699129350 = p.transform.rotation;
+        var newGlobal2 = Handles.FreeMoveHandle(p.globalHandle2,
             HandleUtility.GetHandleSize(p.globalHandle2) * 0.15f, Vector3.zero, Handles.SphereHandleCap);
 
         if (newGlobal2 != p.globalHandle2)
         {
-            Undo.RegisterUndo(p, "Move Handle");
+            Undo.RegisterCompleteObjectUndo(p, "Move Handle");
             p.globalHandle1 = -(newGlobal2 - p.position) + p.position;
             p.globalHandle2 = newGlobal2;
         }
@@ -146,20 +149,22 @@ public class BezierPointEditor : Editor
     {
         Handles.color = Color.cyan;
 
-        var fmh_149_66_638388323699133631 = Quaternion.identity; var newGlobal1 = Handles.FreeMoveHandle(p.globalHandle1,
+        var fmh_149_66_638388323699133631 = Quaternion.identity;
+        var newGlobal1 = Handles.FreeMoveHandle(p.globalHandle1,
             HandleUtility.GetHandleSize(p.globalHandle1) * 0.15f, Vector3.zero, Handles.SphereHandleCap);
-        var fmh_151_66_638388323699136951 = Quaternion.identity; var newGlobal2 = Handles.FreeMoveHandle(p.globalHandle2,
+        var fmh_151_66_638388323699136951 = Quaternion.identity;
+        var newGlobal2 = Handles.FreeMoveHandle(p.globalHandle2,
             HandleUtility.GetHandleSize(p.globalHandle2) * 0.15f, Vector3.zero, Handles.SphereHandleCap);
 
         if (newGlobal1 != p.globalHandle1)
         {
-            Undo.RegisterUndo(p, "Move Handle");
+            Undo.RegisterCompleteObjectUndo(p, "Move Handle");
             p.globalHandle1 = newGlobal1;
         }
 
         if (newGlobal2 != p.globalHandle2)
         {
-            Undo.RegisterUndo(p, "Move Handle");
+            Undo.RegisterCompleteObjectUndo(p, "Move Handle");
             p.globalHandle2 = newGlobal2;
         }
     }

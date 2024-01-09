@@ -38,6 +38,24 @@ namespace Map
             );
         }
 
+        public static Vector2 GetNormalizedPosition(this TerrainData terrain, Vector3 worldPos)
+        {
+            return new Vector2(
+                worldPos.x / terrain.size.x,
+                worldPos.z / terrain.size.z
+            );
+        }
+
+        public static float GetInterpolatedHeight(this TerrainData terrain, Vector2 normalizedPos)
+        {
+            return terrain.GetInterpolatedHeight(normalizedPos.x, normalizedPos.y);
+        }
+
+        public static float GetInterpolatedHeight(this TerrainData terrain, Vector3 worldPos)
+        {
+            return terrain.GetInterpolatedHeight(terrain.GetNormalizedPosition(worldPos));
+        }
+
 
         // Max & Min Height in HeightMap float[,]
         public static void GetMinMaxHeight(this TerrainData terrain, out float minHeight, out float maxHeight)
