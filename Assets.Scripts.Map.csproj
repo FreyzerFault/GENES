@@ -49,8 +49,8 @@
     <Compile Include="Assets\Scripts\Map\MapMarkerManagerSO.cs" />
     <Compile Include="Assets\Scripts\Map\MapMarkerUI.cs" />
     <Compile Include="Assets\Scripts\Map\MapUIRenderer.cs" />
+    <Compile Include="Assets\Scripts\Map\MarkerExtensionMethods.cs" />
     <Compile Include="Assets\Scripts\Map\Map Controller.cs" />
-    <Compile Include="Assets\Scripts\Map\ExtensionMethods.cs" />
     <Compile Include="Assets\Scripts\Map\MapManager.cs" />
     <Compile Include="Assets\Scripts\Map\MapPath.cs" />
     <None Include="Assets\Scripts\Map\Assets.Scripts.Map.asmdef" />
@@ -727,6 +727,10 @@
     <ProjectReference Include="Assets.Scripts.csproj">
       <Project>{c598f215-6716-6b93-fc56-8b55cb542e19}</Project>
       <Name>Assets.Scripts</Name>
+    </ProjectReference>
+    <ProjectReference Include="Assets.Scripts.PathFinding.csproj">
+      <Project>{d98b3dbe-6626-470f-39bc-529ef39ee94d}</Project>
+      <Name>Assets.Scripts.PathFinding</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

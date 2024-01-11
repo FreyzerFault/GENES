@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assets.Scripts.Map", "Asset
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assets.ExternalPackages", "Assets.ExternalPackages.csproj", "{f87886c9-513b-8dc8-0583-172d83e79925}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assets.Scripts.PathFinding", "Assets.Scripts.PathFinding.csproj", "{d98b3dbe-6626-470f-39bc-529ef39ee94d}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assets", "Assets.csproj", "{fc483a6a-6a5c-9bcb-9cad-1ef50cf04080}"
 EndProject
 Global
@@ -40,6 +42,8 @@ Global
 		{8bdb3e98-d617-0799-e30b-ad8b64bb0331}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{f87886c9-513b-8dc8-0583-172d83e79925}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{f87886c9-513b-8dc8-0583-172d83e79925}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{d98b3dbe-6626-470f-39bc-529ef39ee94d}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{d98b3dbe-6626-470f-39bc-529ef39ee94d}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{fc483a6a-6a5c-9bcb-9cad-1ef50cf04080}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{fc483a6a-6a5c-9bcb-9cad-1ef50cf04080}.Debug|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection

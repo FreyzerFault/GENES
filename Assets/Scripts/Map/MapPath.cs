@@ -1,12 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using PathFinding;
 using UnityEngine;
 
 namespace Map
 {
     public class MapPath : MonoBehaviour
     {
+        [SerializeField] private AstarConfigSO aStarConfig;
+
         [SerializeField] private LineRenderer pathLineRenderer;
         [SerializeField] private LineRenderer playerToMarkerLineRenderer;
 
@@ -14,6 +17,7 @@ namespace Map
         [SerializeField] private GameObject marker3DPrefab;
         public MapMarkerObject[] markerObjects;
 
+        [SerializeField] private bool useAstarAlgorithm = true;
         [SerializeField] private bool projectLineToTerrain = true;
         [SerializeField] private bool startLineAtPlayer = true;
 
@@ -61,33 +65,43 @@ namespace Map
             UpdateLine(MarkerManager.Markers.Select(marker => marker.worldPosition).ToArray());
         }
 
-        private void UpdateLine(Vector3[] positions)
+        private void UpdateLine(Vector3[] markerPositions)
         {
-            if (positions.Length == 0) return;
+            if (markerPositions.Length == 0) return;
+
+            var points = new List<Vector3>();
 
             if (startLineAtPlayer)
-                UpdatePlayerLine();
+                points = points.Concat(UpdatePlayerLine()).ToList();
 
             if (projectLineToTerrain)
-            {
-                ProjectLineToTerrain(positions);
-            }
-            else
-            {
-                pathLineRenderer.positionCount = positions.Length;
-                pathLineRenderer.SetPositions(positions);
-            }
+                points = points.Concat(ProjectLineToTerrain(markerPositions)).ToList();
+
+            pathLineRenderer.positionCount = points.Count;
+            pathLineRenderer.SetPositions(points.ToArray());
         }
 
-        private void UpdatePlayerLine()
+        private Vector3[] UpdatePlayerLine()
         {
-            var terrain = MapManager.Instance.TerrainData;
+            var terrain = MapManager.Instance.terrain;
             var playerPos = playerTransform.position;
             var firstMarkerPos = MarkerManager.Markers[0].worldPosition;
 
-            var segmentSamples = ProjectSegmentToTerrain(playerPos, firstMarkerPos, terrain);
-            playerToMarkerLineRenderer.positionCount = segmentSamples.Length;
-            playerToMarkerLineRenderer.SetPositions(segmentSamples);
+            Vector3[] points;
+
+            if (useAstarAlgorithm) // A* Algorithm:
+            {
+                var playerNode = new Node(playerPos, 0, null);
+                var markerNode = new Node(firstMarkerPos, 0, null);
+                var path = AstarAlgorithm.FindPath(playerNode, markerNode, terrain, aStarConfig);
+                points = AstarAlgorithm.GetPathWorldPoints(path);
+            }
+            else // Project on terrain simply:
+            {
+                points = ProjectSegmentToTerrain(playerPos, firstMarkerPos, terrain);
+            }
+
+            return points;
         }
 
         private void ClearLine()
@@ -96,38 +110,58 @@ namespace Map
             pathLineRenderer.SetPositions(Array.Empty<Vector3>());
         }
 
-        private void ProjectLineToTerrain(Vector3[] positions)
+        private Vector3[] ProjectLineToTerrain(Vector3[] points)
         {
+            var terrain = MapManager.Instance.terrain;
             var lineSamples = new List<Vector3>();
 
-            for (var i = 0; i < positions.Length - 1; i++)
+            for (var i = 0; i < points.Length - 1; i++)
             {
-                Vector3 a = positions[i], b = positions[i + 1];
-                lineSamples.AddRange(ProjectSegmentToTerrain(a, b, MapManager.Instance.TerrainData));
+                Vector3 a = points[i], b = points[i + 1];
+                if (useAstarAlgorithm) // A* Algorithm:
+                {
+                    var aNode = new Node(a, 0, null);
+                    var bNode = new Node(b, 0, null);
+                    var path = AstarAlgorithm.FindPath(aNode, bNode, terrain, aStarConfig);
+                    lineSamples.AddRange(AstarAlgorithm.GetPathWorldPoints(path));
+                }
+                else
+                {
+                    lineSamples.AddRange(ProjectSegmentToTerrain(a, b, MapManager.Instance.terrain));
+                }
             }
 
-            lineSamples.Add(positions[^1]);
+            lineSamples.Add(points[^1]);
 
-            pathLineRenderer.positionCount = lineSamples.Count;
-            pathLineRenderer.SetPositions(lineSamples.ToArray());
+            return lineSamples.ToArray();
         }
 
         // Upsample un segmento proyectandolo en el terreno
-        private Vector3[] ProjectSegmentToTerrain(Vector3 a, Vector3 b, TerrainData terrain)
+        private Vector3[] ProjectSegmentToTerrain(Vector3 a, Vector3 b, Terrain terrain)
         {
-            var sampleLength = terrain.heightmapScale.x;
+            var sampleLength = terrain.terrainData.heightmapScale.x;
             var lineSamples = new List<Vector3>();
             var numSamples = Mathf.FloorToInt(Vector3.Distance(a, b) / sampleLength);
             for (var sampleIndex = 0; sampleIndex < numSamples; sampleIndex++)
             {
                 // Por cada sample, calcular su altura mapeada al terreno
                 var samplePos = a + (b - a) * ((float)sampleIndex / numSamples);
-                samplePos.y = terrain.GetInterpolatedHeight(samplePos) + MarkerManager.heightOffset;
+                samplePos.y = terrain.SampleHeight(samplePos);
 
                 lineSamples.Add(samplePos);
             }
 
             return lineSamples.ToArray();
+        }
+
+        private static Vector3[] OffsetPoints(Vector3[] points, float offset)
+        {
+            // Map points adding offset to Heigth
+            return points.Select(point =>
+            {
+                point.y += offset;
+                return point;
+            }).ToArray();
         }
 
         // ================== WORLD MARKERS ==================
