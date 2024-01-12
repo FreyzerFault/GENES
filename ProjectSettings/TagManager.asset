@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Map Marker
   - Map Path
+  - Minimap
+  - Map Fullscreen
   layers:
   - Default
   - TransparentFX

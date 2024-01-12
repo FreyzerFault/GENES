@@ -48,6 +48,7 @@
     <Compile Include="Assets\Scripts\Map\MapMarkerObject.cs" />
     <Compile Include="Assets\Scripts\Map\MapMarkerManagerSO.cs" />
     <Compile Include="Assets\Scripts\Map\MapMarkerUI.cs" />
+    <Compile Include="Assets\Scripts\Map\TerrainGrid.cs" />
     <Compile Include="Assets\Scripts\Map\MapUIRenderer.cs" />
     <Compile Include="Assets\Scripts\Map\MarkerExtensionMethods.cs" />
     <Compile Include="Assets\Scripts\Map\Map Controller.cs" />

@@ -42,9 +42,10 @@ public class VehicleController : MonoBehaviour
     // ================================== GUI ==================================
     private void OnGUI()
     {
-        GUI.Label(new Rect(10, 10, 100, 20), $"Torque: {torqueForce}");
-        GUI.Label(new Rect(10, 30, 100, 20), $"Brake: {brakeForce}");
-        GUI.Label(new Rect(10, 50, 100, 20), $"Steer: {steerAngle}");
+        // Show Info
+        // GUI.Label(new Rect(10, 10, 100, 20), $"Torque: {torqueForce}");
+        // GUI.Label(new Rect(10, 30, 100, 20), $"Brake: {brakeForce}");
+        // GUI.Label(new Rect(10, 50, 100, 20), $"Steer: {steerAngle}");
     }
 
     // ================================== GIZMOS ==================================

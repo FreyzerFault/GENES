@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.Serialization;
 
 namespace Map
 {
@@ -9,15 +8,21 @@ namespace Map
         [SerializeField] private GameObject minimapParent;
         [SerializeField] private GameObject fullScreenMapParent;
 
-        [SerializeField] private MapUIRenderer minimap;
+        [SerializeField] private MapUIRenderer minimapUI;
+        [SerializeField] private MapUIRenderer fullscreenMapUI;
 
-        [FormerlySerializedAs("fullscreenMap")] [SerializeField]
-        private MapUIRenderer fullscreenMapUI;
+        private MapUIRenderer Minimap =>
+            minimapUI ? minimapUI : GameObject.FindWithTag("Minimap").GetComponent<MapUIRenderer>();
+
+        private MapUIRenderer FullScreenMap => fullscreenMapUI
+            ? fullscreenMapUI
+            : GameObject.FindWithTag("Map Fullscreen").GetComponent<MapUIRenderer>();
+
 
         private void Awake()
         {
-            minimap = minimapParent.GetComponentInChildren<MapUIRenderer>();
-            fullscreenMapUI = fullScreenMapParent.GetComponentInChildren<MapUIRenderer>();
+            minimapUI = GameObject.FindWithTag("Minimap")?.GetComponent<MapUIRenderer>();
+            fullscreenMapUI = GameObject.FindWithTag("Map Fullscreen")?.GetComponent<MapUIRenderer>();
         }
 
         // INPUTS
@@ -41,7 +46,10 @@ namespace Map
 
         private void OnZoomInOut(InputValue value)
         {
-            minimap.ZoomScale += value.Get<float>() / 10f;
+            if (minimapParent.activeSelf)
+                Minimap.ZoomScale += Mathf.Clamp(value.Get<float>(), -1, 1) / 10f;
+            else if (fullScreenMapParent.activeSelf)
+                fullscreenMapUI.ZoomScale += Mathf.Clamp(value.Get<float>(), -1, 1) / 10f;
         }
     }
 }

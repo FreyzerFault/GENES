@@ -26,4 +26,5 @@ public class AstarConfigSO : ScriptableObject
 
     // Recompensa minimizar la pendiente (rodea montículos si puede)
     public float slopeHeuristic = 2f;
+    public float maxSlopeAngle = 40f;
 }

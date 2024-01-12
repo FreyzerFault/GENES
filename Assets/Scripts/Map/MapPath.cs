@@ -69,16 +69,18 @@ namespace Map
         {
             if (markerPositions.Length == 0) return;
 
-            var points = new List<Vector3>();
+            var points = Array.Empty<Vector3>();
 
-            if (startLineAtPlayer)
-                points = points.Concat(UpdatePlayerLine()).ToList();
+            if (startLineAtPlayer) points = points.Concat(UpdatePlayerLine()).ToArray();
 
             if (projectLineToTerrain)
-                points = points.Concat(ProjectLineToTerrain(markerPositions)).ToList();
+                points = points.Concat(ProjectLineToTerrain(markerPositions)).ToArray();
 
-            pathLineRenderer.positionCount = points.Count;
-            pathLineRenderer.SetPositions(points.ToArray());
+            points = OffsetPoints(points, MarkerManager.heightOffset);
+
+
+            pathLineRenderer.positionCount = points.Length;
+            pathLineRenderer.SetPositions(points);
         }
 
         private Vector3[] UpdatePlayerLine()

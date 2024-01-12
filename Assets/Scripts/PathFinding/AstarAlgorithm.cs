@@ -89,7 +89,7 @@ namespace PathFinding
         {
             var distHeuristic = Vector2.Distance(node.Pos2D, end.Pos2D) * paramsConfig.distanceHeuristic;
             var heightHeuristic = (node.Position.y - end.Position.y) * paramsConfig.heightHeuristic;
-            var slopeHeuristic = node.SlopeAngle * paramsConfig.slopeHeuristic;
+            var slopeHeuristic = node.SlopeAngle / paramsConfig.maxSlopeAngle * paramsConfig.slopeHeuristic;
 
             return distHeuristic + heightHeuristic + slopeHeuristic;
         }
@@ -111,6 +111,10 @@ namespace PathFinding
                     node.Position.z + zOffset
                 );
 
+                // Check OUT OF BOUNDS of Terrain
+                if (OutOfBounds(new Vector2(neighPos.x, neighPos.z), terrain))
+                    continue;
+
                 // Terrain Height
                 neighPos.y = terrain.SampleHeight(neighPos);
 
@@ -124,6 +128,24 @@ namespace PathFinding
 
             node.Neighbours = neighbours.ToArray();
             return node.Neighbours;
+        }
+
+        // ==================== RESTRICCIONES ====================
+        private static bool OutOfBounds(Vector2 pos, Terrain terrain)
+        {
+            var terrainData = terrain.terrainData;
+            var terrainPos = terrain.GetPosition();
+            Vector2 lowerBound = new(terrainPos.x, terrainPos.z);
+            var upperBound = lowerBound + new Vector2(terrainData.size.x, terrainData.size.z);
+            bool overLowerBound = pos.x > lowerBound.x && pos.y > lowerBound.y,
+                underUpperBound = pos.x < upperBound.x && pos.y < upperBound.y;
+
+            return !overLowerBound && underUpperBound;
+        }
+
+        private static bool IllegalPosition(Vector2 pos, Terrain terrain)
+        {
+            return OutOfBounds(pos, terrain);
         }
 
         // ==================== TRAYECTO FINAL ====================

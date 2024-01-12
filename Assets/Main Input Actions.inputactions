@@ -368,6 +368,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "Toggle Delete Marker Mode",
+                    "type": "PassThrough",
+                    "id": "35ceecb8-cfae-4f3a-968a-52f8e5d426d2",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -416,6 +425,39 @@
                     "isPartOfComposite": true
                 },
                 {
+                    "name": "Scroll Mouse",
+                    "id": "78d428ca-47b7-42ef-8d4d-09a1faeff76e",
+                    "path": "1DAxis",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Zoom In Out",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "negative",
+                    "id": "501cea65-d15c-404c-a0ea-d9cf768968b7",
+                    "path": "<Mouse>/scroll/down",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Zoom In Out",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "positive",
+                    "id": "aaf9619d-2fb0-49db-9e19-0a88f77245f0",
+                    "path": "<Mouse>/scroll/up",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Zoom In Out",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
                     "name": "",
                     "id": "98db20e3-8062-4c20-a373-cddddcd06362",
                     "path": "<Mouse>/leftButton",
@@ -423,6 +465,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "Draw Point",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a312c1fd-8248-4c41-b7e3-ec9d6092c682",
+                    "path": "<Keyboard>/shift",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Toggle Delete Marker Mode",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

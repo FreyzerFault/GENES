@@ -192,7 +192,7 @@ namespace Map
             // La flecha del player se escala al revés para que no se vea afectada por el zoom
             _playerSprite.localScale = new Vector3(1 / zoomScale, 1 / zoomScale, 1);
 
-            UpdateMarkers();
+            // UpdateMarkers();
         }
 
 
