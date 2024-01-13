@@ -35,7 +35,7 @@ public class TerrainGrid : MonoBehaviour
         {
             var localPos = vertices[i];
             var worldPos = transform.TransformPoint(localPos);
-            worldPos.y = _terrain.SampleHeight(worldPos) + 0.1f;
+            worldPos.y = _terrain.SampleHeight(worldPos) + 0.2f;
             vertices[i] = transform.InverseTransformPoint(worldPos);
         }
 

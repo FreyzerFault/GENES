@@ -10,6 +10,7 @@ namespace Map
     public class MapMarkerManagerSO : ScriptableObject
     {
         public MapMarkerData[] Markers;
+        public MapMarkerData FirstMarker => Markers.FirstOrDefault();
 
         // UI Markers
         public GameObject markerUIPrefab;

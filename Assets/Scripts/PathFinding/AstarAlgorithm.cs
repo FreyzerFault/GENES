@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor;
 using UnityEngine;
 
 namespace PathFinding
@@ -9,9 +10,19 @@ namespace PathFinding
     // (Necesito la dirección del Nodo Inicial y cada Nodo necesitará saber su dirección)
     public static class AstarAlgorithm
     {
+        // Cache
+        public static Node[] cachedPath;
+        public static void CleanCache() => cachedPath = Array.Empty<Node>();
+        
         // ALGORTIMO A*
         public static Node[] FindPath(Node start, Node end, Terrain terrain, AstarConfigSO paramsConfig)
         {
+            // Cache de caminos para no repetir el mismo
+            if (paramsConfig.useCache && cachedPath is { Length: > 0 } && cachedPath[0].Position == start.Position && cachedPath[^1].Position == end.Position)
+                return cachedPath;
+            
+            int iterations = 0;
+            
             // Nodes checked
             List<Node> closedList = new();
 
@@ -21,6 +32,8 @@ namespace PathFinding
             // Main loop
             while (openList.Count > 0)
             {
+                iterations++;
+                
                 // Sort by F, then by H
                 openList.Sort((a, b) =>
                 {
@@ -41,8 +54,18 @@ namespace PathFinding
                 // Si cumple la condición objetivo, terminar
                 // End no tiene por qué ser un nodo que cuadre en la malla
                 // El último Nodo será el que se acerque a End hasta que su tamaño lo contenga 
-                if (Vector2.Distance(currentNode.Pos2D, end.Pos2D) < (currentNode.Size / 2).magnitude)
-                    return GetPath(start, currentNode);
+                if (iterations >= paramsConfig.maxIterations || Vector2.Distance(currentNode.Pos2D, end.Pos2D) < currentNode.Size )
+                {
+                    end.G = CalculateCost(currentNode, end, paramsConfig);
+                    end.H = 0;
+                    end.Parent = currentNode;
+
+                    Node[] path = GetPath(start, end);
+                    
+                    if (paramsConfig.useCache) cachedPath = path;
+                    
+                    return path;
+                }
 
                 // Crear vecinos si es la 1º vez que se exploran
                 if (currentNode.Neighbours == null || currentNode.Neighbours.Length == 0)
@@ -71,16 +94,21 @@ namespace PathFinding
                     }
                 }
             }
-
             return null;
         }
 
+        public static Node[] FindPathByCheckpoints(Node[] checkPoints, Terrain terrain, AstarConfigSO paramsConfig)
+        {
+            Node[] pathNodes = Array.Empty<Node>();
+            for (int i = 1; i < checkPoints.Length; i++) pathNodes = pathNodes.Concat(FindPath(checkPoints[i - 1], checkPoints[i], terrain, paramsConfig)).ToArray();
+            return pathNodes;
+        }
 
         // ==================== COSTE Y HEURÍSTICA ====================
         private static float CalculateCost(Node a, Node b, AstarConfigSO paramsConfig)
         {
             var distanceCost = Vector2.Distance(a.Pos2D, b.Pos2D) * paramsConfig.distanceCost;
-            var heightCost = (a.Position.y - b.Position.y) * paramsConfig.heightCost;
+            var heightCost = Math.Abs(a.Position.y - b.Position.y) * paramsConfig.heightCost;
 
             return distanceCost + heightCost;
         }
@@ -88,8 +116,9 @@ namespace PathFinding
         private static float CalculateHeuristic(Node node, Node end, AstarConfigSO paramsConfig)
         {
             var distHeuristic = Vector2.Distance(node.Pos2D, end.Pos2D) * paramsConfig.distanceHeuristic;
-            var heightHeuristic = (node.Position.y - end.Position.y) * paramsConfig.heightHeuristic;
-            var slopeHeuristic = node.SlopeAngle / paramsConfig.maxSlopeAngle * paramsConfig.slopeHeuristic;
+            var heightHeuristic = Mathf.Abs(node.Position.y - end.Position.y) * paramsConfig.heightHeuristic;
+
+            float slopeHeuristic = node.SlopeAngle / paramsConfig.maxSlopeAngle * paramsConfig.slopeHeuristic;
 
             return distHeuristic + heightHeuristic + slopeHeuristic;
         }
@@ -101,8 +130,8 @@ namespace PathFinding
             for (var i = 0; i < 8; i++)
             {
                 // Offset from central Node
-                var xOffset = node.Size.x * (i % 3 - 1);
-                var zOffset = node.Size.y * (i / 3f - 1);
+                var xOffset = node.Size * (i % 3 - 1);
+                var zOffset = node.Size * Mathf.Floor(i / 3f - 1);
 
                 // World Position
                 var neighPos = new Vector3(
@@ -110,6 +139,12 @@ namespace PathFinding
                     0,
                     node.Position.z + zOffset
                 );
+                
+                if (node.Parent != null && node.Equals(new Node(neighPos, 0, node.Size)))
+                {
+                    neighbours.Add(node.Parent);
+                    continue;
+                }
 
                 // Check OUT OF BOUNDS of Terrain
                 if (OutOfBounds(new Vector2(neighPos.x, neighPos.z), terrain))
@@ -118,12 +153,8 @@ namespace PathFinding
                 // Terrain Height
                 neighPos.y = terrain.SampleHeight(neighPos);
 
-                // Terrain Normal => Slope Angle
-                var slopeAngle = Vector3.Angle(
-                    Vector3.up,
-                    terrain.terrainData.GetInterpolatedNormal(neighPos.x, neighPos.z)
-                );
-                neighbours.Add(new Node(neighPos, slopeAngle, node.Size));
+                // Slope Angle
+                neighbours.Add(new Node(neighPos, terrain.GetSlopeAngle(neighPos), node.Size));
             }
 
             node.Neighbours = neighbours.ToArray();
@@ -177,6 +208,7 @@ namespace PathFinding
 
         public static Vector3[] GetPathWorldPoints(Node[] path)
         {
+            if (path.Length == 0) return Array.Empty<Vector3>();
             return path.Select(node => node.Position).ToArray();
         }
 

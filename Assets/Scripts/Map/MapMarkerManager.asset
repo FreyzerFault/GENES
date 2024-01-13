@@ -12,7 +12,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bdd4675c5ff291a48bd2bf8caf582ec4, type: 3}
   m_Name: MapMarkerManager
   m_EditorClassIdentifier: 
-  Markers: []
+  Markers:
+  - normalizedPosition: {x: 0.1569049, y: 0.22312063}
+    worldPosition: {x: 62.761963, y: 100.15, z: 89.24825}
+    color: {r: 1, g: 1, b: 1, a: 1}
+    labelText: '-1: (62.76, 100.15, 89.25)'
+  - normalizedPosition: {x: 0.32810083, y: 0.24396187}
+    worldPosition: {x: 131.24033, y: 100.21061, z: 97.58475}
+    color: {r: 1, g: 1, b: 1, a: 1}
+    labelText: '0: (131.24, 100.21, 97.58)'
+  - normalizedPosition: {x: 0.5171608, y: 0.4702383}
+    worldPosition: {x: 206.8643, y: 100.15, z: 188.09532}
+    color: {r: 1, g: 1, b: 1, a: 1}
+    labelText: '1: (206.86, 100.15, 188.10)'
+  - normalizedPosition: {x: 0.5901051, y: 0.117425784}
+    worldPosition: {x: 236.04205, y: 101.332214, z: 46.970314}
+    color: {r: 1, g: 1, b: 1, a: 1}
+    labelText: '2: (236.04, 101.33, 46.97)'
   markerUIPrefab: {fileID: 7675491264772692944, guid: 5444bb0f9a82ae04eb7be11bf137c20d, type: 3}
   pointCollisionRadius: 0.05
-  heightOffset: 0.15
+  heightOffset: 0.3

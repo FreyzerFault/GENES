@@ -1,3 +1,4 @@
+using System;
 using Cinemachine;
 using UnityEngine;
 
@@ -13,8 +14,12 @@ public class CameraManager : MonoBehaviour
         _activeCam = brain.ActiveVirtualCamera;
         _cams = FindObjectsOfType<CinemachineVirtualCamera>();
 
+    }
+
+    private void Start()
+    {
         ResetCamPriority();
-        ChangeToCam(1);
+        ChangeToCam(0);
     }
 
     private void ResetCamPriority()

@@ -32,6 +32,8 @@ namespace Map
             {
                 minimapParent.SetActive(false);
                 fullScreenMapParent.SetActive(true);
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
             }
             else if (fullScreenMapParent.activeSelf)
             {

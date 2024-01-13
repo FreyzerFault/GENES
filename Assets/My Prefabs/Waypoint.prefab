@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7349041631572500848}
   - component: {fileID: 4517877934335700189}
-  - component: {fileID: 4574597973834434621}
+  - component: {fileID: 2548374464811597315}
   m_Layer: 0
   m_Name: Waypoint
   m_TagString: Map Marker
@@ -54,8 +54,8 @@ MonoBehaviour:
   OnPlayerPickUp:
     m_PersistentCalls:
       m_Calls: []
---- !u!135 &4574597973834434621
-SphereCollider:
+--- !u!136 &2548374464811597315
+CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -69,12 +69,14 @@ SphereCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
-  m_Radius: 0.28245354
-  m_Center: {x: 0, y: 0, z: 0}
+  serializedVersion: 2
+  m_Radius: 0.25591925
+  m_Height: 1.8359691
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.7158001, z: 0}
 --- !u!1001 &848500566286541443
 PrefabInstance:
   m_ObjectHideFlags: 0

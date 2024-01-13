@@ -68,4 +68,19 @@ public static class TerrainExtensionMethods
             maxHeight = Mathf.Max(height * terrain.heightmapScale.y, maxHeight);
         }
     }
+
+    public static float GetSlopeAngle(this Terrain terrain, Vector3 worldPos)
+    {
+        var normalizedPos = terrain.terrainData.GetNormalizedPosition(worldPos);
+        return terrain.GetSlopeAngle(normalizedPos);
+    }
+    
+    public static float GetSlopeAngle(this Terrain terrain, Vector2 normalizedPos)
+    {
+        // Terrain Normal => Slope Angle
+        return Vector3.Angle(
+            Vector3.up,
+            terrain.terrainData.GetInterpolatedNormal(normalizedPos.x, normalizedPos.y)
+        );
+    }
 }

@@ -27,4 +27,15 @@ public class AstarConfigSO : ScriptableObject
     // Recompensa minimizar la pendiente (rodea montículos si puede)
     public float slopeHeuristic = 2f;
     public float maxSlopeAngle = 40f;
+    
+    // ===============================================================
+    // Distancia entre nodos
+    // A + grandes = + rápido pero + impreciso
+    public float cellSize = 1f;
+    
+    // Maximas iteraciones del algoritmo
+    public int maxIterations = 1000;
+    
+    // Cache para evitar recalcular el camino
+    public bool useCache = true;
 }
