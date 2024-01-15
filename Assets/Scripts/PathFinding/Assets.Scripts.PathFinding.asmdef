@@ -2,7 +2,8 @@
     "name": "Assets.Scripts.PathFinding",
     "rootNamespace": "",
     "references": [
-        "GUID:2aff55a0bec22c443bb5fdf3caac4da4"
+        "GUID:2aff55a0bec22c443bb5fdf3caac4da4",
+        "GUID:20aa0aeb7f6270545bab9809729d4919"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

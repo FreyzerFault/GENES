@@ -1,6 +1,8 @@
 using System;
 using System.Linq;
 using EditorCools;
+using ExtensionMethods;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -74,6 +76,8 @@ namespace Map
 
         private void Update()
         {
+            if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.LeftShift)) markerMode = MarkerMode.Remove;
+
             UpdatePlayerPoint();
         }
 
@@ -88,13 +92,13 @@ namespace Map
             switch (markerMode)
             {
                 case MarkerMode.Add:
-                    MarkerManager.AddPoint(normalizedPosition, out var _, out var _);
+                    MarkerManager.AddOrSelectPoint(normalizedPosition, out var _, out var _);
                     break;
                 case MarkerMode.Remove:
                     MarkerManager.RemovePoint(normalizedPosition);
                     break;
                 case MarkerMode.Select:
-                    // TODO - Seleccionar punto
+                    MarkerManager.SelectMarker(normalizedPosition);
                     break;
             }
         }
@@ -135,6 +139,13 @@ namespace Map
             MarkerManager.OnMarkerAdded.AddListener(_ => UpdateMarkers());
             MarkerManager.OnMarkerRemoved.AddListener(_ => UpdateMarkers());
             MarkerManager.OnMarkersClear.AddListener(UpdateMarkers);
+            MarkerManager.OnMarkerMoved.AddListener(_ => UpdateMarkers());
+            MarkerManager.OnMarkerSelected.AddListener(_ => UpdateMarkers());
+            MarkerManager.OnMarkerDeselected.AddListener(_ => UpdateMarkers());
+
+            // Mouse Cursor
+            MarkerManager.OnMarkerSelected.AddListener(_ => UpdateMouseMarker());
+            MarkerManager.OnMarkerDeselected.AddListener(_ => UpdateMouseMarker());
         }
 
         // ================================== TERRAIN VISUALIZATION ==================================
@@ -168,17 +179,6 @@ namespace Map
             displacement.x = Mathf.Min(distanceToBotLeft.x, displacement.x);
             displacement.y = Mathf.Min(distanceToBotLeft.y, displacement.y);
 
-            // var displacement = new Vector2(Mathf.Max(minDistanceNormalized.x, ImageSize.x / 2),
-            //     Mathf.Max(minDistanceNormalized.y, ImageSize.y / 2));
-            // if (MapManager.Instance.PlayerDistanceToBotLeftBorder.x < minDistanceNormalized.x)
-            //     pivot = new Vector2(minDistanceNormalized.x, pivot.y);
-            // if (MapManager.Instance.PlayerDistanceToBotLeftBorder.y < minDistanceNormalized.y)
-            //     pivot = new Vector2(pivot.x, minDistanceNormalized.y);
-            // if (MapManager.Instance.PlayerDistanceToTopRightBorder.x < minDistanceNormalized.x)
-            //     pivot = new Vector2(1 - minDistanceNormalized.x, pivot.y);
-            // if (MapManager.Instance.PlayerDistanceToTopRightBorder.y < minDistanceNormalized.y)
-            //     pivot = new Vector2(pivot.x, 1 - minDistanceNormalized.y);
-
             // Pivot reajustado
             _image.rectTransform.pivot = pivot;
             _image.rectTransform.anchoredPosition = displacement;
@@ -200,10 +200,10 @@ namespace Map
 
         private void ClearMarkers()
         {
-            GetComponentsInChildren<MapMarkerUI>().ToList().ForEach(marker => Destroy(marker.gameObject));
+            GetComponentsInChildren<MarkerUI>().ToList().ForEach(marker => Destroy(marker.gameObject));
         }
 
-        public void UpdateMarkers()
+        private void UpdateMarkers()
         {
             // Clear Markers UI
             ClearMarkers();
@@ -213,16 +213,21 @@ namespace Map
             for (var i = 0; i < MarkerManager.MarkersCount; i++)
             {
                 var marker = MarkerManager.Markers[i];
-                marker.labelText = $"{i} - {marker.worldPosition}";
+                marker.labelText = marker.selected
+                    ? $"{i} - SELECTED"
+                    : $"{i} - {Vector3Int.RoundToInt(marker.worldPosition)}";
+                marker.color = marker.selected ? MarkerManager.selectedColor : MarkerManager.markerColor;
                 InstantiateMarker(marker);
             }
 
+            // Line Renderer y Mouse Cursor
             UpdateLine();
+            UpdateMouseMarker();
         }
 
-        private void InstantiateMarker(MapMarkerData markerData)
+        private void InstantiateMarker(Marker marker)
         {
-            var marker = Instantiate(MarkerManager.markerUIPrefab, mapMarkersParent).GetComponent<MapMarkerUI>();
+            var marker = Instantiate(MarkerManager.markerUIPrefab, mapMarkersParent).GetComponent<MarkerUI>();
             marker.SetData(markerData);
             var markerRect = marker.GetComponent<RectTransform>();
             // marker.GetComponent<RectTransform>().localPosition = GetLocalPointInMap(markerData.normalizedPosition);
@@ -239,6 +244,26 @@ namespace Map
             mapMarkersParent.gameObject.SetActive(value);
         }
 
+
+        // ================================== MOUSE MARKER ==================================
+
+        private void UpdateMouseMarker()
+        {
+            if (mouseCursorMarker == null || !mouseCursorMarker.gameObject.activeSelf) return;
+
+            var numSelected = MarkerManager.numSelectedMarkers;
+            if (numSelected == 0) return;
+            if (numSelected == 1)
+            {
+                mouseCursorMarker.GetComponent<Image>().color = Color.red;
+                mouseLabel.GetComponent<TMP_Text>().text = "Place Marker Selected";
+            }
+            else if (numSelected == 2)
+            {
+                mouseCursorMarker.GetComponent<Image>().color = Color.red;
+                mouseLabel.GetComponent<TMP_Text>().text = "Click to add Middle Marker";
+            }
+        }
 
         // ================================== LINE RENDERER ==================================
         private void UpdateLine()

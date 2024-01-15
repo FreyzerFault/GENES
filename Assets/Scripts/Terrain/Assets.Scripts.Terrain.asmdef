@@ -1,0 +1,16 @@
+{
+    "name": "Assets.Scripts.Terrain",
+    "rootNamespace": "",
+    "references": [
+        "GUID:20aa0aeb7f6270545bab9809729d4919"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

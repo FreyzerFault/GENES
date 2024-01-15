@@ -13,11 +13,12 @@ MonoBehaviour:
   m_Name: A Star Configuration
   m_EditorClassIdentifier: 
   distanceCost: 1
-  heightCost: 0
-  distanceHeuristic: 1
-  heightHeuristic: 0
-  slopeHeuristic: 40
+  heightCost: 1
+  distanceHeuristic: 2
+  heightHeuristic: 1
+  slopeHeuristic: 1
   maxSlopeAngle: 40
   cellSize: 2
-  maxIterations: 1000
+  maxIterations: 2000
   useCache: 1
+  minHeight: 100

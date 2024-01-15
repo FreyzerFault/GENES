@@ -1,11 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Cinemachine;
 using EditorCools;
-using JetBrains.Annotations;
 using PathFinding;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Map
 {
@@ -19,78 +18,82 @@ namespace Map
 
         // WORLD Markers
         [SerializeField] private GameObject marker3DPrefab;
-        public MapMarkerObject[] markerObjects;
+        public MarkerObject[] markerObjects;
+        [SerializeField] private CinemachineTargetGroup camTargetGroup;
 
         [SerializeField] private bool useAstarAlgorithm = true;
         [SerializeField] private bool projectLineToTerrain = true;
         [SerializeField] private bool showStartingLineAtPlayer = true;
         [SerializeField] private bool showDirectPath = true;
 
-        private Transform playerTransform;
-        private MapMarkerManagerSO MarkerManager => MapManager.Instance.markerManager;
+        private Node[] _playerPath;
 
-        private Node[] playerPath;
+        private Transform playerTransform;
+
+        private MapMarkerManagerSO MarkerManager => MapManager.Instance.markerManager;
 
         private void Awake()
         {
             playerTransform = GameObject.FindWithTag("Player").transform;
-            markerObjects ??= Array.Empty<MapMarkerObject>();
+            markerObjects ??= Array.Empty<MarkerObject>();
         }
 
         private void Start()
         {
-            MarkerManager.OnMarkerAdded.AddListener(_ => UpdatePath());
-            MarkerManager.OnMarkerAdded.AddListener(SpawnMarkerInWorld);
-            MarkerManager.OnMarkerRemoved.AddListener(_ => UpdatePath());
-            MarkerManager.OnMarkerRemoved.AddListener(DestroyMarkerInWorld);
-            MarkerManager.OnMarkersClear.AddListener(ClearLine);
-            MarkerManager.OnMarkersClear.AddListener(ClearMarkersInWorld);
-            
             AstarAlgorithm.CleanCache();
 
-            UpdatePath();
+            // PATH
+            InitializePathLineRenderer();
 
-            // First Markers Spawning
+            // First Marker Objects Spawning
             InitializeMarkerObjects();
+
+            // Aerial Camera Targets
+            InitializeCamTargets();
         }
 
         private void Update()
         {
             if (showStartingLineAtPlayer && MarkerManager.Markers.Length > 0)
-                UpdatePlayerPath();
-            
-            
+                UpdatePlayerPathLineRenderer();
+
             // Update Direct Line Renderer
             if (showDirectPath)
-                UpdateDirectPath();
+                UpdateDirectPathLineRenderer();
         }
 
 
         // ================== LINE RENDERER ==================
-
-        private void UpdatePath()
+        private void InitializePathLineRenderer()
         {
-            UpdatePath(MarkerManager.Markers);
+            MarkerManager.OnMarkerAdded.AddListener(_ => UpdatePathLineRenderer());
+            MarkerManager.OnMarkerRemoved.AddListener(_ => UpdatePathLineRenderer());
+            MarkerManager.OnMarkersClear.AddListener(ClearPathLines);
+            UpdatePathLineRenderer();
         }
 
-        private void UpdatePath(MapMarkerData[] markers)
+        private void UpdatePathLineRenderer()
         {
-            UpdatePath(MarkerManager.Markers.Select(marker => marker.worldPosition).ToArray());
+            UpdatePathLineRenderer(MarkerManager.Markers);
         }
 
-        [Button("Ejecutar PathFinding")]
-        private void UpdatePath(Vector3[] markerPositions)
+        private void UpdatePathLineRenderer(Marker[] markers)
+        {
+            UpdatePathLineRenderer(MarkerManager.Markers.Select(marker => marker.worldPosition).ToArray());
+        }
+
+        private void UpdatePathLineRenderer(Vector3[] markerPositions)
         {
             // Player -> First Marker Line
-            if (showStartingLineAtPlayer) UpdatePlayerPath();
-            
+            if (showStartingLineAtPlayer) UpdatePlayerPathLineRenderer();
+
             if (markerPositions.Length < 2) return;
 
             var pathForMarkers = BuildPath(
                 markerPositions,
                 MapManager.Instance.terrain
-                );
-            
+            );
+
             // Proyectar en el Terreno
             if (projectLineToTerrain) pathForMarkers = ProjectPathToTerrain(pathForMarkers);
 
@@ -98,47 +101,56 @@ namespace Map
             linePathBetweenMarkers.positionCount = pathForMarkers.Length;
             linePathBetweenMarkers.SetPositions(pathForMarkers);
         }
-        
-        private void UpdatePlayerPath()
+
+        private void UpdatePlayerPathLineRenderer()
         {
             if (MarkerManager.Markers.Length == 0) return;
-            
+
             // PathFinding
             var pathForPlayer = BuildPath(
-                new [] { playerTransform.position, MarkerManager.FirstMarker.worldPosition },
+                new[] { playerTransform.position, MarkerManager.FirstMarker.worldPosition },
                 MapManager.Instance.terrain
             );
-            
+
             // Proyectar en el Terreno
             if (projectLineToTerrain) pathForPlayer = ProjectPathToTerrain(pathForPlayer);
-            
+
             // Update LineRenderer
             linePlayerToMarker.positionCount = pathForPlayer.Length;
             linePlayerToMarker.SetPositions(pathForPlayer);
         }
-        
-        
+
+
         // Direct Path to every marker
-        private void UpdateDirectPath()
+        private void UpdateDirectPathLineRenderer()
         {
-            Vector3[] directPath = MarkerManager.Markers.Select(marker => marker.worldPosition)
+            var directPath = MarkerManager.Markers.Select(marker => marker.worldPosition)
                 .Prepend(playerTransform.position).ToArray();
-            
+
             if (projectLineToTerrain)
                 directPath = ProjectPathToTerrain(directPath);
-            
+
             directLinePath.positionCount = directPath.Length;
             directLinePath.SetPositions(directPath);
         }
 
+        private void ClearPathLines()
+        {
+            linePathBetweenMarkers.positionCount = 0;
+            linePathBetweenMarkers.SetPositions(Array.Empty<Vector3>());
+
+            linePlayerToMarker.positionCount = 0;
+            linePlayerToMarker.SetPositions(Array.Empty<Vector3>());
+        }
+
+
         // ================== PATH FINDING ==================
         private Vector3[] BuildPath(Vector3[] checkPoints, Terrain terrain)
         {
-            Vector3[] points = Array.Empty<Vector3>();
+            var points = Array.Empty<Vector3>();
 
             if (useAstarAlgorithm) // A* Algorithm
-                for (int i = 1; i < checkPoints.Length; i++)
-                {
+                for (var i = 1; i < checkPoints.Length; i++)
                     points = points.Concat(
                         AstarAlgorithm.GetPathWorldPoints(
                             AstarAlgorithm.FindPath(
@@ -148,34 +160,25 @@ namespace Map
                                 aStarConfig
                             )
                         )
-                        ).ToArray();
-                }
+                    ).ToArray();
             else
                 points = checkPoints;
-            
+
             return points;
         }
 
 
-        private void ClearLine()
-        {
-            linePathBetweenMarkers.positionCount = 0;
-            linePathBetweenMarkers.SetPositions(Array.Empty<Vector3>());
-            
-            linePlayerToMarker.positionCount = 0;
-            linePlayerToMarker.SetPositions(Array.Empty<Vector3>());
-        }
-        
+        // ================== TERRAIN PROJECTION ==================
         private Vector3[] ProjectPathToTerrain(Vector3[] path)
         {
-            Vector3[] finalPath = Array.Empty<Vector3>();
-            for (int i = 1; i < path.Length; i++) 
+            var finalPath = Array.Empty<Vector3>();
+            for (var i = 1; i < path.Length; i++)
                 finalPath = finalPath.Concat(ProjectSegmentToTerrain(path[i - 1], path[i]).SkipLast(1)).ToArray();
             finalPath = finalPath.Append(path[^1]).ToArray();
-            
+
             // Offset en altura
             finalPath = OffsetPoints(finalPath, MarkerManager.heightOffset);
-            
+
             return finalPath;
         }
 
@@ -186,10 +189,10 @@ namespace Map
 
             var distance = Vector3.Distance(a, b);
             var sampleLength = terrain.terrainData.heightmapScale.x;
-            
+
             // Si el segmento es más corto, no hace falta samplearlo
-            if (sampleLength > distance) return new[] {a, b};
-            
+            if (sampleLength > distance) return new[] { a, b };
+
             var lineSamples = new List<Vector3>();
             var numSamples = Mathf.FloorToInt(distance / sampleLength);
             for (var sampleIndex = 0; sampleIndex < numSamples; sampleIndex++)
@@ -219,23 +222,26 @@ namespace Map
 
         private void InitializeMarkerObjects()
         {
+            MarkerManager.OnMarkerAdded.AddListener(SpawnMarkerInWorld);
+            MarkerManager.OnMarkerRemoved.AddListener(DestroyMarkerInWorld);
+            MarkerManager.OnMarkersClear.AddListener(ClearMarkersInWorld);
             foreach (var marker in MarkerManager.Markers) SpawnMarkerInWorld(marker);
         }
 
-        private void SpawnMarkerInWorld(MapMarkerData markerData)
+        private void SpawnMarkerInWorld(Marker marker)
         {
-            var pos = markerData.worldPosition;
+            var pos = marker.worldPosition;
 
             var parent = GameObject.FindWithTag("Map Path");
             var markerObj = Instantiate(marker3DPrefab, pos, Quaternion.identity, parent.transform)
-                .GetComponent<MapMarkerObject>();
-            markerObj.id = markerData.id;
+                .GetComponent<MarkerObject>();
+
             markerObjects = markerObjects.Append(markerObj).ToArray();
         }
 
-        private void DestroyMarkerInWorld(MapMarkerData marker)
+        private void DestroyMarkerInWorld(Marker marker)
         {
-            var index = markerObjects.ToList().FindIndex(markerObj => markerObj.id == marker.id);
+            var index = markerObjects.ToList().FindIndex(markerObj => markerObj.Id == marker.id);
             var markerObj = markerObjects[index];
             Destroy(markerObj.gameObject);
 
@@ -248,7 +254,37 @@ namespace Map
         {
             foreach (var markerObj in markerObjects) Destroy(markerObj.gameObject);
 
-            markerObjects = Array.Empty<MapMarkerObject>();
+            markerObjects = Array.Empty<MarkerObject>();
+        }
+
+        // ================== CAM TARGETS ==================
+        private void InitializeCamTargets()
+        {
+            MarkerManager.OnMarkerAdded.AddListener(_ => UpdateCamTargets());
+            MarkerManager.OnMarkerRemoved.AddListener(_ => UpdateCamTargets());
+            MarkerManager.OnMarkersClear.AddListener(ClearCamTargets);
+            ClearCamTargets();
+            UpdateCamTargets();
+        }
+
+        private void UpdateCamTargets()
+        {
+            foreach (var obj in markerObjects) camTargetGroup.AddMember(obj.transform, 1, 1);
+        }
+
+        private void ClearCamTargets()
+        {
+            camTargetGroup.m_Targets = Array.Empty<CinemachineTargetGroup.Target>();
+        }
+
+        // =================================== UI ===================================
+
+        [Button("Ejecutar PathFinding")]
+        private void RedoPathFinding()
+        {
+            AstarAlgorithm.CleanCache();
+            UpdatePathLineRenderer();
+            UpdatePlayerPathLineRenderer();
         }
     }
 }

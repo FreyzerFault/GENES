@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEditor;
+using ExtensionMethods;
 using UnityEngine;
 
 namespace PathFinding
@@ -12,17 +12,22 @@ namespace PathFinding
     {
         // Cache
         public static Node[] cachedPath;
-        public static void CleanCache() => cachedPath = Array.Empty<Node>();
-        
+
+        public static void CleanCache()
+        {
+            cachedPath = Array.Empty<Node>();
+        }
+
         // ALGORTIMO A*
         public static Node[] FindPath(Node start, Node end, Terrain terrain, AstarConfigSO paramsConfig)
         {
             // Cache de caminos para no repetir el mismo
-            if (paramsConfig.useCache && cachedPath is { Length: > 0 } && cachedPath[0].Position == start.Position && cachedPath[^1].Position == end.Position)
+            if (paramsConfig.useCache && cachedPath is { Length: > 0 } && cachedPath[0].Position == start.Position &&
+                cachedPath[^1].Position == end.Position)
                 return cachedPath;
-            
-            int iterations = 0;
-            
+
+            var iterations = 0;
+
             // Nodes checked
             List<Node> closedList = new();
 
@@ -33,7 +38,7 @@ namespace PathFinding
             while (openList.Count > 0)
             {
                 iterations++;
-                
+
                 // Sort by F, then by H
                 openList.Sort((a, b) =>
                 {
@@ -54,26 +59,30 @@ namespace PathFinding
                 // Si cumple la condición objetivo, terminar
                 // End no tiene por qué ser un nodo que cuadre en la malla
                 // El último Nodo será el que se acerque a End hasta que su tamaño lo contenga 
-                if (iterations >= paramsConfig.maxIterations || Vector2.Distance(currentNode.Pos2D, end.Pos2D) < currentNode.Size )
+                if (iterations >= paramsConfig.maxIterations ||
+                    Vector2.Distance(currentNode.Pos2D, end.Pos2D) < currentNode.Size)
                 {
                     end.G = CalculateCost(currentNode, end, paramsConfig);
                     end.H = 0;
                     end.Parent = currentNode;
 
-                    Node[] path = GetPath(start, end);
-                    
+                    var path = GetPath(start, end);
+
                     if (paramsConfig.useCache) cachedPath = path;
-                    
+
                     return path;
                 }
 
                 // Crear vecinos si es la 1º vez que se exploran
                 if (currentNode.Neighbours == null || currentNode.Neighbours.Length == 0)
-                    currentNode.Neighbours = CreateNeighbours(currentNode, terrain);
+                    currentNode.Neighbours = CreateNeighbours(currentNode, terrain, paramsConfig);
 
                 // Explorar vecinos
                 foreach (var neighbour in currentNode.Neighbours)
                 {
+                    neighbour.Legal = IsLegal(neighbour, paramsConfig);
+                    if (!neighbour.Legal) continue;
+
                     // Ya explorado
                     if (closedList.Contains(neighbour)) continue;
 
@@ -94,13 +103,16 @@ namespace PathFinding
                     }
                 }
             }
+
             return null;
         }
 
         public static Node[] FindPathByCheckpoints(Node[] checkPoints, Terrain terrain, AstarConfigSO paramsConfig)
         {
-            Node[] pathNodes = Array.Empty<Node>();
-            for (int i = 1; i < checkPoints.Length; i++) pathNodes = pathNodes.Concat(FindPath(checkPoints[i - 1], checkPoints[i], terrain, paramsConfig)).ToArray();
+            var pathNodes = Array.Empty<Node>();
+            for (var i = 1; i < checkPoints.Length; i++)
+                pathNodes = pathNodes.Concat(FindPath(checkPoints[i - 1], checkPoints[i], terrain, paramsConfig))
+                    .ToArray();
             return pathNodes;
         }
 
@@ -118,13 +130,21 @@ namespace PathFinding
             var distHeuristic = Vector2.Distance(node.Pos2D, end.Pos2D) * paramsConfig.distanceHeuristic;
             var heightHeuristic = Mathf.Abs(node.Position.y - end.Position.y) * paramsConfig.heightHeuristic;
 
-            float slopeHeuristic = node.SlopeAngle / paramsConfig.maxSlopeAngle * paramsConfig.slopeHeuristic;
+            var slopeHeuristic = node.SlopeAngle * paramsConfig.slopeHeuristic;
 
             return distHeuristic + heightHeuristic + slopeHeuristic;
         }
 
+        private static bool IsLegal(Node node, AstarConfigSO paramsConfig)
+        {
+            bool legalHeight = node.Height >= paramsConfig.minHeight,
+                legalSlope = node.SlopeAngle <= paramsConfig.maxSlopeAngle;
+
+            return legalHeight && legalSlope;
+        }
+
         // ==================== VECINOS ====================
-        private static Node[] CreateNeighbours(Node node, Terrain terrain)
+        private static Node[] CreateNeighbours(Node node, Terrain terrain, AstarConfigSO paramsConfig)
         {
             var neighbours = new List<Node>();
             for (var i = 0; i < 8; i++)
@@ -139,7 +159,7 @@ namespace PathFinding
                     0,
                     node.Position.z + zOffset
                 );
-                
+
                 if (node.Parent != null && node.Equals(new Node(neighPos, 0, node.Size)))
                 {
                     neighbours.Add(node.Parent);
@@ -154,7 +174,9 @@ namespace PathFinding
                 neighPos.y = terrain.SampleHeight(neighPos);
 
                 // Slope Angle
-                neighbours.Add(new Node(neighPos, terrain.GetSlopeAngle(neighPos), node.Size));
+                var slopeAngle = terrain.GetSlopeAngle(neighPos);
+
+                neighbours.Add(new Node(neighPos, slopeAngle, node.Size));
             }
 
             node.Neighbours = neighbours.ToArray();

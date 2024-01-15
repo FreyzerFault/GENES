@@ -28,6 +28,7 @@ namespace PathFinding
         public float F => G + H;
         public float G { get; set; }
         public float H { get; set; }
+        public bool Legal { get; set; }
 
         public Vector2 Pos2D => new(Position.x, Position.z);
         public float Height => Position.y;
@@ -40,9 +41,8 @@ namespace PathFinding
         public override bool Equals(object obj)
         {
             if (obj is not Node node) return false;
-            
+
             return Vector2.Distance(node.Pos2D, Pos2D) < EqualityPrecision;
-            
         }
     }
 }
