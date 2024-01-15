@@ -9,62 +9,119 @@ namespace Map
     [Serializable]
     public class Marker
     {
-        private static readonly Color DefaultColor = Color.white;
-
-        public Vector2 normalizedPosition;
-        public Vector3 worldPosition;
-
-        public Color color;
-        public string labelText;
-        public bool selected;
-
-        public UnityEvent<MarkerState> OnStateChange;
 
         public readonly GUID id;
+        
+        private Vector2 _normalizedPosition;
+        private Vector3 _worldPosition;
 
+        private string _labelText;
 
-        public Marker(Vector2 normalizedPos, Vector3 worldPos, string label = "",
-            Color? color = null)
+        private MarkerState _state;
+        private bool _selected;
+
+        public UnityEvent<Vector2> onPositionChange;
+        public UnityEvent<MarkerState> onStateChange;
+        public UnityEvent<string> onLabelChange;
+        public UnityEvent<bool> onSelected;
+        
+        public Marker(Vector2 normalizedPos, Vector3 worldPos, string label = "")
         {
-            normalizedPosition = normalizedPos;
-            worldPosition = worldPos;
+            _normalizedPosition = normalizedPos;
+            _worldPosition = worldPos;
 
-            this.color = color ?? DefaultColor;
-            labelText = label ?? worldPosition.ToString();
+            _labelText = label ?? Vector3Int.RoundToInt(_worldPosition).ToString();
 
             id = GUID.Generate();
 
-            State = MarkerState.Unchecked;
-            selected = false;
-            OnStateChange = new UnityEvent<MarkerState>();
+            _selected = false;
+            _state = MarkerState.Unchecked;
+            
+            onPositionChange = new UnityEvent<Vector2>();
+            onStateChange = new UnityEvent<MarkerState>();
+            onLabelChange = new UnityEvent<string>();
+            onSelected = new UnityEvent<bool>();
         }
 
         // Solo el normalizedPos => Se calcula la normalized
-        public Marker(Vector2 normalizedPos, string label = "", Color? color = null)
+        public Marker(Vector2 normalizedPos, string label = "")
             : this(
                 normalizedPos,
-                MapManager.Instance.TerrainData.GetWorldPosition(normalizedPos),
-                label,
-                color
+                ToWorldPos(normalizedPos),
+                label
             )
         {
         }
 
-        public MarkerState State
+        public Vector2 NormalizedPosition
         {
-            get => State;
+            get => _normalizedPosition;
             set
             {
-                State = value;
-                OnStateChange.Invoke(value);
+                _normalizedPosition = value;
+                _worldPosition = ToWorldPos(value);
+                onPositionChange.Invoke(value);
             }
         }
 
+        public Vector3 WorldPosition
+        {
+            get => _worldPosition;
+            set
+            {
+                _worldPosition = value;
+                _normalizedPosition = ToNormPos(value);
+                onPositionChange.Invoke(_normalizedPosition);
+            }
+        }
+
+        public string LabelText
+        {
+            get => _labelText;
+            set
+            {
+                _labelText = value;
+                onLabelChange.Invoke(value);
+            }
+        }
+        
+        
+        public MarkerState State
+        {
+            get => _state;
+            set
+            {
+                _state = value;
+                onStateChange.Invoke(value);
+            }
+        }
+
+        public void Select()
+        {
+            _selected = true;
+            onSelected.Invoke(true);
+        }
+        public void Deselect()
+        {
+            _selected = false;
+            onSelected.Invoke(false);
+        }
 
         public bool IsNext => State == MarkerState.Next;
         public bool IsChecked => State == MarkerState.Checked;
+        public bool IsUnchecked => State == MarkerState.Unchecked;
+        
+        public bool IsSelected => _selected;
+        
+        private static Vector3 ToWorldPos(Vector2 normalizedPos)
+        {
+            return MapManager.Instance.TerrainData.GetWorldPosition(normalizedPos);
+        }
+        private static Vector3 ToNormPos(Vector3 worldPos)
+        {
+            return MapManager.Instance.TerrainData.GetNormalizedPosition(worldPos);
+        }
     }
-
 
     [Serializable]
     public enum MarkerState

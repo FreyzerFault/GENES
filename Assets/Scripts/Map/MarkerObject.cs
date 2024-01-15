@@ -1,22 +1,26 @@
+using ExtensionMethods;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Serialization;
 
 namespace Map
 {
     public class MarkerObject : MonoBehaviour
     {
-        private static readonly int PickUp = Animator.StringToHash("PickUp");
-        [SerializeField] private GameObject waypointModel;
+        private static readonly int PickUpAnimationId = Animator.StringToHash("PickUp");
+        
         [SerializeField] private GameObject coin;
+        
+        [SerializeField] private GameObject waypointModel;
         [SerializeField] private GameObject arrowModel;
         [SerializeField] private GameObject checkedModel;
 
-        public UnityEvent<Marker> OnPlayerPickUp;
-
         [SerializeField] private Marker marker;
-
+        
         private GameObject _player;
+        
+        public UnityEvent<Marker> onPlayerPickUp;
 
         public GUID Id => marker.id;
 
@@ -38,17 +42,24 @@ namespace Map
 
         private void OnTriggerEnter(Collider other)
         {
-            Debug.Log("OnTriggerEnter");
-            if (other.CompareTag("Player") && marker.IsNext) OnPlayerPickUp.Invoke(marker);
+            if (!other.CompareTag("Player") || !marker.IsNext) return;
+            
+            // ANIMACION
+            PickUpAnimation();
+            
+            // ESTADO -> CHECKED
+            marker.State = MarkerState.Checked;
+            
+            // EVENTO PICK UP
+            onPlayerPickUp.Invoke(marker);
         }
 
         private void Initialize()
         {
-            OnPlayerPickUp = new UnityEvent<Marker>();
-            OnPlayerPickUp.AddListener(_ => PickUpAnimation());
-            OnPlayerPickUp.AddListener(_ => marker.State = MarkerState.Checked);
-
             UpdateState(marker.State);
+            
+            marker.onStateChange.AddListener(UpdateState);
+            marker.onPositionChange.AddListener(_ => UpdatePosition());
         }
 
         private void UpdateState(MarkerState state)
@@ -69,11 +80,13 @@ namespace Map
                     break;
             }
         }
+        
+        private void UpdatePosition() => transform.position = marker.WorldPosition;
 
 
         private void PickUpAnimation()
         {
-            coin.GetComponent<Animator>().SetTrigger(PickUp);
+            coin.GetComponent<Animator>().SetTrigger(PickUpAnimationId);
             coin.GetComponentInChildren<ParticleSystem>().Play();
         }
     }

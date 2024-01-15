@@ -674,3 +674,5 @@ D:\Unity Projects\Proyecto Campo\obj\Debug\Assets.Scripts.Physics.csproj.CoreCom
 D:\Unity Projects\Proyecto Campo\obj\Debug\Assets.Scripts.Physics.csproj.CopyComplete
 D:\Unity Projects\Proyecto Campo\obj\Debug\Assets.Scripts.Physics.dll
 D:\Unity Projects\Proyecto Campo\obj\Debug\Assets.Scripts.Physics.pdb
+D:\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts.Physics\Assets.Scripts.ExtensionMethods.dll
+D:\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts.Physics\Assets.Scripts.ExtensionMethods.pdb

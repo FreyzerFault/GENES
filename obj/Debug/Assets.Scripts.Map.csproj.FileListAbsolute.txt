@@ -339,3 +339,7 @@ D:\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts.Map\Unity.RenderP
 D:\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts.Map\Unity.Mathematics.pdb
 D:\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts.Map\Unity.RenderPipeline.Universal.ShaderLibrary.pdb
 D:\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts.Map\Unity.Burst.pdb
+D:\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts.Map\Assets.Scripts.ExtensionMethods.dll
+D:\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts.Map\Assets.Scripts.PathFinding.dll
+D:\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts.Map\Assets.Scripts.PathFinding.pdb
+D:\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts.Map\Assets.Scripts.ExtensionMethods.pdb

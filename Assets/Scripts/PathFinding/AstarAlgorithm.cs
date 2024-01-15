@@ -25,6 +25,8 @@ namespace PathFinding
             if (paramsConfig.useCache && cachedPath is { Length: > 0 } && cachedPath[0].Position == start.Position &&
                 cachedPath[^1].Position == end.Position)
                 return cachedPath;
+            
+            if (!IsLegal(start, paramsConfig) || !IsLegal(end, paramsConfig)) return Array.Empty<Node>();
 
             var iterations = 0;
 
@@ -75,7 +77,7 @@ namespace PathFinding
 
                 // Crear vecinos si es la 1º vez que se exploran
                 if (currentNode.Neighbours == null || currentNode.Neighbours.Length == 0)
-                    currentNode.Neighbours = CreateNeighbours(currentNode, terrain, paramsConfig);
+                    currentNode.Neighbours = CreateNeighbours(currentNode, terrain);
 
                 // Explorar vecinos
                 foreach (var neighbour in currentNode.Neighbours)
@@ -104,7 +106,7 @@ namespace PathFinding
                 }
             }
 
-            return null;
+            return Array.Empty<Node>();
         }
 
         public static Node[] FindPathByCheckpoints(Node[] checkPoints, Terrain terrain, AstarConfigSO paramsConfig)
@@ -144,7 +146,7 @@ namespace PathFinding
         }
 
         // ==================== VECINOS ====================
-        private static Node[] CreateNeighbours(Node node, Terrain terrain, AstarConfigSO paramsConfig)
+        private static Node[] CreateNeighbours(Node node, Terrain terrain)
         {
             var neighbours = new List<Node>();
             for (var i = 0; i < 8; i++)

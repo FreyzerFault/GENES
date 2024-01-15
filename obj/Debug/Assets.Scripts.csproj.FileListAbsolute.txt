@@ -678,3 +678,5 @@ D:\Unity Projects\Proyecto Campo\obj\Debug\Assets.Scripts.csproj.CoreCompileInpu
 D:\Unity Projects\Proyecto Campo\obj\Debug\Assets.Scripts.csproj.CopyComplete
 D:\Unity Projects\Proyecto Campo\obj\Debug\Assets.Scripts.dll
 D:\Unity Projects\Proyecto Campo\obj\Debug\Assets.Scripts.pdb
+D:\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts\Assets.Scripts.ExtensionMethods.dll
+D:\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts\Assets.Scripts.ExtensionMethods.pdb
