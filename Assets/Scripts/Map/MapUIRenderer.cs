@@ -1,16 +1,19 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using Codice.Client.Common;
-using EditorCools;
 using ExtensionMethods;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 using UnityEngine.UI.Extensions;
 using Gradient = UnityEngine.Gradient;
+
+#if UNITY_EDITOR
+using MyBox;
+#endif
+
+#if UNITY_EDITOR
+#endif
 
 namespace Map
 {
@@ -36,7 +39,7 @@ namespace Map
         private RawImage _image;
 
         // MARKERS
-        private MapMarkerManagerSO MarkerManager => MapManager.Instance.markerManager;
+        private MarkerManagerSO MarkerManager => MapManager.Instance.markerManager;
 
         public float ZoomScale
         {
@@ -48,9 +51,14 @@ namespace Map
             }
         }
 
+        public RawImage Image
+        {
+            get => _image ? _image : GetComponent<RawImage>();
+            private set => _image = value;
+        }
 
-        private float ImageWidth => _image.rectTransform.rect.width;
-        private float ImageHeight => _image.rectTransform.rect.height;
+        private float ImageWidth => Image.rectTransform.rect.width;
+        private float ImageHeight => Image.rectTransform.rect.height;
         private Vector2 ImageSize => new(ImageWidth, ImageHeight);
 
         private Vector2 OriginPoint
@@ -58,7 +66,7 @@ namespace Map
             get
             {
                 var corners = new Vector3[4];
-                _image.rectTransform.GetWorldCorners(corners);
+                Image.rectTransform.GetWorldCorners(corners);
                 return corners[0];
             }
         }
@@ -66,7 +74,7 @@ namespace Map
         // ================================== UNITY ==================================
         private void Awake()
         {
-            _image ??= GetComponent<RawImage>();
+            Image ??= GetComponent<RawImage>();
         }
 
         private void Start()
@@ -138,13 +146,13 @@ namespace Map
             MarkerManager.OnMarkerRemoved.AddListener(HandleMarkerRemoved);
             MarkerManager.OnMarkerMoved.AddListener(HandleMarkerMoved);
             MarkerManager.OnMarkersClear.AddListener(HandleMarkersClear);
-            
-            
+
+
             // TODO QUITAR ESTO Y LLEVARLO A UN MAPCURSOR
             MarkerManager.OnMarkerSelected.AddListener(HandleMarkerSelected);
             MarkerManager.OnMarkerDeselected.AddListener(HandleMarkerDeselected);
-            
-            
+
+
             // MARKERS
             UpdateMarkers();
         }
@@ -156,30 +164,41 @@ namespace Map
             InstantiateMarker(marker);
             AddMarkerToLine(marker, index);
         }
+
         private void HandleMarkerRemoved(Marker marker, int index)
         {
             UpdateMarkers();
             RemoveMarkerFromLine(index);
         }
+
         private void HandleMarkerMoved(Marker marker, int index)
         {
             UpdateMarkers();
             RemoveMarkerFromLine(index);
             AddMarkerToLine(marker, index);
         }
+
         private void HandleMarkersClear()
         {
             ClearMarkersUI();
             ClearLineRenderer();
         }
-        private void HandleMarkerSelected(Marker marker) => UpdateMouseMarker();
-        private void HandleMarkerDeselected(Marker marker) => UpdateMouseMarker();
+
+        private void HandleMarkerSelected(Marker marker)
+        {
+            UpdateMouseMarker();
+        }
+
+        private void HandleMarkerDeselected(Marker marker)
+        {
+            UpdateMouseMarker();
+        }
 
         // ================================== TERRAIN VISUALIZATION ==================================
         private void RenderTerrain()
         {
             // Create Texture of Map
-            _image.texture =
+            Image.texture =
                 MapManager.Instance.TerrainData.ToTexture((int)ImageWidth, (int)ImageHeight, heightGradient);
         }
 
@@ -195,7 +214,7 @@ namespace Map
         private void CenterPlayerInZoomedMap()
         {
             if (zoomScale == 1) return;
-            
+
             // Centrar el Player en el centro del minimapa por medio de su pivot
             var pivot = MapManager.Instance.PlayerNormalizedPosition;
 
@@ -209,14 +228,14 @@ namespace Map
             displacement.y = Mathf.Min(distanceToBotLeft.y, displacement.y);
 
             // Pivot reajustado
-            _image.rectTransform.pivot = pivot;
-            _image.rectTransform.anchoredPosition = displacement;
+            Image.rectTransform.pivot = pivot;
+            Image.rectTransform.anchoredPosition = displacement;
         }
 
         private void Zoom()
         {
             // Escalar el mapa relativo al centro donde está el Player
-            _image.rectTransform.localScale = new Vector3(zoomScale, zoomScale, 1);
+            Image.rectTransform.localScale = new Vector3(zoomScale, zoomScale, 1);
 
             // La flecha del player se escala al revés para que no se vea afectada por el zoom
             playerSprite.localScale = new Vector3(1 / zoomScale, 1 / zoomScale, 1);
@@ -227,7 +246,13 @@ namespace Map
 
         private void ClearMarkersUI()
         {
-            GetComponentsInChildren<MarkerUI>().ToList().ForEach(marker => Destroy(marker.gameObject));
+            GetComponentsInChildren<MarkerUI>().ToList().ForEach(marker =>
+            {
+                if (Application.isPlaying)
+                    Destroy(marker.gameObject);
+                else
+                    DestroyImmediate(marker.gameObject);
+            });
             ClearLineRenderer();
         }
 
@@ -236,7 +261,7 @@ namespace Map
             ClearMarkersUI();
 
             // Se instancian de nuevo todos los markers
-            foreach (Marker marker in MarkerManager.Markers) InstantiateMarker(marker);
+            foreach (var marker in MarkerManager.Markers) InstantiateMarker(marker);
 
             UpdateLineRenderer();
             UpdateMouseMarker();
@@ -289,26 +314,28 @@ namespace Map
         private void AddMarkerToLine(Marker marker, int index = -1)
         {
             // Si el primer punto es el default, se quita
-            bool lineWithDefaultPoint = lineRenderer.Points[0] == Vector2.zero;
-            
-            if (index == -1) 
+            var lineWithDefaultPoint = lineRenderer.Points[0] == Vector2.zero;
+
+            if (index == -1)
+            {
                 lineRenderer.Points = lineRenderer.Points.Append(
-                        GetLocalPointInMap(marker.NormalizedPosition)
-                    ).ToArray();
+                    GetLocalPointInMap(marker.NormalizedPosition)
+                ).ToArray();
+            }
             else
             {
-                Vector2 posInMap = GetLocalPointInMap(marker.NormalizedPosition);
-                Vector2[] points = lineRenderer.Points;
+                var posInMap = GetLocalPointInMap(marker.NormalizedPosition);
+                var points = lineRenderer.Points;
                 lineRenderer.Points = points
                     .Take(index - 1)
                     .Append(posInMap)
                     .Concat(points.TakeLast(points.Length - index))
                     .ToArray();
             }
-            
+
             if (lineWithDefaultPoint) RemoveMarkerFromLine(0);
         }
-        
+
         private void RemoveMarkerFromLine(int index = -1)
         {
             if (index == -1) return;
@@ -317,16 +344,16 @@ namespace Map
             list.RemoveAt(index);
             lineRenderer.Points = list.ToArray();
         }
-        
+
         private void MoveMarkerFromLine(Marker marker, int index = -1)
         {
             RemoveMarkerFromLine(index);
             AddMarkerToLine(marker, index);
         }
-        
+
         private void ClearLineRenderer()
         {
-            Vector2[] emptyArray = Array.Empty<Vector2>();
+            var emptyArray = Array.Empty<Vector2>();
             lineRenderer.Points = emptyArray;
         }
 
@@ -343,38 +370,6 @@ namespace Map
             return normalizedPos * ImageSize;
         }
 
-        // ================================== BUTTONS on INSPECTOR ==================================
-        [Button("Update Map")]
-        private void UpdateMapButton()
-        {
-            Initialize();
-            RenderTerrain();
-            Zoom();
-            UpdatePlayerPoint();
-        }
-
-        // BUTTONS
-        [Button("Update Player Point")]
-        private void UpdatePlayerPointButton()
-        {
-            Initialize();
-            UpdatePlayerPoint();
-        }
-
-        [Button("Zoom to PLayer")]
-        private void ZoomToPlayerButton()
-        {
-            Initialize();
-            Zoom();
-        }
-
-        [Button("Render Terrain")]
-        private void RenderTerrainButton()
-        {
-            Initialize();
-            RenderTerrain();
-        }
-
         [Serializable]
         private enum MarkerMode
         {
@@ -383,5 +378,40 @@ namespace Map
             Select,
             None
         }
+
+#if UNITY_EDITOR
+        // ================================== BUTTONS on INSPECTOR ==================================
+        [ButtonMethod]
+        private void UpdateMap()
+        {
+            Initialize();
+            RenderTerrain();
+            Zoom();
+            UpdatePlayerPoint();
+        }
+
+        // BUTTONS
+        [ButtonMethod]
+        private void UpdatePlayerPointInMap()
+        {
+            Initialize();
+            UpdatePlayerPoint();
+        }
+
+        [ButtonMethod]
+        private void ZoomMapToPlayerPosition()
+        {
+            Initialize();
+            Zoom();
+        }
+
+
+        [ButtonMethod]
+        private void ReRenderTerrainButton()
+        {
+            Initialize();
+            RenderTerrain();
+        }
+#endif
     }
 }

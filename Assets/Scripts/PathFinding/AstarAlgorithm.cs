@@ -1,32 +1,53 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using ExtensionMethods;
 using UnityEngine;
 
 namespace PathFinding
 {
+    [Serializable]
+    public struct AstarConfig
+    {
+        // Escalado de Coste y Heurística
+        // Ajusta la penalización o recompensa de cada parámetro
+
+        // TRAYECTO MÁS CORTO vs TERRENO MÁS SEGURO
+
+        // =================== Coste ===================
+        // Penaliza la Distancia Recorrida (Ruta + corta)
+        public float distanceCost;
+
+        // Penaliza cambiar la altura (evita que intente subir escalones grandes)
+        public float heightCost;
+
+        // =================== Heurística ===================
+        // Recompensa acercarse al objetivo
+        public float distanceHeuristic;
+
+        // Recompensa acercarse a la altura del objetivo
+        public float heightHeuristic;
+
+        // Recompensa minimizar la pendiente (rodea montículos si puede)
+        public float slopeHeuristic;
+        public float maxSlopeAngle;
+    }
+
     // TODO => Añadir Coste de Giro
     // (Necesito la dirección del Nodo Inicial y cada Nodo necesitará saber su dirección)
-    public static class AstarAlgorithm
+
+    // ALGORTIMO A*
+    public class AstarAlgorithm : PathFindingAlgorithm
     {
-        // Cache
-        public static Node[] cachedPath;
+        private static AstarAlgorithm _instance;
+        public static AstarAlgorithm Instance => _instance ??= new AstarAlgorithm();
 
-        public static void CleanCache()
+        public override Path FindPath(Node start, Node end, Terrain terrain, PathFindingConfigSO paramsConfig)
         {
-            cachedPath = Array.Empty<Node>();
-        }
+            // Si el Path de Cache tiene mismo inicio y fin => Devolverlo
+            if (paramsConfig.useCache && IsCached(start, end))
+                return CachedPath;
 
-        // ALGORTIMO A*
-        public static Node[] FindPath(Node start, Node end, Terrain terrain, AstarConfigSO paramsConfig)
-        {
-            // Cache de caminos para no repetir el mismo
-            if (paramsConfig.useCache && cachedPath is { Length: > 0 } && cachedPath[0].Position == start.Position &&
-                cachedPath[^1].Position == end.Position)
-                return cachedPath;
-            
-            if (!IsLegal(start, paramsConfig) || !IsLegal(end, paramsConfig)) return Array.Empty<Node>();
+            if (!IsLegal(start, paramsConfig) || !IsLegal(end, paramsConfig)) return Path.EmptyPath;
 
             var iterations = 0;
 
@@ -66,11 +87,11 @@ namespace PathFinding
                 {
                     end.G = CalculateCost(currentNode, end, paramsConfig);
                     end.H = 0;
-                    end.Parent = currentNode;
+                    end.parent = currentNode;
 
-                    var path = GetPath(start, end);
+                    var path = new Path(start, end);
 
-                    if (paramsConfig.useCache) cachedPath = path;
+                    if (paramsConfig.useCache) CachedPath = path;
 
                     return path;
                 }
@@ -99,54 +120,47 @@ namespace PathFinding
                         neighbour.H = CalculateHeuristic(neighbour, end, paramsConfig);
 
                         // Conectar nodos
-                        neighbour.Parent = currentNode;
+                        neighbour.parent = currentNode;
 
                         if (!openList.Contains(neighbour)) openList.Add(neighbour);
                     }
                 }
             }
 
-            return Array.Empty<Node>();
-        }
-
-        public static Node[] FindPathByCheckpoints(Node[] checkPoints, Terrain terrain, AstarConfigSO paramsConfig)
-        {
-            var pathNodes = Array.Empty<Node>();
-            for (var i = 1; i < checkPoints.Length; i++)
-                pathNodes = pathNodes.Concat(FindPath(checkPoints[i - 1], checkPoints[i], terrain, paramsConfig))
-                    .ToArray();
-            return pathNodes;
+            return Path.EmptyPath;
         }
 
         // ==================== COSTE Y HEURÍSTICA ====================
-        private static float CalculateCost(Node a, Node b, AstarConfigSO paramsConfig)
+
+        protected override float CalculateCost(Node a, Node b, PathFindingConfigSO paramsConfig)
         {
-            var distanceCost = Vector2.Distance(a.Pos2D, b.Pos2D) * paramsConfig.distanceCost;
-            var heightCost = Math.Abs(a.Position.y - b.Position.y) * paramsConfig.heightCost;
+            var distanceCost = Vector2.Distance(a.Pos2D, b.Pos2D) * paramsConfig.aStarConfig.distanceCost;
+            var heightCost = Math.Abs(a.Position.y - b.Position.y) * paramsConfig.aStarConfig.heightCost;
 
             return distanceCost + heightCost;
         }
 
-        private static float CalculateHeuristic(Node node, Node end, AstarConfigSO paramsConfig)
+        protected override float CalculateHeuristic(Node node, Node end, PathFindingConfigSO paramsConfig)
         {
-            var distHeuristic = Vector2.Distance(node.Pos2D, end.Pos2D) * paramsConfig.distanceHeuristic;
-            var heightHeuristic = Mathf.Abs(node.Position.y - end.Position.y) * paramsConfig.heightHeuristic;
+            var distHeuristic = Vector2.Distance(node.Pos2D, end.Pos2D) * paramsConfig.aStarConfig.distanceHeuristic;
+            var heightHeuristic =
+                Mathf.Abs(node.Position.y - end.Position.y) * paramsConfig.aStarConfig.heightHeuristic;
 
-            var slopeHeuristic = node.SlopeAngle * paramsConfig.slopeHeuristic;
+            var slopeHeuristic = node.SlopeAngle * paramsConfig.aStarConfig.slopeHeuristic;
 
             return distHeuristic + heightHeuristic + slopeHeuristic;
         }
 
-        private static bool IsLegal(Node node, AstarConfigSO paramsConfig)
+        protected override bool IsLegal(Node node, PathFindingConfigSO paramsConfig)
         {
             bool legalHeight = node.Height >= paramsConfig.minHeight,
-                legalSlope = node.SlopeAngle <= paramsConfig.maxSlopeAngle;
+                legalSlope = node.SlopeAngle <= paramsConfig.aStarConfig.maxSlopeAngle;
 
             return legalHeight && legalSlope;
         }
 
         // ==================== VECINOS ====================
-        private static Node[] CreateNeighbours(Node node, Terrain terrain)
+        protected override Node[] CreateNeighbours(Node node, Terrain terrain)
         {
             var neighbours = new List<Node>();
             for (var i = 0; i < 8; i++)
@@ -162,9 +176,9 @@ namespace PathFinding
                     node.Position.z + zOffset
                 );
 
-                if (node.Parent != null && node.Equals(new Node(neighPos, 0, node.Size)))
+                if (node.parent != null && node.Equals(new Node(neighPos, size: node.Size)))
                 {
-                    neighbours.Add(node.Parent);
+                    neighbours.Add(node.parent);
                     continue;
                 }
 
@@ -186,7 +200,7 @@ namespace PathFinding
         }
 
         // ==================== RESTRICCIONES ====================
-        private static bool OutOfBounds(Vector2 pos, Terrain terrain)
+        protected override bool OutOfBounds(Vector2 pos, Terrain terrain)
         {
             var terrainData = terrain.terrainData;
             var terrainPos = terrain.GetPosition();
@@ -198,47 +212,9 @@ namespace PathFinding
             return !overLowerBound && underUpperBound;
         }
 
-        private static bool IllegalPosition(Vector2 pos, Terrain terrain)
+        protected override bool IllegalPosition(Vector2 pos, Terrain terrain)
         {
             return OutOfBounds(pos, terrain);
-        }
-
-        // ==================== TRAYECTO FINAL ====================
-        private static Node[] GetPath(Node start, Node end)
-        {
-            // From end to start
-            var path = new List<Node> { end };
-
-            var currentNode = end.Parent;
-            while (currentNode != start && currentNode != null)
-            {
-                path.Add(currentNode);
-                currentNode = currentNode.Parent;
-            }
-
-            path.Add(start);
-            path.Reverse();
-            return path.ToArray();
-        }
-
-        public static float GetPathLength(Node[] path)
-        {
-            float length = 0;
-            for (var i = 1; i < path.Length; i++)
-                length += Vector3.Distance(path[i - 1].Position, path[i].Position);
-
-            return length;
-        }
-
-        public static Vector3[] GetPathWorldPoints(Node[] path)
-        {
-            if (path.Length == 0) return Array.Empty<Vector3>();
-            return path.Select(node => node.Position).ToArray();
-        }
-
-        public static Vector2[] GetPathNormalizedPoints(Node[] path, TerrainData terrain)
-        {
-            return path.Select(node => terrain.GetNormalizedPosition(node.Position)).ToArray();
         }
     }
 }

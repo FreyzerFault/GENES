@@ -155,7 +155,6 @@ C:\Users\dalcanta\Unity Projects\Proyecto Campo\Temp\Bin\Debug\UnityUIExtensions
 C:\Users\dalcanta\Unity Projects\Proyecto Campo\Temp\Bin\Debug\UnityUIExtensions.editor\UnityEditor.UIElementsModule.dll
 C:\Users\dalcanta\Unity Projects\Proyecto Campo\Temp\Bin\Debug\UnityUIExtensions.editor\UnityEditor.UIElementsSamplesModule.dll
 C:\Users\dalcanta\Unity Projects\Proyecto Campo\Temp\Bin\Debug\UnityUIExtensions.editor\UnityEditor.UnityConnectModule.dll
-C:\Users\dalcanta\Unity Projects\Proyecto Campo\Temp\Bin\Debug\UnityUIExtensions.editor\UnityEditor.WebGL.Extensions.dll
 C:\Users\dalcanta\Unity Projects\Proyecto Campo\Temp\Bin\Debug\UnityUIExtensions.editor\UnityEditor.WindowsStandalone.Extensions.dll
 C:\Users\dalcanta\Unity Projects\Proyecto Campo\Temp\Bin\Debug\UnityUIExtensions.editor\UnityEngine.AccessibilityModule.dll
 C:\Users\dalcanta\Unity Projects\Proyecto Campo\Temp\Bin\Debug\UnityUIExtensions.editor\UnityEngine.AIModule.dll
@@ -231,7 +230,6 @@ C:\Users\dalcanta\Unity Projects\Proyecto Campo\Temp\Bin\Debug\UnityUIExtensions
 C:\Users\dalcanta\Unity Projects\Proyecto Campo\Temp\Bin\Debug\UnityUIExtensions.editor\UnityUIExtensions.dll
 C:\Users\dalcanta\Unity Projects\Proyecto Campo\Temp\Bin\Debug\UnityUIExtensions.editor\Unity.Cecil.dll
 C:\Users\dalcanta\Unity Projects\Proyecto Campo\Temp\Bin\Debug\UnityUIExtensions.editor\System.CodeDom.dll
-C:\Users\dalcanta\Unity Projects\Proyecto Campo\Temp\Bin\Debug\UnityUIExtensions.editor\WebGLPlayerBuildProgram.Data.dll
 C:\Users\dalcanta\Unity Projects\Proyecto Campo\Temp\Bin\Debug\UnityUIExtensions.editor\WinPlayerBuildProgram.Data.dll
 C:\Users\dalcanta\Unity Projects\Proyecto Campo\Temp\Bin\Debug\UnityUIExtensions.editor\System.EnterpriseServices.dll
 C:\Users\dalcanta\Unity Projects\Proyecto Campo\Temp\Bin\Debug\UnityUIExtensions.editor\UnityUIExtensions.pdb

@@ -1,11 +1,15 @@
+using System;
+using ExtensionMethods;
 using UnityEngine;
 
 namespace PathFinding
 {
+    [Serializable]
     public class Node
     {
         private static readonly float DefaultSize = 1;
         private static readonly float EqualityPrecision = 0.01f;
+        public Node parent;
 
         public readonly Vector3 Position;
 
@@ -13,13 +17,13 @@ namespace PathFinding
         public readonly float SlopeAngle;
 
         // Neighbours
-        public Node[] Neighbours;
-        public Node Parent;
+        [NonSerialized] public Node[] Neighbours;
 
-        public Node(Vector3 position, float slopeAngle, float? size)
+
+        public Node(Vector3 position, float? slopeAngle = null, float? size = null)
         {
             Position = position;
-            SlopeAngle = slopeAngle;
+            SlopeAngle = slopeAngle ?? Terrain.activeTerrain.GetSlopeAngle(position);
             Size = size ?? DefaultSize;
         }
 

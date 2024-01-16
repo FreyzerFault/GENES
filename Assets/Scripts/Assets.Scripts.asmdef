@@ -1,21 +1,20 @@
 {
-  "name": "Assets.Scripts",
-  "rootNamespace": "",
-  "references": [
-    "GUID:d15875e667ec13246a941984a2ba07ff",
-    "GUID:4307f53044263cf4b835bd812fc161a4",
-    "GUID:75469ad4d38634e559750d17036d5f7c",
-    "GUID:6055be8ebefd69e48b49212b09b47b2f",
-    "GUID:2584cb88a42907a4482a5446380a09e3",
-    "GUID:20aa0aeb7f6270545bab9809729d4919"
-  ],
-  "includePlatforms": [],
-  "excludePlatforms": [],
-  "allowUnsafeCode": false,
-  "overrideReferences": false,
-  "precompiledReferences": [],
-  "autoReferenced": true,
-  "defineConstraints": [],
-  "versionDefines": [],
-  "noEngineReferences": false
+    "name": "Assets.Scripts",
+    "rootNamespace": "",
+    "references": [
+        "GUID:d15875e667ec13246a941984a2ba07ff",
+        "GUID:4307f53044263cf4b835bd812fc161a4",
+        "GUID:75469ad4d38634e559750d17036d5f7c",
+        "GUID:6055be8ebefd69e48b49212b09b47b2f",
+        "GUID:20aa0aeb7f6270545bab9809729d4919"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
 }

@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87e457c393e61534abe11c3891b337f7, type: 3}
+  m_Name: PF Astar Configuration
+  m_EditorClassIdentifier: 
+  cellSize: 2
+  maxIterations: 2000
+  minHeight: 96
+  useCache: 1
+  algorithm: 0
+  aStarConfig:
+    distanceCost: 1
+    heightCost: 1
+    distanceHeuristic: 2
+    heightHeuristic: 1
+    slopeHeuristic: 1
+    maxSlopeAngle: 40
