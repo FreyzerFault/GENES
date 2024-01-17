@@ -15,11 +15,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assets.Scripts", "Assets.Sc
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assets.Scripts.PathFinding", "Assets.Scripts.PathFinding.csproj", "{d98b3dbe-6626-470f-39bc-529ef39ee94d}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assets.Scripts.Terrain", "Assets.Scripts.Terrain.csproj", "{3bfaace1-e45f-aaec-6ade-a241efbf2ee7}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BezierCurves.Editor", "BezierCurves.Editor.csproj", "{ba3033d2-828b-2be4-f4f7-5253d20f1cdf}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assets.Scripts.ExtensionMethods", "Assets.Scripts.ExtensionMethods.csproj", "{afa59c38-eeaf-6b64-b46e-f23cb798a397}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assets.Scripts.Terrain", "Assets.Scripts.Terrain.csproj", "{3bfaace1-e45f-aaec-6ade-a241efbf2ee7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assets.ExternalPackages.BezierCurves", "Assets.ExternalPackages.BezierCurves.csproj", "{1a8157ab-6310-9bdc-bddc-f16864838230}"
 EndProject
@@ -48,12 +48,12 @@ Global
 		{c598f215-6716-6b93-fc56-8b55cb542e19}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{d98b3dbe-6626-470f-39bc-529ef39ee94d}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{d98b3dbe-6626-470f-39bc-529ef39ee94d}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3bfaace1-e45f-aaec-6ade-a241efbf2ee7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3bfaace1-e45f-aaec-6ade-a241efbf2ee7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ba3033d2-828b-2be4-f4f7-5253d20f1cdf}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{ba3033d2-828b-2be4-f4f7-5253d20f1cdf}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{afa59c38-eeaf-6b64-b46e-f23cb798a397}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{afa59c38-eeaf-6b64-b46e-f23cb798a397}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3bfaace1-e45f-aaec-6ade-a241efbf2ee7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3bfaace1-e45f-aaec-6ade-a241efbf2ee7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1a8157ab-6310-9bdc-bddc-f16864838230}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1a8157ab-6310-9bdc-bddc-f16864838230}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{fc483a6a-6a5c-9bcb-9cad-1ef50cf04080}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
