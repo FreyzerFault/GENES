@@ -201,7 +201,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 623e8c31b54f4f64abed2f8172476f4b, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 05470615c35024b48b6939633d6009ea, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -261,3 +261,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55572e750a9d6c4408336f891ead53e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  checkedColor: {r: 0, g: 1, b: 0, a: 1}
+  marker:
+    onPositionChange:
+      m_PersistentCalls:
+        m_Calls: []
+    onStateChange:
+      m_PersistentCalls:
+        m_Calls: []
+    onLabelChange:
+      m_PersistentCalls:
+        m_Calls: []
+    onSelected:
+      m_PersistentCalls:
+        m_Calls: []

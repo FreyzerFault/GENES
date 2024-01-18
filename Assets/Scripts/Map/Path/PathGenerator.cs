@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using Cinemachine;
+using Map.Markers;
 using PathFinding;
 using UnityEngine;
 #if UNITY_EDITOR
@@ -158,6 +159,13 @@ namespace Map.Path
             var parent = GameObject.FindWithTag("Map Path");
             var markerObj = Instantiate(marker3DPrefab, pos, Quaternion.identity, parent.transform)
                 .GetComponent<MarkerObject>();
+            markerObj.Data = marker;
+            markerObj.onPlayerPickUp.AddListener(markerPicked =>
+            {
+                var nextMarker = MarkerManager.FindNextMarker(markerPicked);
+                if (nextMarker != null)
+                    nextMarker.State = MarkerState.Next;
+            });
 
             if (index == -1)
             {

@@ -54,18 +54,10 @@ MonoBehaviour:
   arrowModel: {fileID: 7694901677641283025}
   checkedModel: {fileID: 8717491905142039220}
   marker:
-    onPositionChange:
-      m_PersistentCalls:
-        m_Calls: []
-    onStateChange:
-      m_PersistentCalls:
-        m_Calls: []
-    onLabelChange:
-      m_PersistentCalls:
-        m_Calls: []
-    onSelected:
-      m_PersistentCalls:
-        m_Calls: []
+    _labelText: 
+    _normalizedPosition: {x: 0, y: 0}
+    _worldPosition: {x: 0, y: 0, z: 0}
+    _state: 0
   onPlayerPickUp:
     m_PersistentCalls:
       m_Calls: []
@@ -84,7 +76,7 @@ CapsuleCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
@@ -101,13 +93,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4073728832660073183}
+  - component: {fileID: 3127652660816863509}
   m_Layer: 0
   m_Name: Checked Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &4073728832660073183
 Transform:
   m_ObjectHideFlags: 0
@@ -125,6 +118,27 @@ Transform:
   - {fileID: 4779099848016706994}
   m_Father: {fileID: 7349041631572500848}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!95 &3127652660816863509
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8717491905142039220}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: ccc17e4e74f275045a8bba814b5fd4b4, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1001 &848500566286541443
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -542,7 +556,8 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: fcc6100d84022294fbac085a67ea3637, type: 2}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 272004840158641097, guid: 17cb3168caf0019418c31a666270b56d, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:

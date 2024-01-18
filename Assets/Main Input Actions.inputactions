@@ -377,6 +377,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Deselect All",
+                    "type": "Button",
+                    "id": "b26c9ecc-c2a4-412f-8e6e-8bd49fd9cfd1",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -476,6 +485,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "Toggle Delete Marker Mode",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b29b9998-3bfd-407c-aced-931b0fa33f71",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Deselect All",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

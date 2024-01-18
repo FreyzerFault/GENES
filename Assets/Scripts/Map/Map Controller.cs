@@ -50,8 +50,12 @@ namespace Map
         {
             if (minimapParent.activeSelf)
                 Minimap.ZoomScale += Mathf.Clamp(value.Get<float>(), -1, 1) / 10f;
-            else if (fullScreenMapParent.activeSelf)
-                fullscreenMapUI.ZoomScale += Mathf.Clamp(value.Get<float>(), -1, 1) / 10f;
+        }
+
+        private void OnDeselectAll()
+        {
+            if (fullScreenMapParent.activeSelf)
+                fullscreenMapUI.MarkerManager.DeselectAllMarkers();
         }
     }
 }

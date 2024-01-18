@@ -20,7 +20,7 @@ MonoBehaviour:
   aStarConfig:
     distanceCost: 1
     heightCost: 1
-    distanceHeuristic: 2
+    distanceHeuristic: 1
     heightHeuristic: 1
-    slopeHeuristic: 1
+    slopeHeuristic: 2
     maxSlopeAngle: 40

@@ -1,3 +1,4 @@
+using Map.Markers;
 using UnityEngine;
 
 namespace Map
@@ -38,6 +39,8 @@ namespace Map
 
             terrain ??= FindObjectOfType<Terrain>();
             playerInWorld ??= GameObject.FindGameObjectWithTag("Player")?.transform;
+
+            markerManager.Initialize();
         }
     }
 }
