@@ -345,7 +345,6 @@ D:\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts.Map\Assets.Script
 D:\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts.Map\Assets.Scripts.ExtensionMethods.pdb
 C:\Users\dalcanta\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts.Map\Assets.Scripts.Map.dll
 C:\Users\dalcanta\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts.Map\Assets.Scripts.Map.pdb
-C:\Users\dalcanta\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts.Map\Assets.ExternalPackages.EditorCools.dll
 C:\Users\dalcanta\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts.Map\Assets.Scripts.dll
 C:\Users\dalcanta\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts.Map\Assets.Scripts.ExtensionMethods.dll
 C:\Users\dalcanta\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts.Map\Assets.Scripts.PathFinding.dll
@@ -582,7 +581,6 @@ C:\Users\dalcanta\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts.Ma
 C:\Users\dalcanta\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts.Map\Unity.Mathematics.dll
 C:\Users\dalcanta\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts.Map\Unity.RenderPipeline.Universal.ShaderLibrary.dll
 C:\Users\dalcanta\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts.Map\Unity.Burst.dll
-C:\Users\dalcanta\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts.Map\Assets.ExternalPackages.EditorCools.pdb
 C:\Users\dalcanta\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts.Map\UnityUIExtensions.pdb
 C:\Users\dalcanta\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts.Map\Assets.Scripts.pdb
 C:\Users\dalcanta\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts.Map\Assets.Scripts.PathFinding.pdb
