@@ -238,7 +238,7 @@ namespace Map
 
             // Tamaño del minimapa escalado y Normalizado
             var mapSizeScaled = ImageSize * zoomScale;
-            var displacement = ImageSize / 2;
+            var displacement = ImageSize / 3;
 
             // La distancia a los bordes del minimapa no puede ser menor a la mitad del minimapa
             var distanceToBotLeft = MapManager.Instance.PlayerDistanceToBotLeftBorder * mapSizeScaled;
@@ -344,7 +344,6 @@ namespace Map
                                 break;
                         }
                     }
-
 
                     break;
 

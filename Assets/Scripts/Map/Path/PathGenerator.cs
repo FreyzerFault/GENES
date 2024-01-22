@@ -101,7 +101,7 @@ namespace Map.Path
             playerPathRenderer.Path = BuildPath(new[]
             {
                 playerTransform.position,
-                MarkerManager.FirstMarker.WorldPosition
+                MarkerManager.Markers.First(marker => marker.IsNext).WorldPosition
             });
         }
 
@@ -112,6 +112,7 @@ namespace Map.Path
             if (MarkerManager.MarkersCount < 2) return;
 
             directPathRenderer.Path = new PathFinding.Path(MarkerManager.Markers
+                .Where(marker => marker.State != MarkerState.Checked)
                 .Select(marker => new Node(marker.WorldPosition))
                 .Prepend(new Node(playerTransform.position))
                 .ToArray()

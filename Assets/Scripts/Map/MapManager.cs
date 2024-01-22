@@ -8,7 +8,7 @@ namespace Map
         public MarkerManagerSO markerManager;
 
         public Terrain terrain;
-        [SerializeField] private Transform playerInWorld;
+        [SerializeField] private GameObject playerInWorld;
 
         private float[,] _heightMap;
         public TerrainData TerrainData => terrain.terrainData;
@@ -38,7 +38,7 @@ namespace Map
             base.Awake();
 
             terrain ??= FindObjectOfType<Terrain>();
-            playerInWorld ??= GameObject.FindGameObjectWithTag("Player")?.transform;
+            playerInWorld ??= GameObject.FindGameObjectWithTag("Player");
 
             markerManager.Initialize();
         }
