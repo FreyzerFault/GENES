@@ -88,48 +88,6 @@ namespace ExtensionMethods
 
         // ================== TERRAIN to MESH ==================
 
-        // Create MESH in Terrain Res
-        public static void CreateMeshWithResolution(this Terrain terrain, float size, out Vector3[] vertices,
-            out int[] triangles)
-        {
-            var terrainCellSize = terrain.terrainData.heightmapScale.x;
-            var meshCellSize = terrainCellSize / 2;
-            var sideCellCount = Mathf.CeilToInt(size / meshCellSize);
-            var sideVerticesCount = sideCellCount + 1;
-
-            vertices = new Vector3[sideVerticesCount * sideVerticesCount];
-            triangles = new int[sideCellCount * sideCellCount * 6];
-
-            for (var y = 0; y < sideVerticesCount; y++)
-            for (var x = 0; x < sideVerticesCount; x++)
-            {
-                var vertex = new Vector3(
-                    x * meshCellSize,
-                    0,
-                    y * meshCellSize
-                );
-
-                // Center Mesh
-                vertex -= new Vector3(size, 0, size) / 2;
-
-                var vertexIndex = x + y * sideVerticesCount;
-
-                vertices[vertexIndex] = vertex;
-
-                if (x >= sideCellCount || y >= sideCellCount) continue;
-
-                // Triangles
-                var triangleIndex = (x + y * sideCellCount) * 6;
-                triangles[triangleIndex + 0] = vertexIndex + 0;
-                triangles[triangleIndex + 1] = vertexIndex + sideVerticesCount + 0;
-                triangles[triangleIndex + 2] = vertexIndex + sideVerticesCount + 1;
-
-                triangles[triangleIndex + 3] = vertexIndex + 0;
-                triangles[triangleIndex + 4] = vertexIndex + sideVerticesCount + 1;
-                triangles[triangleIndex + 5] = vertexIndex + 1;
-            }
-        }
-
         // PROJECT MESH in Terrain
         public static Mesh ProjectMeshInTerrain(this Terrain terrain, Mesh mesh, Transform meshTransform, float offset)
         {
@@ -151,21 +109,8 @@ namespace ExtensionMethods
             return mesh;
         }
 
-        public static void CreateMeshPatch(this Terrain terrain, Mesh mesh, Transform meshTransform,
-            Vector3 worldCenter, float size, float offset)
-        {
-            terrain.CreateMeshWithResolution(size, out var vertices, out var tris);
 
-            mesh.vertices = vertices;
-            mesh.triangles = tris;
-
-            mesh.RecalculateBounds();
-            mesh.RecalculateNormals();
-            mesh.Optimize();
-
-            terrain.ProjectMeshInTerrain(mesh, meshTransform, offset);
-        }
-
+        // Convierte el Terreno a una Mesh con la mayor resolucion
         public static void GetMesh(this Terrain terrain, out Vector3[] vertices,
             out int[] triangles, float heightOffset)
         {
@@ -203,6 +148,17 @@ namespace ExtensionMethods
             }
         }
 
+        // Extract Patch from Terrain (Mesh proyectada sobre el terreno)
+        public static void CreateMeshPatch(this Terrain terrain, Mesh mesh, Transform meshTransform,
+            Vector3 worldCenter, float size, float heightOffset)
+        {
+            float cellSize = terrain.terrainData.heightmapScale.x / 2;
+            mesh.GenerateMeshPlane(cellSize, Vector2.one * size);
+
+            terrain.ProjectMeshInTerrain(mesh, meshTransform, heightOffset);
+        }
+        
+        // Crea el Patch en la posicion central dada
         public static void GetMeshPatch(this Terrain terrain, out Vector3[] vertices,
             out int[] triangles, float heightOffset, Vector2 center, float size)
         {
@@ -237,6 +193,7 @@ namespace ExtensionMethods
             );
         }
 
+        // Crea el Patch con la Bounding Box dada
         public static void GetMeshPatch(this Terrain terrain, out Vector3[] vertices,
             out int[] triangles, float heightOffset, Vector2 minBound, Vector2 maxBound, Vector2 displacement)
         {

@@ -49,6 +49,9 @@ namespace Map.Path
 
         private void Start()
         {
+            // Min Height depends on water height
+            pathFindingConfig.minHeight = MapManager.Instance.WaterHeight;
+            
             PathFinding.CleanCache();
 
             // PATH
@@ -66,7 +69,7 @@ namespace Map.Path
             UpdatePlayerPath();
 
             // Update Direct Line Renderer
-            if (showDirectPath) UpdateDirectPath();
+            UpdateDirectPath();
         }
 
 
@@ -89,6 +92,14 @@ namespace Map.Path
 
                 UpdateMarkersPath();
             });
+            MarkerManager.OnMarkerMoved.AddListener((marker, index) =>
+            {
+                // Si es el 1º marcador se actualiza el camino del jugador
+                if (index == 0)
+                    UpdatePlayerPath();
+
+                UpdateMarkersPath();
+            });
             MarkerManager.OnMarkersClear.AddListener(ClearPathLines);
 
             UpdatePlayerPath();
@@ -98,8 +109,6 @@ namespace Map.Path
 
         private void UpdateMarkersPath()
         {
-            if (MarkerManager.MarkersCount < 2) return;
-
             // Delete previous markers path
             foreach (var obj in markersPathRenderers)
                 if (Application.isPlaying)
@@ -107,6 +116,9 @@ namespace Map.Path
                 else
                     DestroyImmediate(obj.gameObject);
             markersPathRenderers = Array.Empty<PathRenderer>();
+            
+            if (MarkerManager.MarkersCount < 2)
+                return;
 
             for (var i = 0; i < MarkerManager.MarkersCount - 1; i++)
             {
@@ -157,6 +169,12 @@ namespace Map.Path
         // Direct Path to every marker
         private void UpdateDirectPath()
         {
+            if (!showDirectPath)
+            {
+                directPathRenderer.Path = global::PathFinding.Path.EmptyPath;
+                return;
+            }
+            
             if (MarkerManager.MarkersCount < 1) return;
 
             directPathRenderer.Path = new PathFinding.Path(MarkerManager.Markers

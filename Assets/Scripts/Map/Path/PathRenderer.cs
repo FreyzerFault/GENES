@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using ExtensionMethods;
 using PathFinding;
@@ -21,6 +22,8 @@ namespace Map.Path
         public List<Node> openNodes = new();
 
         public Color color;
+        
+        public bool showLabels = true;
 
 
         private PathFinding.Path _path = PathFinding.Path.EmptyPath;
@@ -50,21 +53,20 @@ namespace Map.Path
 
         private void OnDrawGizmosSelected()
         {
-            exploredNodes.ForEach(node => DrawNodeGizmos(node, color));
-            openNodes.ForEach(node => DrawNodeGizmos(node, Color.Lerp(color, Color.white, 0.5f)));
+            exploredNodes.ForEach(node => DrawNodeGizmos(node, color, false));
+            openNodes.ForEach(node => DrawNodeGizmos(node, Color.Lerp(color, Color.white, 0.5f), true));
         }
 
-        private void DrawNodeGizmos(Node node, Color color)
+        private void DrawNodeGizmos(Node node, Color color, bool wire = false)
         {
-            float offset = 1;
             var pos = node.Position;
-            pos.y += offset;
+            pos.y += heightOffset;
             var normPos = _terrain.terrainData.GetNormalizedPosition(pos);
             var normal = _terrain.terrainData.GetInterpolatedNormal(normPos.x, normPos.y);
             var tangentMid = Vector3.Cross(normal, Vector3.up);
             var tangentGradient = Vector3.Cross(normal, tangentMid);
-
-
+            
+            // Diferencia de Funcion
             if (node.parent != null)
             {
                 var functionDiff = node.parent.F - node.F;
@@ -75,41 +77,80 @@ namespace Map.Path
                 Gizmos.color = color;
             }
 
+            // Cubo
+            Vector3 size = new Vector3(node.Size / 3, 0.1f, node.Size / 3);
+            if (wire)
+                Gizmos.DrawWireCube(pos, size);
+            else
+                Gizmos.DrawCube(pos, size);
 
-            Gizmos.DrawCube(pos, new Vector3(1, 0.1f, 1));
 
+            // PENDIENTE
+            if (node.SlopeAngle > 0)
+            {
+                // Normal
+                Gizmos.color = Color.Lerp(Color.magenta, Color.red, node.SlopeAngle / 30);
+                DrawArrow(pos, normal, node.Size / 2);
+                
+                // Gradiente
+                Gizmos.color = Color.blue;
+                DrawArrow(pos, tangentGradient);
+            }
 
-            // Normal
-            Gizmos.color = Color.Lerp(Color.green, Color.red, node.SlopeAngle / 30);
-            DrawArrow(pos, normal);
-
-            // Gradiente
-            Gizmos.color = Color.blue;
-            DrawArrow(pos, tangentGradient);
 
             // Line to Parent
             if (node.parent != null)
             {
                 Gizmos.color = Color.Lerp(color, Color.white, 0.5f);
-                Gizmos.DrawLine(pos, node.parent.Position + Vector3.up * offset);
+                Gizmos.DrawLine(pos, node.parent.Position + Vector3.up * heightOffset);
             }
 
-            // F Label
-            Handles.Label(pos + normal * 2, Math.Round(node.G, 2).ToString());
+            // [F,G,H] Labels
+            if (showLabels)
+                DrawLabel(node, Vector3.left * node.Size / 3 + Vector3.up * heightOffset);
         }
 
-        private void DrawArrow(Vector3 pos, Vector3 direction)
+        private void DrawArrow(Vector3 pos, Vector3 direction, float size = 1)
         {
             var tangent = Vector3.Cross(direction, Vector3.up);
+            Vector3 arrowVector = direction * size;
             Gizmos.DrawLineList(new[]
             {
                 pos,
-                pos + direction,
-                pos + direction,
-                pos + direction - Quaternion.AngleAxis(30, tangent) * direction * 0.4f,
-                pos + direction,
-                pos + direction - Quaternion.AngleAxis(-30, tangent) * direction * 0.4f
+                pos + arrowVector,
+                pos + arrowVector,
+                pos + arrowVector - Quaternion.AngleAxis(30, tangent) * arrowVector * 0.4f,
+                pos + arrowVector,
+                pos + arrowVector - Quaternion.AngleAxis(-30, tangent) * arrowVector * 0.4f
             });
+        }
+
+        private void DrawLabel(Node node, Vector3 positionOffset = default)
+        {
+            // STYLE
+            GUIStyle style = new GUIStyle
+            {
+                fontSize = 12,
+                fontStyle = FontStyle.Bold,
+                normal = { textColor = Color.white }
+            };
+            GUIStyle styleF = new GUIStyle(style) { normal = { textColor = Color.white } };
+            GUIStyle styleG = new GUIStyle(style) { normal = { textColor = Color.red } };
+            GUIStyle styleH = new GUIStyle(style) { normal = { textColor = Color.yellow } };
+
+            // TEXT
+            string labelTextF = Math.Round(node.F, 2).ToString(CultureInfo.InvariantCulture);
+            string labelTextG = Math.Round(node.G, 2).ToString(CultureInfo.InvariantCulture);
+            string labelTextH = Math.Round(node.H, 2).ToString(CultureInfo.InvariantCulture);
+            
+            // POSITION
+            Vector3 posF = node.Position + Vector3.forward * 0.2f + positionOffset;
+            Vector3 posG = node.Position + positionOffset;
+            Vector3 posH = node.Position - Vector3.forward * 0.2f  + positionOffset;
+            
+            Handles.Label(posF, labelTextF, styleF);
+            Handles.Label(posG, labelTextG, styleG);
+            Handles.Label(posH, labelTextH, styleH);
         }
 
         private void UpdateLine()
@@ -126,6 +167,10 @@ namespace Map.Path
 
             // Proyectar en el Terreno
             if (projectOnTerrain) points = ProjectPathToTerrain(points);
+            
+            // HEIGHT OFFSET
+            var offset = Vector3.up * heightOffset;
+            points = points.Select(point => point += offset).ToArray();
 
             // Update Line Renderer
             lineRenderer.positionCount = points.Length;
@@ -175,10 +220,6 @@ namespace Map.Path
                     lineSamples.Add(samplePos);
                 }
             }
-
-            // HEIGHT OFFSET
-            var offset = Vector3.up * heightOffset;
-            lineSamples = lineSamples.Select(point => point += offset).ToList();
 
             return lineSamples.ToArray();
         }

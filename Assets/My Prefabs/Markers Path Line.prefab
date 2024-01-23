@@ -148,8 +148,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lineRenderer: {fileID: 6986127222039261452}
-  projectOnTerrain: 1
-  heightOffset: 0.5
+  projectOnTerrain: 0
+  heightOffset: 0.1
   exploredNodes: []
   openNodes: []
   color: {r: 0, g: 0, b: 0, a: 0}
+  showLabels: 0

@@ -338,7 +338,6 @@ C:\Users\dalcanta\Unity Projects\Proyecto Campo\obj\Debug\Assets.Scripts.pdb
 D:\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts\Assets.Scripts.dll
 D:\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts\Assets.Scripts.pdb
 D:\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts\Assets.dll
-D:\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts\Assets.ExternalPackages.dll
 D:\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts\Cinemachine.dll
 D:\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts\log4netPlastic.dll
 D:\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts\Microsoft.Win32.Primitives.dll
@@ -571,7 +570,6 @@ D:\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts\Unity.Mathematics
 D:\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts\Unity.RenderPipeline.Universal.ShaderLibrary.dll
 D:\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts\Unity.Burst.dll
 D:\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts\Assets.pdb
-D:\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts\Assets.ExternalPackages.pdb
 D:\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts\UnityEngine.xml
 D:\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts\UnityEngine.AIModule.xml
 D:\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts\UnityEngine.ARModule.xml

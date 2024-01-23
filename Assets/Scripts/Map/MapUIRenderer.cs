@@ -414,6 +414,7 @@ namespace Map
         // ================================== UTILS ==================================
         private Vector2 GetNormalizedPosition(Vector2 screenPos)
         {
+            _rectTransform ??= GetComponent<RectTransform>();
             RectTransformUtility.ScreenPointToLocalPointInRectangle(_rectTransform, screenPos,
                 null, out var localPos);
             return localPos / ImageSize;

@@ -1,6 +1,5 @@
 D:\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts.Map\Assets.Scripts.Map.dll
 D:\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts.Map\Assets.Scripts.Map.pdb
-D:\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts.Map\Assets.ExternalPackages.EditorCools.dll
 D:\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts.Map\log4netPlastic.dll
 D:\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts.Map\Microsoft.Win32.Primitives.dll
 D:\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts.Map\mscorlib.dll
@@ -226,7 +225,6 @@ D:\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts.Map\UnityEngine.N
 D:\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts.Map\Unity.Cecil.dll
 D:\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts.Map\System.CodeDom.dll
 D:\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts.Map\WinPlayerBuildProgram.Data.dll
-D:\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts.Map\Assets.ExternalPackages.EditorCools.pdb
 D:\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts.Map\UnityUIExtensions.pdb
 D:\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts.Map\UnityEngine.xml
 D:\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts.Map\UnityEngine.AIModule.xml
@@ -688,3 +686,5 @@ C:\Users\dalcanta\Unity Projects\Proyecto Campo\obj\Debug\Assets.Scripts.Map.csp
 C:\Users\dalcanta\Unity Projects\Proyecto Campo\obj\Debug\Assets.Scripts.Map.csproj.CopyComplete
 C:\Users\dalcanta\Unity Projects\Proyecto Campo\obj\Debug\Assets.Scripts.Map.dll
 C:\Users\dalcanta\Unity Projects\Proyecto Campo\obj\Debug\Assets.Scripts.Map.pdb
+D:\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts.Map\MyBox.dll
+D:\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts.Map\MyBox.pdb

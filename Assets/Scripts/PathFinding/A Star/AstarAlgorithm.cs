@@ -170,20 +170,15 @@ namespace PathFinding.A_Star
             return distHeuristic + heightHeuristic + slopeHeuristic;
         }
 
-        protected override bool IsLegal(Node node, PathFindingConfigSO paramsConfig)
-        {
-            bool legalHeight = node.Height >= paramsConfig.minHeight,
-                legalSlope = node.SlopeAngle <= paramsConfig.aStarConfig.maxSlopeAngle;
-
-            return legalHeight && legalSlope;
-        }
 
         // ==================== VECINOS ====================
         protected override Node[] CreateNeighbours(Node node, Terrain terrain, Node[] nodesAlreadyFound)
         {
             var neighbours = new List<Node>();
-            for (var i = 0; i < 8; i++)
+            for (var i = 0; i < 9; i++)
             {
+                if (i == 4) continue; // Skip central Node
+                
                 // Offset from central Node
                 var xOffset = node.Size * (i % 3 - 1);
                 var zOffset = node.Size * Mathf.Floor(i / 3f - 1);
@@ -227,21 +222,41 @@ namespace PathFinding.A_Star
         }
 
         // ==================== RESTRICCIONES ====================
+        
+        protected override bool IsLegal(Node node, PathFindingConfigSO paramsConfig)
+        {
+            bool legalHeight = LegalHeight(node.Height, paramsConfig),
+                legalSlope = LegalSlope(node.SlopeAngle, paramsConfig),
+                legalPosition = LegalPosition(node.Pos2D, Terrain.activeTerrain);
+
+            node.Legal = legalHeight && legalSlope && legalPosition;
+            
+            return node.Legal;
+        }
+        
+        protected override bool LegalPosition(Vector2 pos, Terrain terrain) => !OutOfBounds(pos, terrain);
+
+        protected override bool LegalHeight(float height, PathFindingConfigSO paramsConfig) => height >= paramsConfig.minHeight;
+
+        protected override bool LegalSlope(float slopeAngle, PathFindingConfigSO paramsConfig)
+        {
+            return slopeAngle <= paramsConfig.aStarConfig.maxSlopeAngle;
+        }
+
         protected override bool OutOfBounds(Vector2 pos, Terrain terrain)
         {
             var terrainData = terrain.terrainData;
             var terrainPos = terrain.GetPosition();
+            
+            // BOUNDS
             Vector2 lowerBound = new(terrainPos.x, terrainPos.z);
-            var upperBound = lowerBound + new Vector2(terrainData.size.x, terrainData.size.z);
+            Vector2 upperBound = lowerBound + new Vector2(terrainData.size.x, terrainData.size.z);
+            
             bool overLowerBound = pos.x > lowerBound.x && pos.y > lowerBound.y,
                 underUpperBound = pos.x < upperBound.x && pos.y < upperBound.y;
 
-            return !overLowerBound && underUpperBound;
+            return !(overLowerBound && underUpperBound);
         }
 
-        protected override bool IllegalPosition(Vector2 pos, Terrain terrain)
-        {
-            return OutOfBounds(pos, terrain);
-        }
     }
 }

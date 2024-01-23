@@ -133,14 +133,16 @@ namespace PathFinding
         // NODE Parameters
         protected abstract float CalculateCost(Node a, Node b, PathFindingConfigSO paramsConfig);
         protected abstract float CalculateHeuristic(Node node, Node end, PathFindingConfigSO paramsConfig);
-        protected abstract bool IsLegal(Node node, PathFindingConfigSO paramsConfig);
 
         // NEIGHBOURS
         protected abstract Node[] CreateNeighbours(Node node, Terrain terrain, Node[] nodesAlreadyFound);
 
         // RESTRICCIONES
+        protected abstract bool IsLegal(Node node, PathFindingConfigSO paramsConfig);
+        protected abstract bool LegalPosition(Vector2 pos, Terrain terrain);
+        protected abstract bool LegalHeight(float height, PathFindingConfigSO paramsConfig);
+        protected abstract bool LegalSlope(float slopeAngle, PathFindingConfigSO paramsConfig);
         protected abstract bool OutOfBounds(Vector2 pos, Terrain terrain);
-        protected abstract bool IllegalPosition(Vector2 pos, Terrain terrain);
 
         #region CACHE
 

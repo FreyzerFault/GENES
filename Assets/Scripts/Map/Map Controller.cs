@@ -3,7 +3,7 @@ using UnityEngine.InputSystem;
 
 namespace Map
 {
-    public class MapController : MonoBehaviour
+    public class MapInputController : MonoBehaviour
     {
         [SerializeField] private GameObject minimapParent;
         [SerializeField] private GameObject fullScreenMapParent;

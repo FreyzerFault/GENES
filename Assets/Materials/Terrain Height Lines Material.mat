@@ -120,8 +120,8 @@ Material:
     - _GlossyReflections: 0
     - _GridSpacing: 0.19
     - _GridThickness: 0.05
-    - _Line_Spacing: 0.7
-    - _Line_Thickness: 0.13
+    - _Line_Spacing: 0.23
+    - _Line_Thickness: 0.089
     - _Metallic: 0
     - _OcclusionStrength: 1
     - _Octaves: 8

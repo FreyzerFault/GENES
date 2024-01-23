@@ -674,3 +674,5 @@ C:\Users\dalcanta\Unity Projects\Proyecto Campo\obj\Debug\Assets.Scripts.PathFin
 C:\Users\dalcanta\Unity Projects\Proyecto Campo\obj\Debug\Assets.Scripts.PathFinding.csproj.CopyComplete
 C:\Users\dalcanta\Unity Projects\Proyecto Campo\obj\Debug\Assets.Scripts.PathFinding.dll
 C:\Users\dalcanta\Unity Projects\Proyecto Campo\obj\Debug\Assets.Scripts.PathFinding.pdb
+D:\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts.PathFinding\MyBox.dll
+D:\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts.PathFinding\MyBox.pdb

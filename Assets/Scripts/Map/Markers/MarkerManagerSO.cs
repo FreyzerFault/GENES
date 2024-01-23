@@ -165,6 +165,10 @@ namespace Map.Markers
             var list = Markers.ToList();
             list.RemoveAt(index);
             Markers = list.ToArray();
+            
+            // Si tiene de Estado Next, el siguiente pasa a ser Next
+            if (marker.State == MarkerState.Next && MarkersCount > index)
+                Markers[index].State = MarkerState.Next;
 
             Log("Point removed: " + marker.LabelText);
             OnMarkerRemoved.Invoke(marker, index);

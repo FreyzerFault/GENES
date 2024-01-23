@@ -5,10 +5,12 @@ namespace Terrain
 {
     public class TerrainProjectedMesh : MonoBehaviour
     {
-        public float size = 10f;
+        public Vector2 size = Vector2.one * 10;
         public float offset = 0.2f;
         private Mesh _mesh;
         private UnityEngine.Terrain _terrain;
+
+        public bool realTimeUpdate = false;
 
 
         private void Awake()
@@ -16,20 +18,19 @@ namespace Terrain
             _terrain = FindObjectOfType<UnityEngine.Terrain>();
             _mesh = GetComponent<MeshFilter>().mesh;
 
-            _terrain.CreateMeshWithResolution(size, out var vertices, out var tris);
-
-            _mesh.vertices = vertices;
-            _mesh.triangles = tris;
-
-            _mesh.RecalculateBounds();
-            _mesh.RecalculateNormals();
-            _mesh.Optimize();
+            _mesh.GenerateMeshPlane(_terrain.terrainData.heightmapScale.x / 2, new Vector2(_mesh.bounds.size.x, _mesh.bounds.size.z));
+            
+            _terrain.ProjectMeshInTerrain(_mesh, transform, offset);
+            transform.LockRotationVertical();
         }
 
         private void Update()
         {
-            transform.LockRotationVertical();
-            _terrain.ProjectMeshInTerrain(_mesh, transform, offset);
+            if (realTimeUpdate)
+            {
+                _terrain.ProjectMeshInTerrain(_mesh, transform, offset);
+                transform.LockRotationVertical();
+            }
         }
     }
 }

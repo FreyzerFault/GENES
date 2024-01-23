@@ -8,6 +8,7 @@ TagManager:
   - Map Path
   - Minimap
   - Map Fullscreen
+  - Water
   layers:
   - Default
   - TransparentFX

@@ -9,6 +9,7 @@ namespace Map
 
         public Terrain terrain;
         [SerializeField] private GameObject playerInWorld;
+        [SerializeField] private GameObject water;
 
         private float[,] _heightMap;
         public TerrainData TerrainData => terrain.terrainData;
@@ -22,6 +23,7 @@ namespace Map
             playerInWorld.transform.position.z / TerrainHeight
         );
 
+        public float WaterHeight => water.transform.position.y;
 
         // Distancia normalizada del borde al player:
         // (Permite visualizar el mapa sin salir de la zona del terreno)
@@ -37,10 +39,13 @@ namespace Map
         {
             base.Awake();
 
-            terrain ??= FindObjectOfType<Terrain>();
-            playerInWorld ??= GameObject.FindGameObjectWithTag("Player");
+            terrain = FindObjectOfType<Terrain>();
+            playerInWorld = GameObject.FindGameObjectWithTag("Player");
+            water = GameObject.FindGameObjectWithTag("Water");
 
             markerManager.Initialize();
         }
+
+        public void ClearMarkers() => markerManager.ClearMarkers();
     }
 }

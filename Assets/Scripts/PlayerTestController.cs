@@ -7,6 +7,7 @@ public class PlayerTestController : MonoBehaviour
     public float angularSpeed = 1f;
 
     [SerializeField] private Transform camPoint;
+    private float initialCamRotationEulerX;
 
     private GameObject body;
 
@@ -23,6 +24,7 @@ public class PlayerTestController : MonoBehaviour
 
         transform.rotation = Quaternion.identity;
         camPoint.rotation = Quaternion.identity;
+        initialCamRotationEulerX = camPoint.rotation.eulerAngles.x;
     }
 
     private void Update()
@@ -38,15 +40,26 @@ public class PlayerTestController : MonoBehaviour
 
         if (mouseDelta == Vector2.zero) return;
 
-        // BODY
-        // body.transform.rotation = Quaternion.identity;
+        // CAM POINT Rotation in X Axis
+        var rotation = camPoint.rotation;
+        rotation *= Quaternion.Euler(-mouseDelta.y * angularSpeed / 2 * Time.deltaTime, 0, 0);
+        
+        // Convertir el ángulo a un rango de -180 a 180
+        float angle = rotation.eulerAngles.x > 180 ? rotation.eulerAngles.x - 360 : rotation.eulerAngles.x;
+        
+        // Límites de la rotación
+        float minAngle = -45f; // Ángulo mínimo
+        float maxAngle = 45f; // Ángulo máximo
+        
+        // Clamp to 89º
+        rotation = Quaternion.Euler(
+            Mathf.Clamp(angle, minAngle, maxAngle),
+            rotation.eulerAngles.y,
+            rotation.eulerAngles.z
+        );
+        camPoint.rotation = rotation;
 
-        // var deltaRotation = Quaternion.Euler(-mouseDelta.y * angularSpeed / 2 * Time.deltaTime,
-        //     mouseDelta.x * angularSpeed * Time.deltaTime, 0);
-
-        // CAM POINT
         // PLAYER
-        camPoint.rotation *= Quaternion.Euler(-mouseDelta.y * angularSpeed / 2 * Time.deltaTime, 0, 0);
         transform.rotation *= Quaternion.Euler(0, mouseDelta.x * angularSpeed * Time.deltaTime, 0);
     }
 
