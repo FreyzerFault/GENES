@@ -47,8 +47,8 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\PathFinding\PathLineRendererUI.cs" />
     <Compile Include="Assets\Scripts\PathFinding\PathLineRenderer.cs" />
+    <Compile Include="Assets\Scripts\PathFinding\A Star\AstarAlgorithm.cs" />
     <Compile Include="Assets\Scripts\PathFinding\Node.cs" />
-    <Compile Include="Assets\Scripts\PathFinding\AstarAlgorithm.cs" />
     <Compile Include="Assets\Scripts\PathFinding\PathFindingAlgorithm.cs" />
     <Compile Include="Assets\Scripts\PathFinding\PathFindingConfigSO.cs" />
     <Compile Include="Assets\Scripts\PathFinding\Dijkstra\DijkstraAlgorithm.cs" />

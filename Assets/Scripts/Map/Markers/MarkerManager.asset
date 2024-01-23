@@ -15,63 +15,7 @@ MonoBehaviour:
   markerUIPrefab: {fileID: 7675491264772692944, guid: 5444bb0f9a82ae04eb7be11bf137c20d, type: 3}
   pointCollisionRadius: 0.02
   Markers:
-  - onPositionChange:
-      m_PersistentCalls:
-        m_Calls: []
-    onStateChange:
-      m_PersistentCalls:
-        m_Calls: []
-    onLabelChange:
-      m_PersistentCalls:
-        m_Calls: []
-    onSelected:
-      m_PersistentCalls:
-        m_Calls: []
-  - onPositionChange:
-      m_PersistentCalls:
-        m_Calls: []
-    onStateChange:
-      m_PersistentCalls:
-        m_Calls: []
-    onLabelChange:
-      m_PersistentCalls:
-        m_Calls: []
-    onSelected:
-      m_PersistentCalls:
-        m_Calls: []
-  - onPositionChange:
-      m_PersistentCalls:
-        m_Calls: []
-    onStateChange:
-      m_PersistentCalls:
-        m_Calls: []
-    onLabelChange:
-      m_PersistentCalls:
-        m_Calls: []
-    onSelected:
-      m_PersistentCalls:
-        m_Calls: []
-  - onPositionChange:
-      m_PersistentCalls:
-        m_Calls: []
-    onStateChange:
-      m_PersistentCalls:
-        m_Calls: []
-    onLabelChange:
-      m_PersistentCalls:
-        m_Calls: []
-    onSelected:
-      m_PersistentCalls:
-        m_Calls: []
-  - onPositionChange:
-      m_PersistentCalls:
-        m_Calls: []
-    onStateChange:
-      m_PersistentCalls:
-        m_Calls: []
-    onLabelChange:
-      m_PersistentCalls:
-        m_Calls: []
-    onSelected:
-      m_PersistentCalls:
-        m_Calls: []
+  - _labelText: sadasdsa
+    _normalizedPosition: {x: 0.5, y: 0.5}
+    _worldPosition: {x: 100, y: 300, z: 100}
+    _state: 0

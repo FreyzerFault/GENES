@@ -47,6 +47,7 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\ExtensionMethods\TransformExtensionMethods.cs" />
     <Compile Include="Assets\Scripts\ExtensionMethods\TerrainExtensionMethods.cs" />
+    <Compile Include="Assets\Scripts\ExtensionMethods\ColorExtensions.cs" />
     <None Include="Assets\Scripts\ExtensionMethods\Assets.Scripts.ExtensionMethods.asmdef" />
     <Reference Include="UnityEngine">
       <HintPath>C:\Program Files\Unity\Hub\Editor\2022.3.16f1\Editor\Data\Managed\UnityEngine\UnityEngine.dll</HintPath>

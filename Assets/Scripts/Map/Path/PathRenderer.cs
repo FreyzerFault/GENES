@@ -1,7 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using ExtensionMethods;
+using PathFinding;
+using UnityEditor;
 using UnityEngine;
+using Quaternion = UnityEngine.Quaternion;
+using Vector3 = UnityEngine.Vector3;
 
 namespace Map.Path
 {
@@ -12,8 +17,14 @@ namespace Map.Path
         [SerializeField] private bool projectOnTerrain = true;
         [SerializeField] private float heightOffset = 0.5f;
 
+        public List<Node> exploredNodes = new();
+        public List<Node> openNodes = new();
+
+        public Color color;
+
 
         private PathFinding.Path _path = PathFinding.Path.EmptyPath;
+
         private Terrain _terrain;
 
         public PathFinding.Path Path
@@ -30,6 +41,75 @@ namespace Map.Path
         {
             _terrain = Terrain.activeTerrain;
             lineRenderer = GetComponent<LineRenderer>();
+        }
+
+        private void Start()
+        {
+            lineRenderer.startColor = lineRenderer.endColor = color;
+        }
+
+        private void OnDrawGizmosSelected()
+        {
+            exploredNodes.ForEach(node => DrawNodeGizmos(node, color));
+            openNodes.ForEach(node => DrawNodeGizmos(node, Color.Lerp(color, Color.white, 0.5f)));
+        }
+
+        private void DrawNodeGizmos(Node node, Color color)
+        {
+            float offset = 1;
+            var pos = node.Position;
+            pos.y += offset;
+            var normPos = _terrain.terrainData.GetNormalizedPosition(pos);
+            var normal = _terrain.terrainData.GetInterpolatedNormal(normPos.x, normPos.y);
+            var tangentMid = Vector3.Cross(normal, Vector3.up);
+            var tangentGradient = Vector3.Cross(normal, tangentMid);
+
+
+            if (node.parent != null)
+            {
+                var functionDiff = node.parent.F - node.F;
+                Gizmos.color = Color.Lerp(color.Darken(0.8f), color, functionDiff / 2f + 0.5f);
+            }
+            else
+            {
+                Gizmos.color = color;
+            }
+
+
+            Gizmos.DrawCube(pos, new Vector3(1, 0.1f, 1));
+
+
+            // Normal
+            Gizmos.color = Color.Lerp(Color.green, Color.red, node.SlopeAngle / 30);
+            DrawArrow(pos, normal);
+
+            // Gradiente
+            Gizmos.color = Color.blue;
+            DrawArrow(pos, tangentGradient);
+
+            // Line to Parent
+            if (node.parent != null)
+            {
+                Gizmos.color = Color.Lerp(color, Color.white, 0.5f);
+                Gizmos.DrawLine(pos, node.parent.Position + Vector3.up * offset);
+            }
+
+            // F Label
+            Handles.Label(pos + normal * 2, Math.Round(node.G, 2).ToString());
+        }
+
+        private void DrawArrow(Vector3 pos, Vector3 direction)
+        {
+            var tangent = Vector3.Cross(direction, Vector3.up);
+            Gizmos.DrawLineList(new[]
+            {
+                pos,
+                pos + direction,
+                pos + direction,
+                pos + direction - Quaternion.AngleAxis(30, tangent) * direction * 0.4f,
+                pos + direction,
+                pos + direction - Quaternion.AngleAxis(-30, tangent) * direction * 0.4f
+            });
         }
 
         private void UpdateLine()

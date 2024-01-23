@@ -1,5 +1,6 @@
 using System;
 using MyBox;
+using PathFinding.A_Star;
 using UnityEngine;
 
 namespace PathFinding

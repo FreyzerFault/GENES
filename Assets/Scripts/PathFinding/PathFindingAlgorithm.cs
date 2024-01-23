@@ -14,7 +14,8 @@ namespace PathFinding
         // BreadthFirstSearch,
         // DepthFirstSearch,
         // GreedyBestFirstSearch
-        // ...
+        // RRT
+        // RRT*
     }
 
     [Serializable]
@@ -101,18 +102,30 @@ namespace PathFinding
     public abstract class PathFindingAlgorithm
     {
         // Principal algoritmo
-        public abstract Path FindPath(Node start, Node end, Terrain terrain, PathFindingConfigSO paramsConfig);
+        public abstract Path FindPath(Node start, Node end, Terrain terrain, PathFindingConfigSO paramsConfig,
+            out List<Node> exploredNodes, out List<Node> openNodes);
 
         // Ejecutar el Algoritmo para varios checkpoints
-        public Path FindPathByCheckpoints(Node[] checkPoints, Terrain terrain, PathFindingConfigSO paramsConfig)
+        public Path FindPathByCheckpoints(Node[] checkPoints, Terrain terrain, PathFindingConfigSO paramsConfig,
+            out List<Node> exploredNodes, out List<Node> openNodes)
         {
+            exploredNodes = new List<Node>();
+            openNodes = new List<Node>();
+
             if (checkPoints.Length < 2) return Path.EmptyPath;
 
             var nodes = Array.Empty<Node>();
             for (var i = 1; i < checkPoints.Length; i++)
+            {
                 nodes = nodes
-                    .Concat(FindPath(checkPoints[i - 1], checkPoints[i], terrain, paramsConfig).Nodes)
+                    .Concat(FindPath(checkPoints[i - 1], checkPoints[i], terrain, paramsConfig, out var explored,
+                        out var open).Nodes)
                     .ToArray();
+
+                exploredNodes = exploredNodes.Concat(explored).ToList();
+                openNodes = openNodes.Concat(open).ToList();
+            }
+
             return new Path(nodes);
         }
 
@@ -123,7 +136,7 @@ namespace PathFinding
         protected abstract bool IsLegal(Node node, PathFindingConfigSO paramsConfig);
 
         // NEIGHBOURS
-        protected abstract Node[] CreateNeighbours(Node node, Terrain terrain);
+        protected abstract Node[] CreateNeighbours(Node node, Terrain terrain, Node[] nodesAlreadyFound);
 
         // RESTRICCIONES
         protected abstract bool OutOfBounds(Vector2 pos, Terrain terrain);
@@ -131,18 +144,27 @@ namespace PathFinding
 
         #region CACHE
 
-        protected Path CachedPath = Path.EmptyPath;
+        protected struct PathFindingCache
+        {
+            public Path path;
+            public List<Node> exploredNodes;
+            public List<Node> openNodes;
+        }
+
+        protected PathFindingCache Cache;
 
         protected bool IsCached(Node start, Node end)
         {
-            return CachedPath.Nodes.Length > 0 &&
-                   CachedPath.Start.Equals(start) &&
-                   CachedPath.End.Equals(end);
+            return Cache.path.Nodes.Length > 0 &&
+                   Cache.path.Start.Equals(start) &&
+                   Cache.path.End.Equals(end);
         }
 
         public void CleanCache()
         {
-            CachedPath = Path.EmptyPath;
+            Cache.path = Path.EmptyPath;
+            Cache.exploredNodes = new List<Node>();
+            Cache.openNodes = new List<Node>();
         }
 
         #endregion

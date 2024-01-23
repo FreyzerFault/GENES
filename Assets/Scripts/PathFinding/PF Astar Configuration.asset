@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87e457c393e61534abe11c3891b337f7, type: 3}
   m_Name: PF Astar Configuration
   m_EditorClassIdentifier: 
-  cellSize: 2
+  cellSize: 3
   maxIterations: 2000
   minHeight: 96
   useCache: 1
@@ -22,5 +22,5 @@ MonoBehaviour:
     heightCost: 1
     distanceHeuristic: 1
     heightHeuristic: 1
-    slopeHeuristic: 2
+    slopeHeuristic: 0.2
     maxSlopeAngle: 40

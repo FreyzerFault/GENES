@@ -11,10 +11,10 @@ namespace PathFinding
         private static readonly float EqualityPrecision = 0.01f;
         public Node parent;
 
-        public readonly Vector3 Position;
+        public Vector3 Position;
 
-        public readonly float Size;
-        public readonly float SlopeAngle;
+        public float Size;
+        public float SlopeAngle;
 
         // Neighbours
         [NonSerialized] public Node[] Neighbours;

@@ -1,6 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Cinemachine;
+using ExtensionMethods;
+using JetBrains.Annotations;
 using Map.Markers;
 using PathFinding;
 using UnityEngine;
@@ -14,9 +17,16 @@ namespace Map.Path
     {
         [SerializeField] private PathFindingConfigSO pathFindingConfig;
 
+        // Player -> 1º Marker Path
         [SerializeField] private PathRenderer playerPathRenderer;
-        [SerializeField] private PathRenderer markersPathRenderer;
+
+        // Direct Path
         [SerializeField] private PathRenderer directPathRenderer;
+
+        // Paths between markers
+        [SerializeField] private PathRenderer markerPathRendererPrefab;
+        [SerializeField] private PathRenderer[] markersPathRenderers = Array.Empty<PathRenderer>();
+        [SerializeField] private Transform markersPathParent;
 
         // WORLD Markers
         [SerializeField] private GameObject marker3DPrefab;
@@ -90,7 +100,39 @@ namespace Map.Path
         {
             if (MarkerManager.MarkersCount < 2) return;
 
-            markersPathRenderer.Path = BuildPath(MarkerManager.MarkerWorldPositions);
+            // Delete previous markers path
+            foreach (var obj in markersPathRenderers)
+                if (Application.isPlaying)
+                    Destroy(obj.gameObject);
+                else
+                    DestroyImmediate(obj.gameObject);
+            markersPathRenderers = Array.Empty<PathRenderer>();
+
+            for (var i = 0; i < MarkerManager.MarkersCount - 1; i++)
+            {
+                var marker = MarkerManager.Markers[i];
+
+                // Create PathRenderer
+                var pathRenderer = Instantiate(markerPathRendererPrefab, markersPathParent);
+                markersPathRenderers = markersPathRenderers.Append(pathRenderer).ToArray();
+
+                // PATH
+                pathRenderer.Path = BuildPath(
+                    new[] { marker.WorldPosition, MarkerManager.FindNextMarker(marker).WorldPosition },
+                    out var exploredNodes,
+                    out var openNodes
+                );
+
+                // All NODES
+                pathRenderer.exploredNodes = exploredNodes;
+                pathRenderer.openNodes = openNodes;
+
+                // COLOR
+                pathRenderer.color =
+                    i == 0
+                        ? ColorExtensions.RandomColorSaturated()
+                        : markersPathRenderers[i - 1].color.RotateHue(0.1f);
+            }
         }
 
         private void UpdatePlayerPath()
@@ -98,18 +140,24 @@ namespace Map.Path
             if (MarkerManager.MarkersCount == 0) return;
 
             // Player -> 1º Marker
-            playerPathRenderer.Path = BuildPath(new[]
-            {
-                playerTransform.position,
-                MarkerManager.Markers.First(marker => marker.IsNext).WorldPosition
-            });
+            playerPathRenderer.Path = BuildPath(
+                new[]
+                {
+                    playerTransform.position,
+                    MarkerManager.Markers.First(marker => marker.IsNext).WorldPosition
+                },
+                out var exploredNodes,
+                out var openNodes);
+
+            playerPathRenderer.exploredNodes = exploredNodes;
+            playerPathRenderer.openNodes = openNodes;
         }
 
 
         // Direct Path to every marker
         private void UpdateDirectPath()
         {
-            if (MarkerManager.MarkersCount < 2) return;
+            if (MarkerManager.MarkersCount < 1) return;
 
             directPathRenderer.Path = new PathFinding.Path(MarkerManager.Markers
                 .Where(marker => marker.State != MarkerState.Checked)
@@ -121,15 +169,20 @@ namespace Map.Path
 
         private void ClearPathLines()
         {
-            markersPathRenderer.ClearLine();
+            foreach (Transform obj in markersPathParent)
+                obj.GetComponent<PathRenderer>().ClearLine();
             playerPathRenderer.ClearLine();
             directPathRenderer.ClearLine();
         }
 
 
         // ================== PATH FINDING ==================
-        private PathFinding.Path BuildPath(Vector3[] checkPoints)
+        private PathFinding.Path BuildPath(Vector3[] checkPoints, [CanBeNull] out List<Node> exploredNodes,
+            [CanBeNull] out List<Node> openNodes)
         {
+            exploredNodes = new List<Node>();
+            openNodes = new List<Node>();
+
             if (checkPoints.Length == 0) return global::PathFinding.Path.EmptyPath;
 
             return PathFinding.FindPathByCheckpoints(
@@ -138,7 +191,9 @@ namespace Map.Path
                     size: pathFindingConfig.cellSize
                 )).ToArray(),
                 MapManager.Instance.terrain,
-                pathFindingConfig
+                pathFindingConfig,
+                out exploredNodes,
+                out openNodes
             );
         }
 
