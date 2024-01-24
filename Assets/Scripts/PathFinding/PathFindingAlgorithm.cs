@@ -9,6 +9,7 @@ namespace PathFinding
     public enum PathFindingAlgorithmType
     {
         Astar,
+        AstarDirectional,
 
         Dijkstra
         // BreadthFirstSearch,
@@ -67,11 +68,11 @@ namespace PathFinding
             // From end to start
             var path = new List<Node> { end };
 
-            var currentNode = end.parent;
+            var currentNode = end.Parent;
             while (currentNode != null && !currentNode.Equals(start))
             {
                 path.Add(currentNode);
-                currentNode = currentNode.parent;
+                currentNode = currentNode.Parent;
             }
 
             path.Reverse();

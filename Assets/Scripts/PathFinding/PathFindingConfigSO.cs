@@ -31,10 +31,14 @@ namespace PathFinding
         [ConditionalField("algorithm", false, PathFindingAlgorithmType.Astar)]
         public AstarConfig aStarConfig;
 
+        [ConditionalField("algorithm", false, PathFindingAlgorithmType.AstarDirectional)]
+        public AstarConfig aStarConfigDirectional;
+
         public PathFindingAlgorithm Algorithm =>
             algorithm switch
             {
-                PathFindingAlgorithmType.Astar => AstarAlgorithm.Instance,
+                PathFindingAlgorithmType.Astar => AstarDirectional.Instance,
+                PathFindingAlgorithmType.AstarDirectional => AstarDirectional.Instance,
                 PathFindingAlgorithmType.Dijkstra => DijkstraAlgorithm.Instance,
                 _ => throw new ArgumentOutOfRangeException()
             };

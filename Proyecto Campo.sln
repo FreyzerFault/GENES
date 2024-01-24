@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnityUIExtensions", "UnityUIExtensions.csproj", "{4b06f23d-5e15-1f2c-044c-5b76847e3552}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assets.Scripts.PathFinding", "Assets.Scripts.PathFinding.csproj", "{d98b3dbe-6626-470f-39bc-529ef39ee94d}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assets.Scripts.Physics", "Assets.Scripts.Physics.csproj", "{1ed6883c-23d3-0411-77ba-20b801729070}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnityUIExtensions.examples", "UnityUIExtensions.examples.csproj", "{eb1a7507-d84a-f3e9-9242-512025745a50}"
@@ -12,8 +14,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assets.Scripts.Map", "Assets.Scripts.Map.csproj", "{8bdb3e98-d617-0799-e30b-ad8b64bb0331}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assets.Scripts", "Assets.Scripts.csproj", "{c598f215-6716-6b93-fc56-8b55cb542e19}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assets.Scripts.PathFinding", "Assets.Scripts.PathFinding.csproj", "{d98b3dbe-6626-470f-39bc-529ef39ee94d}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assets.Scripts.Terrain", "Assets.Scripts.Terrain.csproj", "{3bfaace1-e45f-aaec-6ade-a241efbf2ee7}"
 EndProject
@@ -36,6 +36,8 @@ Global
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{4b06f23d-5e15-1f2c-044c-5b76847e3552}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4b06f23d-5e15-1f2c-044c-5b76847e3552}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{d98b3dbe-6626-470f-39bc-529ef39ee94d}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{d98b3dbe-6626-470f-39bc-529ef39ee94d}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1ed6883c-23d3-0411-77ba-20b801729070}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1ed6883c-23d3-0411-77ba-20b801729070}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{eb1a7507-d84a-f3e9-9242-512025745a50}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -46,8 +48,6 @@ Global
 		{8bdb3e98-d617-0799-e30b-ad8b64bb0331}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{c598f215-6716-6b93-fc56-8b55cb542e19}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{c598f215-6716-6b93-fc56-8b55cb542e19}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{d98b3dbe-6626-470f-39bc-529ef39ee94d}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{d98b3dbe-6626-470f-39bc-529ef39ee94d}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3bfaace1-e45f-aaec-6ade-a241efbf2ee7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3bfaace1-e45f-aaec-6ade-a241efbf2ee7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{afa59c38-eeaf-6b64-b46e-f23cb798a397}.Debug|Any CPU.ActiveCfg = Debug|Any CPU

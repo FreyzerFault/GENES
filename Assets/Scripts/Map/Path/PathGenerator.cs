@@ -51,7 +51,7 @@ namespace Map.Path
         {
             // Min Height depends on water height
             pathFindingConfig.minHeight = MapManager.Instance.WaterHeight;
-            
+
             PathFinding.CleanCache();
 
             // PATH
@@ -116,7 +116,7 @@ namespace Map.Path
                 else
                     DestroyImmediate(obj.gameObject);
             markersPathRenderers = Array.Empty<PathRenderer>();
-            
+
             if (MarkerManager.MarkersCount < 2)
                 return;
 
@@ -151,15 +151,20 @@ namespace Map.Path
         {
             if (MarkerManager.MarkersCount == 0) return;
 
+            var terrainData = Terrain.activeTerrain.terrainData;
+            var initialPos = terrainData.GetWorldPosition(terrainData.GetNormalizedPosition(playerTransform.position));
+
             // Player -> 1º Marker
             playerPathRenderer.Path = BuildPath(
                 new[]
                 {
-                    playerTransform.position,
+                    initialPos,
                     MarkerManager.Markers.First(marker => marker.IsNext).WorldPosition
                 },
                 out var exploredNodes,
-                out var openNodes);
+                out var openNodes,
+                new Vector2(playerTransform.forward.x, playerTransform.forward.z)
+            );
 
             playerPathRenderer.exploredNodes = exploredNodes;
             playerPathRenderer.openNodes = openNodes;
@@ -174,7 +179,7 @@ namespace Map.Path
                 directPathRenderer.Path = global::PathFinding.Path.EmptyPath;
                 return;
             }
-            
+
             if (MarkerManager.MarkersCount < 1) return;
 
             directPathRenderer.Path = new PathFinding.Path(MarkerManager.Markers
@@ -196,7 +201,7 @@ namespace Map.Path
 
         // ================== PATH FINDING ==================
         private PathFinding.Path BuildPath(Vector3[] checkPoints, [CanBeNull] out List<Node> exploredNodes,
-            [CanBeNull] out List<Node> openNodes)
+            [CanBeNull] out List<Node> openNodes, Vector2? initialDirection = null)
         {
             exploredNodes = new List<Node>();
             openNodes = new List<Node>();
@@ -206,7 +211,8 @@ namespace Map.Path
             return PathFinding.FindPathByCheckpoints(
                 checkPoints.Select(point => new Node(
                     point,
-                    size: pathFindingConfig.cellSize
+                    size: pathFindingConfig.cellSize,
+                    direction: initialDirection
                 )).ToArray(),
                 MapManager.Instance.terrain,
                 pathFindingConfig,

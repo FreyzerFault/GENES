@@ -16,11 +16,20 @@ MonoBehaviour:
   maxIterations: 2000
   minHeight: 23.82
   useCache: 1
-  algorithm: 0
+  algorithm: 1
   aStarConfig:
     distanceCost: 1
     heightCost: 2
+    turnCost: 0
     distanceHeuristic: 1
     heightHeuristic: 1
     slopeHeuristic: 10
+    maxSlopeAngle: 40
+  aStarConfigDirectional:
+    distanceCost: 1
+    heightCost: 2
+    turnCost: 2
+    distanceHeuristic: 1
+    heightHeuristic: 1
+    slopeHeuristic: 1
     maxSlopeAngle: 40

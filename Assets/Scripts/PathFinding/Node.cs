@@ -8,23 +8,38 @@ namespace PathFinding
     public class Node
     {
         private static readonly float DefaultSize = 1;
-        private static readonly float EqualityPrecision = 0.01f;
-        public Node parent;
+        protected static readonly float EqualityPrecision = 0.01f;
 
         public Vector3 Position;
 
         public float Size;
         public float SlopeAngle;
 
+        // Direccion desde el parent al nodo
+        public Vector2 direction;
+
         // Neighbours
         [NonSerialized] public Node[] Neighbours;
+        private Node parent;
 
 
-        public Node(Vector3 position, float? slopeAngle = null, float? size = null)
+        public Node(Vector3 position, float? slopeAngle = null, float? size = null, Vector2? direction = null)
         {
             Position = position;
             SlopeAngle = slopeAngle ?? Terrain.activeTerrain.GetSlopeAngle(position);
             Size = size ?? DefaultSize;
+            this.direction = direction ?? Vector2.zero;
+        }
+
+        public Node Parent
+        {
+            get => parent;
+            set
+            {
+                // Update Direction from Parent
+                direction = Direction(value, this);
+                parent = value;
+            }
         }
 
 
@@ -36,6 +51,12 @@ namespace PathFinding
 
         public Vector2 Pos2D => new(Position.x, Position.z);
         public float Height => Position.y;
+
+
+        public static Vector2 Direction(Node from, Node to)
+        {
+            return (to.Pos2D - from.Pos2D).normalized;
+        }
 
         public override int GetHashCode()
         {

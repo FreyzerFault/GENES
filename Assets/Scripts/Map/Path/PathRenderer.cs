@@ -143,9 +143,9 @@ namespace Map.Path
             var tangentGradient = Vector3.Cross(normal, tangentMid);
 
             // Diferencia de Funcion
-            if (node.parent != null)
+            if (node.Parent != null)
             {
-                var functionDiff = node.parent.F - node.F;
+                var functionDiff = node.Parent.F - node.F;
                 Gizmos.color = Color.Lerp(color.Darken(0.8f), color, functionDiff / 2f + 0.5f);
             }
             else
@@ -173,12 +173,19 @@ namespace Map.Path
                 DrawArrow(pos, tangentGradient);
             }
 
+            // DIRECTION
+            if (node.direction != Vector2.zero)
+            {
+                Gizmos.color = Color.yellow;
+                DrawArrow(pos, new Vector3(node.direction.x, 0, node.direction.y), node.Size / 2);
+            }
+
 
             // Line to Parent
-            if (node.parent != null)
+            if (node.Parent != null)
             {
                 Gizmos.color = Color.Lerp(color, Color.white, 0.5f);
-                Gizmos.DrawLine(pos, node.parent.Position + Vector3.up * heightOffset);
+                Gizmos.DrawLine(pos, node.Parent.Position + Vector3.up * heightOffset);
             }
 
             // [F,G,H] Labels
