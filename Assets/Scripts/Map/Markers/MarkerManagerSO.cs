@@ -165,7 +165,7 @@ namespace Map.Markers
             var list = Markers.ToList();
             list.RemoveAt(index);
             Markers = list.ToArray();
-            
+
             // Si tiene de Estado Next, el siguiente pasa a ser Next
             if (marker.State == MarkerState.Next && MarkersCount > index)
                 Markers[index].State = MarkerState.Next;
@@ -234,12 +234,12 @@ namespace Map.Markers
 
 #if UNITY_EDITOR
         [ButtonMethod]
+#endif
         public void ClearMarkers()
         {
             Markers = Array.Empty<Marker>();
             OnMarkersClear.Invoke();
         }
-#endif
 
         private static void Log(string msg)
         {

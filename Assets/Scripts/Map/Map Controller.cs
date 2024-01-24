@@ -12,9 +12,9 @@ namespace Map
         [SerializeField] private MapUIRenderer fullscreenMapUI;
 
         private MapUIRenderer Minimap =>
-            minimapUI ? minimapUI : GameObject.FindWithTag("Minimap").GetComponent<MapUIRenderer>();
+            minimapUI != null ? minimapUI : GameObject.FindWithTag("Minimap").GetComponent<MapUIRenderer>();
 
-        private MapUIRenderer FullScreenMap => fullscreenMapUI
+        private MapUIRenderer FullScreenMap => fullscreenMapUI != null
             ? fullscreenMapUI
             : GameObject.FindWithTag("Map Fullscreen").GetComponent<MapUIRenderer>();
 
@@ -25,26 +25,34 @@ namespace Map
             fullscreenMapUI = GameObject.FindWithTag("Map Fullscreen")?.GetComponent<MapUIRenderer>();
         }
 
+
+        private void CloseMap()
+        {
+            fullScreenMapParent.SetActive(false);
+            minimapParent.SetActive(true);
+            GameManager.Instance.State = GameManager.GameState.Playing;
+        }
+
+        private void OpenMap()
+        {
+            minimapParent.SetActive(false);
+            fullScreenMapParent.SetActive(true);
+            GameManager.Instance.State = GameManager.GameState.Paused;
+        }
+
         // INPUTS
         private void OnToggleMap()
         {
-            if (minimapParent.activeSelf)
+            if (GameManager.Instance.IsPlaying)
             {
-                minimapParent.SetActive(false);
-                fullScreenMapParent.SetActive(true);
-                Cursor.lockState = CursorLockMode.None;
-                Cursor.visible = true;
+                OpenMap();
             }
-            else if (fullScreenMapParent.activeSelf)
+            else if (GameManager.Instance.IsPaused)
             {
-                fullScreenMapParent.SetActive(false);
-                minimapParent.SetActive(true);
-                Cursor.lockState = CursorLockMode.Locked;
-                Cursor.visible = false;
-            }
-            else
-            {
-                minimapParent.SetActive(true);
+                if (FullScreenMap.MarkerManager.numSelectedMarkers > 0)
+                    FullScreenMap.MarkerManager.DeselectAllMarkers();
+                else
+                    CloseMap();
             }
         }
 
@@ -56,8 +64,8 @@ namespace Map
 
         private void OnDeselectAll()
         {
-            if (fullScreenMapParent.activeSelf)
-                fullscreenMapUI.MarkerManager.DeselectAllMarkers();
+            if (GameManager.Instance.State == GameManager.GameState.Paused)
+                FullScreenMap.MarkerManager.DeselectAllMarkers();
         }
     }
 }

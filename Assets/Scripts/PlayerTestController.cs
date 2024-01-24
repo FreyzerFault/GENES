@@ -7,9 +7,9 @@ public class PlayerTestController : MonoBehaviour
     public float angularSpeed = 1f;
 
     [SerializeField] private Transform camPoint;
-    private float initialCamRotationEulerX;
 
     private GameObject body;
+    private float initialCamRotationEulerX;
 
     private Vector3 moveInput = Vector3.zero;
     private Terrain terrain;
@@ -43,14 +43,14 @@ public class PlayerTestController : MonoBehaviour
         // CAM POINT Rotation in X Axis
         var rotation = camPoint.rotation;
         rotation *= Quaternion.Euler(-mouseDelta.y * angularSpeed / 2 * Time.deltaTime, 0, 0);
-        
+
         // Convertir el ángulo a un rango de -180 a 180
-        float angle = rotation.eulerAngles.x > 180 ? rotation.eulerAngles.x - 360 : rotation.eulerAngles.x;
-        
+        var angle = rotation.eulerAngles.x > 180 ? rotation.eulerAngles.x - 360 : rotation.eulerAngles.x;
+
         // Límites de la rotación
-        float minAngle = -45f; // Ángulo mínimo
-        float maxAngle = 45f; // Ángulo máximo
-        
+        var minAngle = -45f; // Ángulo mínimo
+        var maxAngle = 45f; // Ángulo máximo
+
         // Clamp to 89º
         rotation = Quaternion.Euler(
             Mathf.Clamp(angle, minAngle, maxAngle),

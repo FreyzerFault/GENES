@@ -401,6 +401,17 @@
                     "isPartOfComposite": false
                 },
                 {
+                    "name": "",
+                    "id": "6153b128-dfb9-4ff7-8081-90f36a36753b",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Toggle Map",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
                     "name": "In Out",
                     "id": "1e7ed069-cc21-4f99-b859-2c0aecd875a1",
                     "path": "1DAxis",
