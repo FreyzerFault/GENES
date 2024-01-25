@@ -99,6 +99,11 @@ namespace Map.Markers
         {
             return MapManager.Instance.TerrainData.GetNormalizedPosition(worldPos);
         }
+
+        public override bool Equals(object obj)
+        {
+            return obj is Marker marker && marker.IsAtPoint(marker._normalizedPosition, 0.01f);
+        }
     }
 
     [Serializable]

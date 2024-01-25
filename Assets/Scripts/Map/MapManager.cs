@@ -1,11 +1,13 @@
 using Map.Markers;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Map
 {
     public class MapManager : Singleton<MapManager>
     {
-        public MarkerManagerSO markerManager;
+        [FormerlySerializedAs("markerManager")]
+        public MarkerStorageSo markerStorage;
 
         public Terrain terrain;
         [SerializeField] private GameObject playerInWorld;
@@ -42,10 +44,11 @@ namespace Map
             terrain = FindObjectOfType<Terrain>();
             playerInWorld = GameObject.FindGameObjectWithTag("Player");
             water = GameObject.FindGameObjectWithTag("Water");
-
-            markerManager.Initialize();
         }
 
-        public void ClearMarkers() => markerManager.ClearMarkers();
+        public void ClearMarkers()
+        {
+            markerStorage.ClearAll();
+        }
     }
 }

@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace Map.Markers
 {
@@ -14,8 +13,6 @@ namespace Map.Markers
         [SerializeField] private GameObject checkedModel;
 
         [SerializeField] private Marker marker;
-
-        public UnityEvent<Marker> onPlayerPickUp;
 
         private GameObject _player;
 
@@ -46,19 +43,21 @@ namespace Map.Markers
         {
             if (!other.CompareTag("Player") || !marker.IsNext) return;
 
-            // ANIMACION
-            PickUpAnimation();
-
-            // ESTADO -> CHECKED
-            marker.State = MarkerState.Checked;
-
-            // EVENTO PICK UP
-            onPlayerPickUp.Invoke(marker);
+            PickUp();
         }
 
         private void Initialize()
         {
             UpdateState();
+        }
+
+        private void PickUp()
+        {
+            // ANIMACION
+            PickUpAnimation();
+
+            // ESTADO -> CHECKED
+            marker.State = MarkerState.Checked;
         }
 
         private void HandleOnStateChange(object sender, MarkerState state)

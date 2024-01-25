@@ -1,3 +1,4 @@
+using ExtensionMethods;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -63,7 +64,8 @@ namespace Map.Markers
             _rectTransform.anchorMin = new Vector2(0, 0);
 
             // Move to Local Pos in Map
-            _rectTransform.anchoredPosition = _mapUIRenderer.GetLocalPointInMap(normalizePos);
+            var localPoint = _mapUIRenderer.GetComponent<RectTransform>().NormalizedToLocalPoint(normalizePos);
+            _rectTransform.anchoredPosition = localPoint;
 
             // Inverse Zoom to mantain size
             _rectTransform.localScale /= _mapUIRenderer.ZoomScale;

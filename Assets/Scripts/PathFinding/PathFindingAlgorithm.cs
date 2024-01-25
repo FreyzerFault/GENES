@@ -61,7 +61,7 @@ namespace PathFinding
             }
         }
 
-        public int PathNodeCount => _nodes.Length;
+        public int NodeCount => _nodes.Length;
 
         private static Node[] ExtractPath(Node start, Node end)
         {

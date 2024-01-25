@@ -1,3 +1,4 @@
+using Map.Markers;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -49,8 +50,8 @@ namespace Map
             }
             else if (GameManager.Instance.IsPaused)
             {
-                if (FullScreenMap.MarkerManager.numSelectedMarkers > 0)
-                    FullScreenMap.MarkerManager.DeselectAllMarkers();
+                if (MarkerManager.Instance.SelectedCount > 0)
+                    MarkerManager.Instance.DeselectAllMarkers();
                 else
                     CloseMap();
             }
@@ -65,7 +66,7 @@ namespace Map
         private void OnDeselectAll()
         {
             if (GameManager.Instance.State == GameManager.GameState.Paused)
-                FullScreenMap.MarkerManager.DeselectAllMarkers();
+                MarkerManager.Instance.DeselectAllMarkers();
         }
     }
 }

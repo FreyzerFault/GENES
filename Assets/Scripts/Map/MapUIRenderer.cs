@@ -7,7 +7,6 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
-using UnityEngine.UI.Extensions;
 using Gradient = UnityEngine.Gradient;
 
 #if UNITY_EDITOR
@@ -19,6 +18,15 @@ using MyBox;
 
 namespace Map
 {
+    [Serializable]
+    public enum MarkerMode
+    {
+        Add,
+        Remove,
+        Select,
+        None
+    }
+
     public class MapUIRenderer : MonoBehaviour, IPointerMoveHandler, IPointerClickHandler, IPointerExitHandler,
         IPointerEnterHandler
     {
@@ -31,8 +39,12 @@ namespace Map
 
         [SerializeField] private Transform markersUIParent;
 
-        // LINE
-        [SerializeField] private UILineRenderer lineRenderer;
+        // LINE Renderers
+        [SerializeField] private PathRendererUI[] pathRenderers;
+
+        [SerializeField] private PathRendererUI pathRendererPrefab;
+        [SerializeField] private GameObject pathRendererParent;
+
         [SerializeField] private int lineDefaultThickness = 7;
 
         // Icono del Player
@@ -41,14 +53,13 @@ namespace Map
         // CURSOR
         [SerializeField] private RectTransform mouseCursorMarker;
 
-        private RawImage _image;
         private RectTransform _rectTransform;
 
         private TMP_Text MouseLabel => mouseCursorMarker.GetComponentInChildren<TMP_Text>();
         private Image MouseSprite => mouseCursorMarker.GetComponentInChildren<Image>();
 
         // MARKERS
-        public MarkerManagerSO MarkerManager => MapManager.Instance.markerManager;
+        public MarkerManager MarkerManager => MarkerManager.Instance;
 
         public float ZoomScale
         {
@@ -60,11 +71,7 @@ namespace Map
             }
         }
 
-        public RawImage Image
-        {
-            get => _image ? _image : GetComponent<RawImage>();
-            private set => _image = value;
-        }
+        public RawImage Image { get; private set; }
 
         private float ImageWidth => Image.rectTransform.rect.width;
         private float ImageHeight => Image.rectTransform.rect.height;
@@ -83,7 +90,7 @@ namespace Map
         // ================================== UNITY ==================================
         private void Awake()
         {
-            Image ??= GetComponent<RawImage>();
+            Image = GetComponent<RawImage>();
         }
 
         private void Start()
@@ -115,7 +122,7 @@ namespace Map
             if (markerMode == MarkerMode.None) return;
 
             // [0,1] Position
-            var normalizedPosition = GetNormalizedPosition(eventData.position);
+            var normalizedPosition = _rectTransform.ScreenToNormalizedPoint(eventData.position);
 
             switch (markerMode)
             {
@@ -159,15 +166,15 @@ namespace Map
         private void Initialize()
         {
             // SUBSCRIBERS:
-            MarkerManager.OnMarkerAdded.AddListener(HandleAdded);
-            MarkerManager.OnMarkerRemoved.AddListener(HandleRemoved);
-            MarkerManager.OnMarkerMoved.AddListener(HandleMoved);
-            MarkerManager.OnMarkersClear.AddListener(HandleClear);
+            MarkerManager.OnMarkerAdded += HandleAdded;
+            MarkerManager.OnMarkerRemoved += HandleRemoved;
+            MarkerManager.OnMarkerMoved += HandleMoved;
+            MarkerManager.OnMarkersClear += HandleClear;
 
 
             // TODO QUITAR ESTO Y LLEVARLO A UN MAPCURSOR
-            MarkerManager.OnMarkerSelected.AddListener(HandleMarkerSelected);
-            MarkerManager.OnMarkerDeselected.AddListener(HandleMarkerDeselected);
+            MarkerManager.OnMarkerSelected += HandleMarkerSelected;
+            MarkerManager.OnMarkerDeselected += HandleMarkerDeselected;
 
 
             // MARKERS
@@ -179,27 +186,23 @@ namespace Map
         private void HandleAdded(Marker marker, int index)
         {
             InstantiateMarker(marker);
-            AddMarkerToLine(marker, index);
             UpdateMouseMarker();
         }
 
         private void HandleRemoved(Marker marker, int index)
         {
             DestroyMarkerUI(marker);
-            RemoveMarkerFromLine(index);
             UpdateMouseMarker();
         }
 
         private void HandleMoved(Marker marker, int index)
         {
-            MoveMarkerFromLine(marker, index);
             UpdateMouseMarker();
         }
 
         private void HandleClear()
         {
             ClearMarkersUI();
-            ClearLineRenderer();
         }
 
         private void HandleMarkerSelected(Marker marker)
@@ -231,7 +234,7 @@ namespace Map
 
         private void CenterPlayerInZoomedMap()
         {
-            if (zoomScale == 1) return;
+            if (Math.Abs(zoomScale - 1) < 0.01f) return;
 
             // Centrar el Player en el centro del minimapa por medio de su pivot
             var pivot = MapManager.Instance.PlayerNormalizedPosition;
@@ -257,6 +260,10 @@ namespace Map
 
             // La flecha del player se escala al revés para que no se vea afectada por el zoom
             playerSprite.localScale = new Vector3(1 / zoomScale, 1 / zoomScale, 1);
+
+
+            // Line Thickness
+            pathRenderers.ForEach(path => path.LineThickness = lineDefaultThickness / zoomScale);
         }
 
 
@@ -271,7 +278,7 @@ namespace Map
                 else
                     DestroyImmediate(marker.gameObject);
             });
-            ClearLineRenderer();
+            ClearPathRenderers();
         }
 
         private void UpdateMarkers()
@@ -319,7 +326,7 @@ namespace Map
                 case MarkerMode.Add:
 
                     var collisionIndex =
-                        MarkerManager.FindClosestMarkerIndex(GetNormalizedPosition(
+                        MarkerManager.FindIndex(_rectTransform.ScreenToNormalizedPoint(
                             new Vector2(Mouse.current.position.x.value, Mouse.current.position.y.value)));
                     if (collisionIndex != -1)
                     {
@@ -328,7 +335,7 @@ namespace Map
                     }
                     else
                     {
-                        switch (MarkerManager.numSelectedMarkers)
+                        switch (MarkerManager.SelectedCount)
                         {
                             case 0:
                                 MouseSprite.color = Color.white;
@@ -354,85 +361,69 @@ namespace Map
             }
         }
 
-        // ================================== LINE RENDERER ==================================
+        // ================================== PATH RENDERERs ==================================
         private void UpdateLineRenderer()
         {
-            lineRenderer.Points = MarkerManager.Markers.ToList().ConvertAll(
-                marker => GetLocalPointInMap(marker.NormalizedPosition)
-            ).ToArray();
-
-            // Thickness
-            lineRenderer.LineThickness = lineDefaultThickness / zoomScale;
+            pathRenderers.ForEach(path => path.UpdateLine());
         }
 
-        private void AddMarkerToLine(Marker marker, int index = -1)
+        private void AddPath(PathFinding.Path path, int index = -1)
         {
-            // Si el primer punto es el default, se quita
-            var lineWithDefaultPoint = lineRenderer.Points[0] == Vector2.zero;
+            var newPathRenderer = Instantiate(pathRendererPrefab, pathRendererParent.transform);
+
+            newPathRenderer.Path = path;
+            newPathRenderer.UpdateLine();
 
             if (index == -1)
             {
-                lineRenderer.Points = lineRenderer.Points.Append(
-                    GetLocalPointInMap(marker.NormalizedPosition)
-                ).ToArray();
+                // Añadir al final
+                pathRenderers = pathRenderers.Append(newPathRenderer).ToArray();
+                newPathRenderer.Color = pathRenderers[^2].Color.RotateHue(0.1f);
             }
             else
             {
-                var posInMap = GetLocalPointInMap(marker.NormalizedPosition);
-                var points = lineRenderer.Points;
-                lineRenderer.Points = points
+                // Insertar en medio
+                pathRenderers = pathRenderers
                     .Take(index)
-                    .Append(posInMap)
-                    .Concat(points.TakeLast(points.Length - index))
+                    .Append(newPathRenderer)
+                    .Concat(pathRenderers.Skip(index))
                     .ToArray();
+
+                // COLOR
+                newPathRenderer.Color = pathRenderers[index - 1].Color.RotateHue(0.1f);
+
+                // Cambiar color en cascada 
+                pathRenderers.Skip(index + 1).ForEach(pathR => pathR.Color = pathR.Color.RotateHue(0.1f));
             }
-
-            if (lineWithDefaultPoint) RemoveMarkerFromLine(0);
         }
 
-        private void RemoveMarkerFromLine(int index = -1)
+        // Modificar un Path por indice
+        private void SetPath(int index, PathFinding.Path path)
         {
-            if (index == -1) return;
+            pathRenderers[index].Path = path;
+        }
 
-            var list = lineRenderer.Points.ToList();
+        private void RemovePath(int index = -1)
+        {
+            if (index < 0 || index > pathRenderers.Length) return;
+
+            var list = pathRenderers.ToList();
             list.RemoveAt(index);
-            lineRenderer.Points = list.ToArray();
+            pathRenderers = list.ToArray();
         }
 
-        private void MoveMarkerFromLine(Marker marker, int index = -1)
+        private void ClearPathRenderers()
         {
-            RemoveMarkerFromLine(index);
-            AddMarkerToLine(marker, index);
+            pathRenderers.ForEach(path =>
+            {
+                if (Application.isPlaying)
+                    Destroy(path.gameObject);
+                else
+                    DestroyImmediate(path.gameObject);
+            });
+            pathRenderers = Array.Empty<PathRendererUI>();
         }
 
-        private void ClearLineRenderer()
-        {
-            var emptyArray = Array.Empty<Vector2>();
-            lineRenderer.Points = emptyArray;
-        }
-
-        // ================================== UTILS ==================================
-        private Vector2 GetNormalizedPosition(Vector2 screenPos)
-        {
-            _rectTransform ??= GetComponent<RectTransform>();
-            RectTransformUtility.ScreenPointToLocalPointInRectangle(_rectTransform, screenPos,
-                null, out var localPos);
-            return localPos / ImageSize;
-        }
-
-        public Vector2 GetLocalPointInMap(Vector2 normalizedPos)
-        {
-            return normalizedPos * ImageSize;
-        }
-
-        [Serializable]
-        private enum MarkerMode
-        {
-            Add,
-            Remove,
-            Select,
-            None
-        }
 
 #if UNITY_EDITOR
         // ================================== BUTTONS on INSPECTOR ==================================
