@@ -31,6 +31,8 @@ namespace Map.Path
         private PathFinding.Path _path = PathFinding.Path.EmptyPath;
 
         private Terrain _terrain;
+        
+        public event Action<PathFinding.Path> OnPathChange;
 
         public PathFinding.Path Path
         {
@@ -39,6 +41,7 @@ namespace Map.Path
             {
                 _path = value;
                 UpdateLine();
+                OnPathChange?.Invoke(_path);
             }
         }
 
