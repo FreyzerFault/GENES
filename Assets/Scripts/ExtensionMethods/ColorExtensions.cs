@@ -1,3 +1,4 @@
+using System.Linq;
 using UnityEngine;
 
 namespace ExtensionMethods
@@ -35,6 +36,14 @@ namespace ExtensionMethods
         public static Color RandomColorSaturated()
         {
             return Random.ColorHSV(0, 1, 1, 1, 1, 1);
+        }
+
+
+        // COLORES Dinamicos
+
+        public static Color[] GetRainBowColors(this Color initColor, int count, float step = 0.1f)
+        {
+            return new Color[count].Select((value, index) => initColor.RotateHue(step * index)).ToArray();
         }
     }
 }

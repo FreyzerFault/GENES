@@ -1,10 +1,15 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace ExtensionMethods
 {
     public static class TerrainExtensionMethods
     {
-        public static Texture2D ToTexture(this TerrainData terrain, int texWidth, int texHeight,
+        #region TEXTURE
+
+        public static Texture2D ToTexture(this Terrain terrain, int texWidth, int texHeight,
             Gradient heightGradient)
         {
             // Heightmap to Texture
@@ -15,7 +20,7 @@ namespace ExtensionMethods
             for (var y = 0; y < texHeight; y++)
             for (var x = 0; x < texWidth; x++)
             {
-                var height = terrain.GetInterpolatedHeight(x / (float)texWidth, y / (float)texHeight);
+                var height = terrain.terrainData.GetInterpolatedHeight(x / (float)texWidth, y / (float)texHeight);
                 var heightNormalized = Mathf.InverseLerp(minHeight, maxHeight, height);
 
                 texture.SetPixel(x, y, heightGradient.Evaluate(heightNormalized));
@@ -26,54 +31,96 @@ namespace ExtensionMethods
             return texture;
         }
 
+        #endregion
+
+        #region SAMPLE_VERTICES
+
+        // Vertice más cercano del terreno a la posición dada (0 altura)
+        public static Vector2 GetNearestVertex(this Terrain terrain, Vector2 normalizedPos)
+        {
+            var cornerIndex = Vector2Int.FloorToInt(terrain.terrainData.heightmapResolution * normalizedPos);
+            var cellSize = terrain.terrainData.heightmapScale.x;
+
+            return cellSize * new Vector2(cornerIndex.x, cornerIndex.y);
+        }
+
+        public static Vector3 GetNearestVertexByWorldPos(this Terrain terrain, Vector3 worldPos)
+        {
+            return terrain.GetNearestVertex(terrain.GetNormalizedPosition(worldPos));
+        }
+
+        #endregion
+
+        #region COORDS_TRANSFORMATIONS
+
         // [0,1] => [0, TerrainWidth] & [0, TerrainHeight]
-        public static Vector3 GetWorldPosition(this TerrainData terrain, Vector2 normalizedPos)
+        public static Vector3 GetWorldPosition(this Terrain terrain, Vector2 normalizedPos)
         {
             return new Vector3(
-                normalizedPos.x * terrain.size.x,
-                terrain.GetInterpolatedHeight(normalizedPos.x, normalizedPos.y),
-                normalizedPos.y * terrain.size.z
+                normalizedPos.x * terrain.terrainData.size.x,
+                terrain.GetInterpolatedHeight(normalizedPos),
+                normalizedPos.y * terrain.terrainData.size.z
             );
         }
 
-        public static Vector2 GetNormalizedPosition(this TerrainData terrain, Vector3 worldPos)
+        public static Vector2 GetNormalizedPosition(this Terrain terrain, Vector3 worldPos)
         {
+            var terrainData = terrain.terrainData;
             return new Vector2(
-                worldPos.x / terrain.size.x,
-                worldPos.z / terrain.size.z
+                worldPos.x / terrainData.size.x,
+                worldPos.z / terrainData.size.z
             );
         }
 
-        public static float GetInterpolatedHeight(this TerrainData terrain, Vector2 normalizedPos)
+        #endregion
+
+        #region HEIGHT
+
+        public static float GetInterpolatedHeight(this Terrain terrain, Vector2 normalizedPos)
         {
-            return terrain.GetInterpolatedHeight(normalizedPos.x, normalizedPos.y);
+            return terrain.terrainData.GetInterpolatedHeight(normalizedPos.x, normalizedPos.y);
         }
 
-        public static float GetInterpolatedHeight(this TerrainData terrain, Vector3 worldPos)
+        public static float GetInterpolatedHeight(this Terrain terrain, Vector3 worldPos)
         {
             return terrain.GetInterpolatedHeight(terrain.GetNormalizedPosition(worldPos));
         }
 
 
         // Max & Min Height in HeightMap float[,]
-        public static void GetMinMaxHeight(this TerrainData terrain, out float minHeight, out float maxHeight)
+        public static void GetMinMaxHeight(this Terrain terrain, out float minHeight, out float maxHeight)
         {
-            var terrainRes = terrain.heightmapResolution;
-            var heightMap = terrain.GetHeights(0, 0, terrainRes, terrainRes);
+            TerrainData terrainData;
+            var terrainRes = terrain.terrainData.heightmapResolution;
+            var heightMap = (terrainData = terrain.terrainData).GetHeights(0, 0, terrainRes, terrainRes);
 
-            minHeight = terrain.heightmapScale.y;
+            minHeight = terrainData.heightmapScale.y;
             maxHeight = 0;
 
             foreach (var height in heightMap)
             {
-                minHeight = Mathf.Min(height * terrain.heightmapScale.y, minHeight);
-                maxHeight = Mathf.Max(height * terrain.heightmapScale.y, maxHeight);
+                minHeight = Mathf.Min(height * terrain.terrainData.heightmapScale.y, minHeight);
+                maxHeight = Mathf.Max(height * terrain.terrainData.heightmapScale.y, maxHeight);
             }
+        }
+
+        #endregion
+
+        #region NORMAL
+
+        public static Vector3 GetNormal(this Terrain terrain, Vector2 normPoint)
+        {
+            return terrain.terrainData.GetInterpolatedNormal(normPoint.x, normPoint.y);
+        }
+
+        public static Vector3 GetNormal(this Terrain terrain, Vector3 worldPoint)
+        {
+            return terrain.GetNormal(terrain.GetNormalizedPosition(worldPoint));
         }
 
         public static float GetSlopeAngle(this Terrain terrain, Vector3 worldPos)
         {
-            var normalizedPos = terrain.terrainData.GetNormalizedPosition(worldPos);
+            var normalizedPos = terrain.GetNormalizedPosition(worldPos);
             return terrain.GetSlopeAngle(normalizedPos);
         }
 
@@ -86,7 +133,9 @@ namespace ExtensionMethods
             );
         }
 
-        // ================== TERRAIN to MESH ==================
+        #endregion
+
+        #region MESH
 
         // PROJECT MESH in Terrain
         public static Mesh ProjectMeshInTerrain(this Terrain terrain, Mesh mesh, Transform meshTransform, float offset)
@@ -114,10 +163,11 @@ namespace ExtensionMethods
         public static void GetMesh(this Terrain terrain, out Vector3[] vertices,
             out int[] triangles, float heightOffset)
         {
-            var heightMap = terrain.terrainData.GetHeights(0, 0, terrain.terrainData.heightmapResolution,
-                terrain.terrainData.heightmapResolution);
+            var terrainData = terrain.terrainData;
+            var heightMap = terrain.terrainData.GetHeights(0, 0, terrainData.heightmapResolution,
+                terrainData.heightmapResolution);
 
-            var cellSize = terrain.terrainData.heightmapScale.x;
+            var cellSize = terrainData.heightmapScale.x;
             var sideCellCount = heightMap.GetLength(0) - 1;
             var sideVerticesCount = heightMap.GetLength(0);
 
@@ -152,18 +202,18 @@ namespace ExtensionMethods
         public static void CreateMeshPatch(this Terrain terrain, Mesh mesh, Transform meshTransform,
             Vector3 worldCenter, float size, float heightOffset)
         {
-            float cellSize = terrain.terrainData.heightmapScale.x / 2;
+            var cellSize = terrain.terrainData.heightmapScale.x / 2;
             mesh.GenerateMeshPlane(cellSize, Vector2.one * size);
 
             terrain.ProjectMeshInTerrain(mesh, meshTransform, heightOffset);
         }
-        
+
         // Crea el Patch en la posicion central dada
         public static void GetMeshPatch(this Terrain terrain, out Vector3[] vertices,
             out int[] triangles, float heightOffset, Vector2 center, float size)
         {
             // Vertice más cercano al centro para ajustar la malla al terreno
-            var normalizedCenter = terrain.terrainData.GetNormalizedPosition(new Vector3(center.x, 0, center.y));
+            var normalizedCenter = terrain.GetNormalizedPosition(new Vector3(center.x, 0, center.y));
             var nearestTerrainVertex = terrain.GetNearestVertex(normalizedCenter);
 
             // Vector [centro -> vertice más cercano]
@@ -174,8 +224,8 @@ namespace ExtensionMethods
                 maxBound = center + Vector2.one * size / 2;
 
             Vector2 normalizedMinBound =
-                    terrain.terrainData.GetNormalizedPosition(new Vector3(minBound.x, 0, minBound.y)),
-                normalizedMaxBound = terrain.terrainData.GetNormalizedPosition(new Vector3(maxBound.x, 0, maxBound.y));
+                    terrain.GetNormalizedPosition(new Vector3(minBound.x, 0, minBound.y)),
+                normalizedMaxBound = terrain.GetNormalizedPosition(new Vector3(maxBound.x, 0, maxBound.y));
 
             normalizedMinBound.x = normalizedMinBound.x < 0.001f ? 0.001f : normalizedMinBound.x;
             normalizedMinBound.y = normalizedMinBound.y < 0.001f ? 0.001f : normalizedMinBound.y;
@@ -197,6 +247,8 @@ namespace ExtensionMethods
         public static void GetMeshPatch(this Terrain terrain, out Vector3[] vertices,
             out int[] triangles, float heightOffset, Vector2 minBound, Vector2 maxBound, Vector2 displacement)
         {
+            TerrainData terrainData;
+
             // Calculamos los indices del mapa de altura dentro de la Bounding Box
             var heightMapRes = terrain.terrainData.heightmapResolution;
 
@@ -209,10 +261,10 @@ namespace ExtensionMethods
                 ySize = Mathf.FloorToInt(count.y);
 
             // Mapa de Altura dentro de la Bounding Box
-            var heightMap = terrain.terrainData.GetHeights(xBase, yBase, xSize, ySize);
+            var heightMap = (terrainData = terrain.terrainData).GetHeights(xBase, yBase, xSize, ySize);
 
             // Dimensiones de la malla
-            var cellSize = terrain.terrainData.heightmapScale.x;
+            var cellSize = terrainData.heightmapScale.x;
             var sideCellCount = new Vector2Int(heightMap.GetLength(1) - 1, heightMap.GetLength(0) - 1);
             var sideVerticesCount = sideCellCount + Vector2Int.one;
             var sideSize = cellSize * new Vector2(sideCellCount.x, sideCellCount.y);
@@ -252,18 +304,58 @@ namespace ExtensionMethods
             }
         }
 
-        // Vertice más cercano del terreno a la posición dada (0 altura)
-        public static Vector2 GetNearestVertex(this Terrain terrain, Vector2 normalizedPos)
-        {
-            var cornerIndex = Vector2Int.FloorToInt(terrain.terrainData.heightmapResolution * normalizedPos);
-            var cellSize = terrain.terrainData.heightmapScale.x;
+        #endregion
 
-            return cellSize * new Vector2(cornerIndex.x, cornerIndex.y);
+        #region PROJECTION
+
+        public static Vector3 Project(this Terrain terrain, Vector3 point)
+        {
+            return new Vector3(point.x, terrain.SampleHeight(point), point.z);
         }
 
-        public static Vector3 GetNearestVertexByWorldPos(this Terrain terrain, Vector3 worldPos)
+        public static Vector3[] ProjectPathToTerrain(this Terrain terrain, Vector3[] pathCheckpoints)
         {
-            return terrain.GetNearestVertex(terrain.terrainData.GetNormalizedPosition(worldPos));
+            if (pathCheckpoints.Length == 0) return Array.Empty<Vector3>();
+
+            var finalPath = new List<Vector3>();
+
+            // Concatena cada segmento proyectado
+            for (var i = 1; i < pathCheckpoints.Length; i++)
+                finalPath.AddRange(
+                    terrain
+                        .ProjectSegmentToTerrain(pathCheckpoints[i - 1], pathCheckpoints[i])
+                        .SkipLast(1)
+                );
+
+            // Last Point
+            finalPath.Add(pathCheckpoints[^1]);
+
+            return finalPath.ToArray();
         }
+
+        public static Vector3[] ProjectSegmentToTerrain(this Terrain terrain, Vector3 a, Vector3 b,
+            float resolution = -1)
+        {
+            var distance = Vector3.Distance(a, b);
+
+            // Resolucion == -1 => Resolucion no especificada => Usa Resolucion del terreno
+            if (resolution < 0)
+                resolution = terrain.terrainData.heightmapScale.x;
+
+            // Si el segmento es más corto, no hace falta samplearlo
+            if (resolution > distance)
+                return new[] { a, b };
+
+            // Se samplea a la resolucion del terreno
+            var numSamples = Mathf.FloorToInt(distance / resolution);
+            return new Vector3[numSamples].Select(
+                (_, index) =>
+                    terrain.Project(
+                        Vector3.Lerp(a, b, (float)index / numSamples)
+                    )
+            ).ToArray();
+        }
+
+        #endregion
     }
 }

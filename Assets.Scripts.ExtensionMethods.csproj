@@ -48,7 +48,7 @@
     <Compile Include="Assets\Scripts\ExtensionMethods\RectTransformExtensionMethods.cs" />
     <Compile Include="Assets\Scripts\ExtensionMethods\MeshExtensions.cs" />
     <Compile Include="Assets\Scripts\ExtensionMethods\TransformExtensionMethods.cs" />
-    <Compile Include="Assets\Scripts\ExtensionMethods\EnumerableExtensionMethods.cs" />
+    <Compile Include="Assets\Scripts\ExtensionMethods\ArrayExtensions.cs" />
     <Compile Include="Assets\Scripts\ExtensionMethods\TerrainExtensionMethods.cs" />
     <Compile Include="Assets\Scripts\ExtensionMethods\ColorExtensions.cs" />
     <None Include="Assets\Scripts\ExtensionMethods\Assets.Scripts.ExtensionMethods.asmdef" />

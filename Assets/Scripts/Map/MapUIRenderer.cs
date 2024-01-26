@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using ExtensionMethods;
 using Map.Markers;
+using Map.Path;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -40,10 +41,7 @@ namespace Map
         [SerializeField] private Transform markersUIParent;
 
         // LINE Renderers
-        [SerializeField] private PathRendererUI[] pathRenderers;
-
-        [SerializeField] private PathRendererUI pathRendererPrefab;
-        [SerializeField] private GameObject pathRendererParent;
+        [SerializeField] private PathRendererUI pathRenderer;
 
         [SerializeField] private int lineDefaultThickness = 7;
 
@@ -91,6 +89,7 @@ namespace Map
         private void Awake()
         {
             Image = GetComponent<RawImage>();
+            pathRenderer = GetComponentInChildren<PathRendererUI>();
         }
 
         private void Start()
@@ -177,6 +176,13 @@ namespace Map
             MarkerManager.OnMarkerDeselected += HandleMarkerDeselected;
 
 
+            // PATH RENDERER
+            // TODO
+            PathGenerator.Instance.OnPathAdded += AddPath;
+            PathGenerator.Instance.OnPathUpdated += SetPath;
+            PathGenerator.Instance.OnPathDeleted += RemovePath;
+            PathGenerator.Instance.OnPathsCleared += ClearPathRenderers;
+
             // MARKERS
             UpdateMarkers();
         }
@@ -220,7 +226,7 @@ namespace Map
         {
             // Create Texture of Map
             Image.texture =
-                MapManager.Instance.TerrainData.ToTexture((int)ImageWidth, (int)ImageHeight, heightGradient);
+                MapManager.Instance.terrain.ToTexture((int)ImageWidth, (int)ImageHeight, heightGradient);
         }
 
         // ================================== PLAYER POINT ==================================
@@ -263,7 +269,7 @@ namespace Map
 
 
             // Line Thickness
-            pathRenderers.ForEach(path => path.LineThickness = lineDefaultThickness / zoomScale);
+            pathRenderer.LineThickness = lineDefaultThickness / zoomScale;
         }
 
 
@@ -288,7 +294,7 @@ namespace Map
             // Se instancian de nuevo todos los markers
             foreach (var marker in MarkerManager.Markers) InstantiateMarker(marker);
 
-            UpdateLineRenderer();
+            UpdatePathRenderer();
             UpdateMouseMarker();
         }
 
@@ -362,66 +368,30 @@ namespace Map
         }
 
         // ================================== PATH RENDERERs ==================================
-        private void UpdateLineRenderer()
+        private void UpdatePathRenderer(int index = -1)
         {
-            pathRenderers.ForEach(path => path.UpdateLine());
+            pathRenderer.UpdateLine(index);
         }
 
         private void AddPath(PathFinding.Path path, int index = -1)
         {
-            var newPathRenderer = Instantiate(pathRendererPrefab, pathRendererParent.transform);
-
-            newPathRenderer.Path = path;
-            newPathRenderer.UpdateLine();
-
-            if (index == -1)
-            {
-                // Añadir al final
-                pathRenderers = pathRenderers.Append(newPathRenderer).ToArray();
-                newPathRenderer.Color = pathRenderers[^2].Color.RotateHue(0.1f);
-            }
-            else
-            {
-                // Insertar en medio
-                pathRenderers = pathRenderers
-                    .Take(index)
-                    .Append(newPathRenderer)
-                    .Concat(pathRenderers.Skip(index))
-                    .ToArray();
-
-                // COLOR
-                newPathRenderer.Color = pathRenderers[index - 1].Color.RotateHue(0.1f);
-
-                // Cambiar color en cascada 
-                pathRenderers.Skip(index + 1).ForEach(pathR => pathR.Color = pathR.Color.RotateHue(0.1f));
-            }
+            pathRenderer.AddPath(path, index);
         }
 
         // Modificar un Path por indice
-        private void SetPath(int index, PathFinding.Path path)
+        private void SetPath(PathFinding.Path path, int index)
         {
-            pathRenderers[index].Path = path;
+            pathRenderer.SetPath(path, index);
         }
 
         private void RemovePath(int index = -1)
         {
-            if (index < 0 || index > pathRenderers.Length) return;
-
-            var list = pathRenderers.ToList();
-            list.RemoveAt(index);
-            pathRenderers = list.ToArray();
+            pathRenderer.RemovePath(index);
         }
 
         private void ClearPathRenderers()
         {
-            pathRenderers.ForEach(path =>
-            {
-                if (Application.isPlaying)
-                    Destroy(path.gameObject);
-                else
-                    DestroyImmediate(path.gameObject);
-            });
-            pathRenderers = Array.Empty<PathRendererUI>();
+            pathRenderer.ClearPaths();
         }
 
 

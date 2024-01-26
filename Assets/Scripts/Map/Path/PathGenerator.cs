@@ -13,37 +13,44 @@ using MyBox;
 
 namespace Map.Path
 {
-    public class PathGenerator : Singleton<MonoBehaviour>
+    public class PathGenerator : Singleton<PathGenerator>
     {
         [SerializeField] private PathFindingConfigSO pathFindingConfig;
 
-        // Player -> 1º Marker Path
-        [SerializeField] private PathRenderer playerPathRenderer;
+        // Player -> 1º Marker Path Renderer
+        [SerializeField] private PathRenderer3D playerPathRenderer;
+
+        // Spawnable Path Renderers
+        [SerializeField] private PathRenderer3D markerPathRendererPrefab;
+        [SerializeField] private Transform markersPathParent;
+        [SerializeField] private PathRenderer3D[] markersPathRenderers = Array.Empty<PathRenderer3D>();
 
         // Direct Path
-        [SerializeField] private PathRenderer directPathRenderer;
-
-        // Paths between markers
-        [SerializeField] private PathRenderer markerPathRendererPrefab;
-        [SerializeField] private PathRenderer[] markersPathRenderers = Array.Empty<PathRenderer>();
-        [SerializeField] private Transform markersPathParent;
+        [SerializeField] private PathRenderer3D directPathRenderer;
 
         // WORLD Markers
         [SerializeField] private GameObject marker3DPrefab;
-        public MarkerObject[] markerObjects;
+        public List<MarkerObject> markerObjects;
+
+        // CAM Target Group - Controla los puntos a los que debe enfocar una cámara aérea
         [SerializeField] private CinemachineTargetGroup camTargetGroup;
 
+        // Mostrar una línea directa hacia los objetivos?
         [SerializeField] private bool showDirectPath = true;
 
-
         private Transform playerTransform;
-        private PathFindingAlgorithm PathFinding => pathFindingConfig.Algorithm;
+
+        // Paths
+        private PathFinding.Path[] markerPaths => markersPathRenderers.Select(pathR => pathR.Path).ToArray();
+        private PathFinding.Path playerPath => playerPathRenderer.Path;
+
         private MarkerManager MarkerManager => MarkerManager.Instance;
+        private PathFindingAlgorithm PathFinding => pathFindingConfig.Algorithm;
 
         private void Awake()
         {
             playerTransform = GameObject.FindWithTag("Player").transform;
-            markerObjects ??= Array.Empty<MarkerObject>();
+            markerObjects ??= new List<MarkerObject>();
         }
 
         private void Start()
@@ -71,6 +78,12 @@ namespace Map.Path
             UpdateDirectPath();
         }
 
+        // EVENTS
+        public event Action<PathFinding.Path, int> OnPathAdded;
+        public event Action<int> OnPathDeleted;
+        public event Action<PathFinding.Path, int> OnPathUpdated;
+        public event Action OnPathsCleared;
+
         public event Action<PathFinding.Path[]> OnPathRenderersChange;
 
 
@@ -84,7 +97,9 @@ namespace Map.Path
                     UpdatePlayerPath();
 
                 UpdateMarkersPath();
-                OnPathRenderersChange?.Invoke();
+
+                // TODO Event for update PathRenderersUI?
+                // OnPathRenderersChange?.Invoke();
             };
             MarkerManager.OnMarkerRemoved += (_, index) =>
             {
@@ -117,7 +132,7 @@ namespace Map.Path
                     Destroy(obj.gameObject);
                 else
                     DestroyImmediate(obj.gameObject);
-            markersPathRenderers = Array.Empty<PathRenderer>();
+            markersPathRenderers = Array.Empty<PathRenderer3D>();
 
             if (MarkerManager.MarkerCount < 2)
                 return;
@@ -144,8 +159,7 @@ namespace Map.Path
                 pathRenderer.exploredNodes = exploredNodes;
                 pathRenderer.openNodes = openNodes;
 
-                // COLOR
-                pathRenderer.color = randomColor.RotateHue(i * 0.1f);
+                OnPathUpdated?.Invoke(pathRenderer.Path, i + 1);
             }
         }
 
@@ -171,6 +185,9 @@ namespace Map.Path
 
             playerPathRenderer.exploredNodes = exploredNodes;
             playerPathRenderer.openNodes = openNodes;
+
+
+            OnPathUpdated?.Invoke(playerPathRenderer.Path, 0);
         }
 
 
@@ -193,14 +210,16 @@ namespace Map.Path
                 .Prepend(new Node(playerTransform.position))
                 .ToArray()
             );
+
+            OnPathUpdated?.Invoke(directPathRenderer.Path, 0);
         }
 
         private void ClearPathLines()
         {
             foreach (Transform obj in markersPathParent)
-                obj.GetComponent<PathRenderer>().ClearLine();
-            playerPathRenderer.ClearLine();
-            directPathRenderer.ClearLine();
+                obj.GetComponent<PathRenderer3D>().ClearPaths();
+            playerPathRenderer.ClearPaths();
+            directPathRenderer.ClearPaths();
         }
 
 
@@ -246,9 +265,10 @@ namespace Map.Path
                 .GetComponent<MarkerObject>();
             markerObj.Data = marker;
 
-            markerObjects = index == -1
-                ? markerObjects.Append(markerObj).ToArray()
-                : markerObjects.InsertBetween(markerObj, index).ToArray();
+            if (index == -1)
+                markerObjects.Add(markerObj);
+            else
+                markerObjects.Insert(index, markerObj);
         }
 
         private void DestroyMarkerInWorld(Marker marker, int index)
@@ -259,9 +279,7 @@ namespace Map.Path
             else
                 DestroyImmediate(markerObj.gameObject);
 
-            var list = markerObjects.ToList();
-            list.RemoveAt(index);
-            markerObjects = list.ToArray();
+            markerObjects.RemoveAt(index);
         }
 
         private void ClearMarkersInWorld()
@@ -272,7 +290,7 @@ namespace Map.Path
                 else
                     DestroyImmediate(markerObj.gameObject);
 
-            markerObjects = Array.Empty<MarkerObject>();
+            markerObjects = new List<MarkerObject>();
         }
 
         // ================== CAM TARGETS ==================

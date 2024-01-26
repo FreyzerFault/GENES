@@ -4,41 +4,30 @@ using System.Linq;
 using ExtensionMethods;
 using MyBox;
 using UnityEngine;
-using UnityEngine.UI.Extensions;
+using Vector3 = UnityEngine.Vector3;
+#if UNITY_EDITOR
+#endif
 
 namespace Map.Path
 {
-    public class PathRendererUI : MonoBehaviour, IPathRenderer<UILineRenderer>
+    public class PathRenderer3D : MonoBehaviour, IPathRenderer<LineRenderer>
     {
         // RENDERER
-        [SerializeField] protected UILineRenderer linePrefab;
-        [SerializeField] protected List<UILineRenderer> lineRenderers = new();
+        [SerializeField] protected LineRenderer linePrefab;
+        [SerializeField] protected List<LineRenderer> lineRenderers = new();
 
         // PATH
         [SerializeField] protected List<PathFinding.Path> paths = new();
-
+        [SerializeField] private bool projectOnTerrain;
+        [SerializeField] private float heightOffset = 0.5f;
         [SerializeField] private float lineThickness = 1f;
 
-        private MapUIRenderer _mapUIRenderer;
         private Terrain _terrain;
-
-        private RectTransform MapRectTransform => _mapUIRenderer.GetComponent<RectTransform>();
-
-        public float LineThickness
-        {
-            get => lineThickness;
-            set
-            {
-                lineThickness = value;
-                lineRenderers.ForEach(line => { line.LineThickness = value; });
-            }
-        }
 
         // ============================= INITIALIZATION =============================
         private void Awake()
         {
             _terrain = Terrain.activeTerrain;
-            _mapUIRenderer = GetComponentInParent<MapUIRenderer>();
         }
 
         private void Start()
@@ -88,11 +77,9 @@ namespace Map.Path
             lineRenderers.Insert(index, lineRenderer);
             paths.Insert(index, path);
 
-            lineRenderer.color = lineRenderers.Count > 1
-                ? lineRenderers[index - 1].color.RotateHue(0.1f)
-                : Color.yellow;
+            UpdateColors();
 
-            lineRenderer.LineThickness = LineThickness;
+            lineRenderer.widthMultiplier = lineThickness;
 
             // Asigna el Path al LineRenderer
             UpdateLine(index);
@@ -109,6 +96,8 @@ namespace Map.Path
 
             lineRenderers.RemoveAt(index);
             paths.RemoveAt(index);
+
+            if (index < lineRenderers.Count) UpdateColors();
         }
 
         // ============================= UPDATE LINE RENDERERS =============================
@@ -118,35 +107,38 @@ namespace Map.Path
             for (var i = 0; i < PathCount; i++)
                 if (i >= lineRenderers.Count) AddPath(paths[i]);
                 else UpdateLine(i);
+
+            UpdateColors();
         }
 
 
         // Asigna un Path a un LineRenderer
-
-        public void UpdateLine(int index = -1)
+        public void UpdateLine(int index)
         {
-            if (index == -1)
-            {
-                UpdateAllLines();
-                return;
-            }
-
             var path = Paths[index];
             var lineRenderer = lineRenderers[index];
 
             if (path.NodeCount < 2)
             {
-                lineRenderer.Points = Array.Empty<Vector2>();
+                lineRenderer.positionCount = 0;
+                lineRenderer.SetPositions(Array.Empty<Vector3>());
                 return;
             }
 
             _terrain ??= Terrain.activeTerrain;
 
-            var normPoints = path.GetPathNormalizedPoints(_terrain);
-            var localpoints = normPoints.Select(normPoint => MapRectTransform.NormalizedToLocalPoint(normPoint));
+            var points = path.GetPathWorldPoints();
+
+            // Proyectar en el Terreno
+            if (projectOnTerrain) points = _terrain.ProjectPathToTerrain(points);
+
+            // HEIGHT OFFSET
+            var offset = Vector3.up * heightOffset;
+            points = points.Select(point => point + offset).ToArray();
 
             // Update Line Renderer
-            lineRenderer.Points = localpoints.ToArray();
+            lineRenderer.positionCount = points.Length;
+            lineRenderer.SetPositions(points);
         }
 
 
@@ -155,16 +147,14 @@ namespace Map.Path
 #endif
         public void ClearPaths()
         {
-            for (var i = 0; i < PathCount; i++) RemovePath(i);
+            for (var i = 0; i < PathCount; i++) RemovePath();
         }
 
-
-        public void SetPath(PathFinding.Path path, int index = -1)
+        private void UpdateColors()
         {
-            if (index == -1) index = lineRenderers.Count - 1;
-
-            paths[index] = path;
-            UpdateLine(index);
+            Color.yellow.GetRainBowColors(PathCount).ForEach(
+                (color, i) => lineRenderers[i].startColor = lineRenderers[i].endColor = color
+            );
         }
     }
 }

@@ -14,8 +14,6 @@ namespace Map
         [SerializeField] private GameObject water;
 
         private float[,] _heightMap;
-        public TerrainData TerrainData => terrain.terrainData;
-
 
         public float TerrainWidth => terrain.terrainData.size.x;
         public float TerrainHeight => terrain.terrainData.size.z;

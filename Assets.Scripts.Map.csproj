@@ -56,7 +56,9 @@
     <Compile Include="Assets\Scripts\Map\Path\PathRendererUI.cs" />
     <Compile Include="Assets\Scripts\Map\Map Controller.cs" />
     <Compile Include="Assets\Scripts\Map\Markers\MarkerUI.cs" />
+    <Compile Include="Assets\Scripts\Map\Path\PathObject.cs" />
     <Compile Include="Assets\Scripts\Map\MapManager.cs" />
+    <Compile Include="Assets\Scripts\Map\Path\PathRenderer3D.cs" />
     <None Include="Assets\Scripts\Map\Assets.Scripts.Map.asmdef" />
     <Reference Include="UnityEngine">
       <HintPath>C:\Program Files\Unity\Hub\Editor\2022.3.16f1\Editor\Data\Managed\UnityEngine\UnityEngine.dll</HintPath>

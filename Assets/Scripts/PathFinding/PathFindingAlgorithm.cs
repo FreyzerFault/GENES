@@ -61,6 +61,8 @@ namespace PathFinding
             }
         }
 
+        public bool IsEmpty => _nodes.Length == 0;
+
         public int NodeCount => _nodes.Length;
 
         private static Node[] ExtractPath(Node start, Node end)
@@ -94,7 +96,7 @@ namespace PathFinding
             return _nodes.Select(node => node.Position).ToArray();
         }
 
-        public Vector2[] GetPathNormalizedPoints(TerrainData terrain)
+        public Vector2[] GetPathNormalizedPoints(Terrain terrain)
         {
             return _nodes.Select(node => terrain.GetNormalizedPosition(node.Position)).ToArray();
         }

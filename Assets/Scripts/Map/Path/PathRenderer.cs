@@ -1,243 +1,26 @@
-using System;
 using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using ExtensionMethods;
-using PathFinding;
 using UnityEngine;
-using Quaternion = UnityEngine.Quaternion;
-using Vector3 = UnityEngine.Vector3;
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
 
 namespace Map.Path
 {
-    public class PathRenderer : MonoBehaviour
+    public interface IPathRenderer<T> where T : Object
     {
-        [SerializeField] private LineRenderer lineRenderer;
+        public List<PathFinding.Path> Paths { get; set; }
 
-        [SerializeField] private bool projectOnTerrain = true;
-        [SerializeField] private float heightOffset = 0.5f;
+        public PathFinding.Path Path { get; set; }
 
-        public List<Node> exploredNodes = new();
-        public List<Node> openNodes = new();
+        public int PathCount { get; }
 
-        public Color color;
+        public bool IsEmpty { get; }
 
-        public bool showLabels = true;
+        public void AddPath(PathFinding.Path path, int index = -1);
 
+        public void RemovePath(int index = -1);
 
-        private PathFinding.Path _path = PathFinding.Path.EmptyPath;
+        public void UpdateAllLines();
 
-        private Terrain _terrain;
-        
-        public event Action<PathFinding.Path> OnPathChange;
-
-        public PathFinding.Path Path
-        {
-            get => _path;
-            set
-            {
-                _path = value;
-                UpdateLine();
-                OnPathChange?.Invoke(_path);
-            }
-        }
-
-        private void Awake()
-        {
-            _terrain = Terrain.activeTerrain;
-            lineRenderer = GetComponent<LineRenderer>();
-        }
-
-        private void Start()
-        {
-            lineRenderer.startColor = lineRenderer.endColor = color;
-        }
-
-
-        private void UpdateLine()
-        {
-            _terrain ??= Terrain.activeTerrain;
-
-            var points = _path.GetPathWorldPoints();
-
-            if (points.Length < 2)
-            {
-                ClearLine();
-                return;
-            }
-
-            // Proyectar en el Terreno
-            if (projectOnTerrain) points = ProjectPathToTerrain(points);
-
-            // HEIGHT OFFSET
-            var offset = Vector3.up * heightOffset;
-            points = points.Select(point => point += offset).ToArray();
-
-            // Update Line Renderer
-            lineRenderer.positionCount = points.Length;
-            lineRenderer.SetPositions(points);
-        }
-
-        public void ClearLine()
-        {
-            lineRenderer.positionCount = 0;
-            lineRenderer.SetPositions(Array.Empty<Vector3>());
-        }
-
-        // ================== TERRAIN PROJECTION ==================
-        private Vector3[] ProjectPathToTerrain(Vector3[] path)
-        {
-            if (path.Length == 0) return Array.Empty<Vector3>();
-            var finalPath = Array.Empty<Vector3>();
-            for (var i = 1; i < path.Length; i++)
-                finalPath = finalPath.Concat(ProjectSegmentToTerrain(path[i - 1], path[i]).SkipLast(1)).ToArray();
-            finalPath = finalPath.Append(path[^1]).ToArray();
-
-            return finalPath;
-        }
-
-        // Upsample un segmento proyectandolo en el terreno
-        private Vector3[] ProjectSegmentToTerrain(Vector3 a, Vector3 b)
-        {
-            var distance = Vector3.Distance(a, b);
-            var sampleLength = _terrain.terrainData.heightmapScale.x;
-
-            var lineSamples = new List<Vector3>();
-
-            // Si el segmento es más corto, no hace falta samplearlo
-            if (sampleLength > distance)
-            {
-                lineSamples = new List<Vector3>(new[] { a, b });
-            }
-            else
-            {
-                var numSamples = Mathf.FloorToInt(distance / sampleLength);
-                for (var sampleIndex = 0; sampleIndex < numSamples; sampleIndex++)
-                {
-                    // Por cada sample, calcular su altura mapeada al terreno
-                    var samplePos = a + (b - a) * ((float)sampleIndex / numSamples);
-                    samplePos.y = _terrain.SampleHeight(samplePos);
-
-                    lineSamples.Add(samplePos);
-                }
-            }
-
-            return lineSamples.ToArray();
-        }
-
-
-#if UNITY_EDITOR
-        private void OnDrawGizmosSelected()
-        {
-            exploredNodes.ForEach(node => DrawNodeGizmos(node, color));
-            openNodes.ForEach(node => DrawNodeGizmos(node, Color.Lerp(color, Color.white, 0.5f), true));
-        }
-
-        private void DrawNodeGizmos(Node node, Color color, bool wire = false)
-        {
-            var pos = node.Position;
-            pos.y += heightOffset;
-            var normPos = _terrain.terrainData.GetNormalizedPosition(pos);
-            var normal = _terrain.terrainData.GetInterpolatedNormal(normPos.x, normPos.y);
-            var tangentMid = Vector3.Cross(normal, Vector3.up);
-            var tangentGradient = Vector3.Cross(normal, tangentMid);
-
-            // Diferencia de Funcion
-            if (node.Parent != null)
-            {
-                var functionDiff = node.Parent.F - node.F;
-                Gizmos.color = Color.Lerp(color.Darken(0.8f), color, functionDiff / 2f + 0.5f);
-            }
-            else
-            {
-                Gizmos.color = color;
-            }
-
-            // Cubo
-            var size = new Vector3(node.Size / 3, 0.1f, node.Size / 3);
-            if (wire)
-                Gizmos.DrawWireCube(pos, size);
-            else
-                Gizmos.DrawCube(pos, size);
-
-
-            // PENDIENTE
-            if (node.SlopeAngle > 0)
-            {
-                // Normal
-                Gizmos.color = Color.Lerp(Color.magenta, Color.red, node.SlopeAngle / 30);
-                DrawArrow(pos, normal, node.Size / 2);
-
-                // Gradiente
-                Gizmos.color = Color.blue;
-                DrawArrow(pos, tangentGradient);
-            }
-
-            // DIRECTION
-            if (node.direction != Vector2.zero)
-            {
-                Gizmos.color = Color.yellow;
-                DrawArrow(pos, new Vector3(node.direction.x, 0, node.direction.y), node.Size / 2);
-            }
-
-
-            // Line to Parent
-            if (node.Parent != null)
-            {
-                Gizmos.color = Color.Lerp(color, Color.white, 0.5f);
-                Gizmos.DrawLine(pos, node.Parent.Position + Vector3.up * heightOffset);
-            }
-
-            // [F,G,H] Labels
-            if (showLabels)
-                DrawLabel(node, Vector3.left * node.Size / 3 + Vector3.up * heightOffset);
-        }
-
-        private void DrawArrow(Vector3 pos, Vector3 direction, float size = 1)
-        {
-            var tangent = Vector3.Cross(direction, Vector3.up);
-            var arrowVector = direction * size;
-            Gizmos.DrawLineList(new[]
-            {
-                pos,
-                pos + arrowVector,
-                pos + arrowVector,
-                pos + arrowVector - Quaternion.AngleAxis(30, tangent) * arrowVector * 0.4f,
-                pos + arrowVector,
-                pos + arrowVector - Quaternion.AngleAxis(-30, tangent) * arrowVector * 0.4f
-            });
-        }
-
-        private void DrawLabel(Node node, Vector3 positionOffset = default)
-        {
-            // STYLE
-            var style = new GUIStyle
-            {
-                fontSize = 12,
-                fontStyle = FontStyle.Bold,
-                normal = { textColor = Color.white }
-            };
-            var styleF = new GUIStyle(style) { normal = { textColor = Color.white } };
-            var styleG = new GUIStyle(style) { normal = { textColor = Color.red } };
-            var styleH = new GUIStyle(style) { normal = { textColor = Color.yellow } };
-
-            // TEXT
-            var labelTextF = Math.Round(node.F, 2).ToString(CultureInfo.InvariantCulture);
-            var labelTextG = Math.Round(node.G, 2).ToString(CultureInfo.InvariantCulture);
-            var labelTextH = Math.Round(node.H, 2).ToString(CultureInfo.InvariantCulture);
-
-            // POSITION
-            var posF = node.Position + Vector3.forward * 0.2f + positionOffset;
-            var posG = node.Position + positionOffset;
-            var posH = node.Position - Vector3.forward * 0.2f + positionOffset;
-
-            Handles.Label(posF, labelTextF, styleF);
-            Handles.Label(posG, labelTextG, styleG);
-            Handles.Label(posH, labelTextH, styleH);
-        }
-#endif
+        // Asigna un Path a un LineRenderer
+        public void UpdateLine(int index);
+        public void ClearPaths();
     }
 }
