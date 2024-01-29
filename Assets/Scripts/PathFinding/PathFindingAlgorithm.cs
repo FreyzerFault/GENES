@@ -6,21 +6,9 @@ using UnityEngine;
 
 namespace PathFinding
 {
-    public enum PathFindingAlgorithmType
-    {
-        Astar,
-        AstarDirectional,
-
-        Dijkstra
-        // BreadthFirstSearch,
-        // DepthFirstSearch,
-        // GreedyBestFirstSearch
-        // RRT
-        // RRT*
-    }
-
+    // TODO Mover Path a su propio archivo
     [Serializable]
-    public struct Path
+    public class Path
     {
         public static Path EmptyPath = new(Array.Empty<Node>());
         [NonSerialized] private Node[] _nodes;
@@ -28,37 +16,27 @@ namespace PathFinding
         public Path(Node start, Node end)
         {
             _nodes = ExtractPath(start, end);
-            Start = start;
-            End = end;
         }
 
         public Path(Node[] nodes)
         {
             _nodes = nodes;
-            if (nodes.Length > 0)
-            {
-                Start = nodes[0];
-                End = nodes[^1];
-            }
-            else
-            {
-                Start = null;
-                End = null;
-            }
         }
 
-        public Node Start { get; private set; }
-        public Node End { get; private set; }
+        public Path(Vector3[] points)
+        {
+            _nodes = points
+                .Select(point => new Node(point))
+                .ToArray();
+        }
+
+        public Node Start => _nodes.Length > 0 ? _nodes[0] : null;
+        public Node End => _nodes.Length > 0 ? _nodes[^1] : null;
 
         public Node[] Nodes
         {
             get => _nodes;
-            set
-            {
-                Start = _nodes[0];
-                End = _nodes[^1];
-                _nodes = value;
-            }
+            set => _nodes = value;
         }
 
         public bool IsEmpty => _nodes.Length == 0;
@@ -100,36 +78,50 @@ namespace PathFinding
         {
             return _nodes.Select(node => terrain.GetNormalizedPosition(node.Position)).ToArray();
         }
+
+
+        #region DEBUG INFO
+
+        // FOR DEBUGGING
+        [NonSerialized] public Node[] exploredNodes = Array.Empty<Node>();
+        [NonSerialized] public Node[] openNodes = Array.Empty<Node>();
+
+        #endregion
+    }
+
+    public enum PathFindingAlgorithmType
+    {
+        Astar,
+        AstarDirectional,
+
+        Dijkstra
+        // BreadthFirstSearch,
+        // DepthFirstSearch,
+        // GreedyBestFirstSearch
+        // RRT
+        // RRT*
     }
 
     public abstract class PathFindingAlgorithm
     {
         // Principal algoritmo
-        public abstract Path FindPath(Node start, Node end, Terrain terrain, PathFindingConfigSO paramsConfig,
-            out List<Node> exploredNodes, out List<Node> openNodes);
+        public abstract Path FindPath(Node start, Node end, Terrain terrain, PathFindingConfigSO paramsConfig);
 
         // Ejecutar el Algoritmo para varios checkpoints
-        public Path FindPathByCheckpoints(Node[] checkPoints, Terrain terrain, PathFindingConfigSO paramsConfig,
-            out List<Node> exploredNodes, out List<Node> openNodes)
+        public Path FindPathByCheckpoints(Node[] checkPoints, Terrain terrain, PathFindingConfigSO paramsConfig)
         {
-            exploredNodes = new List<Node>();
-            openNodes = new List<Node>();
-
             if (checkPoints.Length < 2) return Path.EmptyPath;
+
+            if (checkPoints.Length == 2) return FindPath(checkPoints[0], checkPoints[1], terrain, paramsConfig);
 
             var nodes = Array.Empty<Node>();
             for (var i = 1; i < checkPoints.Length; i++)
-            {
                 nodes = nodes
-                    .Concat(FindPath(checkPoints[i - 1], checkPoints[i], terrain, paramsConfig, out var explored,
-                        out var open).Nodes)
+                    .Concat(FindPath(checkPoints[i - 1], checkPoints[i], terrain, paramsConfig).Nodes)
                     .ToArray();
 
-                exploredNodes = exploredNodes.Concat(explored).ToList();
-                openNodes = openNodes.Concat(open).ToList();
-            }
-
-            return new Path(nodes);
+            var path = new Path(nodes);
+            return path;
         }
 
 
@@ -152,8 +144,6 @@ namespace PathFinding
         protected struct PathFindingCache
         {
             public Path path;
-            public List<Node> exploredNodes;
-            public List<Node> openNodes;
         }
 
         protected PathFindingCache Cache;
@@ -168,8 +158,6 @@ namespace PathFinding
         public void CleanCache()
         {
             Cache.path = Path.EmptyPath;
-            Cache.exploredNodes = new List<Node>();
-            Cache.openNodes = new List<Node>();
         }
 
         #endregion

@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using ExtensionMethods;
-using MyBox;
 using UnityEngine;
 
 namespace PathFinding.A_Star
@@ -16,29 +15,19 @@ namespace PathFinding.A_Star
         private static AstarDirectional _instance;
         public new static AstarDirectional Instance => _instance ??= new AstarDirectional();
 
-        public override Path FindPath(Node start, Node end, Terrain terrain, PathFindingConfigSO paramsConfig,
-            out List<Node> exploredNodes, out List<Node> openNodes)
+        public override Path FindPath(Node start, Node end, Terrain terrain, PathFindingConfigSO paramsConfig)
         {
-            exploredNodes = new List<Node>();
-            openNodes = new List<Node>();
-
             // Si el Path de Cache tiene mismo inicio y fin => Devolverlo
             if (paramsConfig.useCache && IsCached(start, end))
-            {
-                exploredNodes = Cache.exploredNodes;
-                openNodes = Cache.openNodes;
                 return Cache.path;
-            }
 
             if (!IsLegal(start, paramsConfig) || !IsLegal(end, paramsConfig)) return Path.EmptyPath;
 
             var iterations = 0;
 
-            // Nodes checked
-            exploredNodes = new List<Node>();
-
-            // Nodes to check
-            openNodes = new List<Node> { start };
+            // Nodes checked && Nodes to check
+            var exploredNodes = new List<Node>();
+            var openNodes = new List<Node> { start };
 
             // Main loop
             while (openNodes.Count > 0)
@@ -74,12 +63,7 @@ namespace PathFinding.A_Star
 
                     var path = new Path(start, end);
 
-                    if (paramsConfig.useCache)
-                    {
-                        Cache.path = path;
-                        Cache.exploredNodes = exploredNodes;
-                        Cache.openNodes = openNodes;
-                    }
+                    if (paramsConfig.useCache) Cache.path = path;
 
                     return path;
                 }
@@ -166,7 +150,7 @@ namespace PathFinding.A_Star
                 var neigh = new Node(neighPos);
 
                 // 1º Check if already exists
-                var foundIndex = nodesAlreadyFound.FirstIndex(node => node.Equals(neigh));
+                var foundIndex = nodesAlreadyFound.ToList().FindIndex(node.Equals);
                 if (foundIndex != -1)
                 {
                     neighbours.Add(nodesAlreadyFound[foundIndex]);

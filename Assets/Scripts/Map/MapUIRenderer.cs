@@ -179,7 +179,7 @@ namespace Map
             // PATH RENDERER
             // TODO
             PathGenerator.Instance.OnPathAdded += AddPath;
-            PathGenerator.Instance.OnPathUpdated += SetPath;
+            PathGenerator.Instance.OnPathUpdated += UpdatePath;
             PathGenerator.Instance.OnPathDeleted += RemovePath;
             PathGenerator.Instance.OnPathsCleared += ClearPathRenderers;
 
@@ -294,7 +294,7 @@ namespace Map
             // Se instancian de nuevo todos los markers
             foreach (var marker in MarkerManager.Markers) InstantiateMarker(marker);
 
-            UpdatePathRenderer();
+            UpdateAllPathRenderers(PathGenerator.Instance.paths.ToArray());
             UpdateMouseMarker();
         }
 
@@ -368,9 +368,14 @@ namespace Map
         }
 
         // ================================== PATH RENDERERs ==================================
-        private void UpdatePathRenderer(int index = -1)
+        private void UpdateAllPathRenderers(PathFinding.Path[] paths)
         {
-            pathRenderer.UpdateLine(index);
+            pathRenderer.UpdateAllLines(paths);
+        }
+
+        private void UpdatePathRenderer(PathFinding.Path path, int index)
+        {
+            pathRenderer.UpdateLine(path, index);
         }
 
         private void AddPath(PathFinding.Path path, int index = -1)
@@ -379,9 +384,9 @@ namespace Map
         }
 
         // Modificar un Path por indice
-        private void SetPath(PathFinding.Path path, int index)
+        private void UpdatePath(PathFinding.Path path, int index)
         {
-            pathRenderer.SetPath(path, index);
+            pathRenderer.UpdateLine(path, index);
         }
 
         private void RemovePath(int index = -1)

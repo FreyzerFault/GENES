@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Cinemachine;
 using ExtensionMethods;
-using JetBrains.Annotations;
 using Map.Markers;
 using PathFinding;
 using UnityEngine;
@@ -17,51 +16,44 @@ namespace Map.Path
     {
         [SerializeField] private PathFindingConfigSO pathFindingConfig;
 
-        // Player -> 1º Marker Path Renderer
-        [SerializeField] private PathRenderer3D playerPathRenderer;
+        public List<PathFinding.Path> paths;
+        public PathFinding.Path directPath;
 
-        // Spawnable Path Renderers
-        [SerializeField] private PathRenderer3D markerPathRendererPrefab;
-        [SerializeField] private Transform markersPathParent;
-        [SerializeField] private PathRenderer3D[] markersPathRenderers = Array.Empty<PathRenderer3D>();
-
-        // Direct Path
-        [SerializeField] private PathRenderer3D directPathRenderer;
-
+        // TODO: El MarkerManager debería gestionar un MarkerRenderer3D que los instancie y destruya
         // WORLD Markers
         [SerializeField] private GameObject marker3DPrefab;
-        public List<MarkerObject> markerObjects;
+        public List<MarkerObject> markerObjects = new();
 
+        // TODO: El MarkerManager deberia de gestionar el TargetGroup de la Camara Aerea
         // CAM Target Group - Controla los puntos a los que debe enfocar una cámara aérea
         [SerializeField] private CinemachineTargetGroup camTargetGroup;
 
         // Mostrar una línea directa hacia los objetivos?
-        [SerializeField] private bool showDirectPath = true;
+        [SerializeField] private bool buildDirectPath = true;
 
+        // PLAYER
         private Transform playerTransform;
-
-        // Paths
-        private PathFinding.Path[] markerPaths => markersPathRenderers.Select(pathR => pathR.Path).ToArray();
-        private PathFinding.Path playerPath => playerPathRenderer.Path;
+        private Vector3 PlayerPosition => MapManager.Instance.terrain.Project(playerTransform.position);
+        private Vector3 PlayerDirection => playerTransform.forward;
 
         private MarkerManager MarkerManager => MarkerManager.Instance;
         private PathFindingAlgorithm PathFinding => pathFindingConfig.Algorithm;
 
-        private void Awake()
-        {
-            playerTransform = GameObject.FindWithTag("Player").transform;
-            markerObjects ??= new List<MarkerObject>();
-        }
-
         private void Start()
         {
+            playerTransform = GameObject.FindWithTag("Player").transform;
+
             // Min Height depends on water height
             pathFindingConfig.minHeight = MapManager.Instance.WaterHeight;
 
             PathFinding.CleanCache();
 
             // PATH
-            InitializePath();
+            MarkerManager.OnMarkerAdded += HandleOnMarkerAdded;
+            MarkerManager.OnMarkerRemoved += HandleOnMarkerRemoved;
+            MarkerManager.OnMarkerMoved += HandleOnMarkerMoved;
+            MarkerManager.OnMarkersClear += ClearPaths;
+            UpdatePath();
 
             // First Marker Objects Spawning
             InitializeMarkerObjects();
@@ -78,171 +70,201 @@ namespace Map.Path
             UpdateDirectPath();
         }
 
+
         // EVENTS
         public event Action<PathFinding.Path, int> OnPathAdded;
         public event Action<int> OnPathDeleted;
         public event Action<PathFinding.Path, int> OnPathUpdated;
+        public event Action OnAllPathsUpdated;
         public event Action OnPathsCleared;
 
-        public event Action<PathFinding.Path[]> OnPathRenderersChange;
 
+        // ================== PATH ==================
 
-        // ================== LINE RENDERER ==================
-        private void InitializePath()
+        private void HandleOnMarkerAdded(Marker marker, int index = -1)
         {
-            MarkerManager.OnMarkerAdded += (_, index) =>
+            index = index < 0 || index > MarkerManager.MarkerCount ? MarkerManager.MarkerCount : index;
+
+            Vector3 prev = Vector3.zero, start = Vector3.zero, end = Vector3.zero;
+
+            var frontPath = index == paths.Count;
+            var backPath = index == 0;
+            var midPath = !frontPath && !backPath;
+
+            // Es el 1º Marker añadido => [New Marker]
+            if (frontPath && backPath)
             {
-                // Si es el 1º marcador se actualiza el camino del jugador
-                if (index == 0)
-                    UpdatePlayerPath();
+                UpdatePlayerPath();
+                return;
+            }
 
-                UpdateMarkersPath();
-
-                // TODO Event for update PathRenderersUI?
-                // OnPathRenderersChange?.Invoke();
-            };
-            MarkerManager.OnMarkerRemoved += (_, index) =>
+            // Se coloca el último => [... -> Nº Marker ===> New Marker]
+            if (frontPath)
             {
-                // Si es el 1º marcador se actualiza el camino del jugador
-                if (index == 0)
-                    UpdatePlayerPath();
+                start = MarkerManager.Markers[index - 1].WorldPosition;
+                end = marker.WorldPosition;
+            }
 
-                UpdateMarkersPath();
-            };
-            MarkerManager.OnMarkerMoved += (marker, index) =>
+            // Se coloca el primero
+            // [Player ===> New Marker ===> 2º Marker -> ...]
+            if (backPath)
             {
-                // Si es el 1º marcador se actualiza el camino del jugador
-                if (index == 0)
-                    UpdatePlayerPath();
+                UpdatePlayerPath();
 
-                UpdateMarkersPath();
-            };
-            MarkerManager.OnMarkersClear += ClearPathLines;
+                start = marker.WorldPosition;
+                end = MarkerManager.Markers[index + 1].WorldPosition;
+            }
 
-            UpdatePlayerPath();
-            UpdateMarkersPath();
-            UpdateDirectPath();
+            // El Marker se ha insertado en medio del camino
+            // [... -> i-1º Marker ===> New Marker ===> i+1º Marker -> ...]
+            if (midPath)
+            {
+                prev = MarkerManager.Markers[index - 1].WorldPosition;
+                start = marker.WorldPosition;
+                end = MarkerManager.Markers[index + 1].WorldPosition;
+            }
+
+
+            if (start == Vector3.zero || end == Vector3.zero) return;
+
+            // NUEVO PATH (empuja el path[index] a path[index + 1])
+            var newPath = BuildPath(start, end);
+            paths.Insert(index, newPath);
+            OnPathAdded?.Invoke(newPath, index);
+
+
+            if (prev == Vector3.zero) return;
+
+            // PATH ANTERIOR
+            var prevPath = BuildPath(prev, start);
+            paths[index - 1] = prevPath;
+            OnPathUpdated?.Invoke(prevPath, index - 1);
         }
 
-        private void UpdateMarkersPath()
+        private void HandleOnMarkerRemoved(Marker marker, int index)
         {
-            // Delete previous markers path
-            foreach (var obj in markersPathRenderers)
-                if (Application.isPlaying)
-                    Destroy(obj.gameObject);
-                else
-                    DestroyImmediate(obj.gameObject);
-            markersPathRenderers = Array.Empty<PathRenderer3D>();
+            // Si es el 1º marcador se actualiza el camino del jugador
+            if (index == 0)
+                UpdatePlayerPath();
 
-            if (MarkerManager.MarkerCount < 2)
-                return;
+            UpdatePath();
+        }
 
-            var randomColor = ColorExtensions.RandomColorSaturated();
+        private void HandleOnMarkerMoved(Marker marker, int index)
+        {
+            // Si es el 1º marcador se actualiza el camino del jugador
+            if (index == 0)
+                UpdatePlayerPath();
 
-            for (var i = 0; i < MarkerManager.MarkerCount - 1; i++)
-            {
-                var marker = MarkerManager.Markers[i];
-                var nextMarker = MarkerManager.Markers[i + 1];
+            UpdatePath();
+        }
 
-                // Create PathRenderer
-                var pathRenderer = Instantiate(markerPathRendererPrefab, markersPathParent);
-                markersPathRenderers = markersPathRenderers.Append(pathRenderer).ToArray();
 
-                // PATH
-                pathRenderer.Path = BuildPath(
-                    new[] { marker.WorldPosition, nextMarker.WorldPosition },
-                    out var exploredNodes,
-                    out var openNodes
-                );
+        private void UpdatePath()
+        {
+            // Player -> Marker 1 -> Marker 2 -> ... -> Marker N
+            var checkpoints = MarkerManager.Markers
+                .Select(marker => marker.WorldPosition)
+                .Prepend(PlayerPosition)
+                .ToArray();
 
-                // All NODES
-                pathRenderer.exploredNodes = exploredNodes;
-                pathRenderer.openNodes = openNodes;
+            paths = BuildPath(
+                checkpoints,
+                new[] { new Vector2(PlayerDirection.x, PlayerDirection.z) }
+            );
 
-                OnPathUpdated?.Invoke(pathRenderer.Path, i + 1);
-            }
+            OnAllPathsUpdated?.Invoke();
         }
 
         private void UpdatePlayerPath()
         {
             if (MarkerManager.MarkerCount == 0) return;
 
-            var terrainData = Terrain.activeTerrain.terrainData;
-            var initialPos = terrainData.GetWorldPosition(terrainData.GetNormalizedPosition(playerTransform.position));
-
-            // Player -> 1º Marker
-            var playerDirection = playerTransform.forward;
-            playerPathRenderer.Path = BuildPath(
-                new[]
-                {
-                    initialPos,
-                    MarkerManager.NextMarker.WorldPosition
-                },
-                out var exploredNodes,
-                out var openNodes,
-                new Vector2(playerDirection.x, playerDirection.z)
+            var path = BuildPath(
+                PlayerPosition, MarkerManager.Markers[0].WorldPosition,
+                new Vector2(PlayerDirection.x, PlayerDirection.z)
             );
 
-            playerPathRenderer.exploredNodes = exploredNodes;
-            playerPathRenderer.openNodes = openNodes;
+            if (paths.Count == 0) paths.Add(path);
+            else paths[0] = path;
 
-
-            OnPathUpdated?.Invoke(playerPathRenderer.Path, 0);
+            OnPathUpdated?.Invoke(path, 0);
         }
 
-
+        // TODO Crear otro PathGenerator para el DirectPath
         // Direct Path to every marker
         private void UpdateDirectPath()
         {
-            if (!showDirectPath)
+            if (!buildDirectPath)
             {
-                directPathRenderer.Path = global::PathFinding.Path.EmptyPath;
+                directPath = global::PathFinding.Path.EmptyPath;
                 return;
             }
 
-            if (MarkerManager.MarkerCount < 1) return;
+            if (MarkerManager.MarkerCount == 0) return;
 
             // Ignora los Markers Checked
             // Player -> Next -> Unchecked
-            directPathRenderer.Path = new PathFinding.Path(MarkerManager.Markers
-                .Where(marker => marker.State != MarkerState.Checked)
-                .Select(marker => new Node(marker.WorldPosition))
-                .Prepend(new Node(playerTransform.position))
-                .ToArray()
+            var directPathPoints = Terrain.activeTerrain.ProjectPathToTerrain(
+                MarkerManager.Markers
+                    .Where(marker => marker.State != MarkerState.Checked)
+                    .Select(marker => marker.WorldPosition)
+                    .Prepend(playerTransform.position)
+                    .ToArray()
             );
 
-            OnPathUpdated?.Invoke(directPathRenderer.Path, 0);
+            directPath = new PathFinding.Path(
+                directPathPoints
+                    .Select(point => new Node(point))
+                    .ToArray()
+            );
+
+            // TODO Pasar el Direct a otro PathGenerator para que haya otros renderers suscritos a sus eventos
+            // OnPathUpdated?.Invoke(directPath, 0);
         }
 
-        private void ClearPathLines()
+        private void ClearPaths()
         {
-            foreach (Transform obj in markersPathParent)
-                obj.GetComponent<PathRenderer3D>().ClearPaths();
-            playerPathRenderer.ClearPaths();
-            directPathRenderer.ClearPaths();
+            paths.Clear();
+            directPath = global::PathFinding.Path.EmptyPath;
+            OnPathsCleared?.Invoke();
         }
 
 
         // ================== PATH FINDING ==================
-        private PathFinding.Path BuildPath(Vector3[] checkPoints, [CanBeNull] out List<Node> exploredNodes,
-            [CanBeNull] out List<Node> openNodes, Vector2? initialDirection = null)
+        private PathFinding.Path BuildPath(Vector3 start, Vector3 end, Vector2? initialDirection = null,
+            Vector2? endDirection = null)
         {
-            exploredNodes = new List<Node>();
-            openNodes = new List<Node>();
-
-            if (checkPoints.Length == 0) return global::PathFinding.Path.EmptyPath;
-
-            return PathFinding.FindPathByCheckpoints(
-                checkPoints.Select(point => new Node(
-                    point,
-                    size: pathFindingConfig.cellSize,
-                    direction: initialDirection
-                )).ToArray(),
+            var startNode = new Node(start, size: pathFindingConfig.cellSize, direction: initialDirection);
+            var endNode = new Node(end, size: pathFindingConfig.cellSize, direction: endDirection);
+            return PathFinding.FindPath(
+                startNode, endNode,
                 MapManager.Instance.terrain,
-                pathFindingConfig,
-                out exploredNodes,
-                out openNodes
+                pathFindingConfig
             );
+        }
+
+        private List<PathFinding.Path> BuildPath(Vector3[] checkPoints, Vector2[] initialDirections = null)
+        {
+            var pathsBuilt = new List<PathFinding.Path>();
+            var haveDirections = initialDirections is { Length: > 0 };
+
+            for (var i = 1; i < checkPoints.Length; i++)
+            {
+                var start = checkPoints[i - 1];
+                var end = checkPoints[i];
+
+                var startDirection = haveDirections && initialDirections.Length > i - 1
+                    ? initialDirections[i - 1]
+                    : Vector2.zero;
+                var endDirection = haveDirections && initialDirections.Length > i
+                    ? initialDirections[i]
+                    : Vector2.zero;
+
+                pathsBuilt.Add(BuildPath(start, end, startDirection, endDirection));
+            }
+
+            return pathsBuilt;
         }
 
         // ================== WORLD MARKERS ==================
@@ -325,7 +347,7 @@ namespace Map.Path
         {
             PathFinding.CleanCache();
 
-            UpdateMarkersPath();
+            UpdatePath();
             UpdatePlayerPath();
         }
 #endif

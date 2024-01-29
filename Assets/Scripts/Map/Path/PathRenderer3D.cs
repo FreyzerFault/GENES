@@ -1,159 +1,115 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using ExtensionMethods;
-using MyBox;
 using UnityEngine;
-using Vector3 = UnityEngine.Vector3;
 #if UNITY_EDITOR
+using MyBox;
 #endif
 
 namespace Map.Path
 {
-    public class PathRenderer3D : MonoBehaviour, IPathRenderer<LineRenderer>
+    public class PathRenderer3D : MonoBehaviour, IPathRenderer<PathObject>
     {
         // RENDERER
-        [SerializeField] protected LineRenderer linePrefab;
-        [SerializeField] protected List<LineRenderer> lineRenderers = new();
+        [SerializeField] protected PathObject pathObjPrefab;
+        [SerializeField] protected List<PathObject> pathObjects = new();
 
         // PATH
-        [SerializeField] protected List<PathFinding.Path> paths = new();
-        [SerializeField] private bool projectOnTerrain;
         [SerializeField] private float heightOffset = 0.5f;
         [SerializeField] private float lineThickness = 1f;
 
-        private Terrain _terrain;
+
+        public float LineThickness
+        {
+            get => lineThickness;
+            set
+            {
+                lineThickness = value;
+                pathObjects.ForEach(line => { line.LineThickness = value; });
+            }
+        }
+
 
         // ============================= INITIALIZATION =============================
-        private void Awake()
-        {
-            _terrain = Terrain.activeTerrain;
-        }
-
         private void Start()
         {
-            if (!IsEmpty) UpdateAllLines();
+            PathGenerator.Instance.OnPathAdded += AddPath;
+            PathGenerator.Instance.OnPathDeleted += RemovePath;
+            PathGenerator.Instance.OnPathUpdated += UpdateLine;
+            PathGenerator.Instance.OnPathsCleared += ClearPaths;
+            UpdateAllLines(PathGenerator.Instance.paths.ToArray());
         }
 
-
-        public List<PathFinding.Path> Paths
+        private void OnDestroy()
         {
-            get => paths;
-            set
-            {
-                paths = value;
-                UpdateAllLines();
-            }
+            PathGenerator.Instance.OnPathAdded -= AddPath;
+            PathGenerator.Instance.OnPathDeleted -= RemovePath;
+            PathGenerator.Instance.OnPathUpdated -= UpdateLine;
+            PathGenerator.Instance.OnPathsCleared -= ClearPaths;
+            ClearPaths();
         }
 
-        public PathFinding.Path Path
-        {
-            get => PathCount == 0 ? PathFinding.Path.EmptyPath : paths[0];
-            set
-            {
-                if (PathCount == 0)
-                {
-                    AddPath(value);
-                }
-                else
-                {
-                    paths[0] = value;
-                    UpdateLine(0);
-                }
-            }
-        }
+        public int PathCount => pathObjects.Count;
 
-        public int PathCount => Paths.Count;
+        public bool IsEmpty => PathCount == 0;
 
-        public bool IsEmpty => PathCount == 0 || Path.IsEmpty;
 
-        // ============================= MODIFY LIST =============================
+        // ============================= MODIFY PATH RENDERERS =============================
 
         public void AddPath(PathFinding.Path path, int index = -1)
         {
-            if (index == -1) index = lineRenderers.Count;
+            if (index == -1) index = pathObjects.Count;
 
-            var lineRenderer = Instantiate(linePrefab, transform);
-            lineRenderers.Insert(index, lineRenderer);
-            paths.Insert(index, path);
+            var pathObj = Instantiate(pathObjPrefab, transform);
+            pathObjects.Insert(index, pathObj);
 
+            // Initilize properties
+            pathObj.LineThickness = lineThickness;
+            pathObj.heightOffset = heightOffset;
             UpdateColors();
 
-            lineRenderer.widthMultiplier = lineThickness;
-
-            // Asigna el Path al LineRenderer
-            UpdateLine(index);
+            UpdateLine(path, index);
         }
 
         public void RemovePath(int index = -1)
         {
-            if (index == -1) index = lineRenderers.Count - 1;
+            if (index == -1) index = pathObjects.Count - 1;
 
             if (Application.isPlaying)
-                Destroy(lineRenderers[index].gameObject);
+                Destroy(pathObjects[index].gameObject);
             else
-                DestroyImmediate(lineRenderers[index].gameObject);
+                DestroyImmediate(pathObjects[index].gameObject);
 
-            lineRenderers.RemoveAt(index);
-            paths.RemoveAt(index);
+            pathObjects.RemoveAt(index);
 
-            if (index < lineRenderers.Count) UpdateColors();
+            // Si no es el ultimo, los colores deberian actualizarse para mantener la coherencia
+            if (index < pathObjects.Count) UpdateColors();
         }
 
-        // ============================= UPDATE LINE RENDERERS =============================
-
-        public void UpdateAllLines()
-        {
-            for (var i = 0; i < PathCount; i++)
-                if (i >= lineRenderers.Count) AddPath(paths[i]);
-                else UpdateLine(i);
-
-            UpdateColors();
-        }
-
-
-        // Asigna un Path a un LineRenderer
-        public void UpdateLine(int index)
-        {
-            var path = Paths[index];
-            var lineRenderer = lineRenderers[index];
-
-            if (path.NodeCount < 2)
-            {
-                lineRenderer.positionCount = 0;
-                lineRenderer.SetPositions(Array.Empty<Vector3>());
-                return;
-            }
-
-            _terrain ??= Terrain.activeTerrain;
-
-            var points = path.GetPathWorldPoints();
-
-            // Proyectar en el Terreno
-            if (projectOnTerrain) points = _terrain.ProjectPathToTerrain(points);
-
-            // HEIGHT OFFSET
-            var offset = Vector3.up * heightOffset;
-            points = points.Select(point => point + offset).ToArray();
-
-            // Update Line Renderer
-            lineRenderer.positionCount = points.Length;
-            lineRenderer.SetPositions(points);
-        }
-
-
-#if UNITY_EDITOR
-        [ButtonMethod]
-#endif
         public void ClearPaths()
         {
             for (var i = 0; i < PathCount; i++) RemovePath();
         }
 
+        public void UpdateLine(PathFinding.Path path, int index)
+        {
+            pathObjects[index].Path = path;
+        }
+
+        public void UpdateAllLines(PathFinding.Path[] paths)
+        {
+            for (var i = 0; i < paths.Length; i++)
+                if (i >= pathObjects.Count) AddPath(paths[i]);
+                else UpdateLine(paths[i], i);
+
+            UpdateColors();
+        }
+
+
+        // Assign Colors progressively like a rainbow :D
         private void UpdateColors()
         {
             Color.yellow.GetRainBowColors(PathCount).ForEach(
-                (color, i) => lineRenderers[i].startColor = lineRenderers[i].endColor = color
+                (color, i) => pathObjects[i].Color = color
             );
         }
     }

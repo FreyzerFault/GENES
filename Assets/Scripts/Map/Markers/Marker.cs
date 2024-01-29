@@ -92,12 +92,12 @@ namespace Map.Markers
 
         private static Vector3 ToWorldPos(Vector2 normalizedPos)
         {
-            return MapManager.Instance.TerrainData.GetWorldPosition(normalizedPos);
+            return MapManager.Instance.terrain.GetWorldPosition(normalizedPos);
         }
 
         private static Vector3 ToNormPos(Vector3 worldPos)
         {
-            return MapManager.Instance.TerrainData.GetNormalizedPosition(worldPos);
+            return MapManager.Instance.terrain.GetNormalizedPosition(worldPos);
         }
 
         public override bool Equals(object obj)

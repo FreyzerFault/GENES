@@ -15,7 +15,7 @@ namespace Map.Path
     public class PathObject : MonoBehaviour
     {
         public bool showValues;
-        public float heightOffset;
+        public float heightOffset = 0.5f;
 
         public Node[] exploredNodes = Array.Empty<Node>();
         public Node[] openNodes = Array.Empty<Node>();
@@ -26,7 +26,6 @@ namespace Map.Path
 
         private Terrain _terrain;
 
-        private Color Color => _lineRenderer.startColor;
 
         public PathFinding.Path Path
         {
@@ -38,17 +37,47 @@ namespace Map.Path
             }
         }
 
+        public float LineThickness
+        {
+            get => _lineRenderer.widthMultiplier;
+            set => _lineRenderer.widthMultiplier = value;
+        }
+
+        public Color Color
+        {
+            get => _lineRenderer.startColor;
+            set => _lineRenderer.startColor = _lineRenderer.endColor = value;
+        }
+
+        public Color StartColor
+        {
+            get => _lineRenderer.startColor;
+            set => _lineRenderer.startColor = value;
+        }
+
+        public Color EndColor
+        {
+            get => _lineRenderer.endColor;
+            set => _lineRenderer.endColor = value;
+        }
+
         private void Awake()
         {
             _lineRenderer = GetComponent<LineRenderer>();
             _terrain = Terrain.activeTerrain;
+            UpdateLineRenderer();
         }
 
-        private void UpdateLineRenderer()
+        public void UpdateLineRenderer()
         {
-            _lineRenderer.positionCount = Path.NodeCount;
-            _lineRenderer.SetPositions(_path.GetPathWorldPoints().Select(point => point + Vector3.up * heightOffset)
-                .ToArray());
+            if (_path.NodeCount < 2) return;
+
+            // HEIGHT OFFSET
+            var points = _path.GetPathWorldPoints();
+            points = points.Select(point => point + Vector3.up * heightOffset).ToArray();
+
+            _lineRenderer.positionCount = points.Length;
+            _lineRenderer.SetPositions(points);
         }
 
 #if UNITY_EDITOR

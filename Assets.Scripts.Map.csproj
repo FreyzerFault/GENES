@@ -45,7 +45,6 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\2022.3.16f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.Properties.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Scripts\Map\Path\PathRenderer.cs" />
     <Compile Include="Assets\Scripts\Map\Markers\MarkerManager.cs" />
     <Compile Include="Assets\Scripts\Map\Markers\Marker.cs" />
     <Compile Include="Assets\Scripts\Map\Markers\MarkerObject.cs" />
@@ -55,6 +54,7 @@
     <Compile Include="Assets\Scripts\Map\MapUIRenderer.cs" />
     <Compile Include="Assets\Scripts\Map\Path\PathRendererUI.cs" />
     <Compile Include="Assets\Scripts\Map\Map Controller.cs" />
+    <Compile Include="Assets\Scripts\Map\Path\IPathRenderer.cs" />
     <Compile Include="Assets\Scripts\Map\Markers\MarkerUI.cs" />
     <Compile Include="Assets\Scripts\Map\Path\PathObject.cs" />
     <Compile Include="Assets\Scripts\Map\MapManager.cs" />

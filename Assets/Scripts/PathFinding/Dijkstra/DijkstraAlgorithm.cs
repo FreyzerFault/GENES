@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using PathFinding;
 using UnityEngine;
 
@@ -8,8 +7,7 @@ public class DijkstraAlgorithm : PathFindingAlgorithm
     private static DijkstraAlgorithm _instance;
     public static DijkstraAlgorithm Instance => _instance ??= new DijkstraAlgorithm();
 
-    public override Path FindPath(Node start, Node end, Terrain terrain, PathFindingConfigSO paramsConfig,
-        out List<Node> exploredNodes, out List<Node> openNodes)
+    public override Path FindPath(Node start, Node end, Terrain terrain, PathFindingConfigSO paramsConfig)
     {
         throw new NotImplementedException();
     }
