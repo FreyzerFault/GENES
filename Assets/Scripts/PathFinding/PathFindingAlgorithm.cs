@@ -2,93 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using ExtensionMethods;
+using MyBox;
 using UnityEngine;
 
 namespace PathFinding
 {
-    // TODO Mover Path a su propio archivo
-    [Serializable]
-    public class Path
-    {
-        public static Path EmptyPath = new(Array.Empty<Node>());
-        [NonSerialized] private Node[] _nodes;
-
-        public Path(Node start, Node end)
-        {
-            _nodes = ExtractPath(start, end);
-        }
-
-        public Path(Node[] nodes)
-        {
-            _nodes = nodes;
-        }
-
-        public Path(Vector3[] points)
-        {
-            _nodes = points
-                .Select(point => new Node(point))
-                .ToArray();
-        }
-
-        public Node Start => _nodes.Length > 0 ? _nodes[0] : null;
-        public Node End => _nodes.Length > 0 ? _nodes[^1] : null;
-
-        public Node[] Nodes
-        {
-            get => _nodes;
-            set => _nodes = value;
-        }
-
-        public bool IsEmpty => _nodes.Length == 0;
-
-        public int NodeCount => _nodes.Length;
-
-        private static Node[] ExtractPath(Node start, Node end)
-        {
-            // From end to start
-            var path = new List<Node> { end };
-
-            var currentNode = end.Parent;
-            while (currentNode != null && !currentNode.Equals(start))
-            {
-                path.Add(currentNode);
-                currentNode = currentNode.Parent;
-            }
-
-            path.Reverse();
-            return path.ToArray();
-        }
-
-        public float GetPathLength()
-        {
-            float length = 0;
-            for (var i = 1; i < _nodes.Length; i++)
-                length += Vector3.Distance(_nodes[i - 1].Position, _nodes[i].Position);
-
-            return length;
-        }
-
-
-        public Vector3[] GetPathWorldPoints()
-        {
-            return _nodes.Select(node => node.Position).ToArray();
-        }
-
-        public Vector2[] GetPathNormalizedPoints(Terrain terrain)
-        {
-            return _nodes.Select(node => terrain.GetNormalizedPosition(node.Position)).ToArray();
-        }
-
-
-        #region DEBUG INFO
-
-        // FOR DEBUGGING
-        [NonSerialized] public Node[] exploredNodes = Array.Empty<Node>();
-        [NonSerialized] public Node[] openNodes = Array.Empty<Node>();
-
-        #endregion
-    }
-
     public enum PathFindingAlgorithmType
     {
         Astar,
@@ -129,15 +47,86 @@ namespace PathFinding
         protected abstract float CalculateCost(Node a, Node b, PathFindingConfigSO paramsConfig);
         protected abstract float CalculateHeuristic(Node node, Node end, PathFindingConfigSO paramsConfig);
 
-        // NEIGHBOURS
-        protected abstract Node[] CreateNeighbours(Node node, Terrain terrain, Node[] nodesAlreadyFound);
 
-        // RESTRICCIONES
-        protected abstract bool IsLegal(Node node, PathFindingConfigSO paramsConfig);
-        protected abstract bool LegalPosition(Vector2 pos, Terrain terrain);
-        protected abstract bool LegalHeight(float height, PathFindingConfigSO paramsConfig);
-        protected abstract bool LegalSlope(float slopeAngle, PathFindingConfigSO paramsConfig);
-        protected abstract bool OutOfBounds(Vector2 pos, Terrain terrain);
+        // ==================== RESTRICCIONES ====================
+        protected bool IsLegal(Node node, PathFindingConfigSO paramsConfig)
+        {
+            bool legalHeight = LegalHeight(node.Height, paramsConfig),
+                legalSlope = LegalSlope(node.SlopeAngle, paramsConfig),
+                legalPosition = LegalPosition(node.Pos2D, Terrain.activeTerrain);
+
+            node.Legal = legalHeight && legalSlope && legalPosition;
+
+            return node.Legal;
+        }
+
+        protected bool LegalPosition(Vector2 pos, Terrain terrain)
+        {
+            return !terrain.OutOfBounds(pos);
+        }
+
+        protected bool LegalHeight(float height, PathFindingConfigSO paramsConfig)
+        {
+            return height >= paramsConfig.minHeight;
+        }
+
+        protected bool LegalSlope(float slopeAngle, PathFindingConfigSO paramsConfig)
+        {
+            return slopeAngle <= paramsConfig.aStarConfig.maxSlopeAngle;
+        }
+
+        // ==================== NEIGHBOURS ====================
+        protected Node[] CreateNeighbours(Node node, PathFindingConfigSO paramsConfig, Terrain terrain,
+            HashSet<Node> nodesAlreadyFound, bool onlyFrontNeighbours = true)
+        {
+            var neighbours = new List<Node>();
+            var direction = node.direction;
+            for (var i = 0; i < 9; i++)
+            {
+                if (i == 4) continue; // Skip central Node
+
+                // Offset from central Node
+                var offset = new Vector2(
+                    node.Size * (i % 3 - 1),
+                    node.Size * Mathf.Floor(i / 3f - 1)
+                );
+
+                // Only Front Neighbours
+                if (onlyFrontNeighbours && Vector2.Dot(offset, direction) < 0)
+                    continue;
+
+                // World Position
+                var neighPos = new Vector3(
+                    node.Position.x + offset.x,
+                    0,
+                    node.Position.z + offset.y
+                );
+
+                var neigh = new Node(neighPos);
+
+                // 1º Check if already exists
+                var foundIndex = nodesAlreadyFound.FirstIndex(neigh.Equals);
+                if (foundIndex > -1)
+                {
+                    neighbours.Add(nodesAlreadyFound.ElementAt(foundIndex));
+                    continue;
+                }
+
+                // Properties
+                neigh.Position = new Vector3(neigh.Position.x, terrain.SampleHeight(neighPos), neigh.Position.z);
+                neigh.SlopeAngle = terrain.GetSlopeAngle(neighPos);
+                neigh.Size = node.Size;
+
+                // Si no es legal se ignora
+                if (!IsLegal(neigh, paramsConfig))
+                    continue;
+
+                neighbours.Add(neigh);
+                nodesAlreadyFound.Add(neigh);
+            }
+
+            return node.Neighbours = neighbours.ToArray();
+        }
 
         #region CACHE
 

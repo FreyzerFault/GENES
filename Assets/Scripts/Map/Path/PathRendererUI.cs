@@ -42,9 +42,21 @@ namespace Map.Path
             PathGenerator.Instance.OnPathAdded += AddPath;
             PathGenerator.Instance.OnPathDeleted += RemovePath;
             PathGenerator.Instance.OnPathUpdated += UpdateLine;
+            PathGenerator.Instance.OnAllPathsUpdated += UpdateAllLines;
             PathGenerator.Instance.OnPathsCleared += ClearPaths;
             UpdateAllLines(PathGenerator.Instance.paths.ToArray());
         }
+
+        private void OnDestroy()
+        {
+            PathGenerator.Instance.OnPathAdded -= AddPath;
+            PathGenerator.Instance.OnPathDeleted -= RemovePath;
+            PathGenerator.Instance.OnPathUpdated -= UpdateLine;
+            PathGenerator.Instance.OnAllPathsUpdated -= UpdateAllLines;
+            PathGenerator.Instance.OnPathsCleared -= ClearPaths;
+            ClearPaths();
+        }
+
 
         public int PathCount => lineRenderers.Count;
 

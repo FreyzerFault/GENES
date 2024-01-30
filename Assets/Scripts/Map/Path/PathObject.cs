@@ -14,6 +14,8 @@ namespace Map.Path
     [RequireComponent(typeof(LineRenderer))]
     public class PathObject : MonoBehaviour
     {
+        public bool showExplored = true;
+        public bool showOpened = true;
         public bool showValues;
         public float heightOffset = 0.5f;
 
@@ -65,6 +67,10 @@ namespace Map.Path
         {
             _lineRenderer = GetComponent<LineRenderer>();
             _terrain = Terrain.activeTerrain;
+        }
+
+        private void Start()
+        {
             UpdateLineRenderer();
         }
 
@@ -84,8 +90,10 @@ namespace Map.Path
 
         private void OnDrawGizmosSelected()
         {
-            exploredNodes.ForEach(node => DrawNodeGizmos(node, Color));
-            openNodes.ForEach(node => DrawNodeGizmos(node, Color.Lerp(Color, Color.white, 0.5f), true));
+            if (showExplored)
+                _path.ExploredNodes.ForEach(node => DrawNodeGizmos(node, Color));
+            if (showOpened)
+                _path.OpenNodes.ForEach(node => DrawNodeGizmos(node, Color.Lerp(Color, Color.white, 0.5f), true));
         }
 
         private void DrawNodeGizmos(Node node, Color color, bool wire = false)

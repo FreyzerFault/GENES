@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Short Astar Configuration
   m_EditorClassIdentifier: 
   cellSize: 1
-  maxIterations: 2000
+  maxIterations: 1000
   minHeight: 23.82
   useCache: 1
   algorithm: 1
@@ -27,7 +27,7 @@ MonoBehaviour:
     maxSlopeAngle: 40
   aStarConfigDirectional:
     distanceCost: 1
-    heightCost: 2
+    heightCost: 1
     turnCost: 2
     distanceHeuristic: 1
     heightHeuristic: 1

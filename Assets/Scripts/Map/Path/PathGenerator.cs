@@ -75,7 +75,7 @@ namespace Map.Path
         public event Action<PathFinding.Path, int> OnPathAdded;
         public event Action<int> OnPathDeleted;
         public event Action<PathFinding.Path, int> OnPathUpdated;
-        public event Action OnAllPathsUpdated;
+        public event Action<PathFinding.Path[]> OnAllPathsUpdated;
         public event Action OnPathsCleared;
 
 
@@ -83,7 +83,7 @@ namespace Map.Path
 
         private void HandleOnMarkerAdded(Marker marker, int index = -1)
         {
-            index = index < 0 || index > MarkerManager.MarkerCount ? MarkerManager.MarkerCount : index;
+            index = index < 0 || index >= MarkerManager.MarkerCount ? MarkerManager.MarkerCount - 1 : index;
 
             Vector3 prev = Vector3.zero, start = Vector3.zero, end = Vector3.zero;
 
@@ -173,7 +173,7 @@ namespace Map.Path
                 new[] { new Vector2(PlayerDirection.x, PlayerDirection.z) }
             );
 
-            OnAllPathsUpdated?.Invoke();
+            OnAllPathsUpdated?.Invoke(paths.ToArray());
         }
 
         private void UpdatePlayerPath()
@@ -185,10 +185,16 @@ namespace Map.Path
                 new Vector2(PlayerDirection.x, PlayerDirection.z)
             );
 
-            if (paths.Count == 0) paths.Add(path);
-            else paths[0] = path;
-
-            OnPathUpdated?.Invoke(path, 0);
+            if (paths.Count == 0)
+            {
+                paths.Add(path);
+                OnPathAdded?.Invoke(path, 0);
+            }
+            else
+            {
+                paths[0] = path;
+                OnPathUpdated?.Invoke(path, 0);
+            }
         }
 
         // TODO Crear otro PathGenerator para el DirectPath

@@ -12,6 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bdd4675c5ff291a48bd2bf8caf582ec4, type: 3}
   m_Name: Test Markers
   m_EditorClassIdentifier: 
-  markerUIPrefab: {fileID: 7675491264772692944, guid: 5444bb0f9a82ae04eb7be11bf137c20d, type: 3}
-  pointCollisionRadius: 0.05
-  Markers: []
+  markers: []

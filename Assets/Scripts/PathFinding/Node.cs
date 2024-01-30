@@ -67,7 +67,26 @@ namespace PathFinding
         {
             if (obj is not Node node) return false;
 
-            return Vector2.Distance(node.Pos2D, Pos2D) < EqualityPrecision;
+            return Mathf.Abs(Position.x - node.Position.x) < EqualityPrecision &&
+                   Mathf.Abs(Position.z - node.Position.z) < EqualityPrecision;
+        }
+
+        public float Distance2D(Node node)
+        {
+            return Mathf.Sqrt(Distance2DnoSqrt(node));
+        }
+
+        public float Distance2DnoSqrt(Node node)
+        {
+            var xDelta = Position.x - node.Position.x;
+            var zDelta = Position.z - node.Position.z;
+
+            return xDelta * xDelta + zDelta * zDelta;
+        }
+
+        public bool Collision(Node node)
+        {
+            return Distance2DnoSqrt(node) < Size * Size;
         }
     }
 }

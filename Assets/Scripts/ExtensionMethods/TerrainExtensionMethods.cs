@@ -33,6 +33,25 @@ namespace ExtensionMethods
 
         #endregion
 
+        #region BOUNDS
+
+        public static bool OutOfBounds(this Terrain terrain, Vector2 pos)
+        {
+            var size = terrain.terrainData.size;
+            var terrainPos = terrain.GetPosition();
+
+            // BOUNDS
+            Vector2 lowerBound = new(terrainPos.x, terrainPos.z);
+            var upperBound = lowerBound + new Vector2(size.x, size.z);
+
+            bool overLowerBound = pos.x > lowerBound.x && pos.y > lowerBound.y,
+                underUpperBound = pos.x < upperBound.x && pos.y < upperBound.y;
+
+            return !(overLowerBound && underUpperBound);
+        }
+
+        #endregion
+
         #region SAMPLE_VERTICES
 
         // Vertice más cercano del terreno a la posición dada (0 altura)

@@ -55,6 +55,7 @@
     <Compile Include="Assets\Scripts\Map\Path\PathRendererUI.cs" />
     <Compile Include="Assets\Scripts\Map\Map Controller.cs" />
     <Compile Include="Assets\Scripts\Map\Path\IPathRenderer.cs" />
+    <Compile Include="Assets\Scripts\Map\Markers\MarkersCamTargetGroup.cs" />
     <Compile Include="Assets\Scripts\Map\Markers\MarkerUI.cs" />
     <Compile Include="Assets\Scripts\Map\Path\PathObject.cs" />
     <Compile Include="Assets\Scripts\Map\MapManager.cs" />

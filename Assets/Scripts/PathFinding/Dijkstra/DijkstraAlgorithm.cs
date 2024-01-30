@@ -21,34 +21,4 @@ public class DijkstraAlgorithm : PathFindingAlgorithm
     {
         throw new NotImplementedException();
     }
-
-    protected override bool IsLegal(Node node, PathFindingConfigSO paramsConfig)
-    {
-        throw new NotImplementedException();
-    }
-
-    protected override Node[] CreateNeighbours(Node node, Terrain terrain, Node[] nodesAlreadyFound)
-    {
-        throw new NotImplementedException();
-    }
-
-    protected override bool LegalSlope(float slopeAngle, PathFindingConfigSO paramsConfig)
-    {
-        throw new NotImplementedException();
-    }
-
-    protected override bool OutOfBounds(Vector2 pos, Terrain terrain)
-    {
-        throw new NotImplementedException();
-    }
-
-    protected override bool LegalPosition(Vector2 pos, Terrain terrain)
-    {
-        throw new NotImplementedException();
-    }
-
-    protected override bool LegalHeight(float height, PathFindingConfigSO paramsConfig)
-    {
-        throw new NotImplementedException();
-    }
 }
