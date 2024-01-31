@@ -1,3 +1,4 @@
+using System;
 using Map.Markers;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -22,23 +23,41 @@ namespace Map
 
         private void Awake()
         {
-            minimapUI = GameObject.FindWithTag("Minimap")?.GetComponent<MapUIRenderer>();
-            fullscreenMapUI = GameObject.FindWithTag("Map Fullscreen")?.GetComponent<MapUIRenderer>();
+            minimapUI ??= GameObject.FindWithTag("Minimap")?.GetComponent<MapUIRenderer>();
+            fullscreenMapUI ??= GameObject.FindWithTag("Map Fullscreen")?.GetComponent<MapUIRenderer>();
         }
 
+        private void Start()
+        {
+            GameManager.Instance.onGameStateChanged.AddListener(HandleGameStateChanged);
+            HandleGameStateChanged(GameManager.Instance.State);
+        }
+
+        private void HandleGameStateChanged(GameManager.GameState state)
+        {
+            switch (state)
+            {
+                case GameManager.GameState.Playing:
+                    CloseMap();
+                    break;
+                case GameManager.GameState.Paused:
+                    OpenMap();
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(state), state, null);
+            }
+        }
 
         private void CloseMap()
         {
             fullScreenMapParent.SetActive(false);
             minimapParent.SetActive(true);
-            GameManager.Instance.State = GameManager.GameState.Playing;
         }
 
         private void OpenMap()
         {
             minimapParent.SetActive(false);
             fullScreenMapParent.SetActive(true);
-            GameManager.Instance.State = GameManager.GameState.Paused;
         }
 
         // INPUTS
@@ -46,14 +65,14 @@ namespace Map
         {
             if (GameManager.Instance.IsPlaying)
             {
-                OpenMap();
+                GameManager.Instance.State = GameManager.GameState.Paused;
             }
             else if (GameManager.Instance.IsPaused)
             {
                 if (MarkerManager.Instance.SelectedCount > 0)
                     MarkerManager.Instance.DeselectAllMarkers();
                 else
-                    CloseMap();
+                    GameManager.Instance.State = GameManager.GameState.Playing;
             }
         }
 

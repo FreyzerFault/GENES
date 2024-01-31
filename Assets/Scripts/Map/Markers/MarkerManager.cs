@@ -84,6 +84,7 @@ namespace Map.Markers
         {
             if (index < 0 || index > MarkerCount) index = MarkerCount;
 
+            // Actualizacion de Estado y Label segun si va primero o ultimo
             var isFirst = index == 0;
             var isLast = index == MarkerCount;
 
@@ -115,7 +116,7 @@ namespace Map.Markers
             }
             else // Entre 2 marcadores
             {
-                label = $"{Markers[index - 1].LabelText} - {Markers[index + 1].LabelText}";
+                label = $"{Markers[index - 1].LabelText} - {Markers[index].LabelText}";
 
                 if (Markers[index - 1].IsChecked) state = MarkerState.Checked;
             }
@@ -124,7 +125,7 @@ namespace Map.Markers
             marker.State = state;
 
             Log("Point added: " + marker.LabelText);
-            OnMarkerAdded?.Invoke(marker, -1);
+            OnMarkerAdded?.Invoke(marker, index);
 
             return marker;
         }
@@ -139,9 +140,6 @@ namespace Map.Markers
             // Deselect both
             Markers[index - 1].Deselect();
             Markers[index + 1].Deselect();
-
-            Log("Point added: " + marker.LabelText + " between 2 Markers");
-            OnMarkerAdded?.Invoke(marker, index);
 
             return marker;
         }
@@ -166,14 +164,28 @@ namespace Map.Markers
 
         private Marker SelectMarker(int index)
         {
-            var marker = markersStorage.Select(index);
+            if (index < 0 || index >= MarkerCount) return null;
 
-            if (marker == null) return null;
+            Marker marker;
 
-            // Deselect si ya hay 2 seleccionados, o si el seleccionado no es adyacente
+            // Si ya está seleccionado => Deseleccionar
+            if (index == markersStorage.SelectedIndexPair?.Item1
+                || index == markersStorage.SelectedIndexPair?.Item2)
+            {
+                marker = markersStorage.Deselect(index);
+                OnMarkerDeselected?.Invoke(marker);
+                return marker;
+            }
+
+            // Deselect si ya habia 2 seleccionados, o si el seleccionado no es adyacente
             if (markersStorage.SelectedCount == 2 ||
                 (markersStorage.SelectedCount == 1 && Math.Abs(markersStorage.SelectedIndex - index) > 1))
-                markersStorage.Deselect(markersStorage.SelectedIndex);
+            {
+                var deselectedSelected = markersStorage.Deselect(markersStorage.SelectedIndex);
+                OnMarkerDeselected?.Invoke(deselectedSelected);
+            }
+
+            marker = markersStorage.Select(index);
 
             OnMarkerSelected?.Invoke(marker);
             Log("Point selected: " + marker.LabelText);
@@ -201,7 +213,8 @@ namespace Map.Markers
 
         private Marker MoveSelectedMarker(Vector2 targetPos)
         {
-            var selected = markersStorage.Selected;
+            var selectedIndex = markersStorage.SelectedIndex;
+            var selected = markersStorage.markers[selectedIndex];
 
             // Move position
             selected.NormalizedPosition = targetPos;
@@ -213,7 +226,7 @@ namespace Map.Markers
             selected.Deselect();
 
             Log("Point moved: " + selected.LabelText);
-            OnMarkerMoved?.Invoke(selected, markersStorage.SelectedIndex);
+            OnMarkerMoved?.Invoke(selected, selectedIndex);
 
             return selected;
         }

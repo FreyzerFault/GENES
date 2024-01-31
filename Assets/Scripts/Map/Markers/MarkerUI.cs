@@ -84,6 +84,8 @@ namespace Map.Markers
         private void HandleOnSelected(object sender, bool selected)
         {
             _image.color = selected ? selectedColor : defaultColor;
+            var selectedScale = 1.5f;
+            _image.transform.localScale = Vector3.one * (selected ? selectedScale : 1);
         }
 
         private void HandleOnStateChange(object sender, MarkerState state)

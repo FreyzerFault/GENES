@@ -11,15 +11,15 @@ public class GameManager : SingletonPersistent<GameManager>
 
     public UnityEvent<GameState> onGameStateChanged;
 
-    private GameState _state = GameState.Playing;
+    [SerializeField] private GameState state = GameState.Playing;
 
     public GameState State
     {
-        get => _state;
+        get => state;
         set
         {
             onGameStateChanged?.Invoke(value);
-            _state = value;
+            state = value;
         }
     }
 
@@ -41,8 +41,6 @@ public class GameManager : SingletonPersistent<GameManager>
         switch (newState)
         {
             case GameState.Playing:
-                Cursor.lockState = CursorLockMode.Locked;
-                Cursor.visible = false;
                 break;
             case GameState.Paused:
                 Cursor.lockState = CursorLockMode.None;

@@ -43,10 +43,5 @@ namespace Map
             playerInWorld = GameObject.FindGameObjectWithTag("Player");
             water = GameObject.FindGameObjectWithTag("Water");
         }
-
-        public void ClearMarkers()
-        {
-            markerStorage.ClearAll();
-        }
     }
 }

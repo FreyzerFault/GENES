@@ -89,7 +89,12 @@ namespace Map.Path
 
         public void ClearPaths()
         {
-            for (var i = 0; i < PathCount; i++) RemovePath();
+            foreach (var pathObject in pathObjects)
+                if (Application.isPlaying)
+                    Destroy(pathObject.gameObject);
+                else
+                    DestroyImmediate(pathObject.gameObject);
+            pathObjects.Clear();
         }
 
         public void UpdateLine(PathFinding.Path path, int index)
@@ -110,7 +115,7 @@ namespace Map.Path
         // Assign Colors progressively like a rainbow :D
         private void UpdateColors()
         {
-            Color.yellow.GetRainBowColors(PathCount).ForEach(
+            Color.yellow.GetRainBowColors(PathCount, 0.2f).ForEach(
                 (color, i) => pathObjects[i].Color = color
             );
         }

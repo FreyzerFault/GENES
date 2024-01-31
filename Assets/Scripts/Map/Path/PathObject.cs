@@ -106,15 +106,7 @@ namespace Map.Path
             var tangentGradient = Vector3.Cross(normal, tangentMid);
 
             // Diferencia de Funcion
-            if (node.Parent != null)
-            {
-                var functionDiff = node.Parent.F - node.F;
-                Gizmos.color = Color.Lerp(color.Darken(0.8f), color, functionDiff / 2f + 0.5f);
-            }
-            else
-            {
-                Gizmos.color = color;
-            }
+            Gizmos.color = color.Darken(0.5f);
 
             // Cubo
             var size = new Vector3(node.Size / 3, 0.1f, node.Size / 3);

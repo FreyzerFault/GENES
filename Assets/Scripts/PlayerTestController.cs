@@ -8,30 +8,45 @@ public class PlayerTestController : MonoBehaviour
 
     [SerializeField] private Transform camPoint;
 
-    private GameObject body;
-    private float initialCamRotationEulerX;
+    private Vector3 _moveInput = Vector3.zero;
+    private Terrain _terrain;
 
-    private Vector3 moveInput = Vector3.zero;
-    private Terrain terrain;
+    private Vector3 Position => transform.position;
+    private Vector3 Forward => transform.forward;
+    private Vector3 Right => transform.right;
 
     private void Awake()
     {
-        terrain = FindObjectOfType<Terrain>();
-        body = GetComponentInChildren<Collider>().gameObject;
-
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = true;
+        _terrain = FindObjectOfType<Terrain>();
 
         transform.rotation = Quaternion.identity;
         camPoint.rotation = Quaternion.identity;
-        initialCamRotationEulerX = camPoint.rotation.eulerAngles.x;
+    }
+
+    private void Start()
+    {
+        GameManager.Instance.onGameStateChanged.AddListener(HandleGameStateChanged);
     }
 
     private void Update()
     {
+        if (GameManager.Instance.State != GameManager.GameState.Playing) return;
         HandleMovementInput();
         HandleRotationInput();
         StickToTerrainHeight();
+    }
+
+    private void HandleGameStateChanged(GameManager.GameState state)
+    {
+        switch (state)
+        {
+            case GameManager.GameState.Playing:
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = true;
+                break;
+            case GameManager.GameState.Paused:
+                break;
+        }
     }
 
     private void HandleRotationInput()
@@ -65,20 +80,20 @@ public class PlayerTestController : MonoBehaviour
 
     private void HandleMovementInput()
     {
-        transform.position += transform.forward * (moveInput.y * Time.deltaTime * speed) +
-                              transform.right * (moveInput.x * Time.deltaTime * speed);
+        transform.position += Forward * (_moveInput.y * Time.deltaTime * speed) +
+                              Right * (_moveInput.x * Time.deltaTime * speed);
     }
 
     private void StickToTerrainHeight()
     {
         var position = transform.position;
-        var height = terrain.SampleHeight(position);
+        var height = _terrain.SampleHeight(position);
         position.y = height + 1;
         transform.position = position;
     }
 
     private void OnMove(InputValue value)
     {
-        moveInput = value.Get<Vector2>();
+        _moveInput = value.Get<Vector2>();
     }
 }

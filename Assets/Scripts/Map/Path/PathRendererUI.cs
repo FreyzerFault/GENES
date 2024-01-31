@@ -91,7 +91,12 @@ namespace Map.Path
 
         public void ClearPaths()
         {
-            for (var i = 0; i < PathCount; i++) RemovePath(i);
+            foreach (var lineRenderer in lineRenderers)
+                if (Application.isPlaying)
+                    Destroy(lineRenderer.gameObject);
+                else
+                    DestroyImmediate(lineRenderer.gameObject);
+            lineRenderers.Clear();
         }
 
         public void UpdateLine(PathFinding.Path path, int index = -1)

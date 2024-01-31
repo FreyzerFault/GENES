@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using ExtensionMethods;
 using Map.Markers;
@@ -12,9 +13,6 @@ using Gradient = UnityEngine.Gradient;
 
 #if UNITY_EDITOR
 using MyBox;
-#endif
-
-#if UNITY_EDITOR
 #endif
 
 namespace Map
@@ -38,7 +36,6 @@ namespace Map
         [SerializeField] private bool interactable = true;
         [SerializeField] private MarkerMode markerMode = MarkerMode.None;
 
-        [SerializeField] private Transform markersUIParent;
 
         // LINE Renderers
         [SerializeField] private PathRendererUI pathRenderer;
@@ -51,13 +48,18 @@ namespace Map
         // CURSOR
         [SerializeField] private RectTransform mouseCursorMarker;
 
+        // MARKERS
+        [SerializeField] private Transform markersUIParent;
+        [SerializeField] private MarkerUI markerUIPrefab;
+        private readonly List<MarkerUI> _markersUIObjects = new();
+
         private RectTransform _rectTransform;
 
         private TMP_Text MouseLabel => mouseCursorMarker.GetComponentInChildren<TMP_Text>();
         private Image MouseSprite => mouseCursorMarker.GetComponentInChildren<Image>();
 
-        // MARKERS
-        public MarkerManager MarkerManager => MarkerManager.Instance;
+
+        private MarkerManager MarkerManager => MarkerManager.Instance;
 
         public float ZoomScale
         {
@@ -95,9 +97,24 @@ namespace Map
         private void Start()
         {
             _rectTransform = GetComponent<RectTransform>();
-            Initialize();
+
+            // SUBSCRIBERS:
+            MarkerManager.OnMarkerAdded += HandleAdded;
+            MarkerManager.OnMarkerRemoved += HandleRemoved;
+            MarkerManager.OnMarkerMoved += HandleMoved;
+            MarkerManager.OnMarkersClear += HandleClear;
+
+
+            // TODO QUITAR ESTO Y LLEVARLO A UN MAPCURSOR
+            MarkerManager.OnMarkerSelected += HandleMarkerSelected;
+            MarkerManager.OnMarkerDeselected += HandleMarkerDeselected;
+
+            // RENDER
             RenderTerrain();
             Zoom();
+
+            // MARKERS
+            UpdateMarkers();
         }
 
         private void Update()
@@ -160,44 +177,17 @@ namespace Map
             mouseCursorMarker.position = eventData.position;
         }
 
-        // ================================== INITIALIZATION ==================================
-
-        private void Initialize()
-        {
-            // SUBSCRIBERS:
-            MarkerManager.OnMarkerAdded += HandleAdded;
-            MarkerManager.OnMarkerRemoved += HandleRemoved;
-            MarkerManager.OnMarkerMoved += HandleMoved;
-            MarkerManager.OnMarkersClear += HandleClear;
-
-
-            // TODO QUITAR ESTO Y LLEVARLO A UN MAPCURSOR
-            MarkerManager.OnMarkerSelected += HandleMarkerSelected;
-            MarkerManager.OnMarkerDeselected += HandleMarkerDeselected;
-
-
-            // PATH RENDERER
-            // TODO
-            PathGenerator.Instance.OnPathAdded += AddPath;
-            PathGenerator.Instance.OnPathUpdated += UpdatePath;
-            PathGenerator.Instance.OnPathDeleted += RemovePath;
-            PathGenerator.Instance.OnPathsCleared += ClearPathRenderers;
-
-            // MARKERS
-            UpdateMarkers();
-        }
-
 
         // ================================== EVENT SUSCRIBERS ==================================
         private void HandleAdded(Marker marker, int index)
         {
-            InstantiateMarker(marker);
+            InstantiateMarker(marker, index);
             UpdateMouseMarker();
         }
 
         private void HandleRemoved(Marker marker, int index)
         {
-            DestroyMarkerUI(marker);
+            DestroyMarkerUI(index);
             UpdateMouseMarker();
         }
 
@@ -284,7 +274,6 @@ namespace Map
                 else
                     DestroyImmediate(marker.gameObject);
             });
-            ClearPathRenderers();
         }
 
         private void UpdateMarkers()
@@ -294,25 +283,26 @@ namespace Map
             // Se instancian de nuevo todos los markers
             foreach (var marker in MarkerManager.Markers) InstantiateMarker(marker);
 
-            UpdateAllPathRenderers(PathGenerator.Instance.paths.ToArray());
             UpdateMouseMarker();
         }
 
-        private void InstantiateMarker(Marker marker)
+        private void InstantiateMarker(Marker marker, int index = -1)
         {
-            var markerUI = Instantiate(MarkerManager.markerUIPrefab, markersUIParent).GetComponent<MarkerUI>();
+            var markerUI = Instantiate(markerUIPrefab, markersUIParent).GetComponent<MarkerUI>();
             markerUI.Marker = marker;
+            _markersUIObjects.Insert(index == -1 ? _markersUIObjects.Count : index, markerUI);
         }
 
-        private void DestroyMarkerUI(Marker marker)
+        private void DestroyMarkerUI(int index)
         {
-            var markerUI = markersUIParent.GetComponentsInChildren<MarkerUI>().ToList()
-                .Find(m => m.Marker.Equals(marker));
+            var markerUI = _markersUIObjects[index];
 
             if (Application.isPlaying)
                 Destroy(markerUI.gameObject);
             else
                 DestroyImmediate(markerUI.gameObject);
+
+            _markersUIObjects.RemoveAt(index);
         }
 
         public void ToggleMarkers(bool value)
@@ -367,45 +357,11 @@ namespace Map
             }
         }
 
-        // ================================== PATH RENDERERs ==================================
-        private void UpdateAllPathRenderers(PathFinding.Path[] paths)
-        {
-            pathRenderer.UpdateAllLines(paths);
-        }
-
-        private void UpdatePathRenderer(PathFinding.Path path, int index)
-        {
-            pathRenderer.UpdateLine(path, index);
-        }
-
-        private void AddPath(PathFinding.Path path, int index = -1)
-        {
-            pathRenderer.AddPath(path, index);
-        }
-
-        // Modificar un Path por indice
-        private void UpdatePath(PathFinding.Path path, int index)
-        {
-            pathRenderer.UpdateLine(path, index);
-        }
-
-        private void RemovePath(int index = -1)
-        {
-            pathRenderer.RemovePath(index);
-        }
-
-        private void ClearPathRenderers()
-        {
-            pathRenderer.ClearPaths();
-        }
-
-
 #if UNITY_EDITOR
         // ================================== BUTTONS on INSPECTOR ==================================
         [ButtonMethod]
         private void UpdateMap()
         {
-            Initialize();
             RenderTerrain();
             Zoom();
             UpdatePlayerPoint();
@@ -415,14 +371,12 @@ namespace Map
         [ButtonMethod]
         private void UpdatePlayerPointInMap()
         {
-            Initialize();
             UpdatePlayerPoint();
         }
 
         [ButtonMethod]
         private void ZoomMapToPlayerPosition()
         {
-            Initialize();
             Zoom();
         }
 
@@ -430,7 +384,6 @@ namespace Map
         [ButtonMethod]
         private void ReRenderTerrainButton()
         {
-            Initialize();
             RenderTerrain();
         }
 #endif

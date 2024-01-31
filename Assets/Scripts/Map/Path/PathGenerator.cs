@@ -85,7 +85,7 @@ namespace Map.Path
         {
             index = index < 0 || index >= MarkerManager.MarkerCount ? MarkerManager.MarkerCount - 1 : index;
 
-            Vector3 prev = Vector3.zero, start = Vector3.zero, end = Vector3.zero;
+            Vector3 mid = Vector3.zero, start = Vector3.zero, end = Vector3.zero;
 
             var frontPath = index == paths.Count;
             var backPath = index == 0;
@@ -102,7 +102,7 @@ namespace Map.Path
             if (frontPath)
             {
                 start = MarkerManager.Markers[index - 1].WorldPosition;
-                end = marker.WorldPosition;
+                mid = marker.WorldPosition;
             }
 
             // Se coloca el primero
@@ -111,7 +111,7 @@ namespace Map.Path
             {
                 UpdatePlayerPath();
 
-                start = marker.WorldPosition;
+                mid = marker.WorldPosition;
                 end = MarkerManager.Markers[index + 1].WorldPosition;
             }
 
@@ -119,44 +119,89 @@ namespace Map.Path
             // [... -> i-1º Marker ===> New Marker ===> i+1º Marker -> ...]
             if (midPath)
             {
-                prev = MarkerManager.Markers[index - 1].WorldPosition;
-                start = marker.WorldPosition;
+                start = MarkerManager.Markers[index - 1].WorldPosition;
+                mid = marker.WorldPosition;
                 end = MarkerManager.Markers[index + 1].WorldPosition;
             }
 
 
-            if (start == Vector3.zero || end == Vector3.zero) return;
+            if (start == Vector3.zero || mid == Vector3.zero) return;
 
             // NUEVO PATH (empuja el path[index] a path[index + 1])
-            var newPath = BuildPath(start, end);
-            paths.Insert(index, newPath);
-            OnPathAdded?.Invoke(newPath, index);
+            var path1 = BuildPath(start, mid);
+            paths.Insert(index, path1);
+            OnPathAdded?.Invoke(path1, index);
 
 
-            if (prev == Vector3.zero) return;
+            if (end == Vector3.zero) return;
 
             // PATH ANTERIOR
-            var prevPath = BuildPath(prev, start);
-            paths[index - 1] = prevPath;
-            OnPathUpdated?.Invoke(prevPath, index - 1);
+            var path2 = BuildPath(mid, end);
+            paths[index + 1] = path2;
+            OnPathUpdated?.Invoke(path2, index + 1);
         }
 
         private void HandleOnMarkerRemoved(Marker marker, int index)
         {
             // Si es el 1º marcador se actualiza el camino del jugador
             if (index == 0)
+            {
                 UpdatePlayerPath();
+                paths.RemoveAt(1);
+                OnPathDeleted?.Invoke(index);
+                return;
+            }
 
-            UpdatePath();
+            // Ultimo marker eliminado, solo tiene el último path conectado
+            if (index == MarkerManager.MarkerCount)
+            {
+                paths.RemoveAt(index);
+                OnPathDeleted?.Invoke(index);
+                return;
+            }
+
+            // Si el Marker es intermedio hay que fusionar sus dos paths adyacentes en uno
+            // (start) Marker[i-1] =Path[i]=> deleted =Path[i+1]=> Marker[i] (end)
+            // (start) Marker[i-1]          =Path[i]=>         Marker[i] (end)
+            var path1 = paths[index];
+            var path2 = paths[index + 1];
+
+            paths[index] = BuildPath(
+                path1.Start.Position,
+                path2.End.Position,
+                path1.Start.direction,
+                path2.End.direction
+            );
+            OnPathUpdated?.Invoke(paths[index], index);
+
+            paths.RemoveAt(index + 1);
+            OnPathDeleted?.Invoke(index + 1);
         }
 
         private void HandleOnMarkerMoved(Marker marker, int index)
         {
+            // Actualizamos sus paths conectados
+            // [Marker[i-1] =Path[i]=> Marker[i] =Path[i+1]=> Marker[i+1]]
+
             // Si es el 1º marcador se actualiza el camino del jugador
             if (index == 0)
                 UpdatePlayerPath();
+            else
+                paths[index] = BuildPath(
+                    MarkerManager.Markers[index - 1].WorldPosition,
+                    marker.WorldPosition
+                );
 
-            UpdatePath();
+            OnPathUpdated?.Invoke(paths[index], index);
+
+            if (index == paths.Count - 1) return;
+
+            paths[index + 1] = BuildPath(
+                marker.WorldPosition,
+                MarkerManager.Markers[index + 1].WorldPosition
+            );
+
+            OnPathUpdated?.Invoke(paths[index + 1], index + 1);
         }
 
 
@@ -224,9 +269,6 @@ namespace Map.Path
                     .Select(point => new Node(point))
                     .ToArray()
             );
-
-            // TODO Pasar el Direct a otro PathGenerator para que haya otros renderers suscritos a sus eventos
-            // OnPathUpdated?.Invoke(directPath, 0);
         }
 
         private void ClearPaths()
