@@ -48,6 +48,7 @@
     <Compile Include="Assets\Scripts\Utils\Singleton.cs" />
     <Compile Include="Assets\Scripts\PlayerTestController.cs" />
     <Compile Include="Assets\Scripts\Utils\BillboardObject.cs" />
+    <Compile Include="Assets\Scripts\Utils\Discontinous Line Renderer.cs" />
     <Compile Include="Assets\Scripts\GameManager.cs" />
     <Compile Include="Assets\Scripts\CameraManager.cs" />
     <None Include="Assets\Scripts\Assets.Scripts.asmdef" />
@@ -723,6 +724,10 @@
     <ProjectReference Include="Assets.Scripts.ExtensionMethods.csproj">
       <Project>{afa59c38-eeaf-6b64-b46e-f23cb798a397}</Project>
       <Name>Assets.Scripts.ExtensionMethods</Name>
+    </ProjectReference>
+    <ProjectReference Include="UnityUIExtensions.csproj">
+      <Project>{4b06f23d-5e15-1f2c-044c-5b76847e3552}</Project>
+      <Name>UnityUIExtensions</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

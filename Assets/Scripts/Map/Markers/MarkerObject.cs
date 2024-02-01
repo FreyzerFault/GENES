@@ -29,14 +29,14 @@ namespace Map.Markers
         private void Start()
         {
             Initialize();
-            marker.onStateChange += HandleOnStateChange;
-            marker.onPositionChange += HandleOnPositionChange;
+            marker.OnStateChange += HandleOnStateChange;
+            marker.OnPositionChange += HandleOnPositionChange;
         }
 
         private void OnDestroy()
         {
-            marker.onStateChange -= HandleOnStateChange;
-            marker.onPositionChange -= HandleOnPositionChange;
+            marker.OnStateChange -= HandleOnStateChange;
+            marker.OnPositionChange -= HandleOnPositionChange;
         }
 
         private void OnTriggerEnter(Collider other)

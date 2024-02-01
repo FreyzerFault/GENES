@@ -8,13 +8,12 @@ namespace Map.Markers
 {
     public class MarkerManager : Singleton<MarkerManager>
     {
-        // Máximo Radio en el que se considera que dos marcadores colisionan
-        [SerializeField] private float pointCollisionRadius = 0.05f;
-
         // UI Markers
         public GameObject markerUIPrefab;
 
         [SerializeField] private MarkerStorageSo markersStorage;
+
+        private int totalMarkersAdded;
 
         public List<Marker> Markers => markersStorage.markers;
         public int MarkerCount => markersStorage.Count;
@@ -42,7 +41,7 @@ namespace Map.Markers
         {
             var collisions = new List<int>();
             for (var i = 0; i < MarkerCount; i++)
-                if (Markers[i].IsAtPoint(normalizedPos, pointCollisionRadius))
+                if (Markers[i].IsAtPoint(normalizedPos))
                     collisions.Add(i);
 
             // No hay => -1
@@ -77,7 +76,7 @@ namespace Map.Markers
                         break;
                 }
             else // COLISION => Se selecciona el punto
-                SelectMarker(collisionIndex);
+                ToggleSelectMarker(collisionIndex);
         }
 
         private Marker AddMarker(Vector2 normalizedPos, int index = -1)
@@ -88,41 +87,27 @@ namespace Map.Markers
             var isFirst = index == 0;
             var isLast = index == MarkerCount;
 
-            var label = index.ToString();
-            var state = MarkerState.Unchecked;
+            var label = totalMarkersAdded.ToString();
 
-            if (isLast && isFirst) // No hay marcadores
-            {
-                state = MarkerState.Next;
-            }
-            else if (isLast)
-            {
-                if (Markers[^1].IsChecked) state = MarkerState.Next;
-            }
-            else if (isFirst)
-            {
-                label = (int.Parse(Markers[0].LabelText) - 1).ToString();
-
-                switch (Markers[0].State)
-                {
-                    case MarkerState.Next:
-                        Markers[0].State = MarkerState.Unchecked;
-                        state = MarkerState.Next;
-                        break;
-                    case MarkerState.Checked:
-                        state = MarkerState.Checked;
-                        break;
-                }
-            }
-            else // Entre 2 marcadores
-            {
-                label = $"{Markers[index - 1].LabelText} - {Markers[index].LabelText}";
-
-                if (Markers[index - 1].IsChecked) state = MarkerState.Checked;
-            }
+            // El estado depende de la posicion relativa a otros markers y el estado de sus adyacentes
+            var state = isLast && isFirst
+                // 1º Marker added => NExt
+                ? MarkerState.Next
+                : isLast && Markers[^1].IsChecked
+                    // Last Marker & todos estan checked => Next
+                    ? MarkerState.Next
+                    : isFirst
+                        // 1º Marker => Hereda el estado del siguiente
+                        ? Markers[0].State
+                        : Markers[index - 1].IsChecked
+                            // Añadido entre 2 markers
+                            ? MarkerState.Checked
+                            : MarkerState.Unchecked;
 
             var marker = markersStorage.Add(normalizedPos, label, index);
             marker.State = state;
+
+            totalMarkersAdded++;
 
             Log("Point added: " + marker.LabelText);
             OnMarkerAdded?.Invoke(marker, index);
@@ -162,47 +147,54 @@ namespace Map.Markers
             return marker;
         }
 
-        private Marker SelectMarker(int index)
+        private Marker ToggleSelectMarker(int index)
         {
             if (index < 0 || index >= MarkerCount) return null;
 
-            Marker marker;
-
-            // Si ya está seleccionado => Deseleccionar
-            if (index == markersStorage.SelectedIndexPair?.Item1
-                || index == markersStorage.SelectedIndexPair?.Item2)
-            {
-                marker = markersStorage.Deselect(index);
-                OnMarkerDeselected?.Invoke(marker);
-                return marker;
-            }
+            var isSelected = markersStorage.markers[index].IsSelected;
+            var twoSelected = markersStorage.SelectedCount == 2;
+            var notAdyacentToSelected = markersStorage.SelectedCount == 1 &&
+                                        Math.Abs(markersStorage.SelectedIndex - index) > 1;
 
             // Deselect si ya habia 2 seleccionados, o si el seleccionado no es adyacente
-            if (markersStorage.SelectedCount == 2 ||
-                (markersStorage.SelectedCount == 1 && Math.Abs(markersStorage.SelectedIndex - index) > 1))
+            if (!isSelected)
             {
-                var deselectedSelected = markersStorage.Deselect(markersStorage.SelectedIndex);
-                OnMarkerDeselected?.Invoke(deselectedSelected);
+                if (twoSelected) DeselectAllMarkers();
+                else if (notAdyacentToSelected) DeselectMarker(markersStorage.Selected);
             }
 
-            marker = markersStorage.Select(index);
-
-            OnMarkerSelected?.Invoke(marker);
-            Log("Point selected: " + marker.LabelText);
-
+            var marker = markersStorage.markers[index];
+            ToggleSelectMarker(marker);
             return marker;
         }
 
-        public Marker SelectMarker(Vector2 normalizedPos)
+        public Marker ToggleSelectMarker(Vector2 normalizedPos)
         {
             var collisionIndex = FindIndex(normalizedPos);
 
-            return collisionIndex < 0 ? null : SelectMarker(collisionIndex);
+            return collisionIndex < 0 ? null : ToggleSelectMarker(collisionIndex);
         }
 
-        private void DeselectMarker(int index)
+        private void ToggleSelectMarker(Marker marker)
         {
-            OnMarkerDeselected?.Invoke(markersStorage.Deselect(index));
+            if (marker.IsSelected)
+                DeselectMarker(marker);
+            else
+                SelectMarker(marker);
+        }
+
+        private void SelectMarker(Marker marker)
+        {
+            marker.Select();
+            OnMarkerSelected?.Invoke(marker);
+            Log("Point selected: " + marker.LabelText);
+        }
+
+        private void DeselectMarker(Marker marker)
+        {
+            marker.Deselect();
+            OnMarkerDeselected?.Invoke(marker);
+            Log("Point deselected: " + marker.LabelText);
         }
 
         public void DeselectAllMarkers()
@@ -218,9 +210,6 @@ namespace Map.Markers
 
             // Move position
             selected.NormalizedPosition = targetPos;
-
-            // TODO Si no funciona el mover Marker, descomentar
-            // markersStorage.Set(selected, markersStorage.SelectedIndex);
 
             // Deselect cuando se haya movido
             selected.Deselect();

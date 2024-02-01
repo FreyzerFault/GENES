@@ -49,5 +49,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   linePrefab: {fileID: 329689356012660721, guid: 2a4e3d35a64c92347a0d29c01eb8818f, type: 3}
+  illegalLinePrefab: {fileID: 329689356012660721, guid: 77afaf363218d7340ac0453f7f3ee834, type: 3}
   lineRenderers: []
   lineThickness: 1

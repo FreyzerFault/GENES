@@ -28,6 +28,14 @@ namespace Map.Markers
 
         public Marker Selected => SelectedCount > 0 ? markers[SelectedIndex] : null;
 
+        public Tuple<Marker, Marker> SelectedPair =>
+            SelectedCount == 0
+                ? null
+                : new Tuple<Marker, Marker>(
+                    markers[markers.FindIndex(marker => marker.IsSelected)],
+                    markers[markers.FindLastIndex(marker => marker.IsSelected)]
+                );
+
         public int Count => markers.Count;
 
 

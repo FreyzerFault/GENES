@@ -132,6 +132,20 @@ namespace Map
             UpdatePlayerPoint();
         }
 
+        private void OnDestroy()
+        {
+            // SUBSCRIBERS:
+            MarkerManager.OnMarkerAdded -= HandleAdded;
+            MarkerManager.OnMarkerRemoved -= HandleRemoved;
+            MarkerManager.OnMarkerMoved -= HandleMoved;
+            MarkerManager.OnMarkersClear -= HandleClear;
+
+
+            // TODO QUITAR ESTO Y LLEVARLO A UN MAPCURSOR
+            MarkerManager.OnMarkerSelected -= HandleMarkerSelected;
+            MarkerManager.OnMarkerDeselected -= HandleMarkerDeselected;
+        }
+
         // ================================== MOUSE EVENTS ==================================
         public void OnPointerClick(PointerEventData eventData)
         {
@@ -149,7 +163,7 @@ namespace Map
                     MarkerManager.RemoveMarker(normalizedPosition);
                     break;
                 case MarkerMode.Select:
-                    MarkerManager.SelectMarker(normalizedPosition);
+                    MarkerManager.ToggleSelectMarker(normalizedPosition);
                     break;
                 case MarkerMode.None:
                 default:

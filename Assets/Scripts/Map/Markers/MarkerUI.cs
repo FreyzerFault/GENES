@@ -30,18 +30,18 @@ namespace Map.Markers
         {
             Initialize();
 
-            marker.onLabelChange += HandleOnLabelChange;
-            marker.onPositionChange += HandleOnPositionChange;
-            marker.onSelected += HandleOnSelected;
-            marker.onStateChange += HandleOnStateChange;
+            marker.OnLabelChange += HandleOnLabelChange;
+            marker.OnPositionChange += HandleOnPositionChange;
+            marker.OnSelected += HandleOnSelected;
+            marker.OnStateChange += HandleOnStateChange;
         }
 
         private void OnDestroy()
         {
-            marker.onLabelChange -= HandleOnLabelChange;
-            marker.onPositionChange -= HandleOnPositionChange;
-            marker.onSelected -= HandleOnSelected;
-            marker.onStateChange -= HandleOnStateChange;
+            marker.OnLabelChange -= HandleOnLabelChange;
+            marker.OnPositionChange -= HandleOnPositionChange;
+            marker.OnSelected -= HandleOnSelected;
+            marker.OnStateChange -= HandleOnStateChange;
         }
 
         private void Initialize()

@@ -11,10 +11,8 @@ namespace PathFinding.A_Star
         private static AstarDirectional _instance;
         public static AstarDirectional Instance => _instance ??= new AstarDirectional();
 
-        public override Path FindPath(Node start, Node end, Terrain terrain, PathFindingConfigSO paramsConfig)
-        {
-            return FindPathAstar(start, end, terrain, paramsConfig, CalculateCost, CalculateHeuristic);
-        }
+        public override Path FindPath(Node start, Node end, Terrain terrain, PathFindingConfigSO paramsConfig) =>
+            FindPathAstar(start, end, terrain, paramsConfig, CalculateCost, CalculateHeuristic);
 
         // Permite inyectar la Funcion de Coste y de Heuristica
         protected Path FindPathAstar(
@@ -25,7 +23,7 @@ namespace PathFinding.A_Star
             // Si el Path de Cache tiene mismo inicio y fin => Devolverlo
             if (paramsConfig.useCache && IsCached(start, end)) return Cache.path;
 
-            if (!IsLegal(start, paramsConfig) || !IsLegal(end, paramsConfig)) return Path.EmptyPath;
+            if (!IsLegal(start, paramsConfig) || !IsLegal(end, paramsConfig)) return new Path(start, end);
 
             var iterations = 0;
 

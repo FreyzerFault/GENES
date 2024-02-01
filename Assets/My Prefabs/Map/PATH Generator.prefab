@@ -148,6 +148,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pathObjPrefab: {fileID: 0}
+  illegalPathObjPrefab: {fileID: 0}
   pathObjects: []
   heightOffset: 0.5
   lineThickness: 1
@@ -381,6 +382,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pathObjPrefab: {fileID: 0}
+  illegalPathObjPrefab: {fileID: 0}
   pathObjects: []
   heightOffset: 0.5
   lineThickness: 1
@@ -436,7 +438,9 @@ MonoBehaviour:
   pathFindingConfig: {fileID: 11400000, guid: a4a6f39d53a58bc4b8ebc353b04cc136, type: 2}
   paths: []
   directPath:
-    _nodes: []
+    nodes: []
+    ExploredNodes: []
+    OpenNodes: []
   marker3DPrefab: {fileID: 5535374835189013708, guid: 4f0db38c6a0113a409ebaafafff5ea04, type: 3}
   markerObjects: []
   camTargetGroup: {fileID: 1293796846136774318}
@@ -454,6 +458,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pathObjPrefab: {fileID: 3814266642017431954, guid: fcde28d035aa48747893a9071f6f9688, type: 3}
+  illegalPathObjPrefab: {fileID: 3814266642017431954, guid: 5fc6ef9eafd4a964b895c5e0fc90dfd4, type: 3}
   pathObjects: []
   heightOffset: 0.5
   lineThickness: 0.5

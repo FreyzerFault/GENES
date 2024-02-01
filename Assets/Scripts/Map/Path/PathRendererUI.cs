@@ -11,6 +11,7 @@ namespace Map.Path
     {
         // RENDERER
         [SerializeField] protected UILineRenderer linePrefab;
+        [SerializeField] protected UILineRenderer illegalLinePrefab;
         [SerializeField] protected List<UILineRenderer> lineRenderers = new();
 
         [SerializeField] private float lineThickness = 1f;
@@ -68,7 +69,9 @@ namespace Map.Path
         {
             if (index == -1) index = lineRenderers.Count;
 
-            var lineRenderer = Instantiate(linePrefab, transform);
+
+            UILineRenderer lineRenderer;
+            lineRenderer = Instantiate(path.IsIllegal ? illegalLinePrefab : linePrefab, transform);
             lineRenderers.Insert(index, lineRenderer);
 
             // Initilize properties
@@ -99,10 +102,8 @@ namespace Map.Path
             lineRenderers.Clear();
         }
 
-        public void UpdateLine(PathFinding.Path path, int index = -1)
-        {
+        public void UpdateLine(PathFinding.Path path, int index = -1) =>
             lineRenderers[index].Points = PathToLine(path);
-        }
 
         public void UpdateAllLines(PathFinding.Path[] paths)
         {
@@ -114,7 +115,7 @@ namespace Map.Path
         // Convierte el Path en las Coordenadas 2D que necesita el UILineRenderer
         private Vector2[] PathToLine(PathFinding.Path path)
         {
-            if (path.NodeCount < 2) return Array.Empty<Vector2>();
+            if (path.NodeCount < 2 || path.IsIllegal) return Array.Empty<Vector2>();
             return path
                 .GetPathNormalizedPoints(_terrain)
                 .Select(MapRectTransform.NormalizedToLocalPoint)

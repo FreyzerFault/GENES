@@ -76,7 +76,7 @@ namespace Map.Path
 
         public void UpdateLineRenderer()
         {
-            if (_path.NodeCount < 2) return;
+            if (_path == null || _path.NodeCount < 2) return;
 
             // HEIGHT OFFSET
             var points = _path.GetPathWorldPoints();

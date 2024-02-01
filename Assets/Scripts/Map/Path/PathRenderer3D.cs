@@ -11,6 +11,7 @@ namespace Map.Path
     {
         // RENDERER
         [SerializeField] protected PathObject pathObjPrefab;
+        [SerializeField] protected PathObject illegalPathObjPrefab;
         [SerializeField] protected List<PathObject> pathObjects = new();
 
         // PATH
@@ -61,8 +62,10 @@ namespace Map.Path
         {
             if (index == -1) index = pathObjects.Count;
 
-            var pathObj = Instantiate(pathObjPrefab, transform);
+            var pathObj = Instantiate(path.IsIllegal ? illegalPathObjPrefab : pathObjPrefab, transform);
             pathObjects.Insert(index, pathObj);
+
+            if (path.IsIllegal) path.ProjectToTerrain(MapManager.Instance.terrain);
 
             // Initilize properties
             pathObj.LineThickness = lineThickness;
@@ -97,10 +100,7 @@ namespace Map.Path
             pathObjects.Clear();
         }
 
-        public void UpdateLine(PathFinding.Path path, int index)
-        {
-            pathObjects[index].Path = path;
-        }
+        public void UpdateLine(PathFinding.Path path, int index) => pathObjects[index].Path = path;
 
         public void UpdateAllLines(PathFinding.Path[] paths)
         {
