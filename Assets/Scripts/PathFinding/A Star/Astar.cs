@@ -47,11 +47,14 @@ namespace PathFinding.A_Star
                 // Si cumple la condición objetivo => terminar algoritmo
                 // End no tiene por qué ser un nodo que cuadre en la malla
                 // Por lo que el último Nodo será el que se acerque a End colisionando con él
-                if (iterations >= paramsConfig.maxIterations || currentNode.Collision(end))
+                var endReached = currentNode.Collision(end);
+                if (iterations >= paramsConfig.maxIterations || endReached)
                 {
-                    end.G = currentNode.G + costFunction(currentNode, end, paramsConfig);
+                    // Como el Nodo actual esta demasiado cerca, lo ignoramos y conectamos el anterior a END
+                    var lastNode = currentNode.Parent;
+                    end.G = currentNode.G + costFunction(lastNode, end, paramsConfig);
                     end.H = 0;
-                    end.Parent = currentNode;
+                    end.Parent = lastNode;
 
                     var path = new Path(start, end);
 

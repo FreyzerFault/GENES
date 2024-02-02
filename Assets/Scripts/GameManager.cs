@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.Events;
+using Utils;
 
 public class GameManager : SingletonPersistent<GameManager>
 {

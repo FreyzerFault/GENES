@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Short Astar Configuration
   m_EditorClassIdentifier: 
   cellSize: 1
-  maxIterations: 1000
+  maxIterations: 2000
   minHeight: 23.82
   useCache: 1
   algorithm: 1

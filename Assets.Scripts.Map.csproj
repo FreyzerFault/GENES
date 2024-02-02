@@ -45,21 +45,12 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\2022.3.16f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.Properties.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Scripts\Map\Markers\MarkerManager.cs" />
-    <Compile Include="Assets\Scripts\Map\Markers\Marker.cs" />
-    <Compile Include="Assets\Scripts\Map\Markers\MarkerObject.cs" />
-    <Compile Include="Assets\Scripts\Map\Markers\MarkerStorageSO.cs" />
-    <Compile Include="Assets\Scripts\Map\Markers\MarkerExtensionMethods.cs" />
-    <Compile Include="Assets\Scripts\Map\Path\PathGenerator.cs" />
-    <Compile Include="Assets\Scripts\Map\MapUIRenderer.cs" />
-    <Compile Include="Assets\Scripts\Map\Path\PathRendererUI.cs" />
-    <Compile Include="Assets\Scripts\Map\Map Controller.cs" />
-    <Compile Include="Assets\Scripts\Map\Path\IPathRenderer.cs" />
-    <Compile Include="Assets\Scripts\Map\Markers\MarkersCamTargetGroup.cs" />
-    <Compile Include="Assets\Scripts\Map\Markers\MarkerUI.cs" />
-    <Compile Include="Assets\Scripts\Map\Path\PathObject.cs" />
+    <Compile Include="Assets\Scripts\Map\PathGenerator.cs" />
+    <Compile Include="Assets\Scripts\Map\MarkerManager.cs" />
+    <Compile Include="Assets\Scripts\Map\MarkerStorageSO.cs" />
+    <Compile Include="Assets\Scripts\Map\MapInputController.cs" />
     <Compile Include="Assets\Scripts\Map\MapManager.cs" />
-    <Compile Include="Assets\Scripts\Map\Path\PathRenderer3D.cs" />
+    <Compile Include="Assets\Scripts\Map\Marker.cs" />
     <None Include="Assets\Scripts\Map\Assets.Scripts.Map.asmdef" />
     <Reference Include="UnityEngine">
       <HintPath>C:\Program Files\Unity\Hub\Editor\2022.3.16f1\Editor\Data\Managed\UnityEngine\UnityEngine.dll</HintPath>
@@ -709,9 +700,6 @@
     <Reference Include="System.Xml.Serialization">
       <HintPath>C:\Program Files\Unity\Hub\Editor\2022.3.16f1\Editor\Data\NetStandard\compat\2.1.0\shims\netfx\System.Xml.Serialization.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.TextMeshPro">
-      <HintPath>C:\Users\dalcanta\Unity Projects\Proyecto Campo\Library\ScriptAssemblies\Unity.TextMeshPro.dll</HintPath>
-    </Reference>
     <Reference Include="Unity.InputSystem">
       <HintPath>C:\Users\dalcanta\Unity Projects\Proyecto Campo\Library\ScriptAssemblies\Unity.InputSystem.dll</HintPath>
     </Reference>
@@ -729,10 +717,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="UnityUIExtensions.csproj">
-      <Project>{4b06f23d-5e15-1f2c-044c-5b76847e3552}</Project>
-      <Name>UnityUIExtensions</Name>
-    </ProjectReference>
     <ProjectReference Include="Assets.Scripts.csproj">
       <Project>{c598f215-6716-6b93-fc56-8b55cb542e19}</Project>
       <Name>Assets.Scripts</Name>
@@ -744,6 +728,10 @@
     <ProjectReference Include="Assets.Scripts.ExtensionMethods.csproj">
       <Project>{afa59c38-eeaf-6b64-b46e-f23cb798a397}</Project>
       <Name>Assets.Scripts.ExtensionMethods</Name>
+    </ProjectReference>
+    <ProjectReference Include="Assets.Scripts.Utils.csproj">
+      <Project>{51189add-f733-4179-0a42-6ac3c2a69b16}</Project>
+      <Name>Assets.Scripts.Utils</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

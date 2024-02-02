@@ -1,47 +1,98 @@
-using Map.Markers;
+using System;
+using ExtensionMethods;
 using UnityEngine;
-using UnityEngine.Serialization;
+using Utils;
 
 namespace Map
 {
+    public enum MapState
+    {
+        Minimap,
+        Fullscreen,
+        Hidden
+    }
+
     public class MapManager : Singleton<MapManager>
     {
-        [FormerlySerializedAs("markerManager")]
+        [SerializeField] private GameObject player;
+        [SerializeField] private GameObject water;
+
         public MarkerStorageSo markerStorage;
 
-        public Terrain terrain;
-        [SerializeField] private GameObject playerInWorld;
-        [SerializeField] private GameObject water;
+        [SerializeField] private MapState mapState;
+
+        [SerializeField] private float zoomMap = 1;
+        [SerializeField] private float zoomMinimap = 1;
 
         private float[,] _heightMap;
 
-        public float TerrainWidth => terrain.terrainData.size.x;
-        public float TerrainHeight => terrain.terrainData.size.z;
+        public MapState MapState
+        {
+            get => mapState;
+            set
+            {
+                mapState = value;
+                OnStateChanged?.Invoke(value);
+            }
+        }
 
-        public Vector2 PlayerNormalizedPosition => new(
-            playerInWorld.transform.position.x / TerrainWidth,
-            playerInWorld.transform.position.z / TerrainHeight
-        );
+        private float Zoom
+        {
+            get => mapState switch
+            {
+                MapState.Minimap => zoomMinimap,
+                MapState.Fullscreen => zoomMap,
+                _ => -1
+            };
+            set
+            {
+                switch (mapState)
+                {
+                    case MapState.Fullscreen:
+                        zoomMap = value;
+                        OnZoomChanged?.Invoke(value);
+                        break;
+                    case MapState.Minimap:
+                        zoomMinimap = value;
+                        OnZoomChanged?.Invoke(value);
+                        break;
+                    case MapState.Hidden:
+                    default:
+                        break;
+                }
+            }
+        }
+
+        // TERRAIN
+        public static Terrain Terrain => Terrain.activeTerrain;
+
+        public float TerrainWidth => Terrain.terrainData.size.x;
+        public float TerrainHeight => Terrain.terrainData.size.z;
 
         public float WaterHeight => water.transform.position.y;
 
-        // Distancia normalizada del borde al player:
-        // (Permite visualizar el mapa sin salir de la zona del terreno)
-        public Vector2 PlayerDistanceToBotLeftBorder => new(PlayerNormalizedPosition.x, PlayerNormalizedPosition.y);
+        // PLAYER
+        public Vector3 PlayerPosition => player.transform.position;
+        public Vector3 PlayerForward => player.transform.forward;
+        public Vector2 PlayerNormalizedPosition => Terrain.GetNormalizedPosition(player.transform.position);
+        public Vector2 PlayerDistanceToTopRightCorner => Vector2.one - PlayerNormalizedPosition;
 
-        public Vector2 PlayerDistanceToTopRightBorder =>
-            new(1 - PlayerNormalizedPosition.x, 1 - PlayerNormalizedPosition.y);
+        private float PlayerRotationAngle => player.transform.eulerAngles.y;
 
         public Quaternion PlayerRotationForUI =>
-            Quaternion.AngleAxis(90 + playerInWorld.transform.eulerAngles.y, Vector3.back);
+            Quaternion.AngleAxis(90 + PlayerRotationAngle, Vector3.back);
 
         private new void Awake()
         {
             base.Awake();
 
-            terrain = FindObjectOfType<Terrain>();
-            playerInWorld = GameObject.FindGameObjectWithTag("Player");
+            player = GameObject.FindGameObjectWithTag("Player");
             water = GameObject.FindGameObjectWithTag("Water");
         }
+
+        public event Action<MapState> OnStateChanged;
+        public event Action<float> OnZoomChanged;
+
+        public void ZoomIn(float zoomAmount = 0.1f) => Zoom += zoomAmount;
     }
 }

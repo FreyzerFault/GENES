@@ -171,7 +171,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 80.677, y: 92.731995}
+  m_SizeDelta: {x: 132.737, y: 152.571}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!222 &6733330378120984006
 CanvasRenderer:
@@ -265,15 +265,7 @@ MonoBehaviour:
   selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   checkedColor: {r: 0, g: 1, b: 0, a: 1}
   marker:
-    onPositionChange:
-      m_PersistentCalls:
-        m_Calls: []
-    onStateChange:
-      m_PersistentCalls:
-        m_Calls: []
-    onLabelChange:
-      m_PersistentCalls:
-        m_Calls: []
-    onSelected:
-      m_PersistentCalls:
-        m_Calls: []
+    normalizedPosition: {x: 0, y: 0}
+    worldPosition: {x: 0, y: 0, z: 0}
+    labelText: 
+    state: 0

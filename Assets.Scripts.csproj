@@ -45,10 +45,7 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\2022.3.16f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.Properties.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Scripts\Utils\Singleton.cs" />
     <Compile Include="Assets\Scripts\PlayerTestController.cs" />
-    <Compile Include="Assets\Scripts\Utils\BillboardObject.cs" />
-    <Compile Include="Assets\Scripts\Utils\Discontinous Line Renderer.cs" />
     <Compile Include="Assets\Scripts\GameManager.cs" />
     <Compile Include="Assets\Scripts\CameraManager.cs" />
     <None Include="Assets\Scripts\Assets.Scripts.asmdef" />
@@ -706,9 +703,6 @@
     <Reference Include="Unity.InputSystem">
       <HintPath>C:\Users\dalcanta\Unity Projects\Proyecto Campo\Library\ScriptAssemblies\Unity.InputSystem.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.TextMeshPro">
-      <HintPath>C:\Users\dalcanta\Unity Projects\Proyecto Campo\Library\ScriptAssemblies\Unity.TextMeshPro.dll</HintPath>
-    </Reference>
     <Reference Include="UnityEditor.UI">
       <HintPath>C:\Users\dalcanta\Unity Projects\Proyecto Campo\Library\ScriptAssemblies\UnityEditor.UI.dll</HintPath>
     </Reference>
@@ -721,13 +715,9 @@
       <Project>{fc483a6a-6a5c-9bcb-9cad-1ef50cf04080}</Project>
       <Name>Assets</Name>
     </ProjectReference>
-    <ProjectReference Include="Assets.Scripts.ExtensionMethods.csproj">
-      <Project>{afa59c38-eeaf-6b64-b46e-f23cb798a397}</Project>
-      <Name>Assets.Scripts.ExtensionMethods</Name>
-    </ProjectReference>
-    <ProjectReference Include="UnityUIExtensions.csproj">
-      <Project>{4b06f23d-5e15-1f2c-044c-5b76847e3552}</Project>
-      <Name>UnityUIExtensions</Name>
+    <ProjectReference Include="Assets.Scripts.Utils.csproj">
+      <Project>{51189add-f733-4179-0a42-6ac3c2a69b16}</Project>
+      <Name>Assets.Scripts.Utils</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

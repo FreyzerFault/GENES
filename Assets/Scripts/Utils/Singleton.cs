@@ -1,26 +1,29 @@
 using UnityEngine;
 
-public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
+namespace Utils
 {
-    public static T Instance;
-
-    protected void Awake()
+    public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
     {
-        if (Instance != null)
+        public static T Instance;
+
+        protected void Awake()
         {
-            Destroy(gameObject);
-            return;
+            if (Instance != null)
+            {
+                Destroy(gameObject);
+                return;
+            }
+
+            Instance = gameObject.GetComponent<T>();
         }
-
-        Instance = gameObject.GetComponent<T>();
     }
-}
 
-public class SingletonPersistent<T> : Singleton<T> where T : MonoBehaviour
-{
-    protected new void Awake()
+    public class SingletonPersistent<T> : Singleton<T> where T : MonoBehaviour
     {
-        base.Awake();
-        DontDestroyOnLoad(gameObject);
+        protected new void Awake()
+        {
+            base.Awake();
+            DontDestroyOnLoad(gameObject);
+        }
     }
 }
