@@ -1,17 +1,15 @@
 using ExtensionMethods;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace Map.Rendering
 {
-    public class MarkerUI : MonoBehaviour
+    public class MarkerUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
-        public Color defaultColor = Color.white;
-        public Color selectedColor = Color.yellow;
-        public Color checkedColor = Color.green;
-
         [SerializeField] private Marker marker;
+        [SerializeField] private float selectedScale = 1.5f;
 
         private Image _image;
 
@@ -19,6 +17,7 @@ namespace Map.Rendering
 
         private RectTransform _rectTransform;
         private TMP_Text _text;
+
 
         public Marker Marker
         {
@@ -34,6 +33,7 @@ namespace Map.Rendering
             marker.OnPositionChange += HandleOnPositionChange;
             marker.OnSelected += HandleOnSelected;
             marker.OnStateChange += HandleOnStateChange;
+            MarkerManager.Instance.OnMarkerModeChanged += HandleOnEditMarkerModeChange;
         }
 
         private void OnDestroy()
@@ -42,6 +42,19 @@ namespace Map.Rendering
             marker.OnPositionChange -= HandleOnPositionChange;
             marker.OnSelected -= HandleOnSelected;
             marker.OnStateChange -= HandleOnStateChange;
+            MarkerManager.Instance.OnMarkerModeChanged -= HandleOnEditMarkerModeChange;
+        }
+
+        public void OnPointerEnter(PointerEventData eventData)
+        {
+            marker.hovered = true;
+            UpdateAspect();
+        }
+
+        public void OnPointerExit(PointerEventData eventData)
+        {
+            marker.hovered = false;
+            UpdateAspect();
         }
 
         private void Initialize()
@@ -52,10 +65,16 @@ namespace Map.Rendering
             _image = GetComponentInChildren<Image>();
 
             _text.text = marker.LabelText;
-            _image.color = defaultColor;
+            _image.color = MarkerManager.Instance.defaultColor;
 
             UpdatePos(marker.NormalizedPosition);
+            UpdateAspect();
         }
+
+        private void HandleOnPositionChange(Vector2 pos) => UpdatePos(pos);
+        private void HandleOnSelected(bool selected) => UpdateAspect();
+        private void HandleOnStateChange(MarkerState state) => UpdateAspect();
+        private void HandleOnEditMarkerModeChange(EditMarkerMode mode) => UpdateAspect();
 
         private void UpdatePos(Vector2 normalizePos)
         {
@@ -71,26 +90,29 @@ namespace Map.Rendering
             _rectTransform.localScale /= _mapRendererUI.ZoomScale;
         }
 
-        private void HandleOnLabelChange(object sender, string label)
+        private void HandleOnLabelChange(string label)
         {
             _text.text = label;
         }
 
-        private void HandleOnPositionChange(object sender, Vector2 pos)
+        private void UpdateAspect()
         {
-            UpdatePos(pos);
+            var mm = MarkerManager.Instance;
+
+            // SCALE
+            Scale(marker.Selected || marker.hovered ? selectedScale : 1);
+
+            // COLOR
+            if (marker.Selected) _image.color = mm.selectedColor;
+            else if (marker.hovered)
+                _image.color =
+                    mm.EditMarkerMode == EditMarkerMode.Delete
+                        ? mm.deleteColor
+                        : mm.hoverColor;
+            else if (marker.IsChecked) _image.color = mm.checkedColor;
+            else _image.color = mm.defaultColor;
         }
 
-        private void HandleOnSelected(object sender, bool selected)
-        {
-            _image.color = selected ? selectedColor : defaultColor;
-            var selectedScale = 1.5f;
-            _image.transform.localScale = Vector3.one * (selected ? selectedScale : 1);
-        }
-
-        private void HandleOnStateChange(object sender, MarkerState state)
-        {
-            _image.color = state == MarkerState.Checked ? checkedColor : _image.color;
-        }
+        private void Scale(float scale) => _rectTransform.localScale = Vector3.one * scale;
     }
 }

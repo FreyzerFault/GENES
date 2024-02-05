@@ -55,12 +55,12 @@ namespace Map.Rendering
             marker.State = MarkerState.Checked;
         }
 
-        private void HandleOnStateChange(object sender, MarkerState state)
+        private void HandleOnStateChange(MarkerState state)
         {
             UpdateVisuals();
         }
 
-        private void HandleOnPositionChange(object sender, Vector2 pos)
+        private void HandleOnPositionChange(Vector2 pos)
         {
             UpdatePosition();
         }

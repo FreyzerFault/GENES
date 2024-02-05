@@ -7,12 +7,13 @@ namespace Map
     [Serializable]
     public class Marker
     {
-        public static readonly float CollisionRadius = 0.05f;
         [SerializeField] private Vector2 normalizedPosition;
         [SerializeField] private Vector3 worldPosition;
 
         [SerializeField] private string labelText;
         [SerializeField] private MarkerState state;
+        [SerializeField] private bool selected;
+        [SerializeField] public bool hovered;
 
         public Marker(Vector2 normalizedPos, Vector3? worldPos = null, string label = "")
         {
@@ -21,9 +22,11 @@ namespace Map
 
             labelText = label == "" ? Vector3Int.RoundToInt(worldPosition).ToString() : label;
 
-            IsSelected = false;
+            Selected = false;
             state = MarkerState.Unchecked;
         }
+
+        public float CollisionRadius => MarkerManager.Instance.collisionRadius;
 
         private Terrain Terrain => MapManager.Terrain;
 
@@ -34,7 +37,7 @@ namespace Map
             {
                 normalizedPosition = value;
                 worldPosition = Terrain.GetWorldPosition(value);
-                OnPositionChange?.Invoke(this, value);
+                OnPositionChange?.Invoke(value);
             }
         }
 
@@ -45,7 +48,7 @@ namespace Map
             {
                 worldPosition = value;
                 normalizedPosition = Terrain.GetNormalizedPosition(value);
-                OnPositionChange?.Invoke(this, normalizedPosition);
+                OnPositionChange?.Invoke(normalizedPosition);
             }
         }
 
@@ -55,7 +58,7 @@ namespace Map
             set
             {
                 labelText = value;
-                OnLabelChange?.Invoke(this, value);
+                OnLabelChange?.Invoke(value);
             }
         }
 
@@ -66,31 +69,28 @@ namespace Map
             set
             {
                 state = value;
-                OnStateChange?.Invoke(this, value);
+                OnStateChange?.Invoke(value);
             }
         }
 
         public bool IsNext => State == MarkerState.Next;
         public bool IsChecked => State == MarkerState.Checked;
         public bool IsUnchecked => State == MarkerState.Unchecked;
-        public bool IsSelected { get; private set; }
 
-        public event EventHandler<string> OnLabelChange;
-        public event EventHandler<Vector2> OnPositionChange;
-        public event EventHandler<bool> OnSelected;
-        public event EventHandler<MarkerState> OnStateChange;
-
-        public void Select()
+        public bool Selected
         {
-            IsSelected = true;
-            OnSelected?.Invoke(this, true);
+            get => selected;
+            set
+            {
+                selected = value;
+                OnSelected?.Invoke(value);
+            }
         }
 
-        public void Deselect()
-        {
-            IsSelected = false;
-            OnSelected?.Invoke(this, false);
-        }
+        public event Action<string> OnLabelChange;
+        public event Action<Vector2> OnPositionChange;
+        public event Action<MarkerState> OnStateChange;
+        public event Action<bool> OnSelected;
 
         // ==================== //
 

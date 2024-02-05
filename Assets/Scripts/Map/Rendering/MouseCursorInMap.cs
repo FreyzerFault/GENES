@@ -1,18 +1,44 @@
 using ExtensionMethods;
 using TMPro;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
-using UnityEngine.UI;
 
 namespace Map.Rendering
 {
-    public class MouseCursorInMap : MonoBehaviour, IPointerMoveHandler
+    internal enum CursorDisplayMode
     {
+        Default,
+        Delete,
+        Select,
+        DefaultIllegal,
+        SelectIllegal
+    }
+
+    public class MouseCursorInMap : MonoBehaviour
+    {
+        [SerializeField] private Texture2D cursorTexture;
+        [SerializeField] private Texture2D cursorDeleteTexture;
+        [SerializeField] private Texture2D cursorSelectTexture;
+        [SerializeField] private Texture2D cursorIllegalTexture;
+        [SerializeField] private Texture2D cursorIllegalSelectedTexture;
+
+        private CursorDisplayMode _displayMode;
+
         private TMP_Text _label;
         private RectTransform _parentRectTransform;
         private RectTransform _rectTransform;
-        private Image _sprite;
+
+        private CursorDisplayMode DisplayMode
+        {
+            get => _displayMode;
+            set
+            {
+                if (value != _displayMode)
+                    SetCursorDisplayTexture(value);
+                _displayMode = value;
+            }
+        }
+
 
         private static Vector2 MousePosition => new(Mouse.current.position.x.value, Mouse.current.position.y.value);
         private Vector2 NormalizedPositionInMap => _parentRectTransform.ScreenToNormalizedPoint(MousePosition);
@@ -21,80 +47,100 @@ namespace Map.Rendering
         {
             _rectTransform = GetComponent<RectTransform>();
             _parentRectTransform = _rectTransform.parent.GetComponent<RectTransform>();
-            _sprite = _rectTransform.GetComponentInChildren<Image>();
             _label = _rectTransform.GetComponentInChildren<TMP_Text>();
-        }
 
-        private void Start()
-        {
-            MarkerManager.Instance.OnMarkerModeChanged += HandleOnMarkerModeChanged;
+            UpdateCursorTexture(cursorTexture);
         }
 
         private void Update()
         {
             _rectTransform.position = MousePosition;
+            UpdateCursorMode();
         }
 
-        private void OnDestroy()
+        private bool OutOfMap()
         {
-            MarkerManager.Instance.OnMarkerModeChanged -= HandleOnMarkerModeChanged;
+            var normPos = NormalizedPositionInMap;
+            return normPos.x < 0 || normPos.y < 0 || normPos.x > 1 || normPos.y > 1;
         }
 
-        public void OnPointerMove(PointerEventData eventData)
+        private void UpdateCursorMode()
         {
-            UpdateCursorDisplay(MarkerManager.Instance.MarkerMode);
-        }
-
-        private void HandleOnMarkerModeChanged(MarkerMode markerMode)
-        {
-            UpdateCursorDisplay(markerMode);
-        }
-
-        private void UpdateCursorDisplay(MarkerMode mode)
-        {
-            switch (mode)
+            if (OutOfMap())
             {
-                case MarkerMode.Add:
-                    var collisionIndex = MarkerManager.Instance.FindIndex(NormalizedPositionInMap);
+                DisplayMode = CursorDisplayMode.Default;
+                _label.text = "";
+                return;
+            }
 
-                    if (collisionIndex != -1) // Marker in Cursor Position
+            switch (MarkerManager.Instance.EditMarkerMode)
+            {
+                case EditMarkerMode.Add:
+                    if (MarkerManager.Instance.AnyHovered)
                     {
-                        _sprite.color = Color.yellow;
+                        DisplayMode = CursorDisplayMode.Select;
                         _label.text = "Seleccionar";
                     }
                     else
                     {
+                        // Añadir o Mover marker => Necesita una posición legal
+                        var isLegal = MapManager.Instance.IsLegalPos(NormalizedPositionInMap);
                         switch (MarkerManager.Instance.SelectedCount)
                         {
                             case 0: // No Selected
-                                _sprite.color = Color.white;
+                                DisplayMode = isLegal ? CursorDisplayMode.Default : CursorDisplayMode.DefaultIllegal;
                                 _label.text = "Añadir";
                                 break;
                             case 1:
-                                _sprite.color = Color.yellow;
+                                DisplayMode = isLegal ? CursorDisplayMode.Select : CursorDisplayMode.SelectIllegal;
                                 _label.text = "Mover";
                                 break;
                             case 2:
-                                _sprite.color = Color.yellow;
+                                DisplayMode = isLegal ? CursorDisplayMode.Select : CursorDisplayMode.SelectIllegal;
                                 _label.text = "Añadir intermedio";
                                 break;
                         }
                     }
 
                     break;
-                case MarkerMode.Remove:
-                    _sprite.color = Color.red;
+                case EditMarkerMode.Delete:
+                    DisplayMode = CursorDisplayMode.Delete;
                     _label.text = "Eliminar";
                     break;
-                case MarkerMode.Select:
-                    _sprite.color = Color.yellow;
+                case EditMarkerMode.Select:
+                    DisplayMode = CursorDisplayMode.Select;
                     _label.text = "Seleccionar";
                     break;
-                case MarkerMode.None:
-                    _sprite.color = Color.white;
+                case EditMarkerMode.None:
+                    DisplayMode = CursorDisplayMode.Default;
                     _label.text = "";
                     break;
             }
         }
+
+        private void SetCursorDisplayTexture(CursorDisplayMode newDisplayMode)
+        {
+            switch (newDisplayMode)
+            {
+                case CursorDisplayMode.Default:
+                    UpdateCursorTexture(cursorTexture);
+                    break;
+                case CursorDisplayMode.Select:
+                    UpdateCursorTexture(cursorSelectTexture);
+                    break;
+                case CursorDisplayMode.Delete:
+                    UpdateCursorTexture(cursorDeleteTexture);
+                    break;
+                case CursorDisplayMode.DefaultIllegal:
+                    UpdateCursorTexture(cursorIllegalTexture);
+                    break;
+                case CursorDisplayMode.SelectIllegal:
+                    UpdateCursorTexture(cursorIllegalSelectedTexture);
+                    break;
+            }
+        }
+
+        private void UpdateCursorTexture(Texture2D tex) =>
+            Cursor.SetCursor(tex, Vector2.zero, CursorMode.Auto);
     }
 }

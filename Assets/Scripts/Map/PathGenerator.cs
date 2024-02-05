@@ -129,7 +129,7 @@ namespace Map
             if (index == 0)
             {
                 UpdatePlayerPath();
-                paths.RemoveAt(1);
+                paths.RemoveAt(0);
                 OnPathDeleted?.Invoke(index);
                 return;
             }
@@ -149,8 +149,8 @@ namespace Map
             var path2 = paths[index + 1];
 
             paths[index] = BuildPath(
-                path1.Start.Position,
-                path2.End.Position,
+                path1.Start.position,
+                path2.End.position,
                 path1.Start.direction,
                 path2.End.direction
             );
@@ -296,6 +296,12 @@ namespace Map
 
             return pathsBuilt;
         }
+
+        public bool IsLegalPos(Vector2 normPos) =>
+            IsLegalPos(MapManager.Terrain.GetWorldPosition(normPos));
+
+        public bool IsLegalPos(Vector3 pos) =>
+            PathFinding.IsLegal(new Node(pos, size: pathFindingConfig.cellSize), pathFindingConfig);
 
 #if UNITY_EDITOR
         [ButtonMethod]

@@ -105,7 +105,7 @@ namespace Map.Rendering
 
         private void DrawNodeGizmos(Node node, Color color, bool wire = false)
         {
-            var pos = node.Position;
+            var pos = node.position;
             pos.y += heightOffset;
             var normPos = _terrain.GetNormalizedPosition(pos);
             var normal = _terrain.terrainData.GetInterpolatedNormal(normPos.x, normPos.y);
@@ -116,7 +116,7 @@ namespace Map.Rendering
             Gizmos.color = color.Darken(0.5f);
 
             // Cubo
-            var size = new Vector3(node.Size / 3, 0.1f, node.Size / 3);
+            var size = new Vector3(node.size / 3, 0.1f, node.size / 3);
             if (wire)
                 Gizmos.DrawWireCube(pos, size);
             else
@@ -124,11 +124,11 @@ namespace Map.Rendering
 
 
             // PENDIENTE
-            if (node.SlopeAngle > 0)
+            if (node.slopeAngle > 0)
             {
                 // Normal
-                Gizmos.color = Color.Lerp(Color.magenta, Color.red, node.SlopeAngle / 30);
-                DrawArrow(pos, normal, node.Size / 2);
+                Gizmos.color = Color.Lerp(Color.magenta, Color.red, node.slopeAngle / 30);
+                DrawArrow(pos, normal, node.size / 2);
 
                 // Gradiente
                 Gizmos.color = Color.blue;
@@ -139,7 +139,7 @@ namespace Map.Rendering
             if (node.direction != Vector2.zero)
             {
                 Gizmos.color = Color.yellow;
-                DrawArrow(pos, new Vector3(node.direction.x, 0, node.direction.y), node.Size / 2);
+                DrawArrow(pos, new Vector3(node.direction.x, 0, node.direction.y), node.size / 2);
             }
 
 
@@ -147,12 +147,12 @@ namespace Map.Rendering
             if (node.Parent != null)
             {
                 Gizmos.color = Color.Lerp(color, Color.white, 0.5f);
-                Gizmos.DrawLine(pos, node.Parent.Position + Vector3.up * heightOffset);
+                Gizmos.DrawLine(pos, node.Parent.position + Vector3.up * heightOffset);
             }
 
             // [F,G,H] Labels
             if (showValues)
-                DrawLabel(node, Vector3.left * node.Size / 3 + Vector3.up * heightOffset);
+                DrawLabel(node, Vector3.left * node.size / 3 + Vector3.up * heightOffset);
         }
 
         private void DrawArrow(Vector3 pos, Vector3 direction, float size = 1)
@@ -189,9 +189,9 @@ namespace Map.Rendering
             var labelTextH = Math.Round(node.H, 2).ToString(CultureInfo.InvariantCulture);
 
             // POSITION
-            var posF = node.Position + Vector3.forward * 0.2f + positionOffset;
-            var posG = node.Position + positionOffset;
-            var posH = node.Position - Vector3.forward * 0.2f + positionOffset;
+            var posF = node.position + Vector3.forward * 0.2f + positionOffset;
+            var posG = node.position + positionOffset;
+            var posH = node.position - Vector3.forward * 0.2f + positionOffset;
 
             Handles.Label(posF, labelTextF, styleF);
             Handles.Label(posG, labelTextG, styleG);

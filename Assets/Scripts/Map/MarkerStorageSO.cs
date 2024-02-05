@@ -15,16 +15,22 @@ namespace Map
         public Vector3[] WorldPositions => markers.Select(marker => marker.WorldPosition).ToArray();
         public Vector2[] NormalizedPositions => markers.Select(marker => marker.NormalizedPosition).ToArray();
 
-        public int SelectedCount => markers.Count(marker => marker.IsSelected);
+        // HOVERED
+        public Marker Hovered => markers.First(marker => marker.hovered);
+        public int HoveredIndex => markers.FindIndex(marker => marker.hovered);
+        public bool AnyHovered => markers.Any(marker => marker.hovered);
+
+        // SELECTED
+        public int SelectedCount => markers.Count(marker => marker.Selected);
 
         // 2 Seleccionados (para crear un Marker intermedio)
         public Tuple<int, int> SelectedIndexPair =>
             new(
-                markers.FindIndex(marker => marker.IsSelected),
-                markers.FindLastIndex(marker => marker.IsSelected)
+                markers.FindIndex(marker => marker.Selected),
+                markers.FindLastIndex(marker => marker.Selected)
             );
 
-        public int SelectedIndex => markers.FindIndex(marker => marker.IsSelected);
+        public int SelectedIndex => markers.FindIndex(marker => marker.Selected);
 
         public Marker Selected => SelectedCount > 0 ? markers[SelectedIndex] : null;
 
@@ -32,8 +38,8 @@ namespace Map
             SelectedCount == 0
                 ? null
                 : new Tuple<Marker, Marker>(
-                    markers[markers.FindIndex(marker => marker.IsSelected)],
-                    markers[markers.FindLastIndex(marker => marker.IsSelected)]
+                    markers[markers.FindIndex(marker => marker.Selected)],
+                    markers[markers.FindLastIndex(marker => marker.Selected)]
                 );
 
         public int Count => markers.Count;
@@ -66,20 +72,20 @@ namespace Map
             if (index < 0 || index >= Count) return null;
 
             var marker = markers[index];
-            marker.Select();
+            marker.Selected = true;
             return marker;
         }
 
         public Marker Deselect(int index)
         {
             if (index < 0 || index >= Count) return null;
-            markers[index].Deselect();
+            markers[index].Selected = false;
             return markers[index];
         }
 
         public void DeselectAll()
         {
-            markers.ForEach(marker => marker.Deselect());
+            markers.ForEach(marker => marker.Selected = false);
         }
 
         public Marker Set(Marker marker, int index)

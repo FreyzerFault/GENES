@@ -3,35 +3,46 @@ using System.Collections.Generic;
 using System.Linq;
 using MyBox;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Map
 {
     [Serializable]
-    public enum MarkerMode
+    public enum EditMarkerMode
     {
         Add,
-        Remove,
+        Delete,
         Select,
         None
     }
 
     public class MarkerManager : Utils.Singleton<MarkerManager>
     {
+        public Color defaultColor = Color.white;
+        public Color selectedColor = Color.yellow;
+        public Color checkedColor = Color.green;
+        public Color hoverColor = Color.blue;
+        public Color deleteColor = Color.red;
+
+        public float collisionRadius = 0.05f;
+
         // UI Markers
         public GameObject markerUIPrefab;
 
         [SerializeField] private MarkerStorageSo markersStorage;
 
-        [SerializeField] private MarkerMode markerMode = MarkerMode.None;
+        [FormerlySerializedAs("markerMode")] [SerializeField]
+        private EditMarkerMode editMarkerMode = EditMarkerMode.None;
 
         private int totalMarkersAdded;
 
-        public MarkerMode MarkerMode
+        public EditMarkerMode EditMarkerMode
         {
-            get => markerMode;
+            get => editMarkerMode;
             set
             {
-                markerMode = value;
+                if (value == editMarkerMode) return;
+                editMarkerMode = value;
                 OnMarkerModeChanged?.Invoke(value);
             }
         }
@@ -43,16 +54,18 @@ namespace Map
         public Marker SelectedMarker => markersStorage.Selected;
         public int SelectedCount => markersStorage.SelectedCount;
 
+        public Marker HoveredMarker => markersStorage.Hovered;
+        public int HoveredMarkerIndex => markersStorage.HoveredIndex;
+        public bool AnyHovered => markersStorage.AnyHovered;
+
         private void Update()
         {
-            markerMode = MarkerMode.Add;
-
             // SHIFT => Remove Mode
             var shiftPressed = Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.LeftShift);
-            if (shiftPressed) markerMode = MarkerMode.Remove;
+            EditMarkerMode = shiftPressed ? EditMarkerMode.Delete : EditMarkerMode.Add;
         }
 
-        public event Action<MarkerMode> OnMarkerModeChanged;
+        public event Action<EditMarkerMode> OnMarkerModeChanged;
 
 
         public event Action OnAllMarkerDeselected;
@@ -95,10 +108,9 @@ namespace Map
 
         public void AddOrSelectMarker(Vector2 normalizedPos)
         {
-            var collisionIndex = FindIndex(normalizedPos);
-
-            // No hay ninguna colision => Se añade el punto
-            if (collisionIndex == -1)
+            if (AnyHovered)
+                ToggleSelectMarker(HoveredMarkerIndex);
+            else
                 switch (markersStorage.SelectedCount)
                 {
                     case 0:
@@ -113,8 +125,6 @@ namespace Map
                         DeselectAllMarkers();
                         break;
                 }
-            else // COLISION => Se selecciona el punto
-                ToggleSelectMarker(collisionIndex);
         }
 
         private Marker AddMarker(Vector2 normalizedPos, int index = -1)
@@ -153,7 +163,7 @@ namespace Map
             return marker;
         }
 
-        private Marker AddMarkerBetweenSelectedPair(Vector2 normalizedPos)
+        public Marker AddMarkerBetweenSelectedPair(Vector2 normalizedPos)
         {
             if (markersStorage.SelectedCount != 2) return null;
 
@@ -161,15 +171,15 @@ namespace Map
             var marker = AddMarker(normalizedPos, index);
 
             // Deselect both
-            Markers[index - 1].Deselect();
-            Markers[index + 1].Deselect();
+            Markers[index - 1].Selected = false;
+            Markers[index + 1].Selected = false;
 
             return marker;
         }
 
-        public Marker RemoveMarker(Vector2 normalizedPos)
+        public Marker RemoveMarker()
         {
-            var index = FindIndex(normalizedPos);
+            var index = HoveredMarkerIndex;
 
             var marker = markersStorage.Remove(index);
 
@@ -189,7 +199,7 @@ namespace Map
         {
             if (index < 0 || index >= MarkerCount) return null;
 
-            var isSelected = markersStorage.markers[index].IsSelected;
+            var isSelected = markersStorage.markers[index].Selected;
             var twoSelected = markersStorage.SelectedCount == 2;
             var notAdyacentToSelected = markersStorage.SelectedCount == 1 &&
                                         Math.Abs(markersStorage.SelectedIndex - index) > 1;
@@ -215,22 +225,27 @@ namespace Map
 
         private void ToggleSelectMarker(Marker marker)
         {
-            if (marker.IsSelected)
+            if (marker.Selected)
                 DeselectMarker(marker);
             else
                 SelectMarker(marker);
         }
 
+        public void ToggleSelectMarker()
+        {
+            ToggleSelectMarker(HoveredMarkerIndex);
+        }
+
         private void SelectMarker(Marker marker)
         {
-            marker.Select();
+            marker.Selected = true;
             OnMarkerSelected?.Invoke(marker);
             Log("Point selected: " + marker.LabelText);
         }
 
         private void DeselectMarker(Marker marker)
         {
-            marker.Deselect();
+            marker.Selected = false;
             OnMarkerDeselected?.Invoke(marker);
             Log("Point deselected: " + marker.LabelText);
         }
@@ -241,7 +256,7 @@ namespace Map
             OnAllMarkerDeselected?.Invoke();
         }
 
-        private Marker MoveSelectedMarker(Vector2 targetPos)
+        public Marker MoveSelectedMarker(Vector2 targetPos)
         {
             var selectedIndex = markersStorage.SelectedIndex;
             var selected = markersStorage.markers[selectedIndex];
@@ -250,7 +265,7 @@ namespace Map
             selected.NormalizedPosition = targetPos;
 
             // Deselect cuando se haya movido
-            selected.Deselect();
+            selected.Selected = false;
 
             Log("Point moved: " + selected.LabelText);
             OnMarkerMoved?.Invoke(selected, selectedIndex);

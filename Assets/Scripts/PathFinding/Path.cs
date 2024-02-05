@@ -63,21 +63,21 @@ namespace PathFinding
         {
             float length = 0;
             for (var i = 1; i < nodes.Length; i++)
-                length += Vector3.Distance(nodes[i - 1].Position, nodes[i].Position);
+                length += Vector3.Distance(nodes[i - 1].position, nodes[i].position);
 
             return length;
         }
 
 
         public Vector3[] GetPathWorldPoints() =>
-            nodes.Select(node => node.Position).ToArray();
+            nodes.Select(node => node.position).ToArray();
 
         public Vector2[] GetPathNormalizedPoints(Terrain terrain) =>
-            nodes.Select(node => terrain.GetNormalizedPosition(node.Position)).ToArray();
+            nodes.Select(node => terrain.GetNormalizedPosition(node.position)).ToArray();
 
 
         public void ProjectToTerrain(Terrain terrain) =>
-            nodes = terrain.ProjectSegmentToTerrain(Start.Position, End.Position)
+            nodes = terrain.ProjectSegmentToTerrain(Start.position, End.position)
                 .Select(pos => new Node(pos))
                 .ToArray();
 

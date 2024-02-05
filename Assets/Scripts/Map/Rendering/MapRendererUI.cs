@@ -10,8 +10,7 @@ using Gradient = UnityEngine.Gradient;
 
 namespace Map.Rendering
 {
-    public class MapRendererUI : MonoBehaviour,
-        IPointerClickHandler, IPointerExitHandler, IPointerEnterHandler
+    public class MapRendererUI : MonoBehaviour, IPointerClickHandler
     {
         [SerializeField] private float zoomScale = 2;
 
@@ -102,41 +101,32 @@ namespace Map.Rendering
             MarkerManager.OnMarkersClear -= HandleClear;
         }
 
+
         // ================================== MOUSE EVENTS ==================================
         public void OnPointerClick(PointerEventData eventData)
         {
-            if (MarkerManager.MarkerMode == MarkerMode.None) return;
+            if (MarkerManager.EditMarkerMode == EditMarkerMode.None) return;
 
             // [0,1] Position
             var normalizedPosition = _rectTransform.ScreenToNormalizedPoint(eventData.position);
 
-            switch (MarkerManager.MarkerMode)
+            switch (MarkerManager.EditMarkerMode)
             {
-                case MarkerMode.Add:
-                    MarkerManager.AddOrSelectMarker(normalizedPosition);
+                case EditMarkerMode.Add:
+                    if (MapManager.Instance.IsLegalPos(normalizedPosition))
+                        MarkerManager.AddOrSelectMarker(normalizedPosition);
                     break;
-                case MarkerMode.Remove:
-                    MarkerManager.RemoveMarker(normalizedPosition);
+                case EditMarkerMode.Delete:
+                    MarkerManager.RemoveMarker();
                     break;
-                case MarkerMode.Select:
-                    MarkerManager.ToggleSelectMarker(normalizedPosition);
+                case EditMarkerMode.Select:
+                    MarkerManager.ToggleSelectMarker();
                     break;
-                case MarkerMode.None:
+                case EditMarkerMode.None:
                 default:
                     break;
             }
         }
-
-        public void OnPointerEnter(PointerEventData eventData)
-        {
-            Cursor.visible = false;
-        }
-
-        public void OnPointerExit(PointerEventData eventData)
-        {
-            Cursor.visible = true;
-        }
-
 
         // ================================== EVENT SUSCRIBERS ==================================
         private void HandleAdded(Marker marker, int index)

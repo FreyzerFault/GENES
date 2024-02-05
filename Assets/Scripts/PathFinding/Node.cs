@@ -10,35 +10,32 @@ namespace PathFinding
         private static readonly float DefaultSize = 1;
         protected static readonly float EqualityPrecision = 0.01f;
 
-        public Vector3 Position;
-
-        public float Size;
-        public float SlopeAngle;
-
-        // Direccion desde el parent al nodo
+        public Vector3 position;
+        public float size;
+        public float slopeAngle;
         public Vector2 direction;
+        private Node _parent;
 
         // Neighbours
         [NonSerialized] public Node[] Neighbours;
-        private Node parent;
 
 
         public Node(Vector3 position, float? slopeAngle = null, float? size = null, Vector2? direction = null)
         {
-            Position = position;
-            SlopeAngle = slopeAngle ?? Terrain.activeTerrain.GetSlopeAngle(position);
-            Size = size ?? DefaultSize;
+            this.position = position;
+            this.slopeAngle = slopeAngle ?? Terrain.activeTerrain.GetSlopeAngle(position);
+            this.size = size ?? DefaultSize;
             this.direction = direction ?? Vector2.zero;
         }
 
         public Node Parent
         {
-            get => parent;
+            get => _parent;
             set
             {
                 // Update Direction from Parent
                 direction = Direction(value, this);
-                parent = value;
+                _parent = value;
             }
         }
 
@@ -49,44 +46,32 @@ namespace PathFinding
         public float H { get; set; }
         public bool Legal { get; set; }
 
-        public Vector2 Pos2D => new(Position.x, Position.z);
-        public float Height => Position.y;
+        public Vector2 Pos2D => new(position.x, position.z);
+        public float Height => position.y;
 
 
-        public static Vector2 Direction(Node from, Node to)
-        {
-            return (to.Pos2D - from.Pos2D).normalized;
-        }
+        public static Vector2 Direction(Node from, Node to) => (to.Pos2D - from.Pos2D).normalized;
 
-        public override int GetHashCode()
-        {
-            return Pos2D.GetHashCode();
-        }
+        public override int GetHashCode() => Pos2D.GetHashCode();
 
         public override bool Equals(object obj)
         {
             if (obj is not Node node) return false;
 
-            return Mathf.Abs(Position.x - node.Position.x) < EqualityPrecision &&
-                   Mathf.Abs(Position.z - node.Position.z) < EqualityPrecision;
+            return Mathf.Abs(position.x - node.position.x) < EqualityPrecision &&
+                   Mathf.Abs(position.z - node.position.z) < EqualityPrecision;
         }
 
-        public float Distance2D(Node node)
-        {
-            return Mathf.Sqrt(Distance2DnoSqrt(node));
-        }
+        public float Distance2D(Node node) => Mathf.Sqrt(Distance2DnoSqrt(node));
 
         public float Distance2DnoSqrt(Node node)
         {
-            var xDelta = Position.x - node.Position.x;
-            var zDelta = Position.z - node.Position.z;
+            var xDelta = position.x - node.position.x;
+            var zDelta = position.z - node.position.z;
 
             return xDelta * xDelta + zDelta * zDelta;
         }
 
-        public bool Collision(Node node)
-        {
-            return Distance2DnoSqrt(node) < Size * Size;
-        }
+        public bool Collision(Node node) => Distance2DnoSqrt(node) < size * size;
     }
 }

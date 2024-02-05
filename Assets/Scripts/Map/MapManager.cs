@@ -17,7 +17,7 @@ namespace Map
         [SerializeField] private GameObject player;
         [SerializeField] private GameObject water;
 
-        public MarkerStorageSo markerStorage;
+        public PathGenerator mainPathGenerator;
 
         [SerializeField] private MapState mapState;
 
@@ -94,5 +94,8 @@ namespace Map
         public event Action<float> OnZoomChanged;
 
         public void ZoomIn(float zoomAmount = 0.1f) => Zoom += zoomAmount;
+
+        public bool IsLegalPos(Vector2 normPos) => mainPathGenerator.IsLegalPos(normPos);
+        public bool IsLegalPos(Vector3 normPos) => mainPathGenerator.IsLegalPos(normPos);
     }
 }

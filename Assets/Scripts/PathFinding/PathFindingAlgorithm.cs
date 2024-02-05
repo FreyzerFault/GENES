@@ -49,10 +49,10 @@ namespace PathFinding
 
 
         // ==================== RESTRICCIONES ====================
-        protected bool IsLegal(Node node, PathFindingConfigSO paramsConfig)
+        public bool IsLegal(Node node, PathFindingConfigSO paramsConfig)
         {
             bool legalHeight = LegalHeight(node.Height, paramsConfig),
-                legalSlope = LegalSlope(node.SlopeAngle, paramsConfig),
+                legalSlope = LegalSlope(node.slopeAngle, paramsConfig),
                 legalPosition = LegalPosition(node.Pos2D, Terrain.activeTerrain);
 
             node.Legal = legalHeight && legalSlope && legalPosition;
@@ -60,20 +60,12 @@ namespace PathFinding
             return node.Legal;
         }
 
-        protected bool LegalPosition(Vector2 pos, Terrain terrain)
-        {
-            return !terrain.OutOfBounds(pos);
-        }
+        protected bool LegalPosition(Vector2 pos, Terrain terrain) => !terrain.OutOfBounds(pos);
 
-        protected bool LegalHeight(float height, PathFindingConfigSO paramsConfig)
-        {
-            return height >= paramsConfig.minHeight;
-        }
+        protected bool LegalHeight(float height, PathFindingConfigSO paramsConfig) => height >= paramsConfig.minHeight;
 
-        protected bool LegalSlope(float slopeAngle, PathFindingConfigSO paramsConfig)
-        {
-            return slopeAngle <= paramsConfig.aStarConfig.maxSlopeAngle;
-        }
+        protected bool LegalSlope(float slopeAngle, PathFindingConfigSO paramsConfig) =>
+            slopeAngle <= paramsConfig.aStarConfig.maxSlopeAngle;
 
         // ==================== NEIGHBOURS ====================
         protected Node[] CreateNeighbours(Node node, PathFindingConfigSO paramsConfig, Terrain terrain,
@@ -87,8 +79,8 @@ namespace PathFinding
 
                 // Offset from central Node
                 var offset = new Vector2(
-                    node.Size * (i % 3 - 1),
-                    node.Size * Mathf.Floor(i / 3f - 1)
+                    node.size * (i % 3 - 1),
+                    node.size * Mathf.Floor(i / 3f - 1)
                 );
 
                 // Only Front Neighbours
@@ -97,9 +89,9 @@ namespace PathFinding
 
                 // World Position
                 var neighPos = new Vector3(
-                    node.Position.x + offset.x,
+                    node.position.x + offset.x,
                     0,
-                    node.Position.z + offset.y
+                    node.position.z + offset.y
                 );
 
                 var neigh = new Node(neighPos);
@@ -113,9 +105,9 @@ namespace PathFinding
                 }
 
                 // Properties
-                neigh.Position = new Vector3(neigh.Position.x, terrain.SampleHeight(neighPos), neigh.Position.z);
-                neigh.SlopeAngle = terrain.GetSlopeAngle(neighPos);
-                neigh.Size = node.Size;
+                neigh.position = new Vector3(neigh.position.x, terrain.SampleHeight(neighPos), neigh.position.z);
+                neigh.slopeAngle = terrain.GetSlopeAngle(neighPos);
+                neigh.size = node.size;
 
                 // Si no es legal se ignora
                 if (!IsLegal(neigh, paramsConfig))
@@ -137,12 +129,10 @@ namespace PathFinding
 
         protected PathFindingCache Cache;
 
-        protected bool IsCached(Node start, Node end)
-        {
-            return Cache.path.Nodes.Length > 0 &&
-                   Cache.path.Start.Equals(start) &&
-                   Cache.path.End.Equals(end);
-        }
+        protected bool IsCached(Node start, Node end) =>
+            Cache.path.Nodes.Length > 0 &&
+            Cache.path.Start.Equals(start) &&
+            Cache.path.End.Equals(end);
 
         public void CleanCache()
         {
