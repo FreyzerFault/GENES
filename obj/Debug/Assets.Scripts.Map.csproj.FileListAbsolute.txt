@@ -474,7 +474,6 @@ C:\Users\dalcanta\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts.Ma
 C:\Users\dalcanta\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts.Map\Unity.InputSystem.dll
 C:\Users\dalcanta\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts.Map\Unity.Plastic.Antlr3.Runtime.dll
 C:\Users\dalcanta\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts.Map\Unity.Plastic.Newtonsoft.Json.dll
-C:\Users\dalcanta\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts.Map\Unity.TextMeshPro.dll
 C:\Users\dalcanta\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts.Map\Unity.VisualScripting.Antlr3.Runtime.dll
 C:\Users\dalcanta\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts.Map\Unity.VisualScripting.IonicZip.dll
 C:\Users\dalcanta\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts.Map\Unity.VisualScripting.TextureAssets.dll
@@ -567,7 +566,6 @@ C:\Users\dalcanta\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts.Ma
 C:\Users\dalcanta\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts.Map\UnityEngine.WindModule.dll
 C:\Users\dalcanta\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts.Map\UnityEngine.XRModule.dll
 C:\Users\dalcanta\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts.Map\unityplastic.dll
-C:\Users\dalcanta\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts.Map\UnityUIExtensions.dll
 C:\Users\dalcanta\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts.Map\MyBox.dll
 C:\Users\dalcanta\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts.Map\UnityEngine.NVIDIAModule.dll
 C:\Users\dalcanta\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts.Map\Unity.Cecil.dll
@@ -579,7 +577,6 @@ C:\Users\dalcanta\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts.Ma
 C:\Users\dalcanta\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts.Map\Unity.Mathematics.dll
 C:\Users\dalcanta\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts.Map\Unity.RenderPipeline.Universal.ShaderLibrary.dll
 C:\Users\dalcanta\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts.Map\Unity.Burst.dll
-C:\Users\dalcanta\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts.Map\UnityUIExtensions.pdb
 C:\Users\dalcanta\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts.Map\Assets.Scripts.pdb
 C:\Users\dalcanta\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts.Map\Assets.Scripts.PathFinding.pdb
 C:\Users\dalcanta\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts.Map\Assets.Scripts.ExtensionMethods.pdb
@@ -668,7 +665,6 @@ C:\Users\dalcanta\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts.Ma
 C:\Users\dalcanta\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts.Map\UnityEditor.UnityConnectModule.xml
 C:\Users\dalcanta\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts.Map\Unity.VisualScripting.YamlDotNet.xml
 C:\Users\dalcanta\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts.Map\Unity.VisualScripting.IonicZip.xml
-C:\Users\dalcanta\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts.Map\Unity.TextMeshPro.pdb
 C:\Users\dalcanta\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts.Map\Unity.InputSystem.pdb
 C:\Users\dalcanta\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts.Map\Cinemachine.pdb
 C:\Users\dalcanta\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts.Map\UnityEditor.UI.pdb
@@ -688,3 +684,5 @@ C:\Users\dalcanta\Unity Projects\Proyecto Campo\obj\Debug\Assets.Scripts.Map.dll
 C:\Users\dalcanta\Unity Projects\Proyecto Campo\obj\Debug\Assets.Scripts.Map.pdb
 D:\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts.Map\MyBox.dll
 D:\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts.Map\MyBox.pdb
+C:\Users\dalcanta\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts.Map\Assets.Scripts.Utils.dll
+C:\Users\dalcanta\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts.Map\Assets.Scripts.Utils.pdb

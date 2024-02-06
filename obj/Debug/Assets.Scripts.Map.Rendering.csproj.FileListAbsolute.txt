@@ -1,0 +1,2 @@
+C:\Users\dalcanta\Unity Projects\Proyecto Campo\obj\Debug\Assets.Scripts.Map.Rendering.csproj.AssemblyReference.cache
+C:\Users\dalcanta\Unity Projects\Proyecto Campo\obj\Debug\Assets.Scripts.Map.Rendering.csproj.CoreCompileInputs.cache

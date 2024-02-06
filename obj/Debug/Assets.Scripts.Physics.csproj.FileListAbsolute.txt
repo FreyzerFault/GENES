@@ -672,3 +672,5 @@ D:\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts.Physics\Assets.Sc
 D:\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts.Physics\Assets.Scripts.ExtensionMethods.pdb
 C:\Users\dalcanta\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts.Physics\Assets.Scripts.ExtensionMethods.dll
 C:\Users\dalcanta\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts.Physics\Assets.Scripts.ExtensionMethods.pdb
+C:\Users\dalcanta\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts.Physics\Assets.Scripts.Utils.dll
+C:\Users\dalcanta\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts.Physics\Assets.Scripts.Utils.pdb

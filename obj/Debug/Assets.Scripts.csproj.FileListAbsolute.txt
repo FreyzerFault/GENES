@@ -129,7 +129,6 @@ C:\Users\dalcanta\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts\Sy
 C:\Users\dalcanta\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts\Unity.InputSystem.dll
 C:\Users\dalcanta\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts\Unity.Plastic.Antlr3.Runtime.dll
 C:\Users\dalcanta\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts\Unity.Plastic.Newtonsoft.Json.dll
-C:\Users\dalcanta\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts\Unity.TextMeshPro.dll
 C:\Users\dalcanta\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts\Unity.VisualScripting.Antlr3.Runtime.dll
 C:\Users\dalcanta\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts\Unity.VisualScripting.IonicZip.dll
 C:\Users\dalcanta\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts\Unity.VisualScripting.TextureAssets.dll
@@ -320,7 +319,6 @@ C:\Users\dalcanta\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts\Un
 C:\Users\dalcanta\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts\Unity.VisualScripting.IonicZip.xml
 C:\Users\dalcanta\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts\Cinemachine.pdb
 C:\Users\dalcanta\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts\Unity.InputSystem.pdb
-C:\Users\dalcanta\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts\Unity.TextMeshPro.pdb
 C:\Users\dalcanta\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts\UnityEditor.UI.pdb
 C:\Users\dalcanta\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts\UnityEngine.UI.pdb
 C:\Users\dalcanta\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts\UnityEngine.NVIDIAModule.xml
@@ -676,3 +674,5 @@ D:\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts\Assets.Scripts.Ex
 D:\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts\Assets.Scripts.ExtensionMethods.pdb
 C:\Users\dalcanta\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts\Assets.Scripts.ExtensionMethods.dll
 C:\Users\dalcanta\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts\Assets.Scripts.ExtensionMethods.pdb
+C:\Users\dalcanta\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts\Assets.Scripts.Utils.dll
+C:\Users\dalcanta\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts\Assets.Scripts.Utils.pdb

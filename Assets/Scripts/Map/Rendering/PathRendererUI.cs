@@ -10,9 +10,10 @@ namespace Map.Rendering
 {
     public class PathRendererUI : MonoBehaviour, IPathRenderer<UILineRenderer>
     {
+        [SerializeField] private PathGenerator pathFindingGenerator;
+
         // RENDERER
         [SerializeField] protected UILineRenderer linePrefab;
-        [SerializeField] protected UILineRenderer illegalLinePrefab;
         [SerializeField] protected List<UILineRenderer> lineRenderers = new();
 
         [SerializeField] private float lineThickness = 1f;
@@ -41,21 +42,21 @@ namespace Map.Rendering
 
         private void Start()
         {
-            PathGenerator.Instance.OnPathAdded += AddPath;
-            PathGenerator.Instance.OnPathDeleted += RemovePath;
-            PathGenerator.Instance.OnPathUpdated += UpdateLine;
-            PathGenerator.Instance.OnAllPathsUpdated += UpdateAllLines;
-            PathGenerator.Instance.OnPathsCleared += ClearPaths;
-            UpdateAllLines(PathGenerator.Instance.paths.ToArray());
+            pathFindingGenerator.OnPathAdded += AddPath;
+            pathFindingGenerator.OnPathDeleted += RemovePath;
+            pathFindingGenerator.OnPathUpdated += UpdateLine;
+            pathFindingGenerator.OnAllPathsUpdated += UpdateAllLines;
+            pathFindingGenerator.OnPathsCleared += ClearPaths;
+            UpdateAllLines(pathFindingGenerator.paths.ToArray());
         }
 
         private void OnDestroy()
         {
-            PathGenerator.Instance.OnPathAdded -= AddPath;
-            PathGenerator.Instance.OnPathDeleted -= RemovePath;
-            PathGenerator.Instance.OnPathUpdated -= UpdateLine;
-            PathGenerator.Instance.OnAllPathsUpdated -= UpdateAllLines;
-            PathGenerator.Instance.OnPathsCleared -= ClearPaths;
+            pathFindingGenerator.OnPathAdded -= AddPath;
+            pathFindingGenerator.OnPathDeleted -= RemovePath;
+            pathFindingGenerator.OnPathUpdated -= UpdateLine;
+            pathFindingGenerator.OnAllPathsUpdated -= UpdateAllLines;
+            pathFindingGenerator.OnPathsCleared -= ClearPaths;
             ClearPaths();
         }
 
@@ -63,6 +64,16 @@ namespace Map.Rendering
         public int PathCount => lineRenderers.Count;
 
         public bool IsEmpty => PathCount == 0;
+
+        public void UpdateLine(Path path, int index = -1) =>
+            lineRenderers[index].Points = PathToLine(path);
+
+        public void UpdateAllLines(Path[] paths)
+        {
+            for (var i = 0; i < paths.Length; i++)
+                if (i >= lineRenderers.Count) AddPath(paths[i]);
+                else UpdateLine(paths[i], i);
+        }
 
         // ============================= MODIFY LIST =============================
 
@@ -100,16 +111,6 @@ namespace Map.Rendering
                 else
                     DestroyImmediate(lineRenderer.gameObject);
             lineRenderers.Clear();
-        }
-
-        public void UpdateLine(Path path, int index = -1) =>
-            lineRenderers[index].Points = PathToLine(path);
-
-        public void UpdateAllLines(Path[] paths)
-        {
-            for (var i = 0; i < paths.Length; i++)
-                if (i >= lineRenderers.Count) AddPath(paths[i]);
-                else UpdateLine(paths[i], i);
         }
 
         // Convierte el Path en las Coordenadas 2D que necesita el UILineRenderer

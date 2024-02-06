@@ -1,6 +1,7 @@
 using System;
 using ExtensionMethods;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Utils;
 
 namespace Map
@@ -17,7 +18,8 @@ namespace Map
         [SerializeField] private GameObject player;
         [SerializeField] private GameObject water;
 
-        public PathGenerator mainPathGenerator;
+        [FormerlySerializedAs("mainPathGenerator")]
+        public PathFindingGenerator mainPathFindingGenerator;
 
         [SerializeField] private MapState mapState;
 
@@ -95,7 +97,7 @@ namespace Map
 
         public void ZoomIn(float zoomAmount = 0.1f) => Zoom += zoomAmount;
 
-        public bool IsLegalPos(Vector2 normPos) => mainPathGenerator.IsLegalPos(normPos);
-        public bool IsLegalPos(Vector3 normPos) => mainPathGenerator.IsLegalPos(normPos);
+        public bool IsLegalPos(Vector2 normPos) => mainPathFindingGenerator.IsLegalPos(normPos);
+        public bool IsLegalPos(Vector3 normPos) => mainPathFindingGenerator.IsLegalPos(normPos);
     }
 }

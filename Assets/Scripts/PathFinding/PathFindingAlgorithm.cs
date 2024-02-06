@@ -130,6 +130,7 @@ namespace PathFinding
         protected PathFindingCache Cache;
 
         protected bool IsCached(Node start, Node end) =>
+            Cache.path != null &&
             Cache.path.Nodes.Length > 0 &&
             Cache.path.Start.Equals(start) &&
             Cache.path.End.Equals(end);

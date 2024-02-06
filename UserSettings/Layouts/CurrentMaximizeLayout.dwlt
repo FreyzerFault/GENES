@@ -508,9 +508,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: 23.82, y: 23.82, z: 26.059998}
+    m_Target: {x: 300.575, y: 540, z: 0}
     speed: 2
-    m_Value: {x: 960, y: 540, z: 0}
+    m_Value: {x: 300.575, y: 540, z: 0}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -556,17 +556,17 @@ MonoBehaviour:
     m_GridAxis: 1
     m_gridOpacity: 0.5
   m_Rotation:
-    m_Target: {x: 0.46159193, y: -0.025276115, z: 0.01315889, w: 0.8866361}
+    m_Target: {x: 0, y: 0, z: 0, w: 1}
     speed: 2
-    m_Value: {x: 0, y: 0, z: 0, w: 1}
+    m_Value: {x: -0, y: 0, z: -0, w: -1}
   m_Size:
-    m_Target: 35.35534
+    m_Target: 563.8256
     speed: 2
-    m_Value: 183.74121
+    m_Value: 563.8256
   m_Ortho:
-    m_Target: 0
+    m_Target: 1
     speed: 2
-    m_Value: 0
+    m_Value: 1
   m_CameraSettings:
     m_Speed: 0.8259
     m_SpeedNormalized: 0.41
@@ -1118,7 +1118,7 @@ MonoBehaviour:
     m_CachedPref: -160
     m_ControlHash: -371814159
     m_PrefName: Preview_InspectorPreview
-  m_LastInspectedObjectInstanceID: 31214
+  m_LastInspectedObjectInstanceID: -1
   m_LastVerticalScrollValue: 0
   m_GlobalObjectId: 
   m_InspectorMode: 0
@@ -1221,7 +1221,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 50}
   m_MaxSize: {x: 16192, y: 8096}
   vertical: 0
-  controlID: 32833
+  controlID: 31561
 --- !u!114 &12
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -1285,9 +1285,9 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: ee790000
-      m_LastClickedID: 31214
-      m_ExpandedIDs: f4fffdffdef9fffff6f9ffff00faffff0afaffff10faffff76faffffdc790000e4790000fc790000
+      m_SelectedIDs: 26790000
+      m_LastClickedID: 31014
+      m_ExpandedIDs: 6cb6ffff84b6ffff8eb6ffff80faffff8afaffff94faffffbefaffffc8fafffffafaffff267900003e79000050790000ce790000d6790000ee790000
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -1382,7 +1382,7 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/My Prefabs/Map
+    - Assets/My Prefabs/Map/Marker
     m_Globs: []
     m_OriginalText: 
     m_ImportLogFlags: 0
@@ -1390,16 +1390,16 @@ MonoBehaviour:
   m_ViewMode: 1
   m_StartGridSize: 96
   m_LastFolders:
-  - Assets/My Prefabs/Map
+  - Assets/My Prefabs/Map/Marker
   m_LastFoldersGridSize: 96
   m_LastProjectPath: C:\Users\dalcanta\Unity Projects\Proyecto Campo
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 47}
-    m_SelectedIDs: 1eca0000
-    m_LastClickedID: 51742
-    m_ExpandedIDs: 00000000a47d0000a67d0000a87d0000aa7d0000ba7d0000d27d000000ca9a3b
+    scrollPos: {x: 0, y: 95}
+    m_SelectedIDs: 4c0b0100
+    m_LastClickedID: 68428
+    m_ExpandedIDs: 00000000a87d0000aa7d0000ac7d0000ae7d0000be7d0000d87d000000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1427,7 +1427,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 00000000a47d0000a67d0000a87d0000aa7d000000ca9a3b
+    m_ExpandedIDs: 00000000a87d0000aa7d0000ac7d0000ae7d000000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1452,9 +1452,9 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
   m_ListAreaState:
-    m_SelectedInstanceIDs: ee790000
-    m_LastClickedInstanceID: 31214
-    m_HadKeyboardFocusLastEvent: 1
+    m_SelectedInstanceIDs: 26790000
+    m_LastClickedInstanceID: 31014
+    m_HadKeyboardFocusLastEvent: 0
     m_ExpandedInstanceIDs: 
     m_RenameOverlay:
       m_UserAcceptedRename: 0
@@ -1471,7 +1471,7 @@ MonoBehaviour:
       m_IsRenaming: 0
       m_OriginalEventType: 11
       m_IsRenamingFilename: 1
-      m_ClientGUIView: {fileID: 14}
+      m_ClientGUIView: {fileID: 3}
     m_CreateAssetUtility:
       m_EndAction: {fileID: 0}
       m_InstanceID: 0
@@ -1479,7 +1479,7 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
     m_NewAssetIndexInList: -1
-    m_ScrollPosition: {x: 0, y: 240}
+    m_ScrollPosition: {x: 0, y: 179}
     m_GridSize: 96
   m_SkipHiddenPackages: 0
   m_DirectoriesAreaWidth: 145
@@ -1546,4 +1546,4 @@ MonoBehaviour:
     m_OverlaysVisible: 1
   m_LockTracker:
     m_IsLocked: 0
-  m_LastSelectedObjectID: 31214
+  m_LastSelectedObjectID: 31056

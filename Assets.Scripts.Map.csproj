@@ -48,9 +48,11 @@
     <Compile Include="Assets\Scripts\Map\PathGenerator.cs" />
     <Compile Include="Assets\Scripts\Map\MarkerManager.cs" />
     <Compile Include="Assets\Scripts\Map\MarkerStorageSO.cs" />
+    <Compile Include="Assets\Scripts\Map\DirectPathGenerator.cs" />
     <Compile Include="Assets\Scripts\Map\MapInputController.cs" />
     <Compile Include="Assets\Scripts\Map\MapManager.cs" />
     <Compile Include="Assets\Scripts\Map\Marker.cs" />
+    <Compile Include="Assets\Scripts\Map\PathFindingGenerator.cs" />
     <None Include="Assets\Scripts\Map\Assets.Scripts.Map.asmdef" />
     <Reference Include="UnityEngine">
       <HintPath>C:\Program Files\Unity\Hub\Editor\2022.3.16f1\Editor\Data\Managed\UnityEngine\UnityEngine.dll</HintPath>

@@ -4,24 +4,19 @@ using System.Linq;
 using ExtensionMethods;
 using MyBox;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Gradient = UnityEngine.Gradient;
 
 namespace Map.Rendering
 {
-    public class MapRendererUI : MonoBehaviour, IPointerClickHandler
+    public class MapRendererUI : MonoBehaviour
     {
         [SerializeField] private float zoomScale = 2;
 
         public Gradient heightGradient = new();
 
-        [SerializeField] private bool interactable = true;
-
-
-        // LINE Renderers
+        // PATH Renderer
         [SerializeField] private PathRendererUI pathRenderer;
-
         [SerializeField] private int lineDefaultThickness = 7;
 
         // Icono del Player
@@ -30,12 +25,13 @@ namespace Map.Rendering
         // MARKERS
         [SerializeField] private Transform markersUIParent;
         [SerializeField] private MarkerUI markerUIPrefab;
+
+        [SerializeField] private RawImage image;
+
+        [SerializeField] protected RectTransform RectTransform;
         private readonly List<MarkerUI> _markersUIObjects = new();
 
-        private RectTransform _rectTransform;
-
-
-        private MarkerManager MarkerManager => MarkerManager.Instance;
+        protected MarkerManager MarkerManager => MarkerManager.Instance;
 
         public float ZoomScale
         {
@@ -47,10 +43,8 @@ namespace Map.Rendering
             }
         }
 
-        private RawImage Image { get; set; }
-
-        private float ImageWidth => Image.rectTransform.rect.width;
-        private float ImageHeight => Image.rectTransform.rect.height;
+        private float ImageWidth => image.rectTransform.rect.width;
+        private float ImageHeight => image.rectTransform.rect.height;
         private Vector2 ImageSize => new(ImageWidth, ImageHeight);
 
         private Vector2 OriginPoint
@@ -58,7 +52,7 @@ namespace Map.Rendering
             get
             {
                 var corners = new Vector3[4];
-                Image.rectTransform.GetWorldCorners(corners);
+                image.rectTransform.GetWorldCorners(corners);
                 return corners[0];
             }
         }
@@ -66,19 +60,18 @@ namespace Map.Rendering
         // ================================== UNITY ==================================
         private void Awake()
         {
-            Image = GetComponent<RawImage>();
+            image = GetComponent<RawImage>();
             pathRenderer = GetComponentInChildren<PathRendererUI>();
         }
 
         private void Start()
         {
-            _rectTransform = GetComponent<RectTransform>();
+            RectTransform = GetComponent<RectTransform>();
 
             // SUBSCRIBERS:
             MarkerManager.OnMarkerAdded += HandleAdded;
             MarkerManager.OnMarkerRemoved += HandleRemoved;
             MarkerManager.OnMarkersClear += HandleClear;
-
 
             // RENDER
             RenderTerrain();
@@ -102,54 +95,16 @@ namespace Map.Rendering
         }
 
 
-        // ================================== MOUSE EVENTS ==================================
-        public void OnPointerClick(PointerEventData eventData)
-        {
-            if (MarkerManager.EditMarkerMode == EditMarkerMode.None) return;
-
-            // [0,1] Position
-            var normalizedPosition = _rectTransform.ScreenToNormalizedPoint(eventData.position);
-
-            switch (MarkerManager.EditMarkerMode)
-            {
-                case EditMarkerMode.Add:
-                    if (MapManager.Instance.IsLegalPos(normalizedPosition))
-                        MarkerManager.AddOrSelectMarker(normalizedPosition);
-                    break;
-                case EditMarkerMode.Delete:
-                    MarkerManager.RemoveMarker();
-                    break;
-                case EditMarkerMode.Select:
-                    MarkerManager.ToggleSelectMarker();
-                    break;
-                case EditMarkerMode.None:
-                default:
-                    break;
-            }
-        }
-
         // ================================== EVENT SUSCRIBERS ==================================
-        private void HandleAdded(Marker marker, int index)
-        {
-            InstantiateMarker(marker, index);
-        }
-
-        private void HandleRemoved(Marker marker, int index)
-        {
-            DestroyMarkerUI(index);
-        }
-
-        private void HandleClear()
-        {
-            ClearMarkersUI();
-        }
-
+        private void HandleAdded(Marker marker, int index) => InstantiateMarker(marker, index);
+        private void HandleRemoved(Marker marker, int index) => DestroyMarkerUI(index);
+        private void HandleClear() => ClearMarkersUI();
 
         // ================================== TERRAIN VISUALIZATION ==================================
         private void RenderTerrain()
         {
             // Create Texture of Map
-            Image.texture =
+            image.texture =
                 MapManager.Terrain.ToTexture((int)ImageWidth, (int)ImageHeight, heightGradient);
         }
 
@@ -179,26 +134,23 @@ namespace Map.Rendering
             displacement.y = Mathf.Min(distanceToBotLeft.y, displacement.y);
 
             // Pivot reajustado
-            Image.rectTransform.pivot = pivot;
-            Image.rectTransform.anchoredPosition = displacement;
+            image.rectTransform.pivot = pivot;
+            image.rectTransform.anchoredPosition = displacement;
         }
 
         private void Zoom()
         {
             // Escalar el mapa relativo al centro donde está el Player
-            Image.rectTransform.localScale = new Vector3(zoomScale, zoomScale, 1);
+            image.rectTransform.localScale = new Vector3(zoomScale, zoomScale, 1);
 
             // La flecha del player se escala al revés para que no se vea afectada por el zoom
             playerSprite.localScale = new Vector3(1 / zoomScale, 1 / zoomScale, 1);
-
 
             // Line Thickness
             pathRenderer.LineThickness = lineDefaultThickness / zoomScale;
         }
 
-
         // ================================== MARKERS ==================================
-
         private void ClearMarkersUI()
         {
             GetComponentsInChildren<MarkerUI>().ToList().ForEach(marker =>
@@ -242,14 +194,10 @@ namespace Map.Rendering
             markersUIParent.gameObject.SetActive(value);
         }
 
-
-        // ================================== MOUSE MARKER ==================================
-
-
 #if UNITY_EDITOR
         // ================================== BUTTONS on INSPECTOR ==================================
         [ButtonMethod]
-        private void UpdateMap()
+        protected void UpdateMap()
         {
             RenderTerrain();
             Zoom();
@@ -258,20 +206,19 @@ namespace Map.Rendering
 
         // BUTTONS
         [ButtonMethod]
-        private void UpdatePlayerPointInMap()
+        protected void UpdatePlayerPointInMap()
         {
             UpdatePlayerPoint();
         }
 
         [ButtonMethod]
-        private void ZoomMapToPlayerPosition()
+        protected void ZoomMapToPlayerPosition()
         {
             Zoom();
         }
 
-
         [ButtonMethod]
-        private void ReRenderTerrainButton()
+        protected void ReRenderTerrain()
         {
             RenderTerrain();
         }

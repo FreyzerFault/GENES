@@ -20,6 +20,8 @@ namespace PathFinding.A_Star
             Func<Node, Node, PathFindingConfigSO, float> costFunction,
             Func<Node, Node, PathFindingConfigSO, float> heuristicFunction)
         {
+            if (start.Collision(end)) return Path.EmptyPath;
+
             // Si el Path de Cache tiene mismo inicio y fin => Devolverlo
             if (paramsConfig.useCache && IsCached(start, end)) return Cache.path;
 

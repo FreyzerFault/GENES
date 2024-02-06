@@ -52,6 +52,7 @@
     <Compile Include="Assets\Scripts\Map\Rendering\PathObject.cs" />
     <Compile Include="Assets\Scripts\Map\Rendering\IPathRenderer.cs" />
     <Compile Include="Assets\Scripts\Map\Rendering\MapRendererUI.cs" />
+    <Compile Include="Assets\Scripts\Map\Rendering\MapRendererUIEditable.cs" />
     <Compile Include="Assets\Scripts\Map\Rendering\MouseCursorInMap.cs" />
     <Compile Include="Assets\Scripts\Map\Rendering\PathRenderer3D.cs" />
     <None Include="Assets\Scripts\Map\Rendering\Assets.Scripts.Map.Rendering.asmdef" />

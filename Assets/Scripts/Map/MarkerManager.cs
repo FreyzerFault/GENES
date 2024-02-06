@@ -58,13 +58,6 @@ namespace Map
         public int HoveredMarkerIndex => markersStorage.HoveredIndex;
         public bool AnyHovered => markersStorage.AnyHovered;
 
-        private void Update()
-        {
-            // SHIFT => Remove Mode
-            var shiftPressed = Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.LeftShift);
-            EditMarkerMode = shiftPressed ? EditMarkerMode.Delete : EditMarkerMode.Add;
-        }
-
         public event Action<EditMarkerMode> OnMarkerModeChanged;
 
 
@@ -76,10 +69,8 @@ namespace Map
         public event Action OnMarkersClear;
         public event Action<Marker> OnMarkerSelected;
 
-        public int FindIndex(Marker marker)
-        {
-            return Markers.FindIndex(m => ReferenceEquals(m, marker));
-        }
+        private int FindIndex(Marker marker) =>
+            Markers.FindIndex(m => ReferenceEquals(m, marker));
 
         // Buscar el Marcador dentro de un radio de colision (el mas cercano si hay varios)
         public int FindIndex(Vector2 normalizedPos)
@@ -89,12 +80,6 @@ namespace Map
                 if (Markers[i].IsAtPoint(normalizedPos))
                     collisions.Add(i);
 
-            IComparer<int> comparer = Comparer<int>.Create((index1, index2) =>
-                Markers[index1].DistanceTo(normalizedPos) <
-                Markers[index2].DistanceTo(normalizedPos)
-                    ? -1
-                    : 1);
-
             // No hay => -1
             // Hay mas de 1 => El mas cercano
             return
@@ -102,7 +87,7 @@ namespace Map
                 {
                     0 => -1,
                     1 => collisions[0],
-                    _ => collisions.OrderBy(index => Markers[index].DistanceTo(normalizedPos)).First()
+                    _ => collisions.OrderBy(index => Markers[index].Distance2D(normalizedPos)).First()
                 };
         }
 
@@ -127,7 +112,7 @@ namespace Map
                 }
         }
 
-        private Marker AddMarker(Vector2 normalizedPos, int index = -1)
+        public Marker AddMarker(Vector2 normalizedPos, int index = -1)
         {
             if (index < 0 || index > MarkerCount) index = MarkerCount;
 
@@ -177,10 +162,10 @@ namespace Map
             return marker;
         }
 
-        public Marker RemoveMarker()
-        {
-            var index = HoveredMarkerIndex;
+        public Marker RemoveHoveredMarker() => RemoveMarker(HoveredMarkerIndex);
 
+        public Marker RemoveMarker(int index)
+        {
             var marker = markersStorage.Remove(index);
 
             if (marker == null) return null;
@@ -195,7 +180,7 @@ namespace Map
             return marker;
         }
 
-        private Marker ToggleSelectMarker(int index)
+        public Marker ToggleSelectMarker(int index)
         {
             if (index < 0 || index >= MarkerCount) return null;
 
@@ -236,14 +221,28 @@ namespace Map
             ToggleSelectMarker(HoveredMarkerIndex);
         }
 
-        private void SelectMarker(Marker marker)
+        public void SelectMarker(int index)
+        {
+            if (index < 0 || index >= MarkerCount) return;
+
+            SelectMarker(Markers[index]);
+        }
+
+        public void SelectMarker(Marker marker)
         {
             marker.Selected = true;
             OnMarkerSelected?.Invoke(marker);
             Log("Point selected: " + marker.LabelText);
         }
 
-        private void DeselectMarker(Marker marker)
+        public void DeselectMarker(int index)
+        {
+            if (index < 0 || index >= MarkerCount) return;
+
+            DeselectMarker(Markers[index]);
+        }
+
+        public void DeselectMarker(Marker marker)
         {
             marker.Selected = false;
             OnMarkerDeselected?.Invoke(marker);
@@ -256,21 +255,31 @@ namespace Map
             OnAllMarkerDeselected?.Invoke();
         }
 
+        public Marker MoveMarker(int index, Vector2 targetPos)
+        {
+            if (index < 0 || index >= MarkerCount) return null;
+
+            var marker = Markers[index];
+
+            // Move position
+            marker.NormalizedPosition = targetPos;
+
+            Log("Point moved: " + marker.LabelText);
+            OnMarkerMoved?.Invoke(marker, index);
+
+            return marker;
+        }
+
         public Marker MoveSelectedMarker(Vector2 targetPos)
         {
             var selectedIndex = markersStorage.SelectedIndex;
-            var selected = markersStorage.markers[selectedIndex];
 
-            // Move position
-            selected.NormalizedPosition = targetPos;
+            var moved = MoveMarker(selectedIndex, targetPos);
 
             // Deselect cuando se haya movido
-            selected.Selected = false;
+            moved.Selected = false;
 
-            Log("Point moved: " + selected.LabelText);
-            OnMarkerMoved?.Invoke(selected, selectedIndex);
-
-            return selected;
+            return moved;
         }
 
         public void CheckMarker(int index)

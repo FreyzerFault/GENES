@@ -97,17 +97,17 @@ namespace Map
         // Collision Test
         public bool Collide(Marker marker) => Distance2D(marker) < CollisionRadius;
 
-        public bool IsAtPoint(Vector2 normalizedPos) => DistanceTo(normalizedPos) < CollisionRadius;
+        public bool IsAtPoint(Vector2 normalizedPos) => Distance2D(normalizedPos) < CollisionRadius;
 
         // 2D Distance
-        public float DistanceTo(Vector2 normalizedPos) => Vector2.Distance(NormalizedPosition, normalizedPos);
+        public float Distance2D(Vector2 normalizedPos) => Vector2.Distance(NormalizedPosition, normalizedPos);
 
-        public float Distance2D(Marker marker) => DistanceTo(marker.NormalizedPosition);
+        public float Distance2D(Marker marker) => Distance2D(marker.NormalizedPosition);
 
         // 3D Distance
-        public float DistanceTo(Vector3 globalPos) => Vector3.Distance(WorldPosition, globalPos);
+        public float Distance3D(Vector3 globalPos) => Vector3.Distance(WorldPosition, globalPos);
 
-        public float Distance3D(Marker marker) => DistanceTo(marker.WorldPosition);
+        public float Distance3D(Marker marker) => Distance3D(marker.WorldPosition);
     }
 
     [Serializable]

@@ -17,6 +17,13 @@ namespace Map
             MapManager.Instance.OnStateChanged += HandleStateChanged;
         }
 
+        private void Update()
+        {
+            // SHIFT => Remove Mode
+            var shiftPressed = Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.LeftShift);
+            MarkerManager.Instance.EditMarkerMode = shiftPressed ? EditMarkerMode.Delete : EditMarkerMode.Add;
+        }
+
         private void OnDestroy()
         {
             MapManager.Instance.OnStateChanged -= HandleStateChanged;

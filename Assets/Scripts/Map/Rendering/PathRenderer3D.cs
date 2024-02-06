@@ -16,6 +16,7 @@ namespace Map.Rendering
         // PATH
         [SerializeField] private float heightOffset = 0.5f;
         [SerializeField] private float lineThickness = 1f;
+        [SerializeField] private PathGenerator pathFindingGenerator;
 
 
         public float LineThickness
@@ -32,27 +33,39 @@ namespace Map.Rendering
         // ============================= INITIALIZATION =============================
         private void Start()
         {
-            PathGenerator.Instance.OnPathAdded += AddPath;
-            PathGenerator.Instance.OnPathDeleted += RemovePath;
-            PathGenerator.Instance.OnPathUpdated += UpdateLine;
-            PathGenerator.Instance.OnAllPathsUpdated += UpdateAllLines;
-            PathGenerator.Instance.OnPathsCleared += ClearPaths;
-            UpdateAllLines(PathGenerator.Instance.paths.ToArray());
+            pathFindingGenerator.OnPathAdded += AddPath;
+            pathFindingGenerator.OnPathDeleted += RemovePath;
+            pathFindingGenerator.OnPathUpdated += UpdateLine;
+            pathFindingGenerator.OnAllPathsUpdated += UpdateAllLines;
+            pathFindingGenerator.OnPathsCleared += ClearPaths;
+            UpdateAllLines(pathFindingGenerator.paths.ToArray());
         }
 
         private void OnDestroy()
         {
-            PathGenerator.Instance.OnPathAdded -= AddPath;
-            PathGenerator.Instance.OnPathDeleted -= RemovePath;
-            PathGenerator.Instance.OnPathUpdated -= UpdateLine;
-            PathGenerator.Instance.OnAllPathsUpdated -= UpdateAllLines;
-            PathGenerator.Instance.OnPathsCleared -= ClearPaths;
+            pathFindingGenerator.OnPathAdded -= AddPath;
+            pathFindingGenerator.OnPathDeleted -= RemovePath;
+            pathFindingGenerator.OnPathUpdated -= UpdateLine;
+            pathFindingGenerator.OnAllPathsUpdated -= UpdateAllLines;
+            pathFindingGenerator.OnPathsCleared -= ClearPaths;
             ClearPaths();
         }
 
         public int PathCount => pathObjects.Count;
 
         public bool IsEmpty => PathCount == 0;
+
+        public void UpdateLine(Path path, int index) =>
+            pathObjects[index].Path = path;
+
+        public void UpdateAllLines(Path[] paths)
+        {
+            for (var i = 0; i < paths.Length; i++)
+                if (i >= pathObjects.Count) AddPath(paths[i]);
+                else UpdateLine(paths[i], i);
+
+            UpdateColors();
+        }
 
 
         // ============================= MODIFY PATH RENDERERS =============================
@@ -95,18 +108,6 @@ namespace Map.Rendering
                 else
                     DestroyImmediate(pathObject.gameObject);
             pathObjects.Clear();
-        }
-
-        public void UpdateLine(Path path, int index) =>
-            pathObjects[index].Path = path;
-
-        public void UpdateAllLines(Path[] paths)
-        {
-            for (var i = 0; i < paths.Length; i++)
-                if (i >= pathObjects.Count) AddPath(paths[i]);
-                else UpdateLine(paths[i], i);
-
-            UpdateColors();
         }
 
 

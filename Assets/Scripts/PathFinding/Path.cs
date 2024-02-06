@@ -81,6 +81,16 @@ namespace PathFinding
                 .Select(pos => new Node(pos))
                 .ToArray();
 
+        public static Path operator +(Path a, Path b)
+        {
+            if (a.IsEmpty) return b;
+            if (b.IsEmpty) return a;
+
+            b.Start.Parent = a.End.Equals(b.Start) ? a.End.Parent : a.End;
+
+            return new Path(a.Start, b.End);
+        }
+
         #region DEBUG INFO
 
         // FOR DEBUGGING
