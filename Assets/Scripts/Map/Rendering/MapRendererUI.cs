@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using ExtensionMethods;
@@ -11,13 +10,7 @@ namespace Map.Rendering
 {
     public class MapRendererUI : MonoBehaviour
     {
-        [SerializeField] private float zoomScale = 2;
-
         public Gradient heightGradient = new();
-
-        // PATH Renderer
-        [SerializeField] private PathRendererUI pathRenderer;
-        [SerializeField] private int lineDefaultThickness = 7;
 
         // Icono del Player
         [SerializeField] private RectTransform playerSprite;
@@ -26,56 +19,46 @@ namespace Map.Rendering
         [SerializeField] private Transform markersUIParent;
         [SerializeField] private MarkerUI markerUIPrefab;
 
+        // Image
         [SerializeField] private RawImage image;
-
-        [SerializeField] protected RectTransform RectTransform;
         private readonly List<MarkerUI> _markersUIObjects = new();
+        protected RectTransform FrameRectTransform;
+        protected RectTransform ImageRectTransform;
+        private float ImageWidth => image.rectTransform.rect.width * image.rectTransform.localScale.x;
+        private float ImageHeight => image.rectTransform.rect.height * image.rectTransform.localScale.y;
+        private Vector2 ImageSize => new(ImageWidth, ImageHeight);
+
+        private float ZoomScale => MapManager.Instance.Zoom;
 
         protected MarkerManager MarkerManager => MarkerManager.Instance;
 
-        public float ZoomScale
-        {
-            get => zoomScale;
-            set
-            {
-                zoomScale = value;
-                Zoom();
-            }
-        }
-
-        private float ImageWidth => image.rectTransform.rect.width;
-        private float ImageHeight => image.rectTransform.rect.height;
-        private Vector2 ImageSize => new(ImageWidth, ImageHeight);
 
         private Vector2 OriginPoint
         {
             get
             {
                 var corners = new Vector3[4];
-                image.rectTransform.GetWorldCorners(corners);
+                ImageRectTransform.GetWorldCorners(corners);
                 return corners[0];
             }
         }
 
         // ================================== UNITY ==================================
-        private void Awake()
-        {
-            image = GetComponent<RawImage>();
-            pathRenderer = GetComponentInChildren<PathRendererUI>();
-        }
 
         private void Start()
         {
-            RectTransform = GetComponent<RectTransform>();
+            ImageRectTransform = image.GetComponent<RectTransform>();
+            FrameRectTransform = ImageRectTransform.parent.GetComponent<RectTransform>();
 
             // SUBSCRIBERS:
             MarkerManager.OnMarkerAdded += HandleAdded;
             MarkerManager.OnMarkerRemoved += HandleRemoved;
             MarkerManager.OnMarkersClear += HandleClear;
+            MapManager.Instance.OnZoomChanged += HandleZoomChange;
 
             // RENDER
             RenderTerrain();
-            Zoom();
+            Zoom(ZoomScale);
 
             // MARKERS
             UpdateMarkers();
@@ -92,6 +75,33 @@ namespace Map.Rendering
             MarkerManager.OnMarkerAdded -= HandleAdded;
             MarkerManager.OnMarkerRemoved -= HandleRemoved;
             MarkerManager.OnMarkersClear -= HandleClear;
+            MapManager.Instance.OnZoomChanged -= HandleZoomChange;
+        }
+
+        private void OnDrawGizmos()
+        {
+            var playerLocalPos = FrameRectTransform.InverseTransformPoint(playerSprite.position);
+            var frameSize = FrameRectTransform.rect.size;
+            var frameCenter = frameSize / 2;
+            var displacement = frameCenter + (Vector2)playerLocalPos;
+            var mapSizeDif = ImageSize - frameSize;
+
+            displacement.x = Mathf.Clamp(displacement.x, -mapSizeDif.x, mapSizeDif.x);
+            displacement.y = Mathf.Clamp(displacement.y, -mapSizeDif.y, mapSizeDif.y);
+
+            Gizmos.color = Color.white;
+            Gizmos.DrawRay(FrameRectTransform.position + playerLocalPos, displacement);
+            Gizmos.color = Color.blue;
+            Gizmos.DrawRay(FrameRectTransform.position + playerLocalPos, frameCenter - (Vector2)playerLocalPos);
+            Gizmos.color = Color.red;
+            Gizmos.DrawRay(FrameRectTransform.position + playerLocalPos, mapSizeDif);
+
+
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(FrameRectTransform,
+                Input.mousePosition, null, out var localMousePosition);
+
+            Gizmos.color = Color.red;
+            Gizmos.DrawSphere(FrameRectTransform.position + playerLocalPos, 20);
         }
 
 
@@ -111,43 +121,37 @@ namespace Map.Rendering
         // ================================== PLAYER POINT ==================================
         private void UpdatePlayerPoint()
         {
-            playerSprite.anchoredPosition = MapManager.Instance.PlayerNormalizedPosition * ImageSize;
+            playerSprite.anchoredPosition = MapManager.Instance.PlayerNormalizedPosition * FrameRectTransform.rect.size;
             playerSprite.rotation = MapManager.Instance.PlayerRotationForUI;
 
-            CenterPlayerInZoomedMap();
+            Zoom(ZoomScale);
         }
 
-        private void CenterPlayerInZoomedMap()
+        private void HandleZoomChange(float zoom)
         {
-            if (Math.Abs(zoomScale - 1) < 0.01f) return;
-
-            // Centrar el Player en el centro del minimapa por medio de su pivot
-            var pivot = MapManager.Instance.PlayerNormalizedPosition;
-
-            // Tamaño del minimapa escalado y Normalizado
-            var mapSizeScaled = ImageSize * zoomScale;
-            var displacement = ImageSize / 3;
-
-            // La distancia a los bordes del minimapa no puede ser menor a la mitad del minimapa
-            var distanceToBotLeft = MapManager.Instance.PlayerNormalizedPosition * mapSizeScaled;
-            displacement.x = Mathf.Min(distanceToBotLeft.x, displacement.x);
-            displacement.y = Mathf.Min(distanceToBotLeft.y, displacement.y);
-
-            // Pivot reajustado
-            image.rectTransform.pivot = pivot;
-            image.rectTransform.anchoredPosition = displacement;
+            Zoom(zoom);
         }
 
-        private void Zoom()
+        private void Zoom(float zoom)
         {
+            // Posicion y Escalado relativos al jugador
+            image.rectTransform.pivot = MapManager.Instance.PlayerNormalizedPosition;
+
+            // Posicionar el mapa en el centro del frame
+            var newPosition = FrameRectTransform.TransformPoint(FrameRectTransform.rect.size / 2);
+            var distanceToLowerCorner = (Vector3)ImageRectTransform.rect.min - FrameRectTransform.position;
+            distanceToLowerCorner.x = Mathf.Max(distanceToLowerCorner.x, 0);
+            distanceToLowerCorner.y = Mathf.Max(distanceToLowerCorner.y, 0);
+            newPosition -= distanceToLowerCorner;
+
+            ImageRectTransform.position = newPosition;
+
+
             // Escalar el mapa relativo al centro donde está el Player
-            image.rectTransform.localScale = new Vector3(zoomScale, zoomScale, 1);
+            image.rectTransform.localScale = new Vector3(zoom, zoom, 1);
 
             // La flecha del player se escala al revés para que no se vea afectada por el zoom
-            playerSprite.localScale = new Vector3(1 / zoomScale, 1 / zoomScale, 1);
-
-            // Line Thickness
-            pathRenderer.LineThickness = lineDefaultThickness / zoomScale;
+            playerSprite.localScale = new Vector3(1 / zoom, 1 / zoom, 1);
         }
 
         // ================================== MARKERS ==================================
@@ -200,7 +204,7 @@ namespace Map.Rendering
         protected void UpdateMap()
         {
             RenderTerrain();
-            Zoom();
+            Zoom(ZoomScale);
             UpdatePlayerPoint();
         }
 
@@ -214,7 +218,7 @@ namespace Map.Rendering
         [ButtonMethod]
         protected void ZoomMapToPlayerPosition()
         {
-            Zoom();
+            Zoom(ZoomScale);
         }
 
         [ButtonMethod]

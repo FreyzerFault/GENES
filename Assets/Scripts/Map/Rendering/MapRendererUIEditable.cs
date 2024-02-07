@@ -31,7 +31,7 @@ namespace Map.Rendering
 
         public void OnPointerDown(PointerEventData eventData)
         {
-            HandleStartDrag(RectTransform.ScreenToNormalizedPoint(eventData.position));
+            HandleStartDrag(ImageRectTransform.ScreenToNormalizedPoint(eventData.position));
         }
 
         public void OnPointerUp(PointerEventData eventData)
@@ -40,7 +40,7 @@ namespace Map.Rendering
             if (eventData.button != PointerEventData.InputButton.Left) return;
 
             var editMarkerModeIsAdd = MarkerManager.EditMarkerMode == EditMarkerMode.Add;
-            var normalizedPosition = RectTransform.ScreenToNormalizedPoint(eventData.position);
+            var normalizedPosition = FrameRectTransform.ScreenToNormalizedPoint(eventData.position);
 
             // Si no se arrastra una distancia minima o no es legal -> Ignorar el drag
             var canDrag = editMarkerModeIsAdd &&
@@ -110,18 +110,11 @@ namespace Map.Rendering
         {
             MarkerManager.MoveMarker(_markerDraggedIndex, normalizedPosition);
             MarkerManager.DeselectMarker(_markerDraggedIndex);
-
-            if (_markerPlaceholderDragged == null) return;
-
-            if (Application.isEditor)
-                DestroyImmediate(_markerPlaceholderDragged);
-            else
-                Destroy(_markerPlaceholderDragged);
         }
 
         private void HandleDrag(Vector2 mousePosition)
         {
-            var localPoint = RectTransform.ScreenToLocalPoint(mousePosition);
+            var localPoint = ImageRectTransform.ScreenToLocalPoint(mousePosition);
 
             // Spawn Marker placeholder para que el usuario sepa que lo está moviendo
             if (_markerPlaceholderDragged == null)
@@ -131,7 +124,7 @@ namespace Map.Rendering
                     Quaternion.identity,
                     transform
                 );
-            else if (IsLegalPos(RectTransform.LocalToNormalizedPoint(localPoint)))
+            else if (IsLegalPos(ImageRectTransform.LocalToNormalizedPoint(localPoint)))
                 _markerPlaceholderDragged.GetComponent<RectTransform>().anchoredPosition = localPoint;
         }
 
@@ -139,6 +132,13 @@ namespace Map.Rendering
         {
             _markerDraggedIndex = -1;
             _isDragging = false;
+
+            if (_markerPlaceholderDragged == null) return;
+
+            if (Application.isEditor)
+                DestroyImmediate(_markerPlaceholderDragged);
+            else
+                Destroy(_markerPlaceholderDragged);
         }
     }
 }

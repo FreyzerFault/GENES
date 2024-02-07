@@ -48,7 +48,9 @@ MonoBehaviour:
   pathObjPrefab: {fileID: 3814266642017431954, guid: fcde28d035aa48747893a9071f6f9688, type: 3}
   pathObjects: []
   heightOffset: 0.5
-  lineThickness: 0.5
+  lineThickness: 0.1
+  color: {r: 0.2735849, g: 0.2735849, b: 0.2735849, a: 1}
+  pathFindingGenerator: {fileID: 0}
 --- !u!114 &4951823689424986327
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -63,3 +65,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   paths: []
   generatePlayerPath: 1
+  singlePath: 0

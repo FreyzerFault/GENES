@@ -25,15 +25,25 @@ namespace Map.Rendering
             set => marker = value;
         }
 
+        private void Awake()
+        {
+            _mapRendererUI = GetComponentInParent<MapRendererUI>();
+            _rectTransform = GetComponent<RectTransform>();
+            _text = GetComponentInChildren<TMP_Text>();
+            _image = GetComponentInChildren<Image>();
+        }
+
         private void Start()
         {
-            Initialize();
+            UpdatePos(marker.NormalizedPosition);
+            UpdateAspect();
 
             marker.OnLabelChange += HandleOnLabelChange;
             marker.OnPositionChange += HandleOnPositionChange;
             marker.OnSelected += HandleOnSelected;
             marker.OnStateChange += HandleOnStateChange;
             MarkerManager.Instance.OnMarkerModeChanged += HandleOnEditMarkerModeChange;
+            MapManager.Instance.OnZoomChanged += HandleOnZoomChange;
         }
 
         private void OnDestroy()
@@ -43,6 +53,7 @@ namespace Map.Rendering
             marker.OnSelected -= HandleOnSelected;
             marker.OnStateChange -= HandleOnStateChange;
             MarkerManager.Instance.OnMarkerModeChanged -= HandleOnEditMarkerModeChange;
+            MapManager.Instance.OnZoomChanged -= HandleOnZoomChange;
         }
 
         public void OnPointerEnter(PointerEventData eventData)
@@ -57,24 +68,12 @@ namespace Map.Rendering
             UpdateAspect();
         }
 
-        private void Initialize()
-        {
-            _mapRendererUI = GetComponentInParent<MapRendererUI>();
-            _rectTransform = GetComponent<RectTransform>();
-            _text = GetComponentInChildren<TMP_Text>();
-            _image = GetComponentInChildren<Image>();
-
-            _text.text = marker.LabelText;
-            _image.color = MarkerManager.Instance.defaultColor;
-
-            UpdatePos(marker.NormalizedPosition);
-            UpdateAspect();
-        }
-
         private void HandleOnPositionChange(Vector2 pos) => UpdatePos(pos);
         private void HandleOnSelected(bool selected) => UpdateAspect();
         private void HandleOnStateChange(MarkerState state) => UpdateAspect();
         private void HandleOnEditMarkerModeChange(EditMarkerMode mode) => UpdateAspect();
+        private void HandleOnZoomChange(float modezoom) => UpdateScaleByZoom();
+        private void HandleOnLabelChange(string label) => _text.text = label;
 
         private void UpdatePos(Vector2 normalizePos)
         {
@@ -85,18 +84,20 @@ namespace Map.Rendering
             // Move to Local Pos in Map
             var localPoint = _mapRendererUI.GetComponent<RectTransform>().NormalizedToLocalPoint(normalizePos);
             _rectTransform.anchoredPosition = localPoint;
-
-            // Inverse Zoom to mantain size
-            _rectTransform.localScale /= _mapRendererUI.ZoomScale;
         }
 
-        private void HandleOnLabelChange(string label)
+        private void UpdateScaleByZoom()
         {
-            _text.text = label;
+            // Inverse Zoom to mantain size
+            _rectTransform.localScale = Vector3.one / MapManager.Instance.Zoom;
         }
+
 
         private void UpdateAspect()
         {
+            // LABEL
+            _text.text = marker.LabelText;
+
             var mm = MarkerManager.Instance;
 
             // SCALE

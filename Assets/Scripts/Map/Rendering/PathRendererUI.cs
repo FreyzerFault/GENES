@@ -10,8 +10,6 @@ namespace Map.Rendering
 {
     public class PathRendererUI : MonoBehaviour, IPathRenderer<UILineRenderer>
     {
-        [SerializeField] private PathGenerator pathFindingGenerator;
-
         // RENDERER
         [SerializeField] protected UILineRenderer linePrefab;
         [SerializeField] protected List<UILineRenderer> lineRenderers = new();
@@ -20,6 +18,7 @@ namespace Map.Rendering
 
         private MapRendererUI _mapRendererUI;
         private Terrain _terrain;
+        private static PathGenerator PathFindingGenerator => MapManager.Instance.mainPathFindingGenerator;
 
         private RectTransform MapRectTransform => _mapRendererUI.GetComponent<RectTransform>();
 
@@ -42,24 +41,26 @@ namespace Map.Rendering
 
         private void Start()
         {
-            pathFindingGenerator.OnPathAdded += AddPath;
-            pathFindingGenerator.OnPathDeleted += RemovePath;
-            pathFindingGenerator.OnPathUpdated += UpdateLine;
-            pathFindingGenerator.OnAllPathsUpdated += UpdateAllLines;
-            pathFindingGenerator.OnPathsCleared += ClearPaths;
-            UpdateAllLines(pathFindingGenerator.paths.ToArray());
+            PathFindingGenerator.OnPathAdded += AddPath;
+            PathFindingGenerator.OnPathDeleted += RemovePath;
+            PathFindingGenerator.OnPathUpdated += UpdateLine;
+            PathFindingGenerator.OnAllPathsUpdated += UpdateAllLines;
+            PathFindingGenerator.OnPathsCleared += ClearPaths;
+            MapManager.Instance.OnZoomChanged += HandleOnZoomChange;
+            UpdateAllLines(PathFindingGenerator.paths.ToArray());
         }
+
 
         private void OnDestroy()
         {
-            pathFindingGenerator.OnPathAdded -= AddPath;
-            pathFindingGenerator.OnPathDeleted -= RemovePath;
-            pathFindingGenerator.OnPathUpdated -= UpdateLine;
-            pathFindingGenerator.OnAllPathsUpdated -= UpdateAllLines;
-            pathFindingGenerator.OnPathsCleared -= ClearPaths;
+            PathFindingGenerator.OnPathAdded -= AddPath;
+            PathFindingGenerator.OnPathDeleted -= RemovePath;
+            PathFindingGenerator.OnPathUpdated -= UpdateLine;
+            PathFindingGenerator.OnAllPathsUpdated -= UpdateAllLines;
+            PathFindingGenerator.OnPathsCleared -= ClearPaths;
+            MapManager.Instance.OnZoomChanged -= HandleOnZoomChange;
             ClearPaths();
         }
-
 
         public int PathCount => lineRenderers.Count;
 
@@ -111,6 +112,11 @@ namespace Map.Rendering
                 else
                     DestroyImmediate(lineRenderer.gameObject);
             lineRenderers.Clear();
+        }
+
+        private void HandleOnZoomChange(float zoomAmount)
+        {
+            foreach (var uiLineRenderer in lineRenderers) uiLineRenderer.LineThickness = lineThickness / zoomAmount;
         }
 
         // Convierte el Path en las Coordenadas 2D que necesita el UILineRenderer

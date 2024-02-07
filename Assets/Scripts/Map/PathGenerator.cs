@@ -212,7 +212,8 @@ namespace Map
             {
                 var onlyOnePath = Path.EmptyPath;
                 foreach (var path in paths) onlyOnePath += path;
-                paths[0] = onlyOnePath;
+                ClearPaths();
+                paths.Add(onlyOnePath);
             }
 
             OnAllPathsUpdated?.Invoke(paths.ToArray());

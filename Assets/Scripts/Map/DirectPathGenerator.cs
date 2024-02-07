@@ -11,6 +11,7 @@ namespace Map
         {
             var startNode = new Node(start, direction: initialDirection);
             var endNode = new Node(end, direction: endDirection);
+            endNode.Parent = startNode;
             return new Path(startNode, endNode);
         }
 

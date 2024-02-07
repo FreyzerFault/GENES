@@ -14,6 +14,9 @@ namespace PathFinding
         public float size;
         public float slopeAngle;
         public Vector2 direction;
+
+        // Es legal hasta que se demuestre lo contrario
+        private bool _legal = true;
         private Node _parent;
 
         // Neighbours
@@ -44,7 +47,12 @@ namespace PathFinding
         public float F => G + H;
         public float G { get; set; }
         public float H { get; set; }
-        public bool Legal { get; set; }
+
+        public bool Legal
+        {
+            get => _legal;
+            set => _legal = value;
+        }
 
         public Vector2 Pos2D => new(position.x, position.z);
         public float Height => position.y;

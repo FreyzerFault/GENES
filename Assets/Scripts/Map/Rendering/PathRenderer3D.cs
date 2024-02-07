@@ -16,6 +16,7 @@ namespace Map.Rendering
         // PATH
         [SerializeField] private float heightOffset = 0.5f;
         [SerializeField] private float lineThickness = 1f;
+        [SerializeField] private Color color = Color.yellow;
         [SerializeField] private PathGenerator pathFindingGenerator;
 
 
@@ -114,7 +115,7 @@ namespace Map.Rendering
         // Assign Colors progressively like a rainbow :D
         private void UpdateColors()
         {
-            var rainbowColors = Color.yellow.GetRainBowColors(PathCount, 0.2f);
+            var rainbowColors = color.GetRainBowColors(PathCount, 0.2f);
             for (var i = 0; i < rainbowColors.Length; i++) pathObjects[i].Color = rainbowColors[i];
         }
     }

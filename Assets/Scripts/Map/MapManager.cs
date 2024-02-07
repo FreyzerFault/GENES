@@ -38,7 +38,7 @@ namespace Map
             }
         }
 
-        private float Zoom
+        public float Zoom
         {
             get => mapState switch
             {
@@ -48,6 +48,7 @@ namespace Map
             };
             set
             {
+                value = Mathf.Max(value, 1);
                 switch (mapState)
                 {
                     case MapState.Fullscreen:
@@ -92,12 +93,23 @@ namespace Map
             water = GameObject.FindGameObjectWithTag("Water");
         }
 
+        private void Start()
+        {
+            mainPathFindingGenerator = GameObject.FindWithTag("Map Path Main").GetComponent<PathFindingGenerator>();
+        }
+
         public event Action<MapState> OnStateChanged;
         public event Action<float> OnZoomChanged;
 
         public void ZoomIn(float zoomAmount = 0.1f) => Zoom += zoomAmount;
 
-        public bool IsLegalPos(Vector2 normPos) => mainPathFindingGenerator.IsLegalPos(normPos);
+        public bool IsLegalPos(Vector2 normPos)
+        {
+            var worldPos = Terrain.GetWorldPosition(normPos);
+            if (worldPos.y < WaterHeight) return false;
+            return IsLegalPos(worldPos);
+        }
+
         public bool IsLegalPos(Vector3 normPos) => mainPathFindingGenerator.IsLegalPos(normPos);
     }
 }
