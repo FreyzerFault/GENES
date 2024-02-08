@@ -57,6 +57,10 @@ namespace Map
                 MapState.Fullscreen => MapState.Minimap,
                 _ => MapState.Fullscreen
             };
+
+            GameManager.Instance.State = MapManager.Instance.MapState == MapState.Fullscreen
+                ? GameManager.GameState.Paused
+                : GameManager.GameState.Playing;
         }
 
         private void OnZoomInOut(InputValue value) =>

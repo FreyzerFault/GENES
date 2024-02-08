@@ -7,6 +7,8 @@ namespace CameraManagement
 {
     public class MarkersCamTargetGroup : MonoBehaviour
     {
+        [SerializeField] private float firstMarkerWeight = 2;
+        [SerializeField] private float defaultmarkerWeight = 1;
         private CinemachineTargetGroup _targetGroup;
 
         private MarkerObject[] MarkerObjs => FindObjectsOfType<MarkerObject>();
@@ -41,8 +43,16 @@ namespace CameraManagement
 
         private void UpdateTargetGroup()
         {
-            foreach (var markerObject in FindObjectsOfType<MarkerObject>())
-                _targetGroup.AddMember(markerObject.transform, 1, 1);
+            var markers = FindObjectsOfType<MarkerObject>();
+            for (var i = 0; i < markers.Length; i++)
+                _targetGroup.AddMember(
+                    markers[i].transform,
+                    // 1º Marker has more weigth
+                    i == 0
+                        ? firstMarkerWeight
+                        : defaultmarkerWeight,
+                    1
+                );
         }
     }
 }

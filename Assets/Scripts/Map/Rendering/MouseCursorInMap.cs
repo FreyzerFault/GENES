@@ -1,7 +1,6 @@
 using ExtensionMethods;
 using TMPro;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace Map.Rendering
 {
@@ -40,7 +39,7 @@ namespace Map.Rendering
         }
 
 
-        private static Vector2 MousePosition => new(Mouse.current.position.x.value, Mouse.current.position.y.value);
+        private static Vector2 MousePosition => Input.mousePosition;
         private Vector2 NormalizedPositionInMap => _parentRectTransform.ScreenToNormalizedPoint(MousePosition);
 
         private void Awake()

@@ -16,6 +16,25 @@ namespace Map.Rendering
 
         private bool IsDraggingMarker => _isDragging && _markerDraggedIndex != -1;
 
+        private void OnDrawGizmos()
+        {
+            var imagePos = (Vector2)ImageRectTransform.position;
+            var imageCorner = imagePos - ImageRectTransform.pivot * ImageRectTransform.rect.size;
+            var sizeScaled = ImageRectTransform.rect.size * ImageRectTransform.localScale;
+
+            Gizmos.DrawSphere(imageCorner, 20);
+            Gizmos.DrawSphere(imageCorner + sizeScaled, 20);
+
+            Gizmos.color = Color.red;
+            Gizmos.DrawSphere(
+                imageCorner + ImageRectTransform.ScreenToNormalizedPoint(Input.mousePosition) * sizeScaled, 20);
+
+            Gizmos.color = Color.blue;
+            Gizmos.DrawSphere(imagePos +
+                              ImageRectTransform.ScreenToNormalizedPoint(Input.mousePosition) *
+                              sizeScaled, 20);
+        }
+
         // ============================= MOUSE EVENTS =============================
         public void OnDrag(PointerEventData eventData)
         {
@@ -122,7 +141,7 @@ namespace Map.Rendering
                     markerPlaceholderDraggedPrefab,
                     localPoint,
                     Quaternion.identity,
-                    transform
+                    ImageRectTransform
                 );
             else if (IsLegalPos(ImageRectTransform.LocalToNormalizedPoint(localPoint)))
                 _markerPlaceholderDragged.GetComponent<RectTransform>().anchoredPosition = localPoint;

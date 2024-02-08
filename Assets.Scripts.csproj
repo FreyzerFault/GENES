@@ -47,6 +47,7 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\PlayerTestController.cs" />
     <Compile Include="Assets\Scripts\GameManager.cs" />
+    <Compile Include="Assets\Scripts\UI\TabMenu.cs" />
     <Compile Include="Assets\Scripts\CameraManager.cs" />
     <None Include="Assets\Scripts\Assets.Scripts.asmdef" />
     <Reference Include="UnityEngine">

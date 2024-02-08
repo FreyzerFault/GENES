@@ -80,28 +80,21 @@ namespace Map.Rendering
 
         private void OnDrawGizmos()
         {
-            var playerLocalPos = FrameRectTransform.InverseTransformPoint(playerSprite.position);
-            var frameSize = FrameRectTransform.rect.size;
-            var frameCenter = frameSize / 2;
-            var displacement = frameCenter + (Vector2)playerLocalPos;
-            var mapSizeDif = ImageSize - frameSize;
+            var frame = image.rectTransform.parent.GetComponent<RectTransform>();
+            var worldFrameCorners = new Vector3[4];
+            frame.GetWorldCorners(worldFrameCorners);
 
-            displacement.x = Mathf.Clamp(displacement.x, -mapSizeDif.x, mapSizeDif.x);
-            displacement.y = Mathf.Clamp(displacement.y, -mapSizeDif.y, mapSizeDif.y);
+            var worldImageCorners = new Vector3[4];
+            image.rectTransform.GetWorldCorners(worldImageCorners);
 
-            Gizmos.color = Color.white;
-            Gizmos.DrawRay(FrameRectTransform.position + playerLocalPos, displacement);
+            Gizmos.color = Color.red;
+            Gizmos.DrawLineStrip(worldImageCorners, true);
+            Gizmos.DrawSphere(worldImageCorners[0], 20);
+            Gizmos.DrawSphere(worldFrameCorners[0], 20);
             Gizmos.color = Color.blue;
-            Gizmos.DrawRay(FrameRectTransform.position + playerLocalPos, frameCenter - (Vector2)playerLocalPos);
-            Gizmos.color = Color.red;
-            Gizmos.DrawRay(FrameRectTransform.position + playerLocalPos, mapSizeDif);
-
-
-            RectTransformUtility.ScreenPointToLocalPointInRectangle(FrameRectTransform,
-                Input.mousePosition, null, out var localMousePosition);
-
-            Gizmos.color = Color.red;
-            Gizmos.DrawSphere(FrameRectTransform.position + playerLocalPos, 20);
+            Gizmos.DrawLineStrip(worldFrameCorners, true);
+            Gizmos.DrawSphere(worldImageCorners[2], 20);
+            Gizmos.DrawSphere(worldFrameCorners[2], 20);
         }
 
 
@@ -138,20 +131,24 @@ namespace Map.Rendering
             image.rectTransform.pivot = MapManager.Instance.PlayerNormalizedPosition;
 
             // Posicionar el mapa en el centro del frame
-            var newPosition = FrameRectTransform.TransformPoint(FrameRectTransform.rect.size / 2);
-            var distanceToLowerCorner = (Vector3)ImageRectTransform.rect.min - FrameRectTransform.position;
-            distanceToLowerCorner.x = Mathf.Max(distanceToLowerCorner.x, 0);
-            distanceToLowerCorner.y = Mathf.Max(distanceToLowerCorner.y, 0);
-            newPosition -= distanceToLowerCorner;
-
-            ImageRectTransform.position = newPosition;
-
+            var frameCenter = FrameRectTransform.TransformPoint(FrameRectTransform.rect.size / 2);
+            ImageRectTransform.position = frameCenter;
 
             // Escalar el mapa relativo al centro donde está el Player
             image.rectTransform.localScale = new Vector3(zoom, zoom, 1);
 
             // La flecha del player se escala al revés para que no se vea afectada por el zoom
             playerSprite.localScale = new Vector3(1 / zoom, 1 / zoom, 1);
+
+            // Reajustar el offset hacia los bordes para que no se vea el fondo
+            var imgCorners = new Vector3[4];
+            var frameCorners = new Vector3[4];
+            ImageRectTransform.GetWorldCorners(imgCorners);
+            FrameRectTransform.GetWorldCorners(frameCorners);
+
+            var distanceToLowerCorner = Vector3.Max(imgCorners[0] - frameCorners[0], Vector3.zero);
+            var distanceToUpperCorner = Vector3.Max(frameCorners[2] - imgCorners[2], Vector3.zero);
+            image.rectTransform.position += distanceToUpperCorner - distanceToLowerCorner;
         }
 
         // ================================== MARKERS ==================================
