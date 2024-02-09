@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\Utils\Singleton.cs" />
+    <Compile Include="Assets\Scripts\Utils\DictionarySerializable.cs" />
     <Compile Include="Assets\Scripts\Utils\BillboardObject.cs" />
     <None Include="Assets\Scripts\Utils\Assets.Scripts.Utils.asmdef" />
     <Reference Include="UnityEngine">

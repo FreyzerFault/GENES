@@ -89,17 +89,14 @@ namespace Map.Rendering
 
         private void OnDrawGizmosSelected()
         {
+            var openedColor = Color.Lerp(Color, Color.white, 0.9f);
             if (showExplored && _path.ExploredNodes.Length > 0)
                 _path.ExploredNodes.ToList().ForEach(
                     node => DrawNodeGizmos(node, Color)
                 );
             if (showOpened && _path.OpenNodes.Length > 0)
                 _path.OpenNodes.ToList().ForEach(
-                    node => DrawNodeGizmos(
-                        node,
-                        Color.Lerp(Color, Color.white, 0.5f),
-                        true
-                    )
+                    node => DrawNodeGizmos(node, openedColor)
                 );
         }
 

@@ -16,24 +16,6 @@ namespace Map.Rendering
 
         private bool IsDraggingMarker => _isDragging && _markerDraggedIndex != -1;
 
-        private void OnDrawGizmos()
-        {
-            var imagePos = (Vector2)ImageRectTransform.position;
-            var imageCorner = imagePos - ImageRectTransform.pivot * ImageRectTransform.rect.size;
-            var sizeScaled = ImageRectTransform.rect.size * ImageRectTransform.localScale;
-
-            Gizmos.DrawSphere(imageCorner, 20);
-            Gizmos.DrawSphere(imageCorner + sizeScaled, 20);
-
-            Gizmos.color = Color.red;
-            Gizmos.DrawSphere(
-                imageCorner + ImageRectTransform.ScreenToNormalizedPoint(Input.mousePosition) * sizeScaled, 20);
-
-            Gizmos.color = Color.blue;
-            Gizmos.DrawSphere(imagePos +
-                              ImageRectTransform.ScreenToNormalizedPoint(Input.mousePosition) *
-                              sizeScaled, 20);
-        }
 
         // ============================= MOUSE EVENTS =============================
         public void OnDrag(PointerEventData eventData)
@@ -50,7 +32,7 @@ namespace Map.Rendering
 
         public void OnPointerDown(PointerEventData eventData)
         {
-            HandleStartDrag(ImageRectTransform.ScreenToNormalizedPoint(eventData.position));
+            HandleStartDrag();
         }
 
         public void OnPointerUp(PointerEventData eventData)
@@ -59,7 +41,7 @@ namespace Map.Rendering
             if (eventData.button != PointerEventData.InputButton.Left) return;
 
             var editMarkerModeIsAdd = MarkerManager.EditMarkerMode == EditMarkerMode.Add;
-            var normalizedPosition = FrameRectTransform.ScreenToNormalizedPoint(eventData.position);
+            var normalizedPosition = ImageRectTransform.ScreenToNormalizedPoint(eventData.position);
 
             // Si no se arrastra una distancia minima o no es legal -> Ignorar el drag
             var canDrag = editMarkerModeIsAdd &&
@@ -89,62 +71,74 @@ namespace Map.Rendering
         private void HandleClickWithoutDrag(Vector2 normPos)
         {
             var anyHovered = MarkerManager.AnyHovered;
+
             switch (MarkerManager.EditMarkerMode)
             {
-                // ELIMINAR
+                case EditMarkerMode.Add:
+
+                    if (anyHovered)
+                        // Cursor sobre Marker
+                    {
+                        MarkerManager.ToggleSelectMarker(normPos);
+                    }
+                    else
+                    {
+                        // No hay ninguna marker en el cursor & es una Posicion LEGAL => Añadimos un marker
+                        if (IsLegalPos(normPos))
+                            switch (MarkerManager.SelectedCount)
+                            {
+                                case 0:
+                                    MarkerManager.AddMarker(normPos);
+                                    break;
+                                case 1:
+                                    MarkerManager.MoveSelectedMarker(normPos);
+                                    MarkerManager.DeselectAllMarkers();
+                                    break;
+                                case 2:
+                                    MarkerManager.AddMarkerBetweenSelectedPair(normPos);
+                                    MarkerManager.DeselectAllMarkers();
+                                    break;
+                            }
+                    }
+
+                    break;
                 case EditMarkerMode.Delete:
                     if (anyHovered)
                         MarkerManager.RemoveMarker(MarkerManager.HoveredMarkerIndex);
                     break;
-                // AÑADIR
-                case EditMarkerMode.Add:
-                    if (!anyHovered)
-                        switch (MarkerManager.SelectedCount)
-                        {
-                            case 0:
-                                MarkerManager.AddMarker(normPos);
-                                break;
-                            case 1:
-                                MarkerManager.MoveSelectedMarker(normPos);
-                                MarkerManager.DeselectAllMarkers();
-                                break;
-                            case 2:
-                                MarkerManager.AddMarkerBetweenSelectedPair(normPos);
-                                MarkerManager.DeselectAllMarkers();
-                                break;
-                        }
-
+                case EditMarkerMode.Select:
+                case EditMarkerMode.None:
+                default:
                     break;
             }
         }
 
-        private void HandleStartDrag(Vector2 normalizedPosition)
+        private void HandleStartDrag()
         {
             _markerDraggedIndex = MarkerManager.HoveredMarkerIndex;
-            if (_markerDraggedIndex != -1)
-                MarkerManager.ToggleSelectMarker(_markerDraggedIndex);
         }
 
         private void HandleEndDrag(Vector2 normalizedPosition)
         {
+            if (!IsLegalPos(normalizedPosition)) return;
             MarkerManager.MoveMarker(_markerDraggedIndex, normalizedPosition);
             MarkerManager.DeselectMarker(_markerDraggedIndex);
         }
 
         private void HandleDrag(Vector2 mousePosition)
         {
-            var localPoint = ImageRectTransform.ScreenToLocalPoint(mousePosition);
-
             // Spawn Marker placeholder para que el usuario sepa que lo está moviendo
             if (_markerPlaceholderDragged == null)
-                _markerPlaceholderDragged = Instantiate(
-                    markerPlaceholderDraggedPrefab,
-                    localPoint,
-                    Quaternion.identity,
-                    ImageRectTransform
-                );
-            else if (IsLegalPos(ImageRectTransform.LocalToNormalizedPoint(localPoint)))
-                _markerPlaceholderDragged.GetComponent<RectTransform>().anchoredPosition = localPoint;
+                InstantiateMarkerPlaceholder(mousePosition);
+            else
+                _markerPlaceholderDragged.transform.position = mousePosition;
+        }
+
+        private void InstantiateMarkerPlaceholder(Vector2 position)
+        {
+            _markerPlaceholderDragged = Instantiate(markerPlaceholderDraggedPrefab, position, Quaternion.identity,
+                ImageRectTransform);
+            _markerPlaceholderDragged.transform.localScale /= ImageRectTransform.localScale.x;
         }
 
         private void ResetDragState()
@@ -159,5 +153,40 @@ namespace Map.Rendering
             else
                 Destroy(_markerPlaceholderDragged);
         }
+
+
+        // ============================= DEBUG =============================
+
+        // private void OnDrawGizmos()
+        // {
+        //     var imagePos = ImageRectTransform.PivotGlobal();
+        //     var imageMinCorner = ImageRectTransform.MinCorner();
+        //     var sizeScaled = ImageRectTransform.SizeScaled();
+        //
+        //     RectTransformUtility.ScreenPointToLocalPointInRectangle(
+        //         ImageRectTransform,
+        //         Input.mousePosition,
+        //         null,
+        //         out var localPos
+        //     );
+        //
+        //     // MIN y MAX
+        //     Gizmos.color = Color.green;
+        //     Gizmos.DrawSphere(imageMinCorner, 20);
+        //     Gizmos.DrawSphere(imageMinCorner + sizeScaled, 20);
+        //     Gizmos.DrawSphere(ImageRectTransform.PivotGlobal(), 20);
+        //
+        //     Gizmos.color = Color.yellow;
+        //     Gizmos.DrawSphere(imageMinCorner + localPos, 20);
+        //
+        //     Gizmos.color = Color.red;
+        //     Gizmos.DrawSphere(
+        //         imageMinCorner + ImageRectTransform.ScreenToNormalizedPoint(Input.mousePosition) * sizeScaled, 20);
+        //
+        //
+        //     // ESTE ES EL BUENOOOOOOOOO
+        //     Gizmos.color = Color.blue;
+        //     Gizmos.DrawSphere(imageMinCorner + ImageRectTransform.ScreenToLocalPoint(Input.mousePosition), 20);
+        // }
     }
 }

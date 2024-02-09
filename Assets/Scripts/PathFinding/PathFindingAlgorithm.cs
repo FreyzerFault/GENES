@@ -65,7 +65,7 @@ namespace PathFinding
         protected bool LegalHeight(float height, PathFindingConfigSO paramsConfig) => height >= paramsConfig.minHeight;
 
         protected bool LegalSlope(float slopeAngle, PathFindingConfigSO paramsConfig) =>
-            slopeAngle <= paramsConfig.aStarConfig.maxSlopeAngle;
+            slopeAngle <= paramsConfig.maxSlopeAngle;
 
         // ==================== NEIGHBOURS ====================
         protected Node[] CreateNeighbours(Node node, PathFindingConfigSO paramsConfig, Terrain terrain,

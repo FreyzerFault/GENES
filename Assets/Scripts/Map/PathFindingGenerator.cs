@@ -18,6 +18,9 @@ namespace Map
         {
             base.Start();
 
+            // Subscribe to PathFindingConfig changes
+            pathFindingConfig.OnFineTune += RedoPathFinding;
+
             // Min Height depends on water height
             pathFindingConfig.minHeight = MapManager.Instance.WaterHeight;
 

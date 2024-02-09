@@ -31,12 +31,21 @@ namespace ExtensionMethods
             return Color.HSVToRGB(H, S, V);
         }
 
+        public static Color Lighten(this Color color, float lightenAmount)
+        {
+            // Convertir el color RGB a HSV
+            Color.RGBToHSV(color, out var H, out var S, out var V);
+
+            // Oscurecer el color
+            V = Mathf.Max(0, V + lightenAmount);
+
+            // Convertir el color HSV de vuelta a RGB
+            return Color.HSVToRGB(H, S, V);
+        }
+
 
         // Color Random con la mayor saturacion
-        public static Color RandomColorSaturated()
-        {
-            return Random.ColorHSV(0, 1, 1, 1, 1, 1);
-        }
+        public static Color RandomColorSaturated() => Random.ColorHSV(0, 1, 1, 1, 1, 1);
 
 
         // COLORES Dinamicos

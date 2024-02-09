@@ -435,6 +435,8 @@ MonoBehaviour:
   markersUIParent: {fileID: 863898638760301793}
   markerUIPrefab: {fileID: 8598442967786466416, guid: 5444bb0f9a82ae04eb7be11bf137c20d, type: 3}
   image: {fileID: 6240223420935271203}
+  FrameRectTransform: {fileID: 796403487025579189}
+  ImageRectTransform: {fileID: 204655917141326999}
 --- !u!1001 &1087467222822757948
 PrefabInstance:
   m_ObjectHideFlags: 0

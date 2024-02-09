@@ -27,6 +27,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assets.Scripts", "Assets.Sc
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assets.Scripts.CameraManagement", "Assets.Scripts.CameraManagement.csproj", "{d75abbcf-ab83-93e4-8c8e-0daf9df35fa6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assets.Scripts.UI", "Assets.Scripts.UI.csproj", "{d0bca65a-23bf-530a-653d-d2794386f727}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assets.ExternalPackages.BezierCurves", "Assets.ExternalPackages.BezierCurves.csproj", "{1a8157ab-6310-9bdc-bddc-f16864838230}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assets", "Assets.csproj", "{fc483a6a-6a5c-9bcb-9cad-1ef50cf04080}"
@@ -66,6 +68,8 @@ Global
 		{c598f215-6716-6b93-fc56-8b55cb542e19}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{d75abbcf-ab83-93e4-8c8e-0daf9df35fa6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{d75abbcf-ab83-93e4-8c8e-0daf9df35fa6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{d0bca65a-23bf-530a-653d-d2794386f727}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{d0bca65a-23bf-530a-653d-d2794386f727}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1a8157ab-6310-9bdc-bddc-f16864838230}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1a8157ab-6310-9bdc-bddc-f16864838230}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{fc483a6a-6a5c-9bcb-9cad-1ef50cf04080}.Debug|Any CPU.ActiveCfg = Debug|Any CPU

@@ -18,6 +18,7 @@ namespace PathFinding
 
         // ===============================================================
         // RESTRICCIONES
+        public float maxSlopeAngle = 30f;
         public float minHeight = 100f;
 
 
@@ -42,5 +43,45 @@ namespace PathFinding
                 PathFindingAlgorithmType.Dijkstra => DijkstraAlgorithm.Instance,
                 _ => throw new ArgumentOutOfRangeException()
             };
+
+        // ================================ FINE-TUNING ================================
+        public float DistanceCost
+        {
+            get => aStarConfig.DistanceCost;
+            set => aStarConfig.DistanceCost = value;
+        }
+
+        public float HeightCost
+        {
+            get => aStarConfig.HeightCost;
+            set => aStarConfig.HeightCost = value;
+        }
+
+        public float TurnCost
+        {
+            get => aStarConfig.TurnCost;
+            set => aStarConfig.TurnCost = value;
+        }
+
+        public float DistanceHeuristic
+        {
+            get => aStarConfig.DistanceHeuristic;
+            set => aStarConfig.DistanceHeuristic = value;
+        }
+
+        public float HeightHeuristic
+        {
+            get => aStarConfig.HeightHeuristic;
+            set => aStarConfig.HeightHeuristic = value;
+        }
+
+        public float SlopeHeuristic
+        {
+            get => aStarConfig.SlopeHeuristic;
+            set => aStarConfig.SlopeHeuristic = value;
+        }
+
+        public event Action OnFineTune;
+        public void OnFineTuneTriggerEvent() => OnFineTune?.Invoke();
     }
 }

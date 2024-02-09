@@ -101,6 +101,7 @@ namespace Map.Rendering
             var mm = MarkerManager.Instance;
 
             // SCALE
+            UpdateScaleByZoom();
             Scale(marker.Selected || marker.hovered ? selectedScale : 1);
 
             // COLOR
@@ -114,6 +115,6 @@ namespace Map.Rendering
             else _image.color = mm.defaultColor;
         }
 
-        private void Scale(float scale) => _rectTransform.localScale = Vector3.one * scale;
+        private void Scale(float scale) => _rectTransform.localScale *= scale;
     }
 }

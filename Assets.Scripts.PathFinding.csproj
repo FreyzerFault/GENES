@@ -47,6 +47,7 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\PathFinding\A Star\AstarConfig.cs" />
     <Compile Include="Assets\Scripts\PathFinding\A Star\AstarDirectional.cs" />
+    <Compile Include="Assets\Scripts\PathFinding\PathFindingTuning.cs" />
     <Compile Include="Assets\Scripts\PathFinding\Node.cs" />
     <Compile Include="Assets\Scripts\PathFinding\PathFindingAlgorithm.cs" />
     <Compile Include="Assets\Scripts\PathFinding\PathFindingConfigSO.cs" />
@@ -716,6 +717,10 @@
     <ProjectReference Include="Assets.Scripts.ExtensionMethods.csproj">
       <Project>{afa59c38-eeaf-6b64-b46e-f23cb798a397}</Project>
       <Name>Assets.Scripts.ExtensionMethods</Name>
+    </ProjectReference>
+    <ProjectReference Include="Assets.Scripts.Utils.csproj">
+      <Project>{51189add-f733-4179-0a42-6ac3c2a69b16}</Project>
+      <Name>Assets.Scripts.Utils</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

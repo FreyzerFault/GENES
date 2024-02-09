@@ -1,7 +1,6 @@
 using System;
 using ExtensionMethods;
 using UnityEngine;
-using UnityEngine.Serialization;
 using Utils;
 
 namespace Map
@@ -18,7 +17,6 @@ namespace Map
         [SerializeField] private GameObject player;
         [SerializeField] private GameObject water;
 
-        [FormerlySerializedAs("mainPathGenerator")]
         public PathFindingGenerator mainPathFindingGenerator;
 
         [SerializeField] private MapState mapState;

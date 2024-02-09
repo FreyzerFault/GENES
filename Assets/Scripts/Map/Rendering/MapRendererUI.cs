@@ -21,9 +21,9 @@ namespace Map.Rendering
 
         // Image
         [SerializeField] private RawImage image;
+        [SerializeField] protected RectTransform FrameRectTransform;
+        [SerializeField] protected RectTransform ImageRectTransform;
         private readonly List<MarkerUI> _markersUIObjects = new();
-        protected RectTransform FrameRectTransform;
-        protected RectTransform ImageRectTransform;
         private float ImageWidth => image.rectTransform.rect.width * image.rectTransform.localScale.x;
         private float ImageHeight => image.rectTransform.rect.height * image.rectTransform.localScale.y;
         private Vector2 ImageSize => new(ImageWidth, ImageHeight);
@@ -77,26 +77,6 @@ namespace Map.Rendering
             MarkerManager.OnMarkersClear -= HandleClear;
             MapManager.Instance.OnZoomChanged -= HandleZoomChange;
         }
-
-        private void OnDrawGizmos()
-        {
-            var frame = image.rectTransform.parent.GetComponent<RectTransform>();
-            var worldFrameCorners = new Vector3[4];
-            frame.GetWorldCorners(worldFrameCorners);
-
-            var worldImageCorners = new Vector3[4];
-            image.rectTransform.GetWorldCorners(worldImageCorners);
-
-            Gizmos.color = Color.red;
-            Gizmos.DrawLineStrip(worldImageCorners, true);
-            Gizmos.DrawSphere(worldImageCorners[0], 20);
-            Gizmos.DrawSphere(worldFrameCorners[0], 20);
-            Gizmos.color = Color.blue;
-            Gizmos.DrawLineStrip(worldFrameCorners, true);
-            Gizmos.DrawSphere(worldImageCorners[2], 20);
-            Gizmos.DrawSphere(worldFrameCorners[2], 20);
-        }
-
 
         // ================================== EVENT SUSCRIBERS ==================================
         private void HandleAdded(Marker marker, int index) => InstantiateMarker(marker, index);

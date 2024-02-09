@@ -106,9 +106,19 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 2909774369673658653, guid: 7d5632f912137984cb07b8175393cb4c, type: 3}
   m_PrefabInstance: {fileID: 4064825199109220897}
   m_PrefabAsset: {fileID: 0}
+--- !u!224 &3703168610110074516 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 796403487025579189, guid: 7d5632f912137984cb07b8175393cb4c, type: 3}
+  m_PrefabInstance: {fileID: 4064825199109220897}
+  m_PrefabAsset: {fileID: 0}
 --- !u!224 &3716604145641619136 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 863898638760301793, guid: 7d5632f912137984cb07b8175393cb4c, type: 3}
+  m_PrefabInstance: {fileID: 4064825199109220897}
+  m_PrefabAsset: {fileID: 0}
+--- !u!224 &4232888335184811702 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 204655917141326999, guid: 7d5632f912137984cb07b8175393cb4c, type: 3}
   m_PrefabInstance: {fileID: 4064825199109220897}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &6262766184782158251 stripped
@@ -162,6 +172,8 @@ MonoBehaviour:
   markersUIParent: {fileID: 3716604145641619136}
   markerUIPrefab: {fileID: 8598442967786466416, guid: 5444bb0f9a82ae04eb7be11bf137c20d, type: 3}
   image: {fileID: 7994050798501583106}
+  FrameRectTransform: {fileID: 3703168610110074516}
+  ImageRectTransform: {fileID: 4232888335184811702}
   markerPlaceholderDraggedPrefab: {fileID: 7675491264772692944, guid: 0757a51cb39e448418d5116a36769558, type: 3}
 --- !u!114 &7994050798501583106 stripped
 MonoBehaviour:
