@@ -9,7 +9,11 @@ namespace Utils
     {
         public List<KeyValuePairSerializable> pairElements;
 
-        public DictionarySerializable() => pairElements = new List<KeyValuePairSerializable>();
+        public DictionarySerializable(string[] dictionary) => pairElements = new List<KeyValuePairSerializable>();
+
+        public DictionarySerializable(TKey[] keyList, TValue[] values) =>
+            pairElements = keyList.Select((key, i) => new KeyValuePairSerializable { key = key, value = values[i] })
+                .ToList();
 
         public DictionarySerializable(KeyValuePairSerializable[] elements) => pairElements = elements.ToList();
 

@@ -23,10 +23,10 @@ namespace PathFinding
     public abstract class PathFindingAlgorithm
     {
         // Principal algoritmo
-        public abstract Path FindPath(Node start, Node end, Terrain terrain, PathFindingConfigSO paramsConfig);
+        public abstract Path FindPath(Node start, Node end, Terrain terrain, PathFindingConfigSo paramsConfig);
 
         // Ejecutar el Algoritmo para varios checkpoints
-        public Path FindPathByCheckpoints(Node[] checkPoints, Terrain terrain, PathFindingConfigSO paramsConfig)
+        public Path FindPathByCheckpoints(Node[] checkPoints, Terrain terrain, PathFindingConfigSo paramsConfig)
         {
             if (checkPoints.Length < 2) return Path.EmptyPath;
 
@@ -44,12 +44,12 @@ namespace PathFinding
 
 
         // NODE Parameters
-        protected abstract float CalculateCost(Node a, Node b, PathFindingConfigSO paramsConfig);
-        protected abstract float CalculateHeuristic(Node node, Node end, PathFindingConfigSO paramsConfig);
+        protected abstract float CalculateCost(Node a, Node b, PathFindingConfigSo paramsConfig);
+        protected abstract float CalculateHeuristic(Node node, Node end, PathFindingConfigSo paramsConfig);
 
 
         // ==================== RESTRICCIONES ====================
-        public bool IsLegal(Node node, PathFindingConfigSO paramsConfig)
+        public bool IsLegal(Node node, PathFindingConfigSo paramsConfig)
         {
             bool legalHeight = LegalHeight(node.Height, paramsConfig),
                 legalSlope = LegalSlope(node.slopeAngle, paramsConfig),
@@ -62,13 +62,13 @@ namespace PathFinding
 
         protected bool LegalPosition(Vector2 pos, Terrain terrain) => !terrain.OutOfBounds(pos);
 
-        protected bool LegalHeight(float height, PathFindingConfigSO paramsConfig) => height >= paramsConfig.minHeight;
+        protected bool LegalHeight(float height, PathFindingConfigSo paramsConfig) => height >= paramsConfig.minHeight;
 
-        protected bool LegalSlope(float slopeAngle, PathFindingConfigSO paramsConfig) =>
+        protected bool LegalSlope(float slopeAngle, PathFindingConfigSo paramsConfig) =>
             slopeAngle <= paramsConfig.maxSlopeAngle;
 
         // ==================== NEIGHBOURS ====================
-        protected Node[] CreateNeighbours(Node node, PathFindingConfigSO paramsConfig, Terrain terrain,
+        protected Node[] CreateNeighbours(Node node, PathFindingConfigSo paramsConfig, Terrain terrain,
             HashSet<Node> nodesAlreadyFound, bool onlyFrontNeighbours = true)
         {
             var neighbours = new List<Node>();

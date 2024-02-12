@@ -6,7 +6,7 @@ using UnityEngine;
 namespace PathFinding
 {
     [CreateAssetMenu(fileName = "PathFinding Config", menuName = "Configurations/PathFinding Configuration", order = 1)]
-    public class PathFindingConfigSO : ScriptableObject
+    public class PathFindingConfigSo : ScriptableObject
     {
         // Distancia entre nodos
         // A + grandes = + rápido pero + impreciso
@@ -35,50 +35,62 @@ namespace PathFinding
         [ConditionalField("algorithm", false, PathFindingAlgorithmType.AstarDirectional)]
         public AstarConfig aStarConfigDirectional;
 
+        [ConditionalField("algorithm", false, PathFindingAlgorithmType.Dijkstra)]
+        public AstarConfig dijkstraConfig;
+
         public PathFindingAlgorithm Algorithm =>
             algorithm switch
             {
-                PathFindingAlgorithmType.Astar => AstarDirectional.Instance,
+                PathFindingAlgorithmType.Astar => Astar.Instance,
                 PathFindingAlgorithmType.AstarDirectional => AstarDirectional.Instance,
                 PathFindingAlgorithmType.Dijkstra => DijkstraAlgorithm.Instance,
+                _ => throw new ArgumentOutOfRangeException()
+            };
+
+        public AstarConfig Config =>
+            algorithm switch
+            {
+                PathFindingAlgorithmType.Astar => aStarConfig,
+                PathFindingAlgorithmType.AstarDirectional => aStarConfigDirectional,
+                PathFindingAlgorithmType.Dijkstra => dijkstraConfig,
                 _ => throw new ArgumentOutOfRangeException()
             };
 
         // ================================ FINE-TUNING ================================
         public float DistanceCost
         {
-            get => aStarConfig.DistanceCost;
-            set => aStarConfig.DistanceCost = value;
+            get => Config.DistanceCost;
+            set => Config.DistanceCost = value;
         }
 
         public float HeightCost
         {
-            get => aStarConfig.HeightCost;
-            set => aStarConfig.HeightCost = value;
+            get => Config.HeightCost;
+            set => Config.HeightCost = value;
         }
 
         public float TurnCost
         {
-            get => aStarConfig.TurnCost;
-            set => aStarConfig.TurnCost = value;
+            get => Config.TurnCost;
+            set => Config.TurnCost = value;
         }
 
         public float DistanceHeuristic
         {
-            get => aStarConfig.DistanceHeuristic;
-            set => aStarConfig.DistanceHeuristic = value;
+            get => Config.DistanceHeuristic;
+            set => Config.DistanceHeuristic = value;
         }
 
         public float HeightHeuristic
         {
-            get => aStarConfig.HeightHeuristic;
-            set => aStarConfig.HeightHeuristic = value;
+            get => Config.HeightHeuristic;
+            set => Config.HeightHeuristic = value;
         }
 
         public float SlopeHeuristic
         {
-            get => aStarConfig.SlopeHeuristic;
-            set => aStarConfig.SlopeHeuristic = value;
+            get => Config.SlopeHeuristic;
+            set => Config.SlopeHeuristic = value;
         }
 
         public event Action OnFineTune;

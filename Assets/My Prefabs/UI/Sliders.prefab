@@ -368,24 +368,12 @@ MonoBehaviour:
   m_HandleRect: {fileID: 2823527830911961772}
   m_Direction: 0
   m_MinValue: 0
-  m_MaxValue: 1
+  m_MaxValue: 10
   m_WholeNumbers: 0
   m_Value: 0.5
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 11400000, guid: a4a6f39d53a58bc4b8ebc353b04cc136, type: 2}
-        m_TargetAssemblyTypeName: PathFinding.PathFindingConfigSO, Assets.Scripts.PathFinding
-        m_MethodName: set_HeightHeuristic
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!1 &1437700464098362805
 GameObject:
   m_ObjectHideFlags: 0
@@ -1247,24 +1235,12 @@ MonoBehaviour:
   m_HandleRect: {fileID: 6490278252943654361}
   m_Direction: 0
   m_MinValue: 0
-  m_MaxValue: 1
+  m_MaxValue: 10
   m_WholeNumbers: 0
   m_Value: 0.5
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 11400000, guid: a4a6f39d53a58bc4b8ebc353b04cc136, type: 2}
-        m_TargetAssemblyTypeName: PathFinding.PathFindingConfigSO, Assets.Scripts.PathFinding
-        m_MethodName: set_DistanceHeuristic
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!1 &4419244431998681257
 GameObject:
   m_ObjectHideFlags: 0
@@ -1799,24 +1775,12 @@ MonoBehaviour:
   m_HandleRect: {fileID: 3548620390608004770}
   m_Direction: 0
   m_MinValue: 0
-  m_MaxValue: 1
+  m_MaxValue: 10
   m_WholeNumbers: 0
   m_Value: 0.5
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 11400000, guid: a4a6f39d53a58bc4b8ebc353b04cc136, type: 2}
-        m_TargetAssemblyTypeName: PathFinding.PathFindingConfigSO, Assets.Scripts.PathFinding
-        m_MethodName: set_SlopeHeuristic
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!1 &7602770495415511688
 GameObject:
   m_ObjectHideFlags: 0

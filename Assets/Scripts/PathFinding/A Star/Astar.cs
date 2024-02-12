@@ -11,14 +11,14 @@ namespace PathFinding.A_Star
         private static AstarDirectional _instance;
         public static AstarDirectional Instance => _instance ??= new AstarDirectional();
 
-        public override Path FindPath(Node start, Node end, Terrain terrain, PathFindingConfigSO paramsConfig) =>
+        public override Path FindPath(Node start, Node end, Terrain terrain, PathFindingConfigSo paramsConfig) =>
             FindPathAstar(start, end, terrain, paramsConfig, CalculateCost, CalculateHeuristic);
 
         // Permite inyectar la Funcion de Coste y de Heuristica
         protected Path FindPathAstar(
-            Node start, Node end, Terrain terrain, PathFindingConfigSO paramsConfig,
-            Func<Node, Node, PathFindingConfigSO, float> costFunction,
-            Func<Node, Node, PathFindingConfigSO, float> heuristicFunction)
+            Node start, Node end, Terrain terrain, PathFindingConfigSo paramsConfig,
+            Func<Node, Node, PathFindingConfigSo, float> costFunction,
+            Func<Node, Node, PathFindingConfigSo, float> heuristicFunction)
         {
             if (start.Collision(end)) return Path.EmptyPath;
 
@@ -71,7 +71,7 @@ namespace PathFinding.A_Star
                 // Crear vecinos si es la 1º vez que se exploran
                 if (currentNode.Neighbours == null || currentNode.Neighbours.Length == 0)
                     currentNode.Neighbours = CreateNeighbours(
-                        currentNode, paramsConfig, terrain, allNodes
+                        currentNode, paramsConfig, terrain, allNodes, false
                     );
 
                 // Explorar vecinos
@@ -107,7 +107,7 @@ namespace PathFinding.A_Star
         }
 
         // ==================== COSTE Y HEURÍSTICA ====================
-        protected override float CalculateCost(Node a, Node b, PathFindingConfigSO paramsConfig)
+        protected override float CalculateCost(Node a, Node b, PathFindingConfigSo paramsConfig)
         {
             var distanceCost = a.Distance2D(b) * paramsConfig.aStarConfig.DistanceCost;
             var heightCost = Math.Abs(a.position.y - b.position.y) * paramsConfig.aStarConfig.HeightCost;
@@ -115,7 +115,7 @@ namespace PathFinding.A_Star
             return distanceCost + heightCost;
         }
 
-        protected override float CalculateHeuristic(Node node, Node end, PathFindingConfigSO paramsConfig)
+        protected override float CalculateHeuristic(Node node, Node end, PathFindingConfigSo paramsConfig)
         {
             var distHeuristic = node.Distance2D(end) * paramsConfig.aStarConfig.DistanceHeuristic;
             var heightHeuristic =

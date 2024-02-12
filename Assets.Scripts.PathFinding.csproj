@@ -47,7 +47,6 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\PathFinding\A Star\AstarConfig.cs" />
     <Compile Include="Assets\Scripts\PathFinding\A Star\AstarDirectional.cs" />
-    <Compile Include="Assets\Scripts\PathFinding\PathFindingTuning.cs" />
     <Compile Include="Assets\Scripts\PathFinding\Node.cs" />
     <Compile Include="Assets\Scripts\PathFinding\PathFindingAlgorithm.cs" />
     <Compile Include="Assets\Scripts\PathFinding\PathFindingConfigSO.cs" />

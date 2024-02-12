@@ -9,7 +9,7 @@ namespace UI
 {
     public class FineTuningMenu : MonoBehaviour
     {
-        [SerializeField] private PathFindingConfigSO config;
+        [SerializeField] private PathFindingConfigSo pathFindingConfig;
 
         [SerializeField] private Button updateButton;
 
@@ -20,14 +20,15 @@ namespace UI
         private Slider[] _sliders;
         private TMP_Text[] _valueTexts;
 
+        private AstarConfig Config => pathFindingConfig.Config;
+
 
         private void Awake()
         {
             _parameterControllers = new Dictionary<AstarParam, ParameterController>();
-            foreach (var pair in config.aStarConfig.parameters.pairElements)
+            foreach (var pair in Config.parameters.pairElements)
                 _parameterControllers.Add(pair.key, new ParameterController
                 {
-                    parent = parameterControllerObjects[(int)pair.key],
                     labelText = parameterControllerObjects[(int)pair.key].GetComponentsInChildren<TMP_Text>()[0],
                     valueText = parameterControllerObjects[(int)pair.key].GetComponentsInChildren<TMP_Text>()[1],
                     slider = parameterControllerObjects[(int)pair.key].GetComponentInChildren<Slider>()
@@ -38,19 +39,21 @@ namespace UI
         {
             foreach (var controller in _parameterControllers)
             {
-                var paramName = controller.Key.ToString();
-                var value = config.aStarConfig.parameters.GetValue(controller.Key);
+                var value = Config.parameters.GetValue(controller.Key).value;
+                var displayName = Config.parameters.GetValue(controller.Key).displayName;
 
-                controller.Value.labelText.text = paramName;
+                controller.Value.labelText.text = displayName;
                 controller.Value.valueText.text = value.ToString("F2");
                 controller.Value.slider.value = value;
-                controller.Value.slider.onValueChanged.AddListener(newValue => OnValueChange(newValue, controller.Key));
+                controller.Value.slider.onValueChanged.AddListener(newValue =>
+                    OnValueChange(newValue, displayName, controller.Key));
             }
         }
 
-        private void OnValueChange(float value, AstarParam parameter)
+        private void OnValueChange(float value, string displayName, AstarParam parameter)
         {
-            config.aStarConfig.parameters.SetValue(parameter, value);
+            Config.parameters.SetValue(parameter,
+                new ParamValue { value = value, displayName = displayName });
             updateButton.gameObject.SetActive(true);
 
             _parameterControllers[parameter].valueText.text = value.ToString("F2");
@@ -58,13 +61,12 @@ namespace UI
 
         public void OnUpdateConfirmed()
         {
-            config.OnFineTuneTriggerEvent();
+            pathFindingConfig.OnFineTuneTriggerEvent();
             updateButton.gameObject.SetActive(false);
         }
 
         private struct ParameterController
         {
-            public GameObject parent;
             public TMP_Text labelText;
             public TMP_Text valueText;
             public Slider slider;

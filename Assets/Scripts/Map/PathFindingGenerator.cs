@@ -10,7 +10,7 @@ namespace Map
 {
     public class PathFindingGenerator : PathGenerator
     {
-        [SerializeField] private PathFindingConfigSO pathFindingConfig;
+        [SerializeField] private PathFindingConfigSo pathFindingConfig;
 
         private PathFindingAlgorithm PathFinding => pathFindingConfig.Algorithm;
 
