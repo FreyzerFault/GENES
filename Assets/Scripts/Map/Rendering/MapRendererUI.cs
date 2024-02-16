@@ -20,9 +20,9 @@ namespace Map.Rendering
         [SerializeField] private MarkerUI markerUIPrefab;
 
         // Image
-        [SerializeField] private RawImage image;
-        [SerializeField] protected RectTransform FrameRectTransform;
-        [SerializeField] protected RectTransform ImageRectTransform;
+        [SerializeField] private Image image;
+        [SerializeField] protected RectTransform frameRectTransform;
+        [SerializeField] protected RectTransform imageRectTransform;
         private readonly List<MarkerUI> _markersUIObjects = new();
         private float ImageWidth => image.rectTransform.rect.width * image.rectTransform.localScale.x;
         private float ImageHeight => image.rectTransform.rect.height * image.rectTransform.localScale.y;
@@ -38,17 +38,19 @@ namespace Map.Rendering
             get
             {
                 var corners = new Vector3[4];
-                ImageRectTransform.GetWorldCorners(corners);
+                imageRectTransform.GetWorldCorners(corners);
                 return corners[0];
             }
         }
 
+
         // ================================== UNITY ==================================
+
 
         private void Start()
         {
-            ImageRectTransform = image.GetComponent<RectTransform>();
-            FrameRectTransform = ImageRectTransform.parent.GetComponent<RectTransform>();
+            imageRectTransform = image.GetComponent<RectTransform>();
+            frameRectTransform = imageRectTransform.parent.GetComponent<RectTransform>();
 
             // SUBSCRIBERS:
             MarkerManager.OnMarkerAdded += HandleAdded;
@@ -87,14 +89,20 @@ namespace Map.Rendering
         private void RenderTerrain()
         {
             // Create Texture of Map
-            image.texture =
-                MapManager.Terrain.ToTexture((int)ImageWidth, (int)ImageHeight, heightGradient);
+            var texture = MapManager.Instance.mapTexture;
+            image.sprite =
+                Sprite.Create(texture != null
+                        ? texture
+                        : MapManager.Terrain.ToTexture((int)ImageWidth,
+                            ImageHeight == 0 ? (int)ImageWidth : (int)ImageHeight,
+                            heightGradient),
+                    imageRectTransform.rect, imageRectTransform.pivot);
         }
 
         // ================================== PLAYER POINT ==================================
         private void UpdatePlayerPoint()
         {
-            playerSprite.anchoredPosition = MapManager.Instance.PlayerNormalizedPosition * FrameRectTransform.rect.size;
+            playerSprite.anchoredPosition = MapManager.Instance.PlayerNormalizedPosition * frameRectTransform.rect.size;
             playerSprite.rotation = MapManager.Instance.PlayerRotationForUI;
 
             Zoom(ZoomScale);
@@ -111,8 +119,8 @@ namespace Map.Rendering
             image.rectTransform.pivot = MapManager.Instance.PlayerNormalizedPosition;
 
             // Posicionar el mapa en el centro del frame
-            var frameCenter = FrameRectTransform.TransformPoint(FrameRectTransform.rect.size / 2);
-            ImageRectTransform.position = frameCenter;
+            var frameCenter = frameRectTransform.TransformPoint(frameRectTransform.rect.size / 2);
+            imageRectTransform.position = frameCenter;
 
             // Escalar el mapa relativo al centro donde está el Player
             image.rectTransform.localScale = new Vector3(zoom, zoom, 1);
@@ -123,8 +131,8 @@ namespace Map.Rendering
             // Reajustar el offset hacia los bordes para que no se vea el fondo
             var imgCorners = new Vector3[4];
             var frameCorners = new Vector3[4];
-            ImageRectTransform.GetWorldCorners(imgCorners);
-            FrameRectTransform.GetWorldCorners(frameCorners);
+            imageRectTransform.GetWorldCorners(imgCorners);
+            frameRectTransform.GetWorldCorners(frameCorners);
 
             var distanceToLowerCorner = Vector3.Max(imgCorners[0] - frameCorners[0], Vector3.zero);
             var distanceToUpperCorner = Vector3.Max(frameCorners[2] - imgCorners[2], Vector3.zero);

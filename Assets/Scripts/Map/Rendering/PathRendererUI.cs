@@ -15,12 +15,10 @@ namespace Map.Rendering
         [SerializeField] protected List<UILineRenderer> lineRenderers = new();
 
         [SerializeField] private float lineThickness = 1f;
+        private RectTransform _parentRectTransform;
 
-        private MapRendererUI _mapRendererUI;
         private Terrain _terrain;
         private static PathGenerator PathFindingGenerator => MapManager.Instance.mainPathFindingGenerator;
-
-        private RectTransform MapRectTransform => _mapRendererUI.GetComponent<RectTransform>();
 
         public float LineThickness
         {
@@ -36,7 +34,7 @@ namespace Map.Rendering
         private void Awake()
         {
             _terrain = Terrain.activeTerrain;
-            _mapRendererUI = GetComponentInParent<MapRendererUI>();
+            _parentRectTransform = transform.parent.GetComponent<RectTransform>();
         }
 
         private void Start()
@@ -125,7 +123,7 @@ namespace Map.Rendering
             if (path.NodeCount < 2 || path.IsIllegal) return Array.Empty<Vector2>();
             return path
                 .GetPathNormalizedPoints(_terrain)
-                .Select(MapRectTransform.NormalizedToLocalPoint)
+                .Select(_parentRectTransform.NormalizedToLocalPoint)
                 .ToArray();
         }
     }

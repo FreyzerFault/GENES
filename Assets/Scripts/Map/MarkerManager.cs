@@ -58,6 +58,11 @@ namespace Map
         public int HoveredMarkerIndex => markersStorage.HoveredIndex;
         public bool AnyHovered => markersStorage.AnyHovered;
 
+        private void Start()
+        {
+            MapManager.Instance.OnStateChanged += HandleOnMapStateChanged;
+        }
+
         public event Action<EditMarkerMode> OnMarkerModeChanged;
 
 
@@ -68,6 +73,12 @@ namespace Map
         public event Action<Marker, int> OnMarkerRemoved;
         public event Action OnMarkersClear;
         public event Action<Marker> OnMarkerSelected;
+
+        private void HandleOnMapStateChanged(MapState newState)
+        {
+            EditMarkerMode = newState == MapState.Minimap ? EditMarkerMode.None : EditMarkerMode;
+        }
+
 
         private int FindIndex(Marker marker) =>
             Markers.FindIndex(m => ReferenceEquals(m, marker));

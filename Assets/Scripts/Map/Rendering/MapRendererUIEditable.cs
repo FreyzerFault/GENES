@@ -16,6 +16,10 @@ namespace Map.Rendering
 
         private bool IsDraggingMarker => _isDragging && _markerDraggedIndex != -1;
 
+        private void OnEnable()
+        {
+            ResetDragState();
+        }
 
         // ============================= MOUSE EVENTS =============================
         public void OnDrag(PointerEventData eventData)
@@ -41,7 +45,7 @@ namespace Map.Rendering
             if (eventData.button != PointerEventData.InputButton.Left) return;
 
             var editMarkerModeIsAdd = MarkerManager.EditMarkerMode == EditMarkerMode.Add;
-            var normalizedPosition = ImageRectTransform.ScreenToNormalizedPoint(eventData.position);
+            var normalizedPosition = imageRectTransform.ScreenToNormalizedPoint(eventData.position);
 
             // Si no se arrastra una distancia minima o no es legal -> Ignorar el drag
             var canDrag = editMarkerModeIsAdd &&
@@ -137,8 +141,8 @@ namespace Map.Rendering
         private void InstantiateMarkerPlaceholder(Vector2 position)
         {
             _markerPlaceholderDragged = Instantiate(markerPlaceholderDraggedPrefab, position, Quaternion.identity,
-                ImageRectTransform);
-            _markerPlaceholderDragged.transform.localScale /= ImageRectTransform.localScale.x;
+                imageRectTransform);
+            _markerPlaceholderDragged.transform.localScale /= imageRectTransform.localScale.x;
         }
 
         private void ResetDragState()

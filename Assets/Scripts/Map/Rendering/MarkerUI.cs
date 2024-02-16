@@ -12,8 +12,7 @@ namespace Map.Rendering
         [SerializeField] private float selectedScale = 1.5f;
 
         private Image _image;
-
-        private MapRendererUI _mapRendererUI;
+        private RectTransform _parentRectTransform;
 
         private RectTransform _rectTransform;
         private TMP_Text _text;
@@ -27,10 +26,10 @@ namespace Map.Rendering
 
         private void Awake()
         {
-            _mapRendererUI = GetComponentInParent<MapRendererUI>();
             _rectTransform = GetComponent<RectTransform>();
             _text = GetComponentInChildren<TMP_Text>();
             _image = GetComponentInChildren<Image>();
+            _parentRectTransform = transform.parent.GetComponent<RectTransform>();
         }
 
         private void Start()
@@ -82,7 +81,7 @@ namespace Map.Rendering
             _rectTransform.anchorMin = new Vector2(0, 0);
 
             // Move to Local Pos in Map
-            var localPoint = _mapRendererUI.GetComponent<RectTransform>().NormalizedToLocalPoint(normalizePos);
+            var localPoint = _parentRectTransform.NormalizedToLocalPoint(normalizePos);
             _rectTransform.anchoredPosition = localPoint;
         }
 

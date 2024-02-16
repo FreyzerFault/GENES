@@ -23,6 +23,9 @@ namespace Map
 
         [SerializeField] private float zoomMap = 1;
         [SerializeField] private float zoomMinimap = 1;
+        public Gradient heightGradient = new();
+
+        public Texture2D mapTexture;
 
         private float[,] _heightMap;
 
@@ -93,6 +96,7 @@ namespace Map
 
         private void Start()
         {
+            mapTexture = Terrain.ToTexture(1024, 1024, heightGradient);
             mainPathFindingGenerator = GameObject.FindWithTag("Map Path Main").GetComponent<PathFindingGenerator>();
         }
 

@@ -19,7 +19,7 @@ MonoBehaviour:
     width: 1600
     height: 817
   m_ShowMode: 4
-  m_Title: Hierarchy
+  m_Title: Game
   m_RootView: {fileID: 2}
   m_MinSize: {x: 875, y: 300}
   m_MaxSize: {x: 10000, y: 10000}
@@ -120,7 +120,7 @@ MonoBehaviour:
   m_MinSize: {x: 400, y: 100}
   m_MaxSize: {x: 32384, y: 16192}
   vertical: 0
-  controlID: 14594
+  controlID: 34
 --- !u!114 &6
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -140,8 +140,8 @@ MonoBehaviour:
     y: 0
     width: 733
     height: 767
-  m_MinSize: {x: 201, y: 221}
-  m_MaxSize: {x: 4001, y: 4021}
+  m_MinSize: {x: 200, y: 200}
+  m_MaxSize: {x: 4000, y: 4000}
   m_ActualView: {fileID: 14}
   m_Panes:
   - {fileID: 14}
@@ -168,8 +168,8 @@ MonoBehaviour:
     y: 0
     width: 338
     height: 767
-  m_MinSize: {x: 277, y: 121}
-  m_MaxSize: {x: 4002, y: 4021}
+  m_MinSize: {x: 275, y: 100}
+  m_MaxSize: {x: 4000, y: 4000}
   m_ActualView: {fileID: 17}
   m_Panes:
   - {fileID: 17}
@@ -199,7 +199,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 100}
   m_MaxSize: {x: 16192, y: 16192}
   vertical: 1
-  controlID: 14752
+  controlID: 35
 --- !u!114 &9
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -224,7 +224,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 50}
   m_MaxSize: {x: 16192, y: 8096}
   vertical: 0
-  controlID: 14674
+  controlID: 36
 --- !u!114 &10
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -244,8 +244,8 @@ MonoBehaviour:
     y: 0
     width: 264
     height: 410
-  m_MinSize: {x: 201, y: 221}
-  m_MaxSize: {x: 4001, y: 4021}
+  m_MinSize: {x: 202, y: 221}
+  m_MaxSize: {x: 4002, y: 4021}
   m_ActualView: {fileID: 18}
   m_Panes:
   - {fileID: 18}
@@ -440,7 +440,7 @@ MonoBehaviour:
       floating: 0
       collapsed: 0
       displayed: 1
-      snapOffset: {x: -161, y: -26}
+      snapOffset: {x: -166, y: -26}
       snapOffsetDelta: {x: 0, y: 0}
       snapCorner: 3
       id: Tool Settings
@@ -749,7 +749,7 @@ MonoBehaviour:
       sizeOverriden: 0
     m_OverlaysVisible: 1
   m_WindowGUID: 1ee5140339de9484aa4dcae1845259ce
-  m_Gizmos: 0
+  m_Gizmos: 1
   m_OverrideSceneCullingMask: 6917529027641081856
   m_SceneIsLit: 1
   m_SceneLighting: 1
@@ -758,9 +758,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: 24.763475, y: 29.243935, z: 24.984709}
+    m_Target: {x: 1145.8359, y: 520.49524, z: 56.36548}
     speed: 2
-    m_Value: {x: 24.763475, y: 29.243935, z: 24.984709}
+    m_Value: {x: 1145.8359, y: 520.49524, z: 56.36548}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -806,13 +806,13 @@ MonoBehaviour:
     m_GridAxis: 1
     m_gridOpacity: 0.5
   m_Rotation:
-    m_Target: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
+    m_Target: {x: 0.026986899, y: -0.026986875, z: 0.00072881184, w: 0.9992717}
     speed: 2
-    m_Value: {x: 0.7071068, y: 0.000029398803, z: 0, w: 0.7071068}
+    m_Value: {x: 0.026986886, y: -0.026986862, z: 0.0007288115, w: 0.9992712}
   m_Size:
-    m_Target: 25.227726
+    m_Target: 1144.2106
     speed: 2
-    m_Value: 25.227726
+    m_Value: 1144.2106
   m_Ortho:
     m_Target: 1
     speed: 2
@@ -1385,9 +1385,9 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 34790000
-      m_LastClickedID: 31028
-      m_ExpandedIDs: 94f9ffff94faffffecfaffffeefaffff28790000347900005879000082790000aa790000f6790000087a0000147a00004e7a0000
+      m_SelectedIDs: 
+      m_LastClickedID: 0
+      m_ExpandedIDs: ced6e4ff86d7e4ff6cdee4fffa9ee5ffb29fe5ff7ca6e5ff50b5e5ff08b6e5ff3cbde5ff4ee4e5ff06e5e5fffaebe5ff5006e6ff1407e6ffec0de6ff0019e6ffc419e6ffb820e6ff6ebce6ff2abde6ff16c4e6ff08f2e6ffc0f2e6ffb6f9e6ffe048e7ffa449e7ff7e50e7ff745be7ff385ce7ff2e63e7ff0ad1f8ff2cdafeff3adafeff44dafeff50dafeff80dafeff8edafeff98dafeffa4dafeff16dcfeff32e6feffece6feffd4edfefffafaffff2e7a000020ac00000aad000012ad0000befe0000f2fe0000fafe0000ea130100da140100a2150100d6150100de150100dc490100944b0100c84b0100d04b01002a54010054540100bc540100ac55010074560100a8560100b0560100ba56010044570100ec5d0100a0620100ca6201001e6501002665010030650100ba650100d8e4010002e501005ee7010068e70100f2e701000e13020016130200102102001e23020026230200
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -1456,7 +1456,7 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Scripts/PathFinding
+    - Assets/Scripts/Map
     m_Globs: []
     m_OriginalText: 
     m_ImportLogFlags: 0
@@ -1464,16 +1464,16 @@ MonoBehaviour:
   m_ViewMode: 1
   m_StartGridSize: 96
   m_LastFolders:
-  - Assets/Scripts/PathFinding
+  - Assets/Scripts/Map
   m_LastFoldersGridSize: 96
   m_LastProjectPath: C:\Users\dalcanta\Unity Projects\Proyecto Campo
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 67}
-    m_SelectedIDs: 667f0000
-    m_LastClickedID: 32614
-    m_ExpandedIDs: 00000000487f00004a7f00004c7f000000ca9a3b
+    scrollPos: {x: 0, y: 83}
+    m_SelectedIDs: 587f0000
+    m_LastClickedID: 32600
+    m_ExpandedIDs: 000000003e7f0000407f0000427f0000507f0000587f00006c7f00000cc1000000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1501,7 +1501,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 00000000487f00004a7f00004c7f000000ca9a3b
+    m_ExpandedIDs: 000000003e7f0000407f0000427f0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1528,8 +1528,8 @@ MonoBehaviour:
   m_ListAreaState:
     m_SelectedInstanceIDs: 
     m_LastClickedInstanceID: 0
-    m_HadKeyboardFocusLastEvent: 0
-    m_ExpandedInstanceIDs: 3e6e010000000000
+    m_HadKeyboardFocusLastEvent: 1
+    m_ExpandedInstanceIDs: 3e6e010000000000287c0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1553,7 +1553,7 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
     m_NewAssetIndexInList: -1
-    m_ScrollPosition: {x: 0, y: 804}
+    m_ScrollPosition: {x: 0, y: 277}
     m_GridSize: 96
   m_SkipHiddenPackages: 0
   m_DirectoriesAreaWidth: 136
@@ -1593,4 +1593,4 @@ MonoBehaviour:
     m_OverlaysVisible: 1
   m_LockTracker:
     m_IsLocked: 0
-  m_LastSelectedObjectID: 31028
+  m_LastSelectedObjectID: -1718740

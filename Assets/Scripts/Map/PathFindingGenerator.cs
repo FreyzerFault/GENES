@@ -74,12 +74,12 @@ namespace Map
 
 #if UNITY_EDITOR
         [ButtonMethod]
+#endif
         private void RedoPathFinding()
         {
             PathFinding.CleanCache();
 
             UpdatePath();
         }
-#endif
     }
 }

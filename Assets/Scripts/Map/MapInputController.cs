@@ -11,7 +11,7 @@ namespace Map
         private MapState MapState => MapManager.Instance.MapState;
         private int MarkersSelectedCount => MarkerManager.Instance.SelectedCount;
 
-        private void Start()
+        private void Awake()
         {
             HandleStateChanged(MapState);
             MapManager.Instance.OnStateChanged += HandleStateChanged;

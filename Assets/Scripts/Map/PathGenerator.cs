@@ -198,6 +198,7 @@ namespace Map
         {
             // Player -> Marker 1 -> Marker 2 -> ... -> Marker N
             var checkpoints = MarkerManager.Markers
+                .Where(marker => !marker.IsChecked)
                 .Select(marker => marker.WorldPosition)
                 .ToArray();
 
@@ -230,7 +231,7 @@ namespace Map
             }
 
             var path = BuildPath(
-                PlayerPosition, MarkerManager.Markers[0].WorldPosition,
+                PlayerPosition, MarkerManager.NextMarker.WorldPosition,
                 new Vector2(PlayerDirection.x, PlayerDirection.z)
             );
 
