@@ -7,7 +7,7 @@
       "dependencies": {
         "com.unity.ugui": "1.0.0"
       },
-      "hash": "44e73a8e0e6ec8c159cbd957d0e3903e4f27179f"
+      "hash": "e56483d404441832a982cca63b3f1b7af3616a7a"
     },
     "com.unity.2d.sprite": {
       "version": "1.0.0",
@@ -240,6 +240,13 @@
         "com.unity.modules.jsonserialize": "1.0.0"
       },
       "url": "https://packages.unity.com"
+    },
+    "procrain": {
+      "version": "https://github.com/FreyzerFault/Procrain.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "1ecc7dccdd206c7aba139511ac63d6bd23db5722"
     },
     "com.unity.modules.ai": {
       "version": "1.0.0",
