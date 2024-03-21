@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
-using ExtensionMethods;
+using MapGeneration.TextureGeneration;
 using MyBox;
 using UnityEngine;
 using UnityEngine.UI;
@@ -17,21 +17,29 @@ namespace Map.Rendering
 
         // MARKERS
         [SerializeField] private Transform markersUIParent;
+
         [SerializeField] private MarkerUI markerUIPrefab;
 
         // Image
         [SerializeField] private Image image;
+
         [SerializeField] protected RectTransform frameRectTransform;
+
         [SerializeField] protected RectTransform imageRectTransform;
+
         private readonly List<MarkerUI> _markersUIObjects = new();
-        private float ImageWidth => image.rectTransform.rect.width * image.rectTransform.localScale.x;
-        private float ImageHeight => image.rectTransform.rect.height * image.rectTransform.localScale.y;
+
+        private float ImageWidth =>
+            image.rectTransform.rect.width * image.rectTransform.localScale.x;
+
+        private float ImageHeight =>
+            image.rectTransform.rect.height * image.rectTransform.localScale.y;
+
         private Vector2 ImageSize => new(ImageWidth, ImageHeight);
 
         private float ZoomScale => MapManager.Instance.Zoom;
 
         protected MarkerManager MarkerManager => MarkerManager.Instance;
-
 
         private Vector2 OriginPoint
         {
@@ -42,7 +50,6 @@ namespace Map.Rendering
                 return corners[0];
             }
         }
-
 
         // ================================== UNITY ==================================
 
@@ -82,27 +89,33 @@ namespace Map.Rendering
 
         // ================================== EVENT SUSCRIBERS ==================================
         private void HandleAdded(Marker marker, int index) => InstantiateMarker(marker, index);
+
         private void HandleRemoved(Marker marker, int index) => DestroyMarkerUI(index);
+
         private void HandleClear() => ClearMarkersUI();
 
         // ================================== TERRAIN VISUALIZATION ==================================
         private void RenderTerrain()
         {
             // Create Texture of Map
-            var texture = MapManager.Instance.mapTexture;
-            image.sprite =
-                Sprite.Create(texture != null
-                        ? texture
-                        : MapManager.Terrain.ToTexture((int)ImageWidth,
-                            ImageHeight == 0 ? (int)ImageWidth : (int)ImageHeight,
-                            heightGradient),
-                    imageRectTransform.rect, imageRectTransform.pivot);
+            var texture = TextureGenerator.BuildTexture2D(
+                MapManager.Instance.heightMap,
+                heightGradient
+            );
+
+            texture.Apply();
+            image.sprite = Sprite.Create(
+                texture,
+                imageRectTransform.rect,
+                imageRectTransform.pivot
+            );
         }
 
         // ================================== PLAYER POINT ==================================
         private void UpdatePlayerPoint()
         {
-            playerSprite.anchoredPosition = MapManager.Instance.PlayerNormalizedPosition * frameRectTransform.rect.size;
+            playerSprite.anchoredPosition =
+                MapManager.Instance.PlayerNormalizedPosition * frameRectTransform.rect.size;
             playerSprite.rotation = MapManager.Instance.PlayerRotationForUI;
 
             Zoom(ZoomScale);
@@ -142,13 +155,17 @@ namespace Map.Rendering
         // ================================== MARKERS ==================================
         private void ClearMarkersUI()
         {
-            GetComponentsInChildren<MarkerUI>().ToList().ForEach(marker =>
-            {
-                if (Application.isPlaying)
-                    Destroy(marker.gameObject);
-                else
-                    DestroyImmediate(marker.gameObject);
-            });
+            GetComponentsInChildren<MarkerUI>()
+                .ToList()
+                .ForEach(
+                    marker =>
+                    {
+                        if (Application.isPlaying)
+                            Destroy(marker.gameObject);
+                        else
+                            DestroyImmediate(marker.gameObject);
+                    }
+                );
         }
 
         private void UpdateMarkers()

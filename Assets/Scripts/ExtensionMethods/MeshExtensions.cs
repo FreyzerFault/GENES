@@ -4,10 +4,13 @@ namespace ExtensionMethods
 {
     public static class MeshExtensions
     {
-        public static void GenerateMeshPlane(this Mesh mesh, float cellSize, Vector2 size)
+        public static void GenerateMeshPlane(this Mesh mesh, float resolution, Vector2 size)
         {
-            var meshCellSize = cellSize;
-            Vector2Int sideCellCount = new Vector2Int(Mathf.CeilToInt(size.x / cellSize), Mathf.CeilToInt(size.y / cellSize));
+            var meshCellSize = 1 / resolution;
+            var sideCellCount = new Vector2Int(
+                Mathf.CeilToInt(size.x / meshCellSize),
+                Mathf.CeilToInt(size.y / meshCellSize)
+            );
             var sideVerticesCount = sideCellCount + Vector2Int.one;
 
             var vertices = new Vector3[sideVerticesCount.x * sideVerticesCount.y];
@@ -16,11 +19,7 @@ namespace ExtensionMethods
             for (var y = 0; y < sideVerticesCount.y; y++)
             for (var x = 0; x < sideVerticesCount.x; x++)
             {
-                var vertex = new Vector3(
-                    x * meshCellSize,
-                    0,
-                    y * meshCellSize
-                );
+                var vertex = new Vector3(x * meshCellSize, 0, y * meshCellSize);
 
                 // Center Mesh
                 vertex -= new Vector3(size.x, 0, size.y) / 2;
@@ -44,7 +43,7 @@ namespace ExtensionMethods
 
             mesh.vertices = vertices;
             mesh.triangles = triangles;
-            
+
             mesh.RecalculateBounds();
             mesh.RecalculateNormals();
             mesh.Optimize();

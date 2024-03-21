@@ -6,6 +6,7 @@ namespace Map
     public class MapInputController : MonoBehaviour
     {
         [SerializeField] private GameObject minimapParent;
+
         [SerializeField] private GameObject fullScreenMapParent;
 
         private MapState MapState => MapManager.Instance.MapState;
@@ -21,7 +22,9 @@ namespace Map
         {
             // SHIFT => Remove Mode
             var shiftPressed = Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.LeftShift);
-            MarkerManager.Instance.EditMarkerMode = shiftPressed ? EditMarkerMode.Delete : EditMarkerMode.Add;
+            MarkerManager.Instance.EditMarkerMode = shiftPressed
+                ? EditMarkerMode.Delete
+                : EditMarkerMode.Add;
         }
 
         private void OnDestroy()
@@ -31,6 +34,7 @@ namespace Map
 
         private void HandleStateChanged(MapState state)
         {
+            if (fullScreenMapParent == null || minimapParent == null) return;
             fullScreenMapParent.SetActive(false);
             minimapParent.SetActive(false);
 
@@ -58,9 +62,10 @@ namespace Map
                 _ => MapState.Fullscreen
             };
 
-            GameManager.Instance.State = MapManager.Instance.MapState == MapState.Fullscreen
-                ? GameManager.GameState.Paused
-                : GameManager.GameState.Playing;
+            GameManager.Instance.State =
+                MapManager.Instance.MapState == MapState.Fullscreen
+                    ? GameManager.GameState.Paused
+                    : GameManager.GameState.Playing;
         }
 
         private void OnZoomInOut(InputValue value) =>

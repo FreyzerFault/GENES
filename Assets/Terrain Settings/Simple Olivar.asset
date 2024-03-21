@@ -1,0 +1,88 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bcfeeaff4ed61944f9e0f24417334a96, type: 3}
+  m_Name: Simple Olivar
+  m_EditorClassIdentifier: 
+  autoUpdate: 1
+  dirty: 0
+  noiseParams:
+    size: 256
+    scale: 100
+    numOctaves: 5
+    persistance: 0.5
+    lacunarity: 2
+    offset:
+      x: 0
+      y: 0
+    seed: 1
+  heightCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0.0024180338
+      value: 0.0069066286
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 136
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.10840002
+      value: 0.06205079
+      inSlope: 0.6354714
+      outSlope: 0.6354714
+      tangentMode: 136
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.22579828
+      value: 0.14885838
+      inSlope: 0.72894853
+      outSlope: 0.72894853
+      tangentMode: 136
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.36178428
+      value: 0.24675487
+      inSlope: 0.47548166
+      outSlope: 0.47548166
+      tangentMode: 136
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.60698366
+      value: 0.33010504
+      inSlope: 1.0015031
+      outSlope: 1.0015031
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.27863345
+    - serializedVersion: 3
+      time: 1.1138
+      value: 1.0704346
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  heightMultiplier: 100
+  lod: 0

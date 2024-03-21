@@ -11,14 +11,17 @@ namespace Map.Rendering
     {
         // RENDERER
         [SerializeField] protected PathObject pathObjPrefab;
+
         [SerializeField] protected List<PathObject> pathObjects = new();
 
         // PATH
         [SerializeField] private float heightOffset = 0.5f;
-        [SerializeField] private float lineThickness = 1f;
-        [SerializeField] private Color color = Color.yellow;
-        [SerializeField] private PathGenerator pathFindingGenerator;
 
+        [SerializeField] private float lineThickness = 1f;
+
+        [SerializeField] private Color color = Color.yellow;
+
+        [SerializeField] private PathGenerator pathFindingGenerator;
 
         public float LineThickness
         {
@@ -30,10 +33,15 @@ namespace Map.Rendering
             }
         }
 
-
         // ============================= INITIALIZATION =============================
+        private void Awake()
+        {
+            pathFindingGenerator = GetComponent<PathFindingGenerator>();
+        }
+
         private void Start()
         {
+            if (pathFindingGenerator == null) return;
             pathFindingGenerator.OnPathAdded += AddPath;
             pathFindingGenerator.OnPathDeleted += RemovePath;
             pathFindingGenerator.OnPathUpdated += UpdateLine;
@@ -44,6 +52,7 @@ namespace Map.Rendering
 
         private void OnDestroy()
         {
+            if (pathFindingGenerator == null) return;
             pathFindingGenerator.OnPathAdded -= AddPath;
             pathFindingGenerator.OnPathDeleted -= RemovePath;
             pathFindingGenerator.OnPathUpdated -= UpdateLine;
@@ -56,18 +65,18 @@ namespace Map.Rendering
 
         public bool IsEmpty => PathCount == 0;
 
-        public void UpdateLine(Path path, int index) =>
-            pathObjects[index].Path = path;
+        public void UpdateLine(Path path, int index) => pathObjects[index].Path = path;
 
         public void UpdateAllLines(Path[] paths)
         {
             for (var i = 0; i < paths.Length; i++)
-                if (i >= pathObjects.Count) AddPath(paths[i]);
-                else UpdateLine(paths[i], i);
+                if (i >= pathObjects.Count)
+                    AddPath(paths[i]);
+                else
+                    UpdateLine(paths[i], i);
 
             UpdateColors();
         }
-
 
         // ============================= MODIFY PATH RENDERERS =============================
 
@@ -110,7 +119,6 @@ namespace Map.Rendering
                     DestroyImmediate(pathObject.gameObject);
             pathObjects.Clear();
         }
-
 
         // Assign Colors progressively like a rainbow :D
         private void UpdateColors()

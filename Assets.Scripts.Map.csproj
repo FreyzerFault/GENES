@@ -310,7 +310,7 @@
       <HintPath>C:\Program Files\Unity\Hub\Editor\2022.3.16f1\Editor\Data\PlaybackEngines\WindowsStandaloneSupport\UnityEditor.WindowsStandalone.Extensions.dll</HintPath>
     </Reference>
     <Reference Include="Unity.VisualScripting.YamlDotNet">
-      <HintPath>C:\Users\dalcanta\Unity Projects\Proyecto Campo\Library\PackageCache\com.unity.visualscripting@1.9.1\Editor\VisualScripting.Core\Dependencies\YamlDotNet\Unity.VisualScripting.YamlDotNet.dll</HintPath>
+      <HintPath>C:\Users\dalcanta\Unity Projects\Proyecto Campo\Library\PackageCache\com.unity.visualscripting@1.9.2\Editor\VisualScripting.Core\Dependencies\YamlDotNet\Unity.VisualScripting.YamlDotNet.dll</HintPath>
     </Reference>
     <Reference Include="ReportGeneratorMerged">
       <HintPath>C:\Users\dalcanta\Unity Projects\Proyecto Campo\Library\PackageCache\com.unity.testtools.codecoverage@1.2.4\lib\ReportGenerator\ReportGeneratorMerged.dll</HintPath>
@@ -328,13 +328,13 @@
       <HintPath>C:\Users\dalcanta\Unity Projects\Proyecto Campo\Library\PackageCache\com.unity.collab-proxy@2.2.0\Lib\Editor\PlasticSCM\log4netPlastic.dll</HintPath>
     </Reference>
     <Reference Include="Unity.VisualScripting.IonicZip">
-      <HintPath>C:\Users\dalcanta\Unity Projects\Proyecto Campo\Library\PackageCache\com.unity.visualscripting@1.9.1\Editor\VisualScripting.Core\Dependencies\DotNetZip\Unity.VisualScripting.IonicZip.dll</HintPath>
+      <HintPath>C:\Users\dalcanta\Unity Projects\Proyecto Campo\Library\PackageCache\com.unity.visualscripting@1.9.2\Editor\VisualScripting.Core\Dependencies\DotNetZip\Unity.VisualScripting.IonicZip.dll</HintPath>
     </Reference>
     <Reference Include="Unity.VisualScripting.Antlr3.Runtime">
-      <HintPath>C:\Users\dalcanta\Unity Projects\Proyecto Campo\Library\PackageCache\com.unity.visualscripting@1.9.1\Runtime\VisualScripting.Flow\Dependencies\NCalc\Unity.VisualScripting.Antlr3.Runtime.dll</HintPath>
+      <HintPath>C:\Users\dalcanta\Unity Projects\Proyecto Campo\Library\PackageCache\com.unity.visualscripting@1.9.2\Runtime\VisualScripting.Flow\Dependencies\NCalc\Unity.VisualScripting.Antlr3.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="Unity.VisualScripting.TextureAssets">
-      <HintPath>C:\Users\dalcanta\Unity Projects\Proyecto Campo\Library\PackageCache\com.unity.visualscripting@1.9.1\Editor\VisualScripting.Core\EditorAssetResources\Unity.VisualScripting.TextureAssets.dll</HintPath>
+      <HintPath>C:\Users\dalcanta\Unity Projects\Proyecto Campo\Library\PackageCache\com.unity.visualscripting@1.9.2\Editor\VisualScripting.Core\EditorAssetResources\Unity.VisualScripting.TextureAssets.dll</HintPath>
     </Reference>
     <Reference Include="netstandard">
       <HintPath>C:\Program Files\Unity\Hub\Editor\2022.3.16f1\Editor\Data\NetStandard\ref\2.1.0\netstandard.dll</HintPath>
@@ -734,6 +734,18 @@
     <ProjectReference Include="Assets.Scripts.Utils.csproj">
       <Project>{51189add-f733-4179-0a42-6ac3c2a69b16}</Project>
       <Name>Assets.Scripts.Utils</Name>
+    </ProjectReference>
+    <ProjectReference Include="Procrain.MapGeneration.csproj">
+      <Project>{830defe6-8853-bf3d-3b4e-45670b5a5be4}</Project>
+      <Name>Procrain.MapGeneration</Name>
+    </ProjectReference>
+    <ProjectReference Include="Procrain.Noise.csproj">
+      <Project>{5e525b5f-f0be-0341-510c-ac0bbc3cfe1c}</Project>
+      <Name>Procrain.Noise</Name>
+    </ProjectReference>
+    <ProjectReference Include="Procrain.Utils.csproj">
+      <Project>{dff1b38a-820b-862c-0816-27baa1d9338c}</Project>
+      <Name>Procrain.Utils</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

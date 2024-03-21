@@ -202,7 +202,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.textmeshpro": {
-      "version": "3.0.6",
+      "version": "3.0.8",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -232,7 +232,7 @@
       }
     },
     "com.unity.visualscripting": {
-      "version": "1.9.1",
+      "version": "1.9.2",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -242,11 +242,10 @@
       "url": "https://packages.unity.com"
     },
     "procrain": {
-      "version": "https://github.com/FreyzerFault/Procrain.git",
+      "version": "file:C:/Users/dalcanta/Unity Projects/Local Packages/Procrain",
       "depth": 0,
-      "source": "git",
-      "dependencies": {},
-      "hash": "431009875bedb8fe1e6faf693315a28ed7cb6f3c"
+      "source": "local",
+      "dependencies": {}
     },
     "com.unity.modules.ai": {
       "version": "1.0.0",

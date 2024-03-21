@@ -8,7 +8,9 @@ namespace CameraManagement
     public class MarkersCamTargetGroup : MonoBehaviour
     {
         [SerializeField] private float firstMarkerWeight = 2;
+
         [SerializeField] private float defaultmarkerWeight = 1;
+
         private CinemachineTargetGroup _targetGroup;
 
         private MarkerObject[] MarkerObjs => FindObjectsOfType<MarkerObject>();
@@ -30,6 +32,7 @@ namespace CameraManagement
 
         private void OnDestroy()
         {
+            if (MarkerManager.Instance == null) return;
             MarkerManager.Instance.OnMarkerAdded -= HandleOnAnyMarkerChange;
             MarkerManager.Instance.OnMarkerRemoved -= HandleOnAnyMarkerChange;
             MarkerManager.Instance.OnMarkerMoved -= HandleOnAnyMarkerChange;

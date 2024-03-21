@@ -1,5 +1,6 @@
 using System;
 using ExtensionMethods;
+using MapGeneration;
 using UnityEngine;
 using Utils;
 
@@ -15,19 +16,22 @@ namespace Map
     public class MapManager : Singleton<MapManager>
     {
         [SerializeField] private GameObject player;
+
         [SerializeField] private GameObject water;
 
-        public PathFindingGenerator mainPathFindingGenerator;
+        // MAP
+        public TerrainSettingsSo terrainSettings;
+        public Gradient heightGradient = new();
 
         [SerializeField] private MapState mapState;
 
         [SerializeField] private float zoomMap = 1;
+
         [SerializeField] private float zoomMinimap = 1;
-        public Gradient heightGradient = new();
 
-        public Texture2D mapTexture;
-
-        private float[,] _heightMap;
+        // PATH FINDING
+        public PathFindingGenerator mainPathFindingGenerator;
+        public HeightMap heightMap;
 
         public MapState MapState
         {
@@ -41,12 +45,13 @@ namespace Map
 
         public float Zoom
         {
-            get => mapState switch
-            {
-                MapState.Minimap => zoomMinimap,
-                MapState.Fullscreen => zoomMap,
-                _ => -1
-            };
+            get =>
+                mapState switch
+                {
+                    MapState.Minimap => zoomMinimap,
+                    MapState.Fullscreen => zoomMap,
+                    _ => -1
+                };
             set
             {
                 value = Mathf.Max(value, 1);
@@ -73,12 +78,15 @@ namespace Map
         public float TerrainWidth => Terrain.terrainData.size.x;
         public float TerrainHeight => Terrain.terrainData.size.z;
 
-        public float WaterHeight => water.transform.position.y;
+        public float WaterHeight => water == null ? 0 : water.transform.position.y;
 
         // PLAYER
         public Vector3 PlayerPosition => player.transform.position;
         public Vector3 PlayerForward => player.transform.forward;
-        public Vector2 PlayerNormalizedPosition => Terrain.GetNormalizedPosition(player.transform.position);
+
+        public Vector2 PlayerNormalizedPosition =>
+            Terrain.GetNormalizedPosition(player.transform.position);
+
         public Vector2 PlayerDistanceToTopRightCorner => Vector2.one - PlayerNormalizedPosition;
 
         private float PlayerRotationAngle => player.transform.eulerAngles.y;
@@ -96,20 +104,31 @@ namespace Map
 
         private void Start()
         {
-            mapTexture = Terrain.ToTexture(1024, 1024, heightGradient);
-            mainPathFindingGenerator = GameObject.FindWithTag("Map Path Main").GetComponent<PathFindingGenerator>();
+            var mainPathFindingObj = GameObject.FindWithTag("Map Path Main");
+            if (mainPathFindingObj != null)
+                mainPathFindingGenerator = mainPathFindingObj.GetComponent<PathFindingGenerator>();
+
+            UpdateMap();
         }
 
         public event Action<MapState> OnStateChanged;
         public event Action<float> OnZoomChanged;
+
+        public void UpdateMap() =>
+            heightMap =
+                terrainSettings != null
+                    ? HeightMapGenerator.CreatePerlinNoiseHeightMap(
+                        terrainSettings.NoiseParams,
+                        terrainSettings.HeightCurve
+                    )
+                    : new HeightMap(Terrain);
 
         public void ZoomIn(float zoomAmount = 0.1f) => Zoom += zoomAmount;
 
         public bool IsLegalPos(Vector2 normPos)
         {
             var worldPos = Terrain.GetWorldPosition(normPos);
-            if (worldPos.y < WaterHeight) return false;
-            return IsLegalPos(worldPos);
+            return !(worldPos.y < WaterHeight) && IsLegalPos(worldPos);
         }
 
         public bool IsLegalPos(Vector3 normPos) => mainPathFindingGenerator.IsLegalPos(normPos);
