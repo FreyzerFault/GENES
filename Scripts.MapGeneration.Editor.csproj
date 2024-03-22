@@ -742,10 +742,6 @@
       <Project>{bc37734a-8c60-b81b-9d02-1e40cbefdff1}</Project>
       <Name>Procrain.MapGeneration.TerrainGeneration.InfiniteGeneration</Name>
     </ProjectReference>
-    <ProjectReference Include="Scripts.Utils.Editor.csproj">
-      <Project>{cb593a60-fb47-d04e-c001-b0b93276dbb4}</Project>
-      <Name>Scripts.Utils.Editor</Name>
-    </ProjectReference>
     <ProjectReference Include="Scripts.Geometry.csproj">
       <Project>{689fd1c9-9885-4b74-95ec-469d4d389211}</Project>
       <Name>Scripts.Geometry</Name>
@@ -753,6 +749,10 @@
     <ProjectReference Include="DavidUtils.csproj">
       <Project>{b195b350-5f82-196a-330d-3c4e004004bf}</Project>
       <Name>DavidUtils</Name>
+    </ProjectReference>
+    <ProjectReference Include="DavidUtils.Editor.csproj">
+      <Project>{0f7a7cde-a24e-c84f-d785-e4b0323d8a48}</Project>
+      <Name>DavidUtils.Editor</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

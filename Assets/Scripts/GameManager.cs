@@ -26,7 +26,7 @@ public class GameManager : SingletonPersistent<GameManager>
     public bool IsPlaying => State == GameState.Playing;
     public bool IsPaused => State == GameState.Paused;
 
-    private void Awake()
+    protected override void Awake()
     {
         base.Awake();
 

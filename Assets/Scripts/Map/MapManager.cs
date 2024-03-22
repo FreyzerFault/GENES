@@ -19,15 +19,20 @@ namespace Map
         // PATH FINDING
         public PathFindingGenerator mainPathFindingGenerator;
 
-        [SerializeField] private MapState mapState;
+        [SerializeField]
+        private MapState mapState;
 
-        [SerializeField] private GameObject player;
+        [SerializeField]
+        private GameObject player;
 
-        [SerializeField] private GameObject water;
+        [SerializeField]
+        private GameObject water;
 
-        [SerializeField] private float zoomMap = 1;
+        [SerializeField]
+        private float zoomMap = 1;
 
-        [SerializeField] private float zoomMinimap = 1;
+        [SerializeField]
+        private float zoomMinimap = 1;
 
         public HeightMap heightMap;
 
@@ -95,7 +100,7 @@ namespace Map
         public Quaternion PlayerRotationForUI =>
             Quaternion.AngleAxis(90 + PlayerRotationAngle, Vector3.back);
 
-        private void Awake()
+        protected override void Awake()
         {
             base.Awake();
 

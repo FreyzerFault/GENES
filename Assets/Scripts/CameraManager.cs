@@ -1,13 +1,14 @@
 using Cinemachine;
 using UnityEngine;
 
-public class CameraManager : MonoBehaviour
+public class CameraManager : Singleton<CameraManager>
 {
     [SerializeField] private CinemachineVirtualCamera[] _cams;
+
     private ICinemachineCamera _activeCam;
     private int _currentCamIndex;
 
-    private void Awake()
+    protected override void Awake()
     {
         var brain = GetComponent<CinemachineBrain>();
         _activeCam = brain.ActiveVirtualCamera;

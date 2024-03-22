@@ -45,6 +45,8 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\2022.3.16f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.Properties.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="C:\Users\dalcanta\Unity Projects\Local Packages\DavidUtils\Editor\PowerOfTwoDrawer.cs" />
+    <Compile Include="C:\Users\dalcanta\Unity Projects\Local Packages\DavidUtils\Editor\AutoUpdatableSoEditor.cs" />
     <Compile Include="C:\Users\dalcanta\Unity Projects\Local Packages\DavidUtils\Editor\SingletonExecuteAlways.cs" />
     <None Include="C:\Users\dalcanta\Unity Projects\Local Packages\DavidUtils\Editor\DavidUtils.Editor.asmdef" />
     <Reference Include="UnityEngine">
