@@ -27,12 +27,15 @@ namespace UI
         {
             _parameterControllers = new Dictionary<AstarParam, ParameterController>();
             foreach (var pair in Config.parameters.pairElements)
-                _parameterControllers.Add(pair.key, new ParameterController
-                {
-                    labelText = parameterControllerObjects[(int)pair.key].GetComponentsInChildren<TMP_Text>()[0],
-                    valueText = parameterControllerObjects[(int)pair.key].GetComponentsInChildren<TMP_Text>()[1],
-                    slider = parameterControllerObjects[(int)pair.key].GetComponentInChildren<Slider>()
-                });
+                _parameterControllers.Add(
+                    pair.key,
+                    new ParameterController
+                    {
+                        labelText = parameterControllerObjects[(int)pair.key].GetComponentsInChildren<TMP_Text>()[0],
+                        valueText = parameterControllerObjects[(int)pair.key].GetComponentsInChildren<TMP_Text>()[1],
+                        slider = parameterControllerObjects[(int)pair.key].GetComponentInChildren<Slider>()
+                    }
+                );
         }
 
         private void Start()
@@ -45,15 +48,19 @@ namespace UI
                 controller.Value.labelText.text = displayName;
                 controller.Value.valueText.text = value.ToString("F2");
                 controller.Value.slider.value = value;
-                controller.Value.slider.onValueChanged.AddListener(newValue =>
-                    OnValueChange(newValue, displayName, controller.Key));
+                controller.Value.slider.onValueChanged.AddListener(
+                    newValue =>
+                        OnValueChange(newValue, displayName, controller.Key)
+                );
             }
         }
 
         private void OnValueChange(float value, string displayName, AstarParam parameter)
         {
-            Config.parameters.SetValue(parameter,
-                new ParamValue { value = value, displayName = displayName });
+            Config.parameters.SetValue(
+                parameter,
+                new ParamValue { value = value, displayName = displayName }
+            );
             updateButton.gameObject.SetActive(true);
 
             _parameterControllers[parameter].valueText.text = value.ToString("F2");

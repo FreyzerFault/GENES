@@ -23,10 +23,19 @@ namespace PathFinding
     public abstract class PathFindingAlgorithm
     {
         // Principal algoritmo
-        public abstract Path FindPath(Node start, Node end, Terrain terrain, PathFindingConfigSo paramsConfig);
+        public abstract Path FindPath(
+            Node start,
+            Node end,
+            Terrain terrain,
+            PathFindingConfigSo paramsConfig
+        );
 
         // Ejecutar el Algoritmo para varios checkpoints
-        public Path FindPathByCheckpoints(Node[] checkPoints, Terrain terrain, PathFindingConfigSo paramsConfig)
+        public Path FindPathByCheckpoints(
+            Node[] checkPoints,
+            Terrain terrain,
+            PathFindingConfigSo paramsConfig
+        )
         {
             if (checkPoints.Length < 2) return Path.EmptyPath;
 
@@ -35,18 +44,23 @@ namespace PathFinding
             var nodes = Array.Empty<Node>();
             for (var i = 1; i < checkPoints.Length; i++)
                 nodes = nodes
-                    .Concat(FindPath(checkPoints[i - 1], checkPoints[i], terrain, paramsConfig).Nodes)
+                    .Concat(
+                        FindPath(checkPoints[i - 1], checkPoints[i], terrain, paramsConfig).Nodes
+                    )
                     .ToArray();
 
             var path = new Path(nodes);
             return path;
         }
 
-
         // NODE Parameters
         protected abstract float CalculateCost(Node a, Node b, PathFindingConfigSo paramsConfig);
-        protected abstract float CalculateHeuristic(Node node, Node end, PathFindingConfigSo paramsConfig);
 
+        protected abstract float CalculateHeuristic(
+            Node node,
+            Node end,
+            PathFindingConfigSo paramsConfig
+        );
 
         // ==================== RESTRICCIONES ====================
         public bool IsLegal(Node node, PathFindingConfigSo paramsConfig)
@@ -62,14 +76,20 @@ namespace PathFinding
 
         protected bool LegalPosition(Vector2 pos, Terrain terrain) => !terrain.OutOfBounds(pos);
 
-        protected bool LegalHeight(float height, PathFindingConfigSo paramsConfig) => height >= paramsConfig.minHeight;
+        protected bool LegalHeight(float height, PathFindingConfigSo paramsConfig) =>
+            height >= paramsConfig.minHeight;
 
         protected bool LegalSlope(float slopeAngle, PathFindingConfigSo paramsConfig) =>
             slopeAngle <= paramsConfig.maxSlopeAngle;
 
         // ==================== NEIGHBOURS ====================
-        protected Node[] CreateNeighbours(Node node, PathFindingConfigSo paramsConfig, Terrain terrain,
-            HashSet<Node> nodesAlreadyFound, bool onlyFrontNeighbours = true)
+        protected Node[] CreateNeighbours(
+            Node node,
+            PathFindingConfigSo paramsConfig,
+            Terrain terrain,
+            HashSet<Node> nodesAlreadyFound,
+            bool onlyFrontNeighbours = true
+        )
         {
             var neighbours = new List<Node>();
             var direction = node.direction;
@@ -84,8 +104,7 @@ namespace PathFinding
                 );
 
                 // Only Front Neighbours
-                if (onlyFrontNeighbours && Vector2.Dot(offset, direction) < 0)
-                    continue;
+                if (onlyFrontNeighbours && Vector2.Dot(offset, direction) < 0) continue;
 
                 // World Position
                 var neighPos = new Vector3(
@@ -105,13 +124,16 @@ namespace PathFinding
                 }
 
                 // Properties
-                neigh.position = new Vector3(neigh.position.x, terrain.SampleHeight(neighPos), neigh.position.z);
+                neigh.position = new Vector3(
+                    neigh.position.x,
+                    terrain.SampleHeight(neighPos),
+                    neigh.position.z
+                );
                 neigh.slopeAngle = terrain.GetSlopeAngle(neighPos);
                 neigh.size = node.size;
 
                 // Si no es legal se ignora
-                if (!IsLegal(neigh, paramsConfig))
-                    continue;
+                if (!IsLegal(neigh, paramsConfig)) continue;
 
                 neighbours.Add(neigh);
                 nodesAlreadyFound.Add(neigh);
@@ -130,10 +152,10 @@ namespace PathFinding
         protected PathFindingCache Cache;
 
         protected bool IsCached(Node start, Node end) =>
-            Cache.path != null &&
-            Cache.path.Nodes.Length > 0 &&
-            Cache.path.Start.Equals(start) &&
-            Cache.path.End.Equals(end);
+            Cache.path != null
+            && Cache.path.Nodes.Length > 0
+            && Cache.path.Start.Equals(start)
+            && Cache.path.End.Equals(end);
 
         public void CleanCache()
         {

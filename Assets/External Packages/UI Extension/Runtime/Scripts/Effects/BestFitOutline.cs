@@ -10,10 +10,10 @@ using System.Collections.Generic;
 namespace UnityEngine.UI.Extensions
 {
 #if UNITY_2022_1_OR_NEWER
-	[Obsolete("BestFitOutline is not supported in Unity 2022.1 or newer. Use TMPro instead.")]
-	public class BestFitOutline : Shadow
-	{
-	}
+    [Obsolete("BestFitOutline is not supported in Unity 2022.1 or newer. Use TMPro instead.")]
+    public class BestFitOutline : Shadow
+    {
+    }
 #else
     [AddComponentMenu("UI/Effects/Extensions/BestFit Outline")]
 	public class BestFitOutline : Shadow
@@ -47,7 +47,8 @@ namespace UnityEngine.UI.Extensions
 
 			if (foundtext && foundtext.resizeTextForBestFit)  
 			{
-				best_fit_adjustment = (float)foundtext.cachedTextGenerator.fontSizeUsedForBestFit / (foundtext.resizeTextMaxSize-1); //max size seems to be exclusive 
+				best_fit_adjustment =
+ (float)foundtext.cachedTextGenerator.fontSizeUsedForBestFit / (foundtext.resizeTextMaxSize-1); //max size seems to be exclusive 
 			}
 			
 			int start = 0;
@@ -71,4 +72,4 @@ namespace UnityEngine.UI.Extensions
         }
 	}
 #endif
-    }
+}

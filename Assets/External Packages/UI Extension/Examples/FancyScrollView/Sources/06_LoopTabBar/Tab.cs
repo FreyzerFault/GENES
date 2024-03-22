@@ -6,16 +6,17 @@
 
 namespace UnityEngine.UI.Extensions.Examples.FancyScrollViewExample06
 {
-    class Tab : FancyCell<ItemData, Context>
+    internal class Tab : FancyCell<ItemData, Context>
     {
-        [SerializeField] Animator animator = default;
-        [SerializeField] Text message = default;
-        [SerializeField] Button button = default;
+        [SerializeField] private Animator animator;
+        [SerializeField] private Text message;
+        [SerializeField] private Button button;
 
-        static class AnimatorHash
-        {
-            public static readonly int Scroll = Animator.StringToHash("scroll");
-        }
+        // GameObject が非アクティブになると Animator がリセットされてしまうため
+        // 現在位置を保持しておいて OnEnable のタイミングで現在位置を再設定します
+        private float currentPosition;
+
+        private void OnEnable() => UpdatePosition(currentPosition);
 
         public override void Initialize()
         {
@@ -31,18 +32,14 @@ namespace UnityEngine.UI.Extensions.Examples.FancyScrollViewExample06
         {
             currentPosition = position;
 
-            if (animator.isActiveAndEnabled)
-            {
-                animator.Play(AnimatorHash.Scroll, -1, position);
-            }
+            if (animator.isActiveAndEnabled) animator.Play(AnimatorHash.Scroll, -1, position);
 
             animator.speed = 0;
         }
 
-        // GameObject が非アクティブになると Animator がリセットされてしまうため
-        // 現在位置を保持しておいて OnEnable のタイミングで現在位置を再設定します
-        float currentPosition = 0;
-
-        void OnEnable() => UpdatePosition(currentPosition);
+        private static class AnimatorHash
+        {
+            public static readonly int Scroll = Animator.StringToHash("scroll");
+        }
     }
 }

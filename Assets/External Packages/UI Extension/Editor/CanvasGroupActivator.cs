@@ -9,52 +9,28 @@ namespace UnityEngine.UI.Extensions
 {
     public class CanvasGroupActivator : EditorWindow
     {
-        [MenuItem("Window/UI/Extensions/Canvas Groups Activator")]
-        public static void InitWindow()
-        {
-            EditorWindow.GetWindow<CanvasGroupActivator>();
-        }
+        private CanvasGroup[] canvasGroups;
 
-        CanvasGroup[] canvasGroups;
-
-        void OnEnable()
+        private void OnEnable()
         {
             ObtainCanvasGroups();
         }
 
-        void OnFocus()
+        private void OnGUI()
         {
-            ObtainCanvasGroups();
-        }
-
-        void ObtainCanvasGroups()
-        {
-#if UNITY_2023_1_OR_NEWER
-			canvasGroups = GameObject.FindObjectsByType<CanvasGroup>(FindObjectsSortMode.None);
-#else
-            canvasGroups = GameObject.FindObjectsOfType<CanvasGroup>();
-#endif            
-        }
-
-        void OnGUI()
-        {
-            if (canvasGroups == null)
-            {
-                return;
-            }
+            if (canvasGroups == null) return;
 
             GUILayout.Space(10f);
             GUILayout.Label("Canvas Groups");
 
-            for (int i = 0; i < canvasGroups.Length; i++)
+            for (var i = 0; i < canvasGroups.Length; i++)
             {
-                if (canvasGroups[i] == null) { continue; }
+                if (canvasGroups[i] == null) continue;
 
-                bool initialActive = false;
-                if (canvasGroups[i].alpha == 1.0f)
-                    initialActive = true;
+                var initialActive = false;
+                if (canvasGroups[i].alpha == 1.0f) initialActive = true;
 
-                bool active = EditorGUILayout.Toggle(canvasGroups[i].name, initialActive);
+                var active = EditorGUILayout.Toggle(canvasGroups[i].name, initialActive);
                 if (active != initialActive)
                 {
                     //If deactivated and initially active
@@ -80,41 +56,51 @@ namespace UnityEngine.UI.Extensions
 
             GUILayout.Space(5f);
 
-            if (GUILayout.Button("Show All"))
-            {
-                ShowAllGroups();
-            }
+            if (GUILayout.Button("Show All")) ShowAllGroups();
 
-            if (GUILayout.Button("Hide All"))
-            {
-                HideAllGroups();
-            }
+            if (GUILayout.Button("Hide All")) HideAllGroups();
         }
 
-        void ShowAllGroups()
+        private void OnFocus()
+        {
+            ObtainCanvasGroups();
+        }
+
+        [MenuItem("Window/UI/Extensions/Canvas Groups Activator")]
+        public static void InitWindow()
+        {
+            GetWindow<CanvasGroupActivator>();
+        }
+
+        private void ObtainCanvasGroups()
+        {
+#if UNITY_2023_1_OR_NEWER
+			canvasGroups = GameObject.FindObjectsByType<CanvasGroup>(FindObjectsSortMode.None);
+#else
+            canvasGroups = FindObjectsOfType<CanvasGroup>();
+#endif
+        }
+
+        private void ShowAllGroups()
         {
             foreach (var group in canvasGroups)
-            {
                 if (group != null)
                 {
                     group.alpha = 1.0f;
                     group.interactable = true;
                     group.blocksRaycasts = true;
                 }
-            }
         }
 
-        void HideAllGroups()
+        private void HideAllGroups()
         {
             foreach (var group in canvasGroups)
-            {
                 if (group != null)
                 {
                     group.alpha = 0;
                     group.interactable = false;
                     group.blocksRaycasts = false;
                 }
-            }
         }
     }
 }

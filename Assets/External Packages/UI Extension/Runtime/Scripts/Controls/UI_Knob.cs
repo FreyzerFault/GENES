@@ -26,37 +26,48 @@ namespace UnityEngine.UI.Extensions
 {
     [RequireComponent(typeof(Image))]
     [AddComponentMenu("UI/Extensions/UI_Knob")]
-    public class UI_Knob : Selectable, IPointerDownHandler, IPointerUpHandler, IPointerEnterHandler, IPointerExitHandler, IDragHandler, IInitializePotentialDragHandler
+    public class UI_Knob : Selectable, IPointerDownHandler, IPointerUpHandler, IPointerEnterHandler,
+        IPointerExitHandler, IDragHandler, IInitializePotentialDragHandler
     {
-        public enum Direction { CW, CCW };
+        public enum Direction { CW, CCW }
+
         [Tooltip("Direction of rotation CW - clockwise, CCW - counterClockwise")]
         public Direction direction = Direction.CW;
-        [HideInInspector]
-        public float KnobValue;
-        [Tooltip("Max value of the knob, maximum RAW output value knob can reach, overrides snap step, IF set to 0 or higher than loops, max value will be set by loops")]
-        public float MaxValue = 0;
+
+        [HideInInspector] public float KnobValue;
+
+        [Tooltip(
+            "Max value of the knob, maximum RAW output value knob can reach, overrides snap step, IF set to 0 or higher than loops, max value will be set by loops"
+        )]
+        public float MaxValue;
+
         [Tooltip("How many rotations knob can do, if higher than max value, the latter will limit max value")]
-        public int Loops = 0;
+        public int Loops;
+
         [Tooltip("Clamp output value between 0 and 1, useful with loops > 1")]
-        public bool ClampOutput01 = false;
-        [Tooltip("snap to position?")]
-        public bool SnapToPosition = false;
+        public bool ClampOutput01;
+
+        [Tooltip("snap to position?")] public bool SnapToPosition;
+
         [Tooltip("Number of positions to snap")]
         public int SnapStepsPerLoop = 10;
+
         [Tooltip("Parent touch area to extend the touch radius")]
         public RectTransform ParentTouchMask;
+
         [Tooltip("Default background color of the touch mask. Defaults as transparent")]
-        public Color MaskBackground = new Color(0, 0, 0, 0);
-        [Space(30)]
-        public KnobFloatValueEvent OnValueChanged;
-        private float _currentLoops = 0;
-        private float _previousValue = 0;
-        private float _initAngle;
+        public Color MaskBackground = new(0, 0, 0, 0);
+
+        [Space(30)] public KnobFloatValueEvent OnValueChanged;
+
+        private bool _canDrag;
         private float _currentAngle;
+        private float _currentLoops;
         private Vector2 _currentVector;
+        private float _initAngle;
         private Quaternion _initRotation;
-        private bool _canDrag = false;
-		private bool _screenSpaceOverlay;
+        private float _previousValue;
+        private bool _screenSpaceOverlay;
 
         protected override void Awake()
         {
@@ -68,99 +79,25 @@ namespace UnityEngine.UI.Extensions
             CheckForParentTouchMask();
         }
 
-        private void CheckForParentTouchMask()
-        {
-            if (ParentTouchMask)
-            {
-                Image maskImage = ParentTouchMask.gameObject.GetOrAddComponent<Image>();
-                maskImage.color = MaskBackground;
-                EventTrigger trigger = ParentTouchMask.gameObject.GetOrAddComponent<EventTrigger>();
-                trigger.triggers.Clear();
-                //PointerDownEvent
-                EventTrigger.Entry pointerDownEntry = new EventTrigger.Entry();
-                pointerDownEntry.eventID = EventTriggerType.PointerDown;
-                pointerDownEntry.callback.AddListener((data) => { OnPointerDown((PointerEventData)data); });
-                trigger.triggers.Add(pointerDownEntry);
-                //PointerUpEvent
-                EventTrigger.Entry pointerUpEntry = new EventTrigger.Entry();
-                pointerUpEntry.eventID = EventTriggerType.PointerUp;
-                pointerUpEntry.callback.AddListener((data) => { OnPointerUp((PointerEventData)data); });
-                trigger.triggers.Add(pointerUpEntry);
-                //PointerEnterEvent
-                EventTrigger.Entry pointerEnterEntry = new EventTrigger.Entry();
-                pointerEnterEntry.eventID = EventTriggerType.PointerEnter;
-                pointerEnterEntry.callback.AddListener((data) => { OnPointerEnter((PointerEventData)data); });
-                trigger.triggers.Add(pointerEnterEntry);
-                //PointerExitEvent
-                EventTrigger.Entry pointerExitEntry = new EventTrigger.Entry();
-                pointerExitEntry.eventID = EventTriggerType.PointerExit;
-                pointerExitEntry.callback.AddListener((data) => { OnPointerExit((PointerEventData)data); });
-                trigger.triggers.Add(pointerExitEntry);
-                //DragEvent
-                EventTrigger.Entry dragEntry = new EventTrigger.Entry();
-                dragEntry.eventID = EventTriggerType.Drag;
-                dragEntry.callback.AddListener((data) => { OnDrag((PointerEventData)data); });
-                trigger.triggers.Add(dragEntry);
-            }
-        }
-
-        public override void OnPointerUp(PointerEventData eventData)
-        {
-            _canDrag = false;
-        }
-        public override void OnPointerEnter(PointerEventData eventData)
-        {
-            _canDrag = true;
-        }
-        public override void OnPointerExit(PointerEventData eventData)
-        {
-            _canDrag = false;
-        }
-
-        public override void OnPointerDown(PointerEventData eventData)
-        {
-            _canDrag = true;
-
-            base.OnPointerDown(eventData);
-
-            _initRotation = transform.rotation;
-			if (_screenSpaceOverlay)
-            {
-				_currentVector = eventData.position - (Vector2)transform.position;
-            }
-            else
-            {
-				_currentVector = eventData.position - (Vector2)Camera.main.WorldToScreenPoint(transform.position);
-            }
-            _initAngle = Mathf.Atan2(_currentVector.y, _currentVector.x) * Mathf.Rad2Deg;
-        }
-
         public void OnDrag(PointerEventData eventData)
         {
             //CHECK IF CAN DRAG
-            if (!_canDrag)
-            {
-                return;
-            }
+            if (!_canDrag) return;
 
-			if (_screenSpaceOverlay)
-			{
-				_currentVector = eventData.position - (Vector2)transform.position;
-			}
-			else
-			{
-				_currentVector = eventData.position - (Vector2)Camera.main.WorldToScreenPoint(transform.position);
-			}
+            if (_screenSpaceOverlay)
+                _currentVector = eventData.position - (Vector2)transform.position;
+            else
+                _currentVector = eventData.position - (Vector2)Camera.main.WorldToScreenPoint(transform.position);
             _currentAngle = Mathf.Atan2(_currentVector.y, _currentVector.x) * Mathf.Rad2Deg;
 
-            Quaternion addRotation = Quaternion.AngleAxis(_currentAngle - _initAngle, this.transform.forward);
+            var addRotation = Quaternion.AngleAxis(_currentAngle - _initAngle, transform.forward);
             addRotation.eulerAngles = new Vector3(0, 0, addRotation.eulerAngles.z);
 
-            Quaternion finalRotation = _initRotation * addRotation;
+            var finalRotation = _initRotation * addRotation;
 
             if (direction == Direction.CW)
             {
-                KnobValue = 1 - (finalRotation.eulerAngles.z / 360f);
+                KnobValue = 1 - finalRotation.eulerAngles.z / 360f;
 
                 if (SnapToPosition)
                 {
@@ -170,7 +107,7 @@ namespace UnityEngine.UI.Extensions
             }
             else
             {
-                KnobValue = (finalRotation.eulerAngles.z / 360f);
+                KnobValue = finalRotation.eulerAngles.z / 360f;
 
                 if (SnapToPosition)
                 {
@@ -185,6 +122,76 @@ namespace UnityEngine.UI.Extensions
             InvokeEvents(KnobValue + _currentLoops);
 
             _previousValue = KnobValue;
+        }
+
+        public virtual void OnInitializePotentialDrag(PointerEventData eventData)
+        {
+            eventData.useDragThreshold = false;
+        }
+
+        public override void OnPointerDown(PointerEventData eventData)
+        {
+            _canDrag = true;
+
+            base.OnPointerDown(eventData);
+
+            _initRotation = transform.rotation;
+            if (_screenSpaceOverlay)
+                _currentVector = eventData.position - (Vector2)transform.position;
+            else
+                _currentVector = eventData.position - (Vector2)Camera.main.WorldToScreenPoint(transform.position);
+            _initAngle = Mathf.Atan2(_currentVector.y, _currentVector.x) * Mathf.Rad2Deg;
+        }
+
+        public override void OnPointerEnter(PointerEventData eventData)
+        {
+            _canDrag = true;
+        }
+
+        public override void OnPointerExit(PointerEventData eventData)
+        {
+            _canDrag = false;
+        }
+
+        public override void OnPointerUp(PointerEventData eventData)
+        {
+            _canDrag = false;
+        }
+
+        private void CheckForParentTouchMask()
+        {
+            if (ParentTouchMask)
+            {
+                var maskImage = ParentTouchMask.gameObject.GetOrAddComponent<Image>();
+                maskImage.color = MaskBackground;
+                var trigger = ParentTouchMask.gameObject.GetOrAddComponent<EventTrigger>();
+                trigger.triggers.Clear();
+                //PointerDownEvent
+                var pointerDownEntry = new EventTrigger.Entry();
+                pointerDownEntry.eventID = EventTriggerType.PointerDown;
+                pointerDownEntry.callback.AddListener(data => { OnPointerDown((PointerEventData)data); });
+                trigger.triggers.Add(pointerDownEntry);
+                //PointerUpEvent
+                var pointerUpEntry = new EventTrigger.Entry();
+                pointerUpEntry.eventID = EventTriggerType.PointerUp;
+                pointerUpEntry.callback.AddListener(data => { OnPointerUp((PointerEventData)data); });
+                trigger.triggers.Add(pointerUpEntry);
+                //PointerEnterEvent
+                var pointerEnterEntry = new EventTrigger.Entry();
+                pointerEnterEntry.eventID = EventTriggerType.PointerEnter;
+                pointerEnterEntry.callback.AddListener(data => { OnPointerEnter((PointerEventData)data); });
+                trigger.triggers.Add(pointerEnterEntry);
+                //PointerExitEvent
+                var pointerExitEntry = new EventTrigger.Entry();
+                pointerExitEntry.eventID = EventTriggerType.PointerExit;
+                pointerExitEntry.callback.AddListener(data => { OnPointerExit((PointerEventData)data); });
+                trigger.triggers.Add(pointerExitEntry);
+                //DragEvent
+                var dragEntry = new EventTrigger.Entry();
+                dragEntry.eventID = EventTriggerType.Drag;
+                dragEntry.callback.AddListener(data => { OnDrag((PointerEventData)data); });
+                trigger.triggers.Add(dragEntry);
+            }
         }
 
         private void UpdateKnobValue()
@@ -209,7 +216,8 @@ namespace UnityEngine.UI.Extensions
                         InvokeEvents(KnobValue + _currentLoops);
                         return;
                     }
-                    else if (KnobValue < 0.5f && _currentLoops == Loops - 1)
+
+                    if (KnobValue < 0.5f && _currentLoops == Loops - 1)
                     {
                         KnobValue = 1;
                         transform.localEulerAngles = Vector3.zero;
@@ -221,37 +229,26 @@ namespace UnityEngine.UI.Extensions
 
             //CHECK MAX VALUE
             if (MaxValue > 0)
-            {
                 if (KnobValue + _currentLoops > MaxValue)
                 {
                     KnobValue = MaxValue;
-                    float maxAngle = direction == Direction.CW ? 360f - 360f * MaxValue : 360f * MaxValue;
+                    var maxAngle = direction == Direction.CW ? 360f - 360f * MaxValue : 360f * MaxValue;
                     transform.localEulerAngles = new Vector3(0, 0, maxAngle);
                     InvokeEvents(KnobValue);
-                    return;
                 }
-            }
         }
 
         public void SetKnobValue(float value, int loops = 0)
         {
-            Quaternion newRoation = Quaternion.identity;
+            var newRoation = Quaternion.identity;
             KnobValue = value;
             _currentLoops = loops;
 
-            if (SnapToPosition)
-            {
-                SnapToPositionValue(ref KnobValue);
-
-            }
+            if (SnapToPosition) SnapToPositionValue(ref KnobValue);
             if (direction == Direction.CW)
-            {
                 newRoation.eulerAngles = new Vector3(0, 0, 360 - 360 * KnobValue);
-            }
             else
-            {
                 newRoation.eulerAngles = new Vector3(0, 0, 360 * KnobValue);
-            }
 
             UpdateKnobValue();
 
@@ -263,24 +260,20 @@ namespace UnityEngine.UI.Extensions
 
         private void SnapToPositionValue(ref float knobValue)
         {
-            float snapStep = 1 / (float)SnapStepsPerLoop;
-            float newValue = Mathf.Round(knobValue / snapStep) * snapStep;
+            var snapStep = 1 / (float)SnapStepsPerLoop;
+            var newValue = Mathf.Round(knobValue / snapStep) * snapStep;
             knobValue = newValue;
         }
+
         private void InvokeEvents(float value)
         {
-            if (ClampOutput01)
-                value /= Loops;
+            if (ClampOutput01) value /= Loops;
             OnValueChanged.Invoke(value);
-        }
-
-        public virtual void OnInitializePotentialDrag(PointerEventData eventData)
-        {
-            eventData.useDragThreshold = false;
         }
     }
 
-    [System.Serializable]
-    public class KnobFloatValueEvent : UnityEvent<float> { }
-
+    [Serializable]
+    public class KnobFloatValueEvent : UnityEvent<float>
+    {
+    }
 }

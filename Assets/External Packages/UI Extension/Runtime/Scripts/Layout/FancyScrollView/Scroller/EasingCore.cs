@@ -38,7 +38,7 @@ namespace UnityEngine.UI.Extensions.EasingCore
         InOutQuad,
         InOutQuart,
         InOutQuint,
-        InOutSine,
+        InOutSine
     }
 
     public delegate float EasingFunction(float t);
@@ -46,7 +46,7 @@ namespace UnityEngine.UI.Extensions.EasingCore
     public static class Easing
     {
         /// <summary>
-        /// Gets the easing function
+        ///     Gets the easing function
         /// </summary>
         /// <param name="type">Ease type</param>
         /// <returns>Easing function</returns>
@@ -102,27 +102,24 @@ namespace UnityEngine.UI.Extensions.EasingCore
             float inBounce(float t) => 1f - outBounce(1f - t);
 
             float outBounce(float t) =>
-                t < 4f / 11.0f ?
-                    (121f * t * t) / 16.0f :
-                t < 8f / 11.0f ?
-                    (363f / 40.0f * t * t) - (99f / 10.0f * t) + 17f / 5.0f :
-                t < 9f / 10.0f ?
-                    (4356f / 361.0f * t * t) - (35442f / 1805.0f * t) + 16061f / 1805.0f :
-                    (54f / 5.0f * t * t) - (513f / 25.0f * t) + 268f / 25.0f;
+                t < 4f / 11.0f ? 121f * t * t / 16.0f :
+                t < 8f / 11.0f ? 363f / 40.0f * t * t - 99f / 10.0f * t + 17f / 5.0f :
+                t < 9f / 10.0f ? 4356f / 361.0f * t * t - 35442f / 1805.0f * t + 16061f / 1805.0f :
+                54f / 5.0f * t * t - 513f / 25.0f * t + 268f / 25.0f;
 
             float inOutBounce(float t) =>
                 t < 0.5f
                     ? 0.5f * inBounce(2f * t)
                     : 0.5f * outBounce(2f * t - 1f) + 0.5f;
 
-            float inCirc(float t) => 1f - Mathf.Sqrt(1f - (t * t));
+            float inCirc(float t) => 1f - Mathf.Sqrt(1f - t * t);
 
             float outCirc(float t) => Mathf.Sqrt((2f - t) * t);
 
             float inOutCirc(float t) =>
                 t < 0.5f
                     ? 0.5f * (1 - Mathf.Sqrt(1f - 4f * (t * t)))
-                    : 0.5f * (Mathf.Sqrt(-((2f * t) - 3f) * ((2f * t) - 1f)) + 1f);
+                    : 0.5f * (Mathf.Sqrt(-(2f * t - 3f) * (2f * t - 1f)) + 1f);
 
             float inCubic(float t) => t * t * t;
 
@@ -139,8 +136,9 @@ namespace UnityEngine.UI.Extensions.EasingCore
 
             float inOutElastic(float t) =>
                 t < 0.5f
-                    ? 0.5f * Mathf.Sin(13f * (Mathf.PI * 0.5f) * (2f * t)) * Mathf.Pow(2f, 10f * ((2f * t) - 1f))
-                    : 0.5f * (Mathf.Sin(-13f * (Mathf.PI * 0.5f) * ((2f * t - 1f) + 1f)) * Mathf.Pow(2f, -10f * (2f * t - 1f)) + 2f);
+                    ? 0.5f * Mathf.Sin(13f * (Mathf.PI * 0.5f) * (2f * t)) * Mathf.Pow(2f, 10f * (2f * t - 1f))
+                    : 0.5f * (Mathf.Sin(-13f * (Mathf.PI * 0.5f) * (2f * t - 1f + 1f))
+                        * Mathf.Pow(2f, -10f * (2f * t - 1f)) + 2f);
 
             float inExpo(float t) => Mathf.Approximately(0.0f, t) ? t : Mathf.Pow(2f, 10f * (t - 1f));
 
@@ -150,8 +148,8 @@ namespace UnityEngine.UI.Extensions.EasingCore
                 Mathf.Approximately(0.0f, v) || Mathf.Approximately(1.0f, v)
                     ? v
                     : v < 0.5f
-                        ?  0.5f * Mathf.Pow(2f, (20f * v) - 10f)
-                        : -0.5f * Mathf.Pow(2f, (-20f * v) + 10f) + 1f;
+                        ? 0.5f * Mathf.Pow(2f, 20f * v - 10f)
+                        : -0.5f * Mathf.Pow(2f, -20f * v + 10f) + 1f;
 
             float inQuad(float t) => t * t;
 
@@ -159,7 +157,7 @@ namespace UnityEngine.UI.Extensions.EasingCore
 
             float inOutQuad(float t) =>
                 t < 0.5f
-                    ?  2f * t * t
+                    ? 2f * t * t
                     : -2f * t * t + 4f * t - 1f;
 
             float inQuart(float t) => t * t * t * t;

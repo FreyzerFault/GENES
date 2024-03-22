@@ -10,10 +10,10 @@ using UnityEngine.UI.Extensions.EasingCore;
 
 namespace UnityEngine.UI.Extensions.Examples.FancyScrollViewExample07
 {
-    class ScrollView : FancyScrollRect<ItemData, Context>
+    internal class ScrollView : FancyScrollRect<ItemData, Context>
     {
-        [SerializeField] float cellSize = 100f;
-        [SerializeField] GameObject cellPrefab = default;
+        [SerializeField] private float cellSize = 100f;
+        [SerializeField] private GameObject cellPrefab;
 
         protected override float CellSize => cellSize;
         protected override GameObject CellPrefab => cellPrefab;
@@ -71,7 +71,7 @@ namespace UnityEngine.UI.Extensions.Examples.FancyScrollViewExample07
             JumpTo(index, GetAlignment(alignment));
         }
 
-        float GetAlignment(Alignment alignment)
+        private float GetAlignment(Alignment alignment)
         {
             switch (alignment)
             {
@@ -82,12 +82,9 @@ namespace UnityEngine.UI.Extensions.Examples.FancyScrollViewExample07
             }
         }
 
-        void UpdateSelection(int index)
+        private void UpdateSelection(int index)
         {
-            if (Context.SelectedIndex == index)
-            {
-                return;
-            }
+            if (Context.SelectedIndex == index) return;
 
             Context.SelectedIndex = index;
             Refresh();

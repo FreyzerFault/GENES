@@ -21,7 +21,7 @@ float3 hue_to_rgb(float h)
 
 float hash(float2 st)
 {
-    float3 p3  = frac(float3(st.xyx) * .1031);
+    float3 p3 = frac(float3(st.xyx) * .1031);
     p3 += dot(p3, p3.yzx + 19.19);
     return frac((p3.x + p3.y) * p3.z);
 }
@@ -38,7 +38,7 @@ float noise(float2 st)
 
     float2 u = f * f * (3.0 - 2.0 * f);
     return lerp(a, b, u.x) +
-        (c - a)* u.y * (1.0 - u.x) +
+        (c - a) * u.y * (1.0 - u.x) +
         (d - b) * u.x * u.y;
 }
 
@@ -62,7 +62,9 @@ float4 voronoi(float2 st)
         float d = q.x * q.x + q.y * q.y;
         if (d < dist)
         {
-            dist = d; cellPos = p; cellIndex = i;
+            dist = d;
+            cellPos = p;
+            cellIndex = i;
         }
     }
 

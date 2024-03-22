@@ -4,7 +4,7 @@
 namespace UnityEngine.UI.Extensions.ColorPicker
 {
     /// <summary>
-    /// Displays one of the color values of aColorPicker
+    ///     Displays one of the color values of aColorPicker
     /// </summary>
     [RequireComponent(typeof(Slider))]
     public class ColorSlider : MonoBehaviour
@@ -12,13 +12,13 @@ namespace UnityEngine.UI.Extensions.ColorPicker
         public ColorPickerControl ColorPicker;
 
         /// <summary>
-        /// Which value this slider can edit.
+        ///     Which value this slider can edit.
         /// </summary>
         public ColorValues type;
 
-        private Slider slider;
-
         private bool listen = true;
+
+        private Slider slider;
 
         private void Awake()
         {
@@ -53,8 +53,6 @@ namespace UnityEngine.UI.Extensions.ColorPicker
                 case ColorValues.A:
                     slider.normalizedValue = newColor.a;
                     break;
-                default:
-                    break;
             }
         }
 
@@ -72,8 +70,6 @@ namespace UnityEngine.UI.Extensions.ColorPicker
                 case ColorValues.Value:
                     slider.normalizedValue = value;
                     break;
-                default:
-                    break;
             }
         }
 
@@ -87,6 +83,7 @@ namespace UnityEngine.UI.Extensions.ColorPicker
 
                 ColorPicker.AssignColor(type, newValue);
             }
+
             listen = true;
         }
     }

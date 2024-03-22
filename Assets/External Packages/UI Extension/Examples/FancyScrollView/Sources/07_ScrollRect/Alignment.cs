@@ -6,10 +6,10 @@
 
 namespace UnityEngine.UI.Extensions.Examples.FancyScrollViewExample07
 {
-    enum Alignment
+    internal enum Alignment
     {
         Upper,
         Middle,
-        Lower,
+        Lower
     }
 }

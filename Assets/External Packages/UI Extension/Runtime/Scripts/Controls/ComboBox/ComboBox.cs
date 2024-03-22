@@ -1,8 +1,11 @@
 ﻿///Credit perchik
 ///Sourced from - http://forum.unity3d.com/threads/receive-onclick-event-and-pass-it-on-to-lower-ui-elements.293642/
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
+using UnityEngine.Events;
 
 namespace UnityEngine.UI.Extensions
 {
@@ -10,72 +13,58 @@ namespace UnityEngine.UI.Extensions
     [AddComponentMenu("UI/Extensions/ComboBox/ComboBox")]
     public class ComboBox : MonoBehaviour
     {
-        public DropDownListItem SelectedItem { get; private set; }
+        [Header("Combo Box Items")] public List<string> AvailableOptions;
 
-        [Header("Combo Box Items")]
-        public List<string> AvailableOptions;
-
-        [Header("Properties")]
-        [SerializeField]
+        [Header("Properties")] [SerializeField]
         private bool isActive = true;
 
-        [SerializeField]
-        private float _scrollBarWidth = 20.0f;
+        [SerializeField] private float _scrollBarWidth = 20.0f;
 
-        [SerializeField]
-        private int _itemsToDisplay;
+        [SerializeField] private int _itemsToDisplay;
 
-        [SerializeField]
-        private float dropdownOffset;
+        [SerializeField] private float dropdownOffset;
 
-        [SerializeField]
-        private bool _displayPanelAbove = false;
+        [SerializeField] private bool _displayPanelAbove;
 
-        public bool SelectFirstItemOnStart = false;
+        public bool SelectFirstItemOnStart;
 
-        [SerializeField]
-        private int selectItemIndexOnStart = 0;
-
-        private bool shouldSelectItemOnStart => SelectFirstItemOnStart || selectItemIndexOnStart > 0;
-
-        [System.Serializable]
-        public class SelectionChangedEvent : Events.UnityEvent<string> { }
+        [SerializeField] private int selectItemIndexOnStart;
 
         [Header("Events")]
         // fires when item is changed;
         public SelectionChangedEvent OnSelectionChanged;
 
-        [System.Serializable]
-        public class ControlDisabledEvent : Events.UnityEvent<bool> { }
-
         // fires when item is changed;
         public ControlDisabledEvent OnControlDisabled;
-
-        //private bool isInitialized = false;
-        private bool _isPanelActive = false;
-        private bool _hasDrawnOnce = false;
-        private InputField _mainInput;
-        private RectTransform _inputRT;
-        private RectTransform _rectTransform;
-        private RectTransform _overlayRT;
-        private RectTransform _scrollPanelRT;
-        private RectTransform _scrollBarRT;
-        private RectTransform _slidingAreaRT;
-        private RectTransform _scrollHandleRT;
-        private RectTransform _itemsPanelRT;
         private Canvas _canvas;
         private RectTransform _canvasRT;
-        private ScrollRect _scrollRect;
-        private List<string> _panelItems; //items that will get shown in the drop-down
-        private Dictionary<string, GameObject> panelObjects;
-        private GameObject itemTemplate;
+        private bool _hasDrawnOnce;
         private bool _initialized;
+        private RectTransform _inputRT;
+
+        //private bool isInitialized = false;
+        private bool _isPanelActive;
+        private RectTransform _itemsPanelRT;
+        private InputField _mainInput;
+        private RectTransform _overlayRT;
+        private List<string> _panelItems; //items that will get shown in the drop-down
+        private RectTransform _rectTransform;
+        private RectTransform _scrollBarRT;
+        private RectTransform _scrollHandleRT;
+        private RectTransform _scrollPanelRT;
+        private ScrollRect _scrollRect;
+        private RectTransform _slidingAreaRT;
+        private GameObject itemTemplate;
+        private Dictionary<string, GameObject> panelObjects;
+        public DropDownListItem SelectedItem { get; }
+
+        private bool shouldSelectItemOnStart => SelectFirstItemOnStart || selectItemIndexOnStart > 0;
 
         public string Text { get; private set; }
 
         public float ScrollBarWidth
         {
-            get { return _scrollBarWidth; }
+            get => _scrollBarWidth;
             set
             {
                 _scrollBarWidth = value;
@@ -85,14 +74,14 @@ namespace UnityEngine.UI.Extensions
 
         public int ItemsToDisplay
         {
-            get { return _itemsToDisplay; }
+            get => _itemsToDisplay;
             set
             {
                 _itemsToDisplay = value;
                 RedrawPanel();
             }
         }
-        
+
         public void Awake()
         {
             Initialize();
@@ -101,9 +90,7 @@ namespace UnityEngine.UI.Extensions
         public void Start()
         {
             if (shouldSelectItemOnStart && AvailableOptions.Count > 0)
-            {
                 SelectItemIndex(SelectFirstItemOnStart ? 0 : selectItemIndexOnStart);
-            }
             RedrawPanel();
         }
 
@@ -111,7 +98,7 @@ namespace UnityEngine.UI.Extensions
         {
             if (_initialized) return true;
 
-            bool success = true;
+            var success = true;
             try
             {
                 _rectTransform = GetComponent<RectTransform>();
@@ -140,12 +127,15 @@ namespace UnityEngine.UI.Extensions
                 itemTemplate = _rectTransform.Find("ItemTemplate").gameObject;
                 itemTemplate.SetActive(false);
             }
-            catch (System.NullReferenceException ex)
+            catch (NullReferenceException ex)
             {
                 Debug.LogException(ex);
-                Debug.LogError("Something is setup incorrectly with the dropdownlist component causing a Null Reference Exception");
+                Debug.LogError(
+                    "Something is setup incorrectly with the dropdownlist component causing a Null Reference Exception"
+                );
                 success = false;
             }
+
             panelObjects = new Dictionary<string, GameObject>();
 
             _panelItems = AvailableOptions.ToList();
@@ -157,7 +147,7 @@ namespace UnityEngine.UI.Extensions
         }
 
         /// <summary>
-        /// Update the drop down selection to a specific index
+        ///     Update the drop down selection to a specific index
         /// </summary>
         /// <param name="index"></param>
         public void SelectItemIndex(int index)
@@ -188,19 +178,16 @@ namespace UnityEngine.UI.Extensions
         {
             var uniqueOptions = newOptions.Distinct().ToList();
             if (newOptions.Length != uniqueOptions.Count)
-            {
-                Debug.LogWarning($"{nameof(ComboBox)}.{nameof(SetAvailableOptions)}: items may only exists once. {newOptions.Length - uniqueOptions.Count} duplicates.");
-            }
+                Debug.LogWarning(
+                    $"{nameof(ComboBox)}.{nameof(SetAvailableOptions)}: items may only exists once. {newOptions.Length - uniqueOptions.Count} duplicates."
+                );
 
-            this.AvailableOptions.Clear();
+            AvailableOptions.Clear();
 
-            for (int i = 0; i < newOptions.Length; i++)
-            {
-                this.AvailableOptions.Add(newOptions[i]);
-            }
+            for (var i = 0; i < newOptions.Length; i++) AvailableOptions.Add(newOptions[i]);
 
-            this.RebuildPanel();
-            this.RedrawPanel();
+            RebuildPanel();
+            RedrawPanel();
         }
 
         public void ResetItems()
@@ -211,60 +198,54 @@ namespace UnityEngine.UI.Extensions
         }
 
         /// <summary>
-        /// Rebuilds the contents of the panel in response to items being added.
+        ///     Rebuilds the contents of the panel in response to items being added.
         /// </summary>
         private void RebuildPanel()
         {
-            if (!_initialized)
-            {
-                Start();
-            }
+            if (!_initialized) Start();
 
             //panel starts with all options
             _panelItems.Clear();
-            foreach (string option in AvailableOptions)
-            {
-                _panelItems.Add(option.ToLower());
-            }
+            foreach (var option in AvailableOptions) _panelItems.Add(option.ToLower());
 
-            List<GameObject> itemObjs = new List<GameObject>(panelObjects.Values);
+            var itemObjs = new List<GameObject>(panelObjects.Values);
             panelObjects.Clear();
 
-            int indx = 0;
+            var indx = 0;
             while (itemObjs.Count < AvailableOptions.Count)
             {
-                GameObject newItem = Instantiate(itemTemplate) as GameObject;
+                var newItem = Instantiate(itemTemplate);
                 newItem.name = "Item " + indx;
                 newItem.transform.SetParent(_itemsPanelRT, false);
                 itemObjs.Add(newItem);
                 indx++;
             }
 
-            for (int i = 0; i < itemObjs.Count; i++)
+            for (var i = 0; i < itemObjs.Count; i++)
             {
                 itemObjs[i].SetActive(i <= AvailableOptions.Count);
                 if (i < AvailableOptions.Count)
                 {
                     itemObjs[i].name = "Item " + i + " " + _panelItems[i];
 #if UNITY_2022_1_OR_NEWER
-                    itemObjs[i].transform.Find("Text").GetComponent<TMPro.TMP_Text>().text = AvailableOptions[i]; //set the text value
+                    itemObjs[i].transform.Find("Text").GetComponent<TMP_Text>().text =
+                        AvailableOptions[i]; //set the text value
 #else
-                    itemObjs[i].transform.Find("Text").GetComponent<Text>().text = AvailableOptions[i]; //set the text value
+                    itemObjs[i].transform.Find("Text").GetComponent<Text>().text =
+ AvailableOptions[i]; //set the text value
 #endif
-                    Button itemBtn = itemObjs[i].GetComponent<Button>();
+                    var itemBtn = itemObjs[i].GetComponent<Button>();
                     itemBtn.onClick.RemoveAllListeners();
-                    string textOfItem = _panelItems[i]; //has to be copied for anonymous function or it gets garbage collected away
-                    itemBtn.onClick.AddListener(() =>
-                    {
-                        OnItemClicked(textOfItem);
-                    });
+                    var textOfItem =
+                        _panelItems[i]; //has to be copied for anonymous function or it gets garbage collected away
+                    itemBtn.onClick.AddListener(() => { OnItemClicked(textOfItem); });
                     panelObjects[_panelItems[i]] = itemObjs[i];
                 }
             }
         }
 
         /// <summary>
-        /// what happens when an item in the list is selected
+        ///     what happens when an item in the list is selected
         /// </summary>
         /// <param name="item"></param>
         private void OnItemClicked(string item)
@@ -277,10 +258,15 @@ namespace UnityEngine.UI.Extensions
 
         private void RedrawPanel()
         {
-            float scrollbarWidth = _panelItems.Count > ItemsToDisplay ? _scrollBarWidth : 0f;//hide the scrollbar if there's not enough items
+            var scrollbarWidth =
+                _panelItems.Count > ItemsToDisplay
+                    ? _scrollBarWidth
+                    : 0f; //hide the scrollbar if there's not enough items
             _scrollBarRT.gameObject.SetActive(_panelItems.Count > ItemsToDisplay);
 
-            float dropdownHeight = _itemsToDisplay > 0 ? _rectTransform.sizeDelta.y * Mathf.Min(_itemsToDisplay, _panelItems.Count) : _rectTransform.sizeDelta.y * _panelItems.Count;
+            var dropdownHeight = _itemsToDisplay > 0
+                ? _rectTransform.sizeDelta.y * Mathf.Min(_itemsToDisplay, _panelItems.Count)
+                : _rectTransform.sizeDelta.y * _panelItems.Count;
             dropdownHeight += dropdownOffset;
 
             if (!_hasDrawnOnce || _rectTransform.sizeDelta != _inputRT.sizeDelta)
@@ -293,9 +279,9 @@ namespace UnityEngine.UI.Extensions
                 itemsRemaining = itemsRemaining < 0 ? 0 : itemsRemaining;
 
                 _scrollPanelRT.SetParent(transform, true);
-                _scrollPanelRT.anchoredPosition = _displayPanelAbove ?
-                    new Vector2(0, dropdownOffset + dropdownHeight) :
-                    new Vector2(0, -(dropdownOffset + _rectTransform.sizeDelta.y));
+                _scrollPanelRT.anchoredPosition = _displayPanelAbove
+                    ? new Vector2(0, dropdownOffset + dropdownHeight)
+                    : new Vector2(0, -(dropdownOffset + _rectTransform.sizeDelta.y));
 
                 //make the overlay fill the screen
                 _overlayRT.SetParent(_canvas.transform, false);
@@ -311,15 +297,24 @@ namespace UnityEngine.UI.Extensions
             _scrollPanelRT.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, dropdownHeight);
             _scrollPanelRT.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, _rectTransform.sizeDelta.x);
 
-            _itemsPanelRT.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, _scrollPanelRT.sizeDelta.x - scrollbarWidth - 5);
+            _itemsPanelRT.SetSizeWithCurrentAnchors(
+                RectTransform.Axis.Horizontal,
+                _scrollPanelRT.sizeDelta.x - scrollbarWidth - 5
+            );
             _itemsPanelRT.anchoredPosition = new Vector2(5, 0);
 
             _scrollBarRT.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, scrollbarWidth);
             _scrollBarRT.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, dropdownHeight);
-            if (scrollbarWidth == 0) _scrollHandleRT.gameObject.SetActive(false); else _scrollHandleRT.gameObject.SetActive(true);
+            if (scrollbarWidth == 0)
+                _scrollHandleRT.gameObject.SetActive(false);
+            else
+                _scrollHandleRT.gameObject.SetActive(true);
 
             _slidingAreaRT.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 0);
-            _slidingAreaRT.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, dropdownHeight - _scrollBarRT.sizeDelta.x);
+            _slidingAreaRT.SetSizeWithCurrentAnchors(
+                RectTransform.Axis.Vertical,
+                dropdownHeight - _scrollBarRT.sizeDelta.x
+            );
         }
 
         public void OnValueChanged(string currText)
@@ -329,18 +324,19 @@ namespace UnityEngine.UI.Extensions
 
             if (_panelItems.Count == 0)
             {
-                _isPanelActive = true;//this makes it get turned off
+                _isPanelActive = true; //this makes it get turned off
                 ToggleDropdownPanel(false);
             }
             else if (!_isPanelActive)
             {
                 ToggleDropdownPanel(false);
             }
+
             OnSelectionChanged.Invoke(Text);
         }
 
         /// <summary>
-        /// Toggle the drop down list
+        ///     Toggle the drop down list
         /// </summary>
         /// <param name="directClick"> whether an item was directly clicked on</param>
         public void ToggleDropdownPanel(bool directClick)
@@ -361,16 +357,23 @@ namespace UnityEngine.UI.Extensions
         }
 
         /// <summary>
-        /// Updates the control and sets its active status, determines whether the dropdown will open ot not
+        ///     Updates the control and sets its active status, determines whether the dropdown will open ot not
         /// </summary>
         /// <param name="status"></param>
         public void SetActive(bool status)
         {
-            if (status != isActive)
-            {
-                OnControlDisabled?.Invoke(status);
-            }
+            if (status != isActive) OnControlDisabled?.Invoke(status);
             isActive = status;
+        }
+
+        [Serializable]
+        public class SelectionChangedEvent : UnityEvent<string>
+        {
+        }
+
+        [Serializable]
+        public class ControlDisabledEvent : UnityEvent<bool>
+        {
         }
     }
 }

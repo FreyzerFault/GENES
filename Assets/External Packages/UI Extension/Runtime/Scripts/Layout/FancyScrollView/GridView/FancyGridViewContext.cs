@@ -6,7 +6,7 @@ using System;
 namespace UnityEngine.UI.Extensions
 {
     /// <summary>
-    /// <see cref="FancyGridView{TItemData, TContext}"/> のコンテキスト基底クラス.
+    ///     <see cref="FancyGridView{TItemData, TContext}" /> のコンテキスト基底クラス.
     /// </summary>
     public class FancyGridViewContext : IFancyGridViewContext
     {

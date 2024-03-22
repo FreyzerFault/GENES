@@ -38,6 +38,7 @@ use HTML-like tags in your text. Try it out, you'll see what I mean. It doesn't
 break down entirely, but it doesn't really do what you'd want either.
 
 */
+
 #if !UNITY_2022_1_OR_NEWER
 using System.Collections.Generic;
 #endif
@@ -115,9 +116,9 @@ namespace UnityEngine.UI.Extensions
 			
 			string[] lines = text.text.Split('\n');
 			// Vector3  pos;
-			float    letterOffset    = Spacing * (float)text.fontSize / 100f;
+			float    letterOffset = Spacing * (float)text.fontSize / 100f;
 			float    alignmentFactor = 0;
-			int      glyphIdx        = 0;
+			int      glyphIdx = 0;
 
             switch (text.alignment)
             {
@@ -140,10 +141,11 @@ namespace UnityEngine.UI.Extensions
                     break;
             }
 
-            for (int lineIdx=0; lineIdx < lines.Length; lineIdx++)
+            for (int lineIdx = 0; lineIdx < lines.Length; lineIdx++)
 			{
 				string line = lines[lineIdx];
-                float lineOffset = (line.Length - 1) * letterOffset * (alignmentFactor) - (alignmentFactor - 0.5f) * rectTransform.rect.width;
+                float lineOffset =
+ (line.Length - 1) * letterOffset * (alignmentFactor) - (alignmentFactor - 0.5f) * rectTransform.rect.width;
 
                 var offsetX = -lineOffset + letterOffset / 2 * (1 - alignmentFactor * 2);
 
@@ -172,12 +174,18 @@ namespace UnityEngine.UI.Extensions
 
                     var smallCharOffset = smallChar ? -letterOffset/4 : 0;
                     
-                    vert1.position += new Vector3(-vert1.position.x + offsetX + -.5f * charWidth + smallCharOffset, 0, 0);
-                    vert2.position += new Vector3(-vert2.position.x + offsetX + .5f * charWidth + smallCharOffset, 0, 0);
-                    vert3.position += new Vector3(-vert3.position.x + offsetX + .5f * charWidth + smallCharOffset, 0, 0);
-                    vert4.position += new Vector3(-vert4.position.x + offsetX + .5f * charWidth + smallCharOffset, 0, 0);
-                    vert5.position += new Vector3(-vert5.position.x + offsetX + -.5f * charWidth + smallCharOffset, 0, 0);
-                    vert6.position += new Vector3(-vert6.position.x + offsetX + -.5f * charWidth + smallCharOffset, 0, 0);
+                    vert1.position +=
+ new Vector3(-vert1.position.x + offsetX + -.5f * charWidth + smallCharOffset, 0, 0);
+                    vert2.position +=
+ new Vector3(-vert2.position.x + offsetX + .5f * charWidth + smallCharOffset, 0, 0);
+                    vert3.position +=
+ new Vector3(-vert3.position.x + offsetX + .5f * charWidth + smallCharOffset, 0, 0);
+                    vert4.position +=
+ new Vector3(-vert4.position.x + offsetX + .5f * charWidth + smallCharOffset, 0, 0);
+                    vert5.position +=
+ new Vector3(-vert5.position.x + offsetX + -.5f * charWidth + smallCharOffset, 0, 0);
+                    vert6.position +=
+ new Vector3(-vert6.position.x + offsetX + -.5f * charWidth + smallCharOffset, 0, 0);
 
                     if (smallChar)
                         offsetX += letterOffset / 2;
@@ -202,4 +210,4 @@ namespace UnityEngine.UI.Extensions
         }
 	}
 #endif
-    }
+}

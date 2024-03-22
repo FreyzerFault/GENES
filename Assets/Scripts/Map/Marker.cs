@@ -8,11 +8,15 @@ namespace Map
     public class Marker
     {
         [SerializeField] private Vector2 normalizedPosition;
+
         [SerializeField] private Vector3 worldPosition;
 
         [SerializeField] private string labelText;
+
         [SerializeField] private MarkerState state;
+
         [SerializeField] private bool selected;
+
         [SerializeField] public bool hovered;
 
         public Marker(Vector2 normalizedPos, Vector3? worldPos = null, string label = "")
@@ -62,7 +66,6 @@ namespace Map
             }
         }
 
-
         public MarkerState State
         {
             get => state;
@@ -100,7 +103,8 @@ namespace Map
         public bool IsAtPoint(Vector2 normalizedPos) => Distance2D(normalizedPos) < CollisionRadius;
 
         // 2D Distance
-        public float Distance2D(Vector2 normalizedPos) => Vector2.Distance(NormalizedPosition, normalizedPos);
+        public float Distance2D(Vector2 normalizedPos) =>
+            Vector2.Distance(NormalizedPosition, normalizedPos);
 
         public float Distance2D(Marker marker) => Distance2D(marker.NormalizedPosition);
 

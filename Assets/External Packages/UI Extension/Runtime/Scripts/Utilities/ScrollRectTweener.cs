@@ -7,25 +7,29 @@ using UnityEngine.EventSystems;
 namespace UnityEngine.UI.Extensions
 {
     [RequireComponent(typeof(ScrollRect))]
-	[AddComponentMenu("UI/Extensions/ScrollRectTweener")]
+    [AddComponentMenu("UI/Extensions/ScrollRectTweener")]
     public class ScrollRectTweener : MonoBehaviour, IDragHandler
     {
-
-        ScrollRect scrollRect;
-        Vector2 startPos;
-        Vector2 targetPos;
-
-        bool wasHorizontal;
-        bool wasVertical;
-
         public float moveSpeed = 5000f;
-        public bool disableDragWhileTweening = false;
+        public bool disableDragWhileTweening;
 
-        void Awake()
+        private ScrollRect scrollRect;
+        private Vector2 startPos;
+        private Vector2 targetPos;
+
+        private bool wasHorizontal;
+        private bool wasVertical;
+
+        private void Awake()
         {
             scrollRect = GetComponent<ScrollRect>();
             wasHorizontal = scrollRect.horizontal;
             wasVertical = scrollRect.vertical;
+        }
+
+        public void OnDrag(PointerEventData eventData)
+        {
+            if (!disableDragWhileTweening) StopScroll();
         }
 
         public void ScrollHorizontal(float normalizedX)
@@ -53,44 +57,41 @@ namespace UnityEngine.UI.Extensions
             Scroll(normalizedPos, GetScrollDuration(normalizedPos));
         }
 
-        float GetScrollDuration(Vector2 normalizedPos)
+        private float GetScrollDuration(Vector2 normalizedPos)
         {
-            Vector2 currentPos = GetCurrentPos();
+            var currentPos = GetCurrentPos();
             return Vector2.Distance(DeNormalize(currentPos), DeNormalize(normalizedPos)) / moveSpeed;
         }
 
-        Vector2 DeNormalize(Vector2 normalizedPos)
-        {
-            return new Vector2(normalizedPos.x * scrollRect.content.rect.width, normalizedPos.y * scrollRect.content.rect.height);
-        }
+        private Vector2 DeNormalize(Vector2 normalizedPos) => new(
+            normalizedPos.x * scrollRect.content.rect.width,
+            normalizedPos.y * scrollRect.content.rect.height
+        );
 
-        Vector2 GetCurrentPos()
-        {
-            return new Vector2(scrollRect.horizontalNormalizedPosition, scrollRect.verticalNormalizedPosition);
-        }
+        private Vector2 GetCurrentPos() => new(
+            scrollRect.horizontalNormalizedPosition,
+            scrollRect.verticalNormalizedPosition
+        );
 
         public void Scroll(Vector2 normalizedPos, float duration)
         {
             startPos = GetCurrentPos();
             targetPos = normalizedPos;
 
-            if (disableDragWhileTweening)
-                LockScrollability();
+            if (disableDragWhileTweening) LockScrollability();
 
             StopAllCoroutines();
             StartCoroutine(DoMove(duration));
         }
 
-        IEnumerator DoMove(float duration)
+        private IEnumerator DoMove(float duration)
         {
-
             // Abort if movement would be too short
-            if (duration < 0.05f)
-                yield break;
+            if (duration < 0.05f) yield break;
 
-            Vector2 posOffset = targetPos - startPos;
+            var posOffset = targetPos - startPos;
 
-            float currentTime = 0f;
+            var currentTime = 0f;
             while (currentTime < duration)
             {
                 currentTime += Time.deltaTime;
@@ -100,42 +101,31 @@ namespace UnityEngine.UI.Extensions
 
             scrollRect.normalizedPosition = targetPos;
 
-            if (disableDragWhileTweening)
-                RestoreScrollability();
+            if (disableDragWhileTweening) RestoreScrollability();
         }
 
-        public Vector2 EaseVector(float currentTime, Vector2 startValue, Vector2 changeInValue, float duration)
-        {
-            return new Vector2(
+        public Vector2 EaseVector(float currentTime, Vector2 startValue, Vector2 changeInValue, float duration) =>
+            new(
                 changeInValue.x * Mathf.Sin(currentTime / duration * (Mathf.PI / 2)) + startValue.x,
                 changeInValue.y * Mathf.Sin(currentTime / duration * (Mathf.PI / 2)) + startValue.y
-                );
-        }
+            );
 
-        public void OnDrag(PointerEventData eventData)
-        {
-            if (!disableDragWhileTweening)
-                StopScroll();
-        }
-
-        void StopScroll()
+        private void StopScroll()
         {
             StopAllCoroutines();
-            if (disableDragWhileTweening)
-                RestoreScrollability();
+            if (disableDragWhileTweening) RestoreScrollability();
         }
 
-        void LockScrollability()
+        private void LockScrollability()
         {
             scrollRect.horizontal = false;
             scrollRect.vertical = false;
         }
 
-        void RestoreScrollability()
+        private void RestoreScrollability()
         {
             scrollRect.horizontal = wasHorizontal;
             scrollRect.vertical = wasVertical;
         }
-
     }
 }

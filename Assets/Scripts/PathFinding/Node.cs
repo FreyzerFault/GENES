@@ -22,8 +22,12 @@ namespace PathFinding
         // Neighbours
         [NonSerialized] public Node[] Neighbours;
 
-
-        public Node(Vector3 position, float? slopeAngle = null, float? size = null, Vector2? direction = null)
+        public Node(
+            Vector3 position,
+            float? slopeAngle = null,
+            float? size = null,
+            Vector2? direction = null
+        )
         {
             this.position = position;
             this.slopeAngle = slopeAngle ?? Terrain.activeTerrain.GetSlopeAngle(position);
@@ -42,7 +46,6 @@ namespace PathFinding
             }
         }
 
-
         // Function = Cost + Heuristic
         public float F => G + H;
         public float G { get; set; }
@@ -57,7 +60,6 @@ namespace PathFinding
         public Vector2 Pos2D => new(position.x, position.z);
         public float Height => position.y;
 
-
         public static Vector2 Direction(Node from, Node to) => (to.Pos2D - from.Pos2D).normalized;
 
         public override int GetHashCode() => Pos2D.GetHashCode();
@@ -66,8 +68,8 @@ namespace PathFinding
         {
             if (obj is not Node node) return false;
 
-            return Mathf.Abs(position.x - node.position.x) < EqualityPrecision &&
-                   Mathf.Abs(position.z - node.position.z) < EqualityPrecision;
+            return Mathf.Abs(position.x - node.position.x) < EqualityPrecision
+                   && Mathf.Abs(position.z - node.position.z) < EqualityPrecision;
         }
 
         public float Distance2D(Node node) => Mathf.Sqrt(Distance2DnoSqrt(node));

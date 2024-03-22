@@ -1,53 +1,52 @@
 ﻿/// Credit Soprachev Andrei
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
-
 
 namespace UnityEngine.UI.Extensions
 {
     [AddComponentMenu("UI/Extensions/Primitives/Squircle")]
     public class UISquircle : UIPrimitiveBase
     {
-        const float C = 1.0f;
         public enum Type
         {
             Classic,
             Scaled
         }
 
-        [Space]
-        public Type squircleType = Type.Scaled;
-        [Range(1, 40)]
-        public float n = 4;
-        [Min(0.1f)]
-        public float delta = 5f;
+        private const float C = 1.0f;
+
+        [Space] public Type squircleType = Type.Scaled;
+
+        [Range(1, 40)] public float n = 4;
+
+        [Min(0.1f)] public float delta = 5f;
+
         public float quality = 0.1f;
-        [Min(0)]
-        public float radius = 1000;
+
+        [Min(0)] public float radius = 1000;
+        private readonly List<Vector2> vert = new();
 
 
         private float a, b;
-        private List<Vector2> vert = new List<Vector2>();
 
 
         private float SquircleFunc(float t, bool xByY)
         {
-            if (xByY)
-                return (float)System.Math.Pow(C - System.Math.Pow(t / a, n), 1f / n) * b;
+            if (xByY) return (float)Math.Pow(C - Math.Pow(t / a, n), 1f / n) * b;
 
-            return (float)System.Math.Pow(C - System.Math.Pow(t / b, n), 1f / n) * a;
+            return (float)Math.Pow(C - Math.Pow(t / b, n), 1f / n) * a;
         }
 
         protected override void OnPopulateMesh(VertexHelper vh)
         {
-
             float dx = 0;
             float dy = 0;
 
-            float width = rectTransform.rect.width / 2;
-            float height = rectTransform.rect.height / 2;
+            var width = rectTransform.rect.width / 2;
+            var height = rectTransform.rect.height / 2;
 
             if (squircleType == Type.Classic)
             {
@@ -64,7 +63,6 @@ namespace UnityEngine.UI.Extensions
             }
 
 
-
             float x = 0;
             float y = 1;
             vert.Clear();
@@ -76,10 +74,7 @@ namespace UnityEngine.UI.Extensions
                 x += delta;
             }
 
-            if (float.IsNaN(vert.Last().y))
-            {
-                vert.RemoveAt(vert.Count - 1);
-            }
+            if (float.IsNaN(vert.Last().y)) vert.RemoveAt(vert.Count - 1);
 
             while (y > 0)
             {
@@ -90,8 +85,7 @@ namespace UnityEngine.UI.Extensions
 
             vert.Add(new Vector2(width, 0));
 
-            for (int i = 1; i < vert.Count - 1; i++)
-            {
+            for (var i = 1; i < vert.Count - 1; i++)
                 if (vert[i].x < vert[i].y)
                 {
                     if (vert[i - 1].y - vert[i].y < quality)
@@ -108,14 +102,13 @@ namespace UnityEngine.UI.Extensions
                         i -= 1;
                     }
                 }
-            }
 
             vert.AddRange(vert.AsEnumerable().Reverse().Select(t => new Vector2(t.x, -t.y)));
             vert.AddRange(vert.AsEnumerable().Reverse().Select(t => new Vector2(-t.x, t.y)));
 
             vh.Clear();
 
-            for (int i = 0; i < vert.Count - 1; i++)
+            for (var i = 0; i < vert.Count - 1; i++)
             {
                 vh.AddVert(vert[i], color, Vector2.zero);
                 vh.AddVert(vert[i + 1], color, Vector2.zero);
@@ -132,8 +125,8 @@ namespace UnityEngine.UI.Extensions
             public override void OnInspectorGUI()
             {
                 DrawDefaultInspector();
-                UISquircle script = (UISquircle)target;
-                GUILayout.Label("Vertex count: " + script.vert.Count().ToString());
+                var script = (UISquircle)target;
+                GUILayout.Label("Vertex count: " + script.vert.Count());
             }
         }
 #endif

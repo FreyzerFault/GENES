@@ -16,9 +16,13 @@ namespace Map.Rendering
     public class MouseCursorInMap : MonoBehaviour
     {
         [SerializeField] private Texture2D cursorTexture;
+
         [SerializeField] private Texture2D cursorDeleteTexture;
+
         [SerializeField] private Texture2D cursorSelectTexture;
+
         [SerializeField] private Texture2D cursorIllegalTexture;
+
         [SerializeField] private Texture2D cursorIllegalSelectedTexture;
 
         private CursorDisplayMode _displayMode;
@@ -32,15 +36,15 @@ namespace Map.Rendering
             get => _displayMode;
             set
             {
-                if (value != _displayMode)
-                    SetCursorDisplayTexture(value);
+                if (value != _displayMode) SetCursorDisplayTexture(value);
                 _displayMode = value;
             }
         }
 
-
         private static Vector2 MousePosition => Input.mousePosition;
-        private Vector2 NormalizedPositionInMap => _parentRectTransform.ScreenToNormalizedPoint(MousePosition);
+
+        private Vector2 NormalizedPositionInMap =>
+            _parentRectTransform.ScreenToNormalizedPoint(MousePosition);
 
         private void Awake()
         {
@@ -87,15 +91,21 @@ namespace Map.Rendering
                         switch (MarkerManager.Instance.SelectedCount)
                         {
                             case 0: // No Selected
-                                DisplayMode = isLegal ? CursorDisplayMode.Default : CursorDisplayMode.DefaultIllegal;
+                                DisplayMode = isLegal
+                                    ? CursorDisplayMode.Default
+                                    : CursorDisplayMode.DefaultIllegal;
                                 _label.text = "Añadir";
                                 break;
                             case 1:
-                                DisplayMode = isLegal ? CursorDisplayMode.Select : CursorDisplayMode.SelectIllegal;
+                                DisplayMode = isLegal
+                                    ? CursorDisplayMode.Select
+                                    : CursorDisplayMode.SelectIllegal;
                                 _label.text = "Mover";
                                 break;
                             case 2:
-                                DisplayMode = isLegal ? CursorDisplayMode.Select : CursorDisplayMode.SelectIllegal;
+                                DisplayMode = isLegal
+                                    ? CursorDisplayMode.Select
+                                    : CursorDisplayMode.SelectIllegal;
                                 _label.text = "Añadir intermedio";
                                 break;
                         }

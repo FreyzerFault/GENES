@@ -11,33 +11,24 @@ namespace UnityEngine.UI.Extensions
     [RequireComponent(typeof(RectTransform), typeof(LayoutElement))]
     public class ReorderableListElement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler
     {
-        [Tooltip("Can this element be dragged?")]
-        [SerializeField]
+        [Tooltip("Can this element be dragged?")] [SerializeField]
         private bool isGrabbable = true;
 
-        [Tooltip("Can this element be dropped in another container?")]
-        [SerializeField]
+        [Tooltip("Can this element be dropped in another container?")] [SerializeField]
         private bool isTransferable = true;
 
-        [Tooltip("Can this element be dropped in space?")]
-        [SerializeField]
-        private bool isDroppableInSpace = false;
+        [Tooltip("Can this element be dropped in space?")] [SerializeField]
+        private bool isDroppableInSpace;
 
-        public bool IsTransferable
-        {
-            get { return isTransferable; }
-            set 
-            {
-                _canvasGroup = gameObject.GetOrAddComponent<CanvasGroup>();
-                _canvasGroup.blocksRaycasts = value;
-                isTransferable = value; 
-            }
-        }
-
-        private readonly List<RaycastResult> _raycastResults = new List<RaycastResult>();
+        private readonly List<RaycastResult> _raycastResults = new();
+        private CanvasGroup _canvasGroup;
         private ReorderableList _currentReorderableListRaycasted;
 
-        private int _fromIndex;
+        private int _displacedFromIndex;
+        private RectTransform _displacedObject;
+        private LayoutElement _displacedObjectLE;
+        private Vector2 _displacedObjectOriginalSize;
+        private ReorderableList _displacedObjectOriginList;
         private RectTransform _draggingObject;
         private LayoutElement _draggingObjectLE;
         private Vector2 _draggingObjectOriginalSize;
@@ -45,30 +36,36 @@ namespace UnityEngine.UI.Extensions
         private RectTransform _fakeElement;
         private LayoutElement _fakeElementLE;
 
-        private int _displacedFromIndex;
-        private RectTransform _displacedObject;
-        private LayoutElement _displacedObjectLE;
-        private Vector2 _displacedObjectOriginalSize;
-        private ReorderableList _displacedObjectOriginList;
+        private int _fromIndex;
 
         private bool _isDragging;
         private RectTransform _rect;
         private ReorderableList _reorderableList;
-        private CanvasGroup _canvasGroup;
         internal bool isValid;
+
+        public bool IsTransferable
+        {
+            get => isTransferable;
+            set
+            {
+                _canvasGroup = gameObject.GetOrAddComponent<CanvasGroup>();
+                _canvasGroup.blocksRaycasts = value;
+                isTransferable = value;
+            }
+        }
 
 
         #region IBeginDragHandler Members
+
         public void OnBeginDrag(PointerEventData eventData)
         {
-            if (!_canvasGroup) { _canvasGroup = gameObject.GetOrAddComponent<CanvasGroup>(); }
+            if (!_canvasGroup) _canvasGroup = gameObject.GetOrAddComponent<CanvasGroup>();
             _canvasGroup.blocksRaycasts = false;
             isValid = true;
-            if (_reorderableList == null)
-                return;
+            if (_reorderableList == null) return;
 
             //Can't drag, return...
-            if (!_reorderableList.IsDraggable || !this.isGrabbable)
+            if (!_reorderableList.IsDraggable || !isGrabbable)
             {
                 _draggingObject = null;
                 return;
@@ -82,16 +79,17 @@ namespace UnityEngine.UI.Extensions
                 _displacedFromIndex = -1;
                 //Send OnElementRemoved Event
                 if (_reorderableList.OnElementRemoved != null)
-                {
-                    _reorderableList.OnElementRemoved.Invoke(new ReorderableList.ReorderableListEventStruct
+                    _reorderableList.OnElementRemoved.Invoke(
+                        new ReorderableList.ReorderableListEventStruct
                         {
                             DroppedObject = _draggingObject.gameObject,
                             IsAClone = _reorderableList.CloneDraggedObject,
-                            SourceObject = _reorderableList.CloneDraggedObject ? gameObject : _draggingObject.gameObject,
+                            SourceObject =
+                                _reorderableList.CloneDraggedObject ? gameObject : _draggingObject.gameObject,
                             FromList = _reorderableList,
-                            FromIndex = _fromIndex,
-                        });
-                }
+                            FromIndex = _fromIndex
+                        }
+                    );
                 if (isValid == false)
                 {
                     _draggingObject = null;
@@ -101,7 +99,7 @@ namespace UnityEngine.UI.Extensions
             else
             {
                 //Else Duplicate
-                GameObject clone = (GameObject)Instantiate(gameObject);
+                var clone = Instantiate(gameObject);
                 _draggingObject = clone.GetComponent<RectTransform>();
             }
 
@@ -121,14 +119,16 @@ namespace UnityEngine.UI.Extensions
             //Send OnElementGrabbed Event
             if (_reorderableList.OnElementGrabbed != null)
             {
-                _reorderableList.OnElementGrabbed.Invoke(new ReorderableList.ReorderableListEventStruct
+                _reorderableList.OnElementGrabbed.Invoke(
+                    new ReorderableList.ReorderableListEventStruct
                     {
                         DroppedObject = _draggingObject.gameObject,
                         IsAClone = _reorderableList.CloneDraggedObject,
                         SourceObject = _reorderableList.CloneDraggedObject ? gameObject : _draggingObject.gameObject,
                         FromList = _reorderableList,
-                        FromIndex = _fromIndex,
-                    });
+                        FromIndex = _fromIndex
+                    }
+                );
 
                 if (!isValid)
                 {
@@ -139,65 +139,68 @@ namespace UnityEngine.UI.Extensions
 
             _isDragging = true;
         }
+
         #endregion
 
         #region IDragHandler Members
+
         public void OnDrag(PointerEventData eventData)
         {
-            if (!_isDragging)
-                return;
+            if (!_isDragging) return;
             if (!isValid)
             {
                 CancelDrag();
                 return;
             }
+
             //Set dragging object on cursor
             var canvas = _draggingObject.GetComponentInParent<Canvas>();
             Vector3 worldPoint;
-            RectTransformUtility.ScreenPointToWorldPointInRectangle(canvas.GetComponent<RectTransform>(), eventData.position,
-                canvas.renderMode != RenderMode.ScreenSpaceOverlay ? canvas.worldCamera : null, out worldPoint);
+            RectTransformUtility.ScreenPointToWorldPointInRectangle(
+                canvas.GetComponent<RectTransform>(),
+                eventData.position,
+                canvas.renderMode != RenderMode.ScreenSpaceOverlay ? canvas.worldCamera : null,
+                out worldPoint
+            );
             _draggingObject.position = worldPoint;
 
-            ReorderableList _oldReorderableListRaycasted = _currentReorderableListRaycasted;
+            var _oldReorderableListRaycasted = _currentReorderableListRaycasted;
 
             //Check everything under the cursor to find a ReorderableList
             EventSystem.current.RaycastAll(eventData, _raycastResults);
-            for (int i = 0; i < _raycastResults.Count; i++)
+            for (var i = 0; i < _raycastResults.Count; i++)
             {
                 _currentReorderableListRaycasted = _raycastResults[i].gameObject.GetComponent<ReorderableList>();
-                if (_currentReorderableListRaycasted != null)
-                {
-                    break;
-                }
+                if (_currentReorderableListRaycasted != null) break;
             }
 
             //If nothing found or the list is not dropable, put the fake element outside
             if (_currentReorderableListRaycasted == null || _currentReorderableListRaycasted.IsDropable == false
-                || ((_fakeElement.parent == _currentReorderableListRaycasted.Content 
-                    ? _currentReorderableListRaycasted.Content.childCount - 1 
-                    : _currentReorderableListRaycasted.Content.childCount) >= _currentReorderableListRaycasted.maxItems && !_currentReorderableListRaycasted.IsDisplacable)
-                || _currentReorderableListRaycasted.maxItems <= 0)
+                                                         || ((_fakeElement.parent
+                                                              == _currentReorderableListRaycasted.Content
+                                                                 ? _currentReorderableListRaycasted.Content.childCount
+                                                                   - 1
+                                                                 : _currentReorderableListRaycasted.Content.childCount)
+                                                             >= _currentReorderableListRaycasted.maxItems
+                                                             && !_currentReorderableListRaycasted.IsDisplacable)
+                                                         || _currentReorderableListRaycasted.maxItems <= 0)
             {
                 RefreshSizes();
                 _fakeElement.transform.SetParent(_reorderableList.DraggableArea, false);
                 // revert the displaced element when not hovering over its list
-                if (_displacedObject != null)
-                {
-                    revertDisplacedElement();
-                }
+                if (_displacedObject != null) revertDisplacedElement();
             }
             //Else find the best position on the list and put fake element on the right index 
             else if (_currentReorderableListRaycasted == _reorderableList || IsTransferable)
             {
-                if (_currentReorderableListRaycasted.Content.childCount < _currentReorderableListRaycasted.maxItems && _fakeElement.parent != _currentReorderableListRaycasted.Content)
-                {
+                if (_currentReorderableListRaycasted.Content.childCount < _currentReorderableListRaycasted.maxItems
+                    && _fakeElement.parent != _currentReorderableListRaycasted.Content)
                     _fakeElement.SetParent(_currentReorderableListRaycasted.Content, false);
-                }
 
-                float minDistance = float.PositiveInfinity;
-                int targetIndex = 0;
+                var minDistance = float.PositiveInfinity;
+                var targetIndex = 0;
                 float dist = 0;
-                for (int j = 0; j < _currentReorderableListRaycasted.Content.childCount; j++)
+                for (var j = 0; j < _currentReorderableListRaycasted.Content.childCount; j++)
                 {
                     var c = _currentReorderableListRaycasted.Content.GetChild(j).GetComponent<RectTransform>();
 
@@ -206,7 +209,7 @@ namespace UnityEngine.UI.Extensions
                     else if (_currentReorderableListRaycasted.ContentLayout is HorizontalLayoutGroup)
                         dist = Mathf.Abs(c.position.x - worldPoint.x);
                     else if (_currentReorderableListRaycasted.ContentLayout is GridLayoutGroup)
-                        dist = (Mathf.Abs(c.position.x - worldPoint.x) + Mathf.Abs(c.position.y - worldPoint.y));
+                        dist = Mathf.Abs(c.position.x - worldPoint.x) + Mathf.Abs(c.position.y - worldPoint.y);
 
                     if (dist < minDistance)
                     {
@@ -214,17 +217,18 @@ namespace UnityEngine.UI.Extensions
                         targetIndex = j;
                     }
                 }
-                if ((_currentReorderableListRaycasted != _oldReorderableListRaycasted || targetIndex != _displacedFromIndex)
+
+                if ((_currentReorderableListRaycasted != _oldReorderableListRaycasted
+                     || targetIndex != _displacedFromIndex)
                     && _currentReorderableListRaycasted.Content.childCount == _currentReorderableListRaycasted.maxItems)
                 {
-                    Transform toDisplace = _currentReorderableListRaycasted.Content.GetChild(targetIndex);
+                    var toDisplace = _currentReorderableListRaycasted.Content.GetChild(targetIndex);
                     if (_displacedObject != null)
                     {
                         revertDisplacedElement();
-                        if (_currentReorderableListRaycasted.Content.childCount > _currentReorderableListRaycasted.maxItems)
-                        {
+                        if (_currentReorderableListRaycasted.Content.childCount
+                            > _currentReorderableListRaycasted.maxItems)
                             displaceElement(targetIndex, toDisplace);
-                        }
                     }
                     else if (_fakeElement.parent != _currentReorderableListRaycasted.Content)
                     {
@@ -232,121 +236,17 @@ namespace UnityEngine.UI.Extensions
                         displaceElement(targetIndex, toDisplace);
                     }
                 }
+
                 RefreshSizes();
                 _fakeElement.SetSiblingIndex(targetIndex);
                 _fakeElement.gameObject.SetActive(true);
-
             }
         }
-        #endregion
 
-        #region Displacement
-        private void displaceElement(int targetIndex, Transform displaced)
-        {
-            _displacedFromIndex = targetIndex;
-            _displacedObjectOriginList = _currentReorderableListRaycasted;
-            _displacedObject = displaced.GetComponent<RectTransform>();
-            _displacedObjectLE = _displacedObject.GetComponent<LayoutElement>();
-            _displacedObjectOriginalSize = _displacedObject.rect.size;
-
-            var args = new ReorderableList.ReorderableListEventStruct
-            {
-                DroppedObject = _displacedObject.gameObject,
-                FromList = _currentReorderableListRaycasted,
-                FromIndex = targetIndex,
-            };
-
-
-            int c = _fakeElement.parent == _reorderableList.Content 
-                ? _reorderableList.Content.childCount - 1 
-                : _reorderableList.Content.childCount;
-
-            if (_reorderableList.IsDropable && c < _reorderableList.maxItems && _displacedObject.GetComponent<ReorderableListElement>().IsTransferable)
-            {
-                _displacedObjectLE.preferredWidth = _draggingObjectOriginalSize.x;
-                _displacedObjectLE.preferredHeight = _draggingObjectOriginalSize.y;
-                _displacedObject.SetParent(_reorderableList.Content, false);
-                _displacedObject.rotation = _reorderableList.transform.rotation;
-                _displacedObject.SetSiblingIndex(_fromIndex);
-                // Force refreshing both lists because otherwise we get inappropriate FromList in ReorderableListEventStruct 
-                _reorderableList.Refresh();
-                _currentReorderableListRaycasted.Refresh();
-
-                args.ToList = _reorderableList;
-                args.ToIndex = _fromIndex;
-                _reorderableList.OnElementDisplacedTo.Invoke(args);
-                _reorderableList.OnElementAdded.Invoke(args);
-            }
-            else if (_displacedObject.GetComponent<ReorderableListElement>().isDroppableInSpace)
-            {
-                _displacedObject.SetParent(_currentReorderableListRaycasted.DraggableArea, true);
-                _currentReorderableListRaycasted.Refresh();
-                _displacedObject.position += new Vector3(_draggingObjectOriginalSize.x / 2, _draggingObjectOriginalSize.y / 2, 0);
-            }
-            else
-            {
-                _displacedObject.SetParent(null, true);
-                _displacedObjectOriginList.Refresh();
-                _displacedObject.gameObject.SetActive(false);
-            }
-            _displacedObjectOriginList.OnElementDisplacedFrom.Invoke(args);
-            _reorderableList.OnElementRemoved.Invoke(args);
-        }
-
-        private void revertDisplacedElement()
-        {
-            var args = new ReorderableList.ReorderableListEventStruct
-            {
-                DroppedObject = _displacedObject.gameObject,
-                FromList = _displacedObjectOriginList,
-                FromIndex = _displacedFromIndex,
-            };
-            if (_displacedObject.parent != null)
-            {
-                args.ToList = _reorderableList;
-                args.ToIndex = _fromIndex;
-            }
-
-            _displacedObjectLE.preferredWidth = _displacedObjectOriginalSize.x;
-            _displacedObjectLE.preferredHeight = _displacedObjectOriginalSize.y;
-            _displacedObject.SetParent(_displacedObjectOriginList.Content, false);
-            _displacedObject.rotation = _displacedObjectOriginList.transform.rotation;
-            _displacedObject.SetSiblingIndex(_displacedFromIndex);
-            _displacedObject.gameObject.SetActive(true);
-
-            // Force refreshing both lists because otherwise we get inappropriate FromList in ReorderableListEventStruct 
-            _reorderableList.Refresh();
-            _displacedObjectOriginList.Refresh();
-
-            if (args.ToList != null)
-            {
-                _reorderableList.OnElementDisplacedToReturned.Invoke(args);
-                _reorderableList.OnElementRemoved.Invoke(args);
-            }
-            _displacedObjectOriginList.OnElementDisplacedFromReturned.Invoke(args);
-            _displacedObjectOriginList.OnElementAdded.Invoke(args);
-
-            _displacedFromIndex = -1;
-            _displacedObjectOriginList = null;
-            _displacedObject = null;
-            _displacedObjectLE = null;
-
-        }
-
-        public void finishDisplacingElement()
-        {
-            if (_displacedObject.parent == null)
-            {
-                Destroy(_displacedObject.gameObject);
-            }
-            _displacedFromIndex = -1;
-            _displacedObjectOriginList = null;
-            _displacedObject = null;
-            _displacedObjectLE = null;
-        }
         #endregion
 
         #region IEndDragHandler Members
+
         public void OnEndDrag(PointerEventData eventData)
         {
             _isDragging = false;
@@ -355,7 +255,8 @@ namespace UnityEngine.UI.Extensions
             {
                 //If we have a ReorderableList that is dropable
                 //Put the dragged object into the content and at the right index
-                if (_currentReorderableListRaycasted != null && _fakeElement.parent == _currentReorderableListRaycasted.Content)
+                if (_currentReorderableListRaycasted != null
+                    && _fakeElement.parent == _currentReorderableListRaycasted.Content)
                 {
                     var args = new ReorderableList.ReorderableListEventStruct
                     {
@@ -367,12 +268,10 @@ namespace UnityEngine.UI.Extensions
                         ToList = _currentReorderableListRaycasted,
                         ToIndex = _fakeElement.GetSiblingIndex()
                     };
-                    
+
                     //Send OnelementDropped Event
                     if (_reorderableList && _reorderableList.OnElementDropped != null)
-                    {
                         _reorderableList.OnElementDropped.Invoke(args);
-                    }
 
                     if (!isValid || (!IsTransferable && _currentReorderableListRaycasted != _reorderableList))
                     {
@@ -391,27 +290,25 @@ namespace UnityEngine.UI.Extensions
                         var cg = _draggingObject.GetComponent<CanvasGroup>();
                         cg.blocksRaycasts = true;
                     }
+
                     // Force refreshing both lists because otherwise we get inappropriate FromList in ReorderableListEventStruct 
                     _reorderableList.Refresh();
                     _currentReorderableListRaycasted.Refresh();
 
                     _reorderableList.OnElementAdded.Invoke(args);
-            
-                    if (_displacedObject != null)
-                    {
-                        finishDisplacingElement();
-                    }
+
+                    if (_displacedObject != null) finishDisplacingElement();
 
                     if (!isValid)
                         throw new Exception("It's too late to cancel the Transfer! Do so in OnElementDropped!");
                 }
-                
+
                 else
                 {
                     //We don't have an ReorderableList
-                    if (this.isDroppableInSpace)
-                    {
-                        _reorderableList.OnElementDropped.Invoke(new ReorderableList.ReorderableListEventStruct
+                    if (isDroppableInSpace)
+                        _reorderableList.OnElementDropped.Invoke(
+                            new ReorderableList.ReorderableListEventStruct
                             {
                                 DroppedObject = _draggingObject.gameObject,
                                 IsAClone = _reorderableList.CloneDraggedObject,
@@ -419,22 +316,19 @@ namespace UnityEngine.UI.Extensions
                                     _reorderableList.CloneDraggedObject ? gameObject : _draggingObject.gameObject,
                                 FromList = _reorderableList,
                                 FromIndex = _fromIndex
-                            });
-                    }
+                            }
+                        );
                     else
-                    {
                         CancelDrag();
-                    }
-                    
+
                     //If there is no more room for the element in the target list, notify it (OnElementDroppedWithMaxItems event) 
                     if (_currentReorderableListRaycasted != null)
-                    {
                         if ((_currentReorderableListRaycasted.Content.childCount >=
                              _currentReorderableListRaycasted.maxItems &&
                              !_currentReorderableListRaycasted.IsDisplacable)
                             || _currentReorderableListRaycasted.maxItems <= 0)
                         {
-                            GameObject o = _draggingObject.gameObject;
+                            var o = _draggingObject.gameObject;
                             _reorderableList.OnElementDroppedWithMaxItems.Invoke(
                                 new ReorderableList.ReorderableListEventStruct
                                 {
@@ -444,10 +338,9 @@ namespace UnityEngine.UI.Extensions
                                     FromList = _reorderableList,
                                     ToList = _currentReorderableListRaycasted,
                                     FromIndex = _fromIndex
-                                });
-                        } 
-                    }
-                    
+                                }
+                            );
+                        }
                 }
             }
 
@@ -457,8 +350,10 @@ namespace UnityEngine.UI.Extensions
                 Destroy(_fakeElement.gameObject);
                 _fakeElement = null;
             }
+
             _canvasGroup.blocksRaycasts = true;
         }
+
         #endregion
 
         private void CancelDrag()
@@ -493,9 +388,7 @@ namespace UnityEngine.UI.Extensions
 
                 _reorderableList.OnElementAdded.Invoke(args);
 
-                if (!isValid)
-                    throw new Exception("Transfer is already Canceled.");
-
+                if (!isValid) throw new Exception("Transfer is already Canceled.");
             }
 
             //Delete fake element
@@ -504,16 +397,14 @@ namespace UnityEngine.UI.Extensions
                 Destroy(_fakeElement.gameObject);
                 _fakeElement = null;
             }
-            if (_displacedObject != null)
-            {
-                revertDisplacedElement();
-            }
+
+            if (_displacedObject != null) revertDisplacedElement();
             _canvasGroup.blocksRaycasts = true;
         }
 
         private void RefreshSizes()
         {
-            Vector2 size = _draggingObjectOriginalSize;
+            var size = _draggingObjectOriginalSize;
 
             if (_currentReorderableListRaycasted != null
                 && _currentReorderableListRaycasted.IsDropable
@@ -521,10 +412,7 @@ namespace UnityEngine.UI.Extensions
                 && _currentReorderableListRaycasted.EqualizeSizesOnDrag)
             {
                 var firstChild = _currentReorderableListRaycasted.Content.GetChild(0);
-                if (firstChild != null)
-                {
-                    size = firstChild.GetComponent<RectTransform>().rect.size;
-                }
+                if (firstChild != null) size = firstChild.GetComponent<RectTransform>().rect.size;
             }
 
             _draggingObject.sizeDelta = size;
@@ -539,5 +427,116 @@ namespace UnityEngine.UI.Extensions
             _rect = GetComponent<RectTransform>();
             _canvasGroup = gameObject.GetOrAddComponent<CanvasGroup>();
         }
+
+        #region Displacement
+
+        private void displaceElement(int targetIndex, Transform displaced)
+        {
+            _displacedFromIndex = targetIndex;
+            _displacedObjectOriginList = _currentReorderableListRaycasted;
+            _displacedObject = displaced.GetComponent<RectTransform>();
+            _displacedObjectLE = _displacedObject.GetComponent<LayoutElement>();
+            _displacedObjectOriginalSize = _displacedObject.rect.size;
+
+            var args = new ReorderableList.ReorderableListEventStruct
+            {
+                DroppedObject = _displacedObject.gameObject,
+                FromList = _currentReorderableListRaycasted,
+                FromIndex = targetIndex
+            };
+
+
+            var c = _fakeElement.parent == _reorderableList.Content
+                ? _reorderableList.Content.childCount - 1
+                : _reorderableList.Content.childCount;
+
+            if (_reorderableList.IsDropable && c < _reorderableList.maxItems
+                                            && _displacedObject.GetComponent<ReorderableListElement>().IsTransferable)
+            {
+                _displacedObjectLE.preferredWidth = _draggingObjectOriginalSize.x;
+                _displacedObjectLE.preferredHeight = _draggingObjectOriginalSize.y;
+                _displacedObject.SetParent(_reorderableList.Content, false);
+                _displacedObject.rotation = _reorderableList.transform.rotation;
+                _displacedObject.SetSiblingIndex(_fromIndex);
+                // Force refreshing both lists because otherwise we get inappropriate FromList in ReorderableListEventStruct 
+                _reorderableList.Refresh();
+                _currentReorderableListRaycasted.Refresh();
+
+                args.ToList = _reorderableList;
+                args.ToIndex = _fromIndex;
+                _reorderableList.OnElementDisplacedTo.Invoke(args);
+                _reorderableList.OnElementAdded.Invoke(args);
+            }
+            else if (_displacedObject.GetComponent<ReorderableListElement>().isDroppableInSpace)
+            {
+                _displacedObject.SetParent(_currentReorderableListRaycasted.DraggableArea, true);
+                _currentReorderableListRaycasted.Refresh();
+                _displacedObject.position += new Vector3(
+                    _draggingObjectOriginalSize.x / 2,
+                    _draggingObjectOriginalSize.y / 2,
+                    0
+                );
+            }
+            else
+            {
+                _displacedObject.SetParent(null, true);
+                _displacedObjectOriginList.Refresh();
+                _displacedObject.gameObject.SetActive(false);
+            }
+
+            _displacedObjectOriginList.OnElementDisplacedFrom.Invoke(args);
+            _reorderableList.OnElementRemoved.Invoke(args);
+        }
+
+        private void revertDisplacedElement()
+        {
+            var args = new ReorderableList.ReorderableListEventStruct
+            {
+                DroppedObject = _displacedObject.gameObject,
+                FromList = _displacedObjectOriginList,
+                FromIndex = _displacedFromIndex
+            };
+            if (_displacedObject.parent != null)
+            {
+                args.ToList = _reorderableList;
+                args.ToIndex = _fromIndex;
+            }
+
+            _displacedObjectLE.preferredWidth = _displacedObjectOriginalSize.x;
+            _displacedObjectLE.preferredHeight = _displacedObjectOriginalSize.y;
+            _displacedObject.SetParent(_displacedObjectOriginList.Content, false);
+            _displacedObject.rotation = _displacedObjectOriginList.transform.rotation;
+            _displacedObject.SetSiblingIndex(_displacedFromIndex);
+            _displacedObject.gameObject.SetActive(true);
+
+            // Force refreshing both lists because otherwise we get inappropriate FromList in ReorderableListEventStruct 
+            _reorderableList.Refresh();
+            _displacedObjectOriginList.Refresh();
+
+            if (args.ToList != null)
+            {
+                _reorderableList.OnElementDisplacedToReturned.Invoke(args);
+                _reorderableList.OnElementRemoved.Invoke(args);
+            }
+
+            _displacedObjectOriginList.OnElementDisplacedFromReturned.Invoke(args);
+            _displacedObjectOriginList.OnElementAdded.Invoke(args);
+
+            _displacedFromIndex = -1;
+            _displacedObjectOriginList = null;
+            _displacedObject = null;
+            _displacedObjectLE = null;
+        }
+
+        public void finishDisplacingElement()
+        {
+            if (_displacedObject.parent == null) Destroy(_displacedObject.gameObject);
+            _displacedFromIndex = -1;
+            _displacedObjectOriginList = null;
+            _displacedObject = null;
+            _displacedObjectLE = null;
+        }
+
+        #endregion
     }
 }

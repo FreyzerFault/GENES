@@ -8,17 +8,15 @@ namespace UnityEngine.UI.Extensions.ColorPicker
         public Renderer pickerRenderer;
         public ColorPickerControl picker;
 
-        void Awake()
+        private void Awake()
         {
             pickerRenderer = GetComponent<Renderer>();
         }
+
         // Use this for initialization
-        void Start()
+        private void Start()
         {
-            picker.onValueChanged.AddListener(color =>
-            {
-                pickerRenderer.material.color = color;
-            });
+            picker.onValueChanged.AddListener(color => { pickerRenderer.material.color = color; });
         }
     }
 }

@@ -55,7 +55,6 @@
     <Compile Include="C:\Users\dalcanta\Unity Projects\Local Packages\Procrain\Runtime\MapDisplay\MapDisplayInMesh.cs" />
     <Compile Include="C:\Users\dalcanta\Unity Projects\Local Packages\Procrain\Runtime\MapDisplay\MapDisplayBase.cs" />
     <None Include="C:\Users\dalcanta\Unity Projects\Local Packages\Procrain\Runtime\MapDisplay\Procrain.MapDisplay.asmdef" />
-    <None Include="C:\Users\dalcanta\Unity Projects\Local Packages\Procrain\Runtime\Procrain.asmref" />
     <Reference Include="UnityEngine">
       <HintPath>C:\Program Files\Unity\Hub\Editor\2022.3.16f1\Editor\Data\Managed\UnityEngine\UnityEngine.dll</HintPath>
     </Reference>
@@ -719,10 +718,6 @@
       <Project>{9eda2b1c-27de-ccbc-9495-f65f2d41c8dc}</Project>
       <Name>Procrain.MeshGeneration</Name>
     </ProjectReference>
-    <ProjectReference Include="Procrain.Utils.csproj">
-      <Project>{dff1b38a-820b-862c-0816-27baa1d9338c}</Project>
-      <Name>Procrain.Utils</Name>
-    </ProjectReference>
     <ProjectReference Include="Procrain.MapGeneration.csproj">
       <Project>{830defe6-8853-bf3d-3b4e-45670b5a5be4}</Project>
       <Name>Procrain.MapGeneration</Name>
@@ -750,6 +745,10 @@
     <ProjectReference Include="Procrain.TerrainGeneration.csproj">
       <Project>{2df3a3ff-6f0a-81ab-8b1c-8e567149e151}</Project>
       <Name>Procrain.TerrainGeneration</Name>
+    </ProjectReference>
+    <ProjectReference Include="DavidUtils.csproj">
+      <Project>{b195b350-5f82-196a-330d-3c4e004004bf}</Project>
+      <Name>DavidUtils</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

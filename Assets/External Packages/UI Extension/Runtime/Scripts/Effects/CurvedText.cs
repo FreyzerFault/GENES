@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 
 namespace UnityEngine.UI.Extensions
 {
@@ -77,7 +76,8 @@ namespace UnityEngine.UI.Extensions
             {
                 UIVertex uiVertex = new UIVertex();
                 vh.PopulateUIVertex(ref uiVertex, index);
-                uiVertex.position.y += _curveForText.Evaluate(rectTrans.rect.width * rectTrans.pivot.x + uiVertex.position.x) * _curveMultiplier;
+                uiVertex.position.y +=
+ _curveForText.Evaluate(rectTrans.rect.width * rectTrans.pivot.x + uiVertex.position.x) * _curveMultiplier;
                 vh.SetUIVertex(uiVertex, index);
             }
         }

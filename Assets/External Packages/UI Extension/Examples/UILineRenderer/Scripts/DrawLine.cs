@@ -19,18 +19,18 @@ using UnityEngine.UI.Extensions;
 
 public class DrawLine : MonoBehaviour, IDragHandler, IDropHandler, IPointerDownHandler, IPointerUpHandler
 {
-    public enum DemoMode { DragDraw, ClickDraw };
+    public enum DemoMode { DragDraw, ClickDraw }
 
     public UILineRenderer lineRenderer;
     public DemoMode SceneDemoMode = DemoMode.DragDraw;
+    private readonly List<Vector2> points = new();
+    private int CurrentLine;
+    private Vector2 rectPos;
 
     private RectTransform RT;
-    private Vector2 rectPos;
-    private List<Vector2> points = new List<Vector2>();
-    private int CurrentLine = 0;
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         lineRenderer = GetComponent<UILineRenderer>();
         RT = GetComponent<RectTransform>();
@@ -42,7 +42,7 @@ public class DrawLine : MonoBehaviour, IDragHandler, IDropHandler, IPointerDownH
     private Vector2 DragStartPos = Vector2.zero;
 
     /// <summary>
-    /// EventData/MousePosition updated every frame.  Grab the first drag start point as the beginning as the first point
+    ///     EventData/MousePosition updated every frame.  Grab the first drag start point as the beginning as the first point
     /// </summary>
     /// <param name="eventData"></param>
     public void OnDrag(PointerEventData eventData)
@@ -58,6 +58,7 @@ public class DrawLine : MonoBehaviour, IDragHandler, IDropHandler, IPointerDownH
                     points.Add(new Vector2(DragStartPos.x - rectPos.x, DragStartPos.y - rectPos.y));
                     CurrentLine += 1;
                 }
+
                 points.Add(new Vector2(DragStartPos.x - rectPos.x, DragStartPos.y - rectPos.y));
             }
             else
@@ -68,7 +69,7 @@ public class DrawLine : MonoBehaviour, IDragHandler, IDropHandler, IPointerDownH
     }
 
     /// <summary>
-    /// When the user has finished clicking, add the end point and draw the line
+    ///     When the user has finished clicking, add the end point and draw the line
     /// </summary>
     /// <param name="eventData"></param>
     public void OnDrop(PointerEventData eventData)
@@ -89,51 +90,41 @@ public class DrawLine : MonoBehaviour, IDragHandler, IDropHandler, IPointerDownH
 
     #region Click and Draw mode
 
-    private bool drawing = false;
-    private bool mouseDown = false;
+    private bool drawing;
+    private bool mouseDown;
 
-    void Update()
+    private void Update()
     {
         // If in Click Draw mode, update will continue to move the last line to the current mouse position until Esc or Right-Click is pressed
         if (SceneDemoMode == DemoMode.ClickDraw)
         {
-            if (Input.GetMouseButton(1) || Input.GetKey(KeyCode.Escape))
-            {
-                drawing = false;
-            }
-            if (drawing)
-            {
-                DrawLineToPoint(Input.mousePosition);
-            }
+            if (Input.GetMouseButton(1) || Input.GetKey(KeyCode.Escape)) drawing = false;
+            if (drawing) DrawLineToPoint(Input.mousePosition);
         }
     }
 
     /// <summary>
-    /// For continuous lines, finish the last and create a new line for each click.
-    /// 
+    ///     For continuous lines, finish the last and create a new line for each click.
     /// </summary>
     /// <remarks>
-    /// I have used the Pointer Up and Pointer Down handlers here, as the generic Pointer Handler blocks the OnDragEnd handler.
-    /// If you only intend to use click, you can use the IPointerClickHandler instead and drop the mouseDown properties.
+    ///     I have used the Pointer Up and Pointer Down handlers here, as the generic Pointer Handler blocks the OnDragEnd
+    ///     handler.
+    ///     If you only intend to use click, you can use the IPointerClickHandler instead and drop the mouseDown properties.
     /// </remarks>
     /// <param name="eventData"></param>
     public void OnPointerDown(PointerEventData eventData)
     {
-        if (!drawing)
-        {
-            drawing = true;
-        }
+        if (!drawing) drawing = true;
 
         if (!mouseDown && SceneDemoMode == DemoMode.ClickDraw && drawing)
         {
             if (points.Count < 1)
-            {
                 points.Add(new Vector2(eventData.position.x - rectPos.x, eventData.position.y - rectPos.y));
-            }
             points.Add(new Vector2(eventData.position.x - rectPos.x, eventData.position.y - rectPos.y));
             RefreshLine();
             CurrentLine += 1;
         }
+
         mouseDown = true;
     }
 
@@ -161,5 +152,5 @@ public class DrawLine : MonoBehaviour, IDragHandler, IDropHandler, IPointerDownH
         }
     }
 
-    #endregion  Common Functions
+    #endregion Common Functions
 }

@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.Events;
-using Utils;
 
 public class GameManager : SingletonPersistent<GameManager>
 {
@@ -27,8 +26,7 @@ public class GameManager : SingletonPersistent<GameManager>
     public bool IsPlaying => State == GameState.Playing;
     public bool IsPaused => State == GameState.Paused;
 
-
-    private new void Awake()
+    private void Awake()
     {
         base.Awake();
 
@@ -41,8 +39,7 @@ public class GameManager : SingletonPersistent<GameManager>
     {
         switch (newState)
         {
-            case GameState.Playing:
-                break;
+            case GameState.Playing: break;
             case GameState.Paused:
                 Cursor.lockState = CursorLockMode.None;
                 Cursor.visible = true;

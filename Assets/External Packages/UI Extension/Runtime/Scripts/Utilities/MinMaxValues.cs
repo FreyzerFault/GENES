@@ -9,12 +9,13 @@ namespace UnityEngine.UI.Extensions
     public struct MinMaxValues
     {
         /// <summary>
-        /// Floating point tolerance
+        ///     Floating point tolerance
         /// </summary>
         public const float FLOAT_TOL = 0.01f;
 
+        public static MinMaxValues DEFUALT = new(25, 75, 0, 100);
+
         public float minValue, maxValue, minLimit, maxLimit;
-        public static MinMaxValues DEFUALT = new MinMaxValues(25, 75, 0, 100);
 
         public MinMaxValues(float minValue, float maxValue, float minLimit, float maxLimit)
         {
@@ -25,7 +26,7 @@ namespace UnityEngine.UI.Extensions
         }
 
         /// <summary>
-        /// Constructor for when values equal limits
+        ///     Constructor for when values equal limits
         /// </summary>
         /// <param name="minValue"></param>
         /// <param name="maxValue"></param>
@@ -33,18 +34,14 @@ namespace UnityEngine.UI.Extensions
         {
             this.minValue = minValue;
             this.maxValue = maxValue;
-            this.minLimit = minValue;
-            this.maxLimit = maxValue;
+            minLimit = minValue;
+            maxLimit = maxValue;
         }
 
-        public bool IsAtMinAndMax()
-        {
-            return Math.Abs(minValue - minLimit) < FLOAT_TOL && Math.Abs(maxValue - maxLimit) < FLOAT_TOL;
-        }
+        public bool IsAtMinAndMax() =>
+            Math.Abs(minValue - minLimit) < FLOAT_TOL && Math.Abs(maxValue - maxLimit) < FLOAT_TOL;
 
-        public override string ToString()
-        {
-            return $"Values(min:{minValue}, max:{maxValue}) | Limits(min:{minLimit}, max:{maxLimit})";
-        }
+        public override string ToString() =>
+            $"Values(min:{minValue}, max:{maxValue}) | Limits(min:{minLimit}, max:{maxLimit})";
     }
 }

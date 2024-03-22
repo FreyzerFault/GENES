@@ -9,57 +9,58 @@ using System.Collections;
 namespace UnityEngine.UI.Extensions
 {
     /// <summary>
-    /// Dynamic scaling of text or image (including button) based on curves
-    /// 
-    /// Fields
-    /// - animCurve - animation curve for scale (if isUniform set to false, will apply only to X scale)
-    /// - speed - animation speed
-    /// - isLoop - animation will play infinitely (in order to make it work set your animation curve to loop)
-    /// - playAtAwake - starts automatically with script becoming active. Otherwise you need to call Play() method.
-    /// - isUniform - if false animCurve will modify object X scale and animCurveY - Y scale.
-    /// 
-    /// 
-    /// Notes
-    /// - If you want to stop the animation call the ResetTween() method. 
-    /// - In some cases it can create spikes due to redrawing on change, it is recommended  to use it on simple objects in separated canvases to 
-    /// avoid redrawing full canvas. 
-    /// - If you want to scale object only in 1 axis select non unifor and use linear curve from 1 to 1 to lock the scale. 
-    /// 
+    ///     Dynamic scaling of text or image (including button) based on curves
+    ///     Fields
+    ///     - animCurve - animation curve for scale (if isUniform set to false, will apply only to X scale)
+    ///     - speed - animation speed
+    ///     - isLoop - animation will play infinitely (in order to make it work set your animation curve to loop)
+    ///     - playAtAwake - starts automatically with script becoming active. Otherwise you need to call Play() method.
+    ///     - isUniform - if false animCurve will modify object X scale and animCurveY - Y scale.
+    ///     Notes
+    ///     - If you want to stop the animation call the ResetTween() method.
+    ///     - In some cases it can create spikes due to redrawing on change, it is recommended  to use it on simple objects in
+    ///     separated canvases to
+    ///     avoid redrawing full canvas.
+    ///     - If you want to scale object only in 1 axis select non unifor and use linear curve from 1 to 1 to lock the scale.
     /// </summary>
     [AddComponentMenu("UI/Extensions/UI Tween Scale")]
     public class UI_TweenScale : MonoBehaviour
     {
         //ANIMATION FOR X AND Y, OR X IF isUniform set to false 
         public AnimationCurve animCurve;
+
         [Tooltip("Animation speed multiplier")]
         public float speed = 1;
 
         [Tooltip("If true animation will loop, for best effect set animation curve to loop on start and end point")]
+        public bool isLoop;
 
-        public bool isLoop = false;
         //IF TRUE ANIMATION STARTS AUTOMATICALLY
-        [Tooltip("If true animation will start automatically, otherwise you need to call Play() method to start the animation")]
-
-        public bool playAtAwake = false;
+        [Tooltip(
+            "If true animation will start automatically, otherwise you need to call Play() method to start the animation"
+        )]
+        public bool playAtAwake;
 
         [Space(10)]
         //if true both x and y axis will be using animCurve;
         [Header("Non uniform scale")]
-        [Tooltip("If true component will scale by the same amount in X and Y axis, otherwise use animCurve for X scale and animCurveY for Y scale")]
+        [Tooltip(
+            "If true component will scale by the same amount in X and Y axis, otherwise use animCurve for X scale and animCurveY for Y scale"
+        )]
         public bool isUniform = true;
+
         //IF isUniform set to false use this for Y axis
         public AnimationCurve animCurveY;
         private Vector3 initScale;
         private Transform myTransform;
 
-        void Awake()
+        private Vector3 newScale = Vector3.one;
+
+        private void Awake()
         {
             myTransform = GetComponent<Transform>();
             initScale = myTransform.localScale;
-            if (playAtAwake)
-            {
-                Play();
-            }
+            if (playAtAwake) Play();
         }
 
         public void Play()
@@ -67,13 +68,11 @@ namespace UnityEngine.UI.Extensions
             StartCoroutine("Tween");
         }
 
-        Vector3 newScale = Vector3.one;
-
-        IEnumerator Tween()
+        private IEnumerator Tween()
         {
             myTransform.localScale = initScale;
             float t = 0;
-            float maxT = animCurve.keys[animCurve.length - 1].time;
+            var maxT = animCurve.keys[animCurve.length - 1].time;
 
             while (t < maxT || isLoop)
             {

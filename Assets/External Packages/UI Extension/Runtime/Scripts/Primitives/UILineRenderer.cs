@@ -67,7 +67,8 @@ namespace UnityEngine.UI.Extensions
         public JoinType LineJoins = JoinType.Bevel;
 
         [Tooltip(
-            "Bezier method to apply to line, see docs for options\nCan't be used in conjunction with Resolution as Bezier already changes the resolution")]
+            "Bezier method to apply to line, see docs for options\nCan't be used in conjunction with Resolution as Bezier already changes the resolution"
+        )]
         public BezierType BezierMode = BezierType.None;
 
         [HideInInspector] public bool drivenExternally;
@@ -295,8 +296,10 @@ namespace UnityEngine.UI.Extensions
 
             if (vh.currentVertCount > 64000)
             {
-                Debug.LogError("Max Verticies size is 64000, current mesh verticies count is [" + vh.currentVertCount +
-                               "] - Cannot Draw");
+                Debug.LogError(
+                    "Max Verticies size is 64000, current mesh verticies count is [" + vh.currentVertCount +
+                    "] - Cannot Draw"
+                );
                 vh.Clear();
             }
         }
@@ -342,8 +345,10 @@ namespace UnityEngine.UI.Extensions
             return null;
         }
 
-        private UIVertex[] CreateLineSegment(Vector2 start, Vector2 end, SegmentType type,
-            UIVertex[] previousVert = null)
+        private UIVertex[] CreateLineSegment(
+            Vector2 start, Vector2 end, SegmentType type,
+            UIVertex[] previousVert = null
+        )
         {
             var offset = new Vector2(start.y - end.y, end.x - start.x).normalized * lineThickness / 2;
 
@@ -365,14 +370,10 @@ namespace UnityEngine.UI.Extensions
             //Return the VDO with the correct uvs
             switch (type)
             {
-                case SegmentType.Start:
-                    return SetVbo(new[] { v1, v2, v3, v4 }, startUvs);
-                case SegmentType.End:
-                    return SetVbo(new[] { v1, v2, v3, v4 }, endUvs);
-                case SegmentType.Full:
-                    return SetVbo(new[] { v1, v2, v3, v4 }, fullUvs);
-                default:
-                    return SetVbo(new[] { v1, v2, v3, v4 }, middleUvs);
+                case SegmentType.Start: return SetVbo(new[] { v1, v2, v3, v4 }, startUvs);
+                case SegmentType.End: return SetVbo(new[] { v1, v2, v3, v4 }, endUvs);
+                case SegmentType.Full: return SetVbo(new[] { v1, v2, v3, v4 }, fullUvs);
+                default: return SetVbo(new[] { v1, v2, v3, v4 }, middleUvs);
             }
         }
 
@@ -497,10 +498,7 @@ namespace UnityEngine.UI.Extensions
         /// <param name="index">Required Index of the point, starting from point 1</param>
         /// <param name="segmentIndex"> Required Segment the point is held in, Starting from Segment 1</param>
         /// <returns>Vector2 position of the point within UI Space</returns>
-        public Vector2 GetPositionBySegment(int index, int segment)
-        {
-            return Segments[segment][index - 1];
-        }
+        public Vector2 GetPositionBySegment(int index, int segment) => Segments[segment][index - 1];
 
         /// <summary>
         ///     Get the closest point between two given Vector2s from a given Vector2 point

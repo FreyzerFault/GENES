@@ -4,8 +4,11 @@ using UnityEngine.EventSystems;
 
 namespace Map.Rendering
 {
-    public class MapRendererUIEditable : MapRendererUI, IDragHandler, IPointerUpHandler,
-        IPointerDownHandler
+    public class MapRendererUIEditable
+        : MapRendererUI,
+            IDragHandler,
+            IPointerUpHandler,
+            IPointerDownHandler
     {
         [SerializeField] private GameObject markerPlaceholderDraggedPrefab;
 
@@ -24,9 +27,11 @@ namespace Map.Rendering
         // ============================= MOUSE EVENTS =============================
         public void OnDrag(PointerEventData eventData)
         {
-            if (_markerDraggedIndex == -1 ||
-                eventData.button != PointerEventData.InputButton.Left ||
-                MarkerManager.EditMarkerMode != EditMarkerMode.Add)
+            if (
+                _markerDraggedIndex == -1
+                || eventData.button != PointerEventData.InputButton.Left
+                || MarkerManager.EditMarkerMode != EditMarkerMode.Add
+            )
                 return;
 
             HandleDrag(eventData.position);
@@ -48,13 +53,16 @@ namespace Map.Rendering
             var normalizedPosition = imageRectTransform.ScreenToNormalizedPoint(eventData.position);
 
             // Si no se arrastra una distancia minima o no es legal -> Ignorar el drag
-            var canDrag = editMarkerModeIsAdd &&
-                          IsDraggingMarker &&
-                          IsDraggedOverMinDistance(normalizedPosition) &&
-                          IsLegalPos(normalizedPosition);
+            var canDrag =
+                editMarkerModeIsAdd
+                && IsDraggingMarker
+                && IsDraggedOverMinDistance(normalizedPosition)
+                && IsLegalPos(normalizedPosition);
 
-            if (canDrag) HandleEndDrag(normalizedPosition);
-            else HandleClickWithoutDrag(normalizedPosition);
+            if (canDrag)
+                HandleEndDrag(normalizedPosition);
+            else
+                HandleClickWithoutDrag(normalizedPosition);
 
             // Fin del DRAG
             ResetDragState();
@@ -63,7 +71,8 @@ namespace Map.Rendering
         // ============================= CONDITIONS =============================
         // Dragged Marker is far enough to move
         private bool IsDraggedOverMinDistance(Vector2 normalizedPosition) =>
-            MarkerManager.Markers[_markerDraggedIndex].Distance2D(normalizedPosition) > _minDragDistanceToMove;
+            MarkerManager.Markers[_markerDraggedIndex].Distance2D(normalizedPosition)
+            > _minDragDistanceToMove;
 
         // LEGAL POSITION
         private bool IsLegalPos(Vector2 normalizedPosition) =>
@@ -107,8 +116,7 @@ namespace Map.Rendering
 
                     break;
                 case EditMarkerMode.Delete:
-                    if (anyHovered)
-                        MarkerManager.RemoveMarker(MarkerManager.HoveredMarkerIndex);
+                    if (anyHovered) MarkerManager.RemoveMarker(MarkerManager.HoveredMarkerIndex);
                     break;
                 case EditMarkerMode.Select:
                 case EditMarkerMode.None:
@@ -140,8 +148,12 @@ namespace Map.Rendering
 
         private void InstantiateMarkerPlaceholder(Vector2 position)
         {
-            _markerPlaceholderDragged = Instantiate(markerPlaceholderDraggedPrefab, position, Quaternion.identity,
-                imageRectTransform);
+            _markerPlaceholderDragged = Instantiate(
+                markerPlaceholderDraggedPrefab,
+                position,
+                Quaternion.identity,
+                imageRectTransform
+            );
             _markerPlaceholderDragged.transform.localScale /= imageRectTransform.localScale.x;
         }
 
@@ -157,7 +169,6 @@ namespace Map.Rendering
             else
                 Destroy(_markerPlaceholderDragged);
         }
-
 
         // ============================= DEBUG =============================
 

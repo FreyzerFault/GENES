@@ -34,8 +34,7 @@ namespace Map
 
         private void Update()
         {
-            if (generatePlayerPath)
-                UpdatePlayerPath();
+            if (generatePlayerPath) UpdatePlayerPath();
         }
 
 
@@ -128,8 +127,7 @@ namespace Map
             {
                 paths.RemoveAt(0);
 
-                if (generatePlayerPath)
-                    UpdatePlayerPath();
+                if (generatePlayerPath) UpdatePlayerPath();
 
                 OnPathDeleted?.Invoke(index);
                 return;
@@ -231,7 +229,8 @@ namespace Map
             }
 
             var path = BuildPath(
-                PlayerPosition, MarkerManager.NextMarker.WorldPosition,
+                PlayerPosition,
+                MarkerManager.NextMarker.WorldPosition,
                 new Vector2(PlayerDirection.x, PlayerDirection.z)
             );
 

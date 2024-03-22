@@ -12,73 +12,86 @@ namespace UnityEngine.UI.Extensions
     [AddComponentMenu("UI/Extensions/Sliders/MinMax Slider")]
     public class MinMaxSlider : Selectable, IBeginDragHandler, IDragHandler, IEndDragHandler
     {
-        private enum DragState
-        {
-            Both,
-            Min,
-            Max
-        }
+        [Header("UI Controls")] [SerializeField]
+        private Camera customCamera;
 
-        [Header("UI Controls")]
-        [SerializeField] private Camera customCamera = null;
-        [SerializeField] private RectTransform sliderBounds = null;
-        [SerializeField] private RectTransform minHandle = null;
-        [SerializeField] private RectTransform maxHandle = null;
-        [SerializeField] private RectTransform middleGraphic = null;
+        [SerializeField] private RectTransform sliderBounds;
+        [SerializeField] private RectTransform minHandle;
+        [SerializeField] private RectTransform maxHandle;
+        [SerializeField] private RectTransform middleGraphic;
 
         // text components (optional)
-        [Header("Display Text (Optional)")]
-        [SerializeField] private TextMeshProUGUI minText = null;
-        [SerializeField] private TextMeshProUGUI maxText = null;
+        [Header("Display Text (Optional)")] [SerializeField]
+        private TextMeshProUGUI minText;
+
+        [SerializeField] private TextMeshProUGUI maxText;
         [SerializeField] private string textFormat = "0";
 
         // values
-        [Header("Limits")]
-        [SerializeField] private float minLimit = 0;
+        [Header("Limits")] [SerializeField] private float minLimit;
+
         [SerializeField] private float maxLimit = 100;
 
-        [Header("Values")]
-        public bool wholeNumbers;
+        [Header("Values")] public bool wholeNumbers;
+
         [SerializeField] private float minValue = 25;
         [SerializeField] private float maxValue = 75;
 
-        public MinMaxValues Values => new MinMaxValues(minValue, maxValue, minLimit, maxLimit);
-
-        public RectTransform SliderBounds { get => sliderBounds; set => sliderBounds = value; }
-        public RectTransform MinHandle { get => minHandle; set => minHandle = value; }
-        public RectTransform MaxHandle { get => maxHandle; set => maxHandle = value; }
-        public RectTransform MiddleGraphic { get => middleGraphic; set => middleGraphic = value; }
-        public TextMeshProUGUI MinText { get => minText; set => minText = value; }
-        public TextMeshProUGUI MaxText { get => maxText; set => maxText = value; }
-
-        /// <summary>
-        /// Event invoked when either slider value has changed
-        /// <para></para>
-        /// T0 = min, T1 = max
-        /// </summary>
-        [Serializable]
-        public class SliderEvent : UnityEvent<float, float> { }
-
-        public SliderEvent onValueChanged = new SliderEvent();
+        public SliderEvent onValueChanged = new();
+        private float dragStartMaxValue01;
+        private float dragStartMinValue01;
 
         private Vector2 dragStartPosition;
-        private float dragStartMinValue01;
-        private float dragStartMaxValue01;
         private DragState dragState;
-        private bool passDragEvents; // this allows drag events to be passed through to scrollers
+        private bool isOverlayCanvas;
 
         private Camera mainCamera;
         private Canvas parentCanvas;
-        private bool isOverlayCanvas;
+        private bool passDragEvents; // this allows drag events to be passed through to scrollers
+
+        public MinMaxValues Values => new(minValue, maxValue, minLimit, maxLimit);
+
+        public RectTransform SliderBounds
+        {
+            get => sliderBounds;
+            set => sliderBounds = value;
+        }
+
+        public RectTransform MinHandle
+        {
+            get => minHandle;
+            set => minHandle = value;
+        }
+
+        public RectTransform MaxHandle
+        {
+            get => maxHandle;
+            set => maxHandle = value;
+        }
+
+        public RectTransform MiddleGraphic
+        {
+            get => middleGraphic;
+            set => middleGraphic = value;
+        }
+
+        public TextMeshProUGUI MinText
+        {
+            get => minText;
+            set => minText = value;
+        }
+
+        public TextMeshProUGUI MaxText
+        {
+            get => maxText;
+            set => maxText = value;
+        }
 
         protected override void Start()
         {
             base.Start();
 
-            if (!sliderBounds)
-            {
-                sliderBounds = transform as RectTransform;
-            }
+            if (!sliderBounds) sliderBounds = transform as RectTransform;
 
             parentCanvas = GetComponentInParent<Canvas>();
             isOverlayCanvas = parentCanvas.renderMode == RenderMode.ScreenSpaceOverlay;
@@ -112,20 +125,18 @@ namespace UnityEngine.UI.Extensions
             UpdateMiddleGraphic();
 
             if (notify)
-            {
                 // event
                 onValueChanged.Invoke(this.minValue, this.maxValue);
-            }
         }
 
         private void RefreshSliders()
         {
             SetSliderAnchors();
 
-            float clampedMin = Mathf.Clamp(minValue, minLimit, maxLimit);
+            var clampedMin = Mathf.Clamp(minValue, minLimit, maxLimit);
             SetMinHandleValue01(minHandle, GetPercentage(minLimit, maxLimit, clampedMin));
 
-            float clampedMax = Mathf.Clamp(maxValue, minLimit, maxLimit);
+            var clampedMax = Mathf.Clamp(maxValue, minLimit, maxLimit);
             SetMaxHandleValue01(maxHandle, GetPercentage(minLimit, maxLimit, clampedMax));
         }
 
@@ -142,15 +153,9 @@ namespace UnityEngine.UI.Extensions
 
         private void UpdateText()
         {
-            if (minText)
-            {
-                minText.SetText(minValue.ToString(textFormat));
-            }
+            if (minText) minText.SetText(minValue.ToString(textFormat));
 
-            if (maxText)
-            {
-                maxText.SetText(maxValue.ToString(textFormat));
-            }
+            if (maxText) maxText.SetText(maxValue.ToString(textFormat));
         }
 
         private void UpdateMiddleGraphic()
@@ -163,7 +168,105 @@ namespace UnityEngine.UI.Extensions
             middleGraphic.offsetMax = new Vector2(maxHandle.anchoredPosition.x, 0);
         }
 
+        private void PassDragEvents<T>(Action<T> callback) where T : IEventSystemHandler
+        {
+            var parent = transform.parent;
+
+            while (parent != null)
+            {
+                foreach (var component in parent.GetComponents<Component>())
+                {
+                    if (!(component is T)) continue;
+
+                    callback.Invoke((T)(IEventSystemHandler)component);
+                    return;
+                }
+
+                parent = parent.parent;
+            }
+        }
+
+        /// <summary>
+        ///     Sets position of max handle RectTransform
+        /// </summary>
+        /// <param name="handle"></param>
+        /// <param name="value01">Normalized handle position</param>
+        private void SetMaxHandleValue01(RectTransform handle, float value01)
+        {
+            handle.anchoredPosition = new Vector2(
+                value01 * sliderBounds.rect.width - sliderBounds.rect.width + sliderBounds.offsetMax.x,
+                handle.anchoredPosition.y
+            );
+        }
+
+        /// <summary>
+        ///     Sets position of min handle RectTransform
+        /// </summary>
+        /// <param name="handle"></param>
+        /// <param name="value01">Normalized handle position</param>
+        private void SetMinHandleValue01(RectTransform handle, float value01)
+        {
+            handle.anchoredPosition = new Vector2(
+                value01 * sliderBounds.rect.width + sliderBounds.offsetMin.x,
+                handle.anchoredPosition.y
+            );
+        }
+
+        /// <summary>
+        ///     Returns normalized position of max handle RectTransform
+        /// </summary>
+        /// <param name="handle"></param>
+        /// <returns>Normalized position of max handle RectTransform</returns>
+        private float GetMaxHandleValue01(RectTransform handle) =>
+            1 + (handle.anchoredPosition.x - sliderBounds.offsetMax.x) / sliderBounds.rect.width;
+
+        /// <summary>
+        ///     Returns normalized position of min handle RectTransform
+        /// </summary>
+        /// <param name="handle"></param>
+        /// <returns>Normalized position of min handle RectTransform</returns>
+        private float GetMinHandleValue01(RectTransform handle) =>
+            (handle.anchoredPosition.x - sliderBounds.offsetMin.x) / sliderBounds.rect.width;
+
+        /// <summary>
+        ///     Returns normalized position of a point in a slider bounds rectangle
+        /// </summary>
+        /// <param name="position"></param>
+        /// <returns>Normalized position of a point in a slider bounds rectangle</returns>
+        private float GetValueOfPointInSliderBounds01(Vector2 position)
+        {
+            var width = sliderBounds.rect.width;
+            return Mathf.Clamp((position.x + width / 2) / width, 0, 1);
+        }
+
+        /// <summary>
+        ///     Returns percentage of input based on min and max values
+        /// </summary>
+        /// <param name="min"></param>
+        /// <param name="max"></param>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        private static float GetPercentage(float min, float max, float input) => (input - min) / (max - min);
+
+        private enum DragState
+        {
+            Both,
+            Min,
+            Max
+        }
+
+        /// <summary>
+        ///     Event invoked when either slider value has changed
+        ///     <para></para>
+        ///     T0 = min, T1 = max
+        /// </summary>
+        [Serializable]
+        public class SliderEvent : UnityEvent<float, float>
+        {
+        }
+
         #region IDragHandler
+
         public void OnBeginDrag(PointerEventData eventData)
         {
             passDragEvents = Math.Abs(eventData.delta.x) < Math.Abs(eventData.delta.y);
@@ -174,20 +277,27 @@ namespace UnityEngine.UI.Extensions
             }
             else
             {
-                Camera uiCamera = isOverlayCanvas ? null : mainCamera;
-                RectTransformUtility.ScreenPointToLocalPointInRectangle(sliderBounds, eventData.position, uiCamera, out dragStartPosition);
+                var uiCamera = isOverlayCanvas ? null : mainCamera;
+                RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                    sliderBounds,
+                    eventData.position,
+                    uiCamera,
+                    out dragStartPosition
+                );
 
-                float dragStartValue = GetValueOfPointInSliderBounds01(dragStartPosition);
+                var dragStartValue = GetValueOfPointInSliderBounds01(dragStartPosition);
                 dragStartMinValue01 = GetMinHandleValue01(minHandle);
                 dragStartMaxValue01 = GetMaxHandleValue01(maxHandle);
 
                 // set drag state
-                if (dragStartValue < dragStartMinValue01 || RectTransformUtility.RectangleContainsScreenPoint(minHandle, eventData.position, uiCamera))
+                if (dragStartValue < dragStartMinValue01
+                    || RectTransformUtility.RectangleContainsScreenPoint(minHandle, eventData.position, uiCamera))
                 {
                     dragState = DragState.Min;
                     minHandle.SetAsLastSibling();
                 }
-                else if (dragStartValue > dragStartMaxValue01 || RectTransformUtility.RectangleContainsScreenPoint(maxHandle, eventData.position, uiCamera))
+                else if (dragStartValue > dragStartMaxValue01
+                         || RectTransformUtility.RectangleContainsScreenPoint(maxHandle, eventData.position, uiCamera))
                 {
                     dragState = DragState.Max;
                     maxHandle.SetAsLastSibling();
@@ -207,15 +317,20 @@ namespace UnityEngine.UI.Extensions
             }
             else if (minHandle && maxHandle)
             {
-                RectTransformUtility.ScreenPointToLocalPointInRectangle(sliderBounds, eventData.position, isOverlayCanvas ? null : mainCamera, out Vector2 clickPosition);
+                RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                    sliderBounds,
+                    eventData.position,
+                    isOverlayCanvas ? null : mainCamera,
+                    out var clickPosition
+                );
 
                 SetSliderAnchors();
 
                 if (dragState == DragState.Min || dragState == DragState.Max)
                 {
-                    float dragPosition01 = GetValueOfPointInSliderBounds01(clickPosition);
-                    float minHandleValue = GetMinHandleValue01(minHandle);
-                    float maxHandleValue = GetMaxHandleValue01(maxHandle);
+                    var dragPosition01 = GetValueOfPointInSliderBounds01(clickPosition);
+                    var minHandleValue = GetMinHandleValue01(minHandle);
+                    var maxHandleValue = GetMaxHandleValue01(maxHandle);
 
                     if (dragState == DragState.Min)
                         SetMinHandleValue01(minHandle, Mathf.Clamp(dragPosition01, 0, maxHandleValue));
@@ -224,14 +339,14 @@ namespace UnityEngine.UI.Extensions
                 }
                 else
                 {
-                    float distancePercent = (clickPosition.x - dragStartPosition.x) / sliderBounds.rect.width;
+                    var distancePercent = (clickPosition.x - dragStartPosition.x) / sliderBounds.rect.width;
                     SetMinHandleValue01(minHandle, dragStartMinValue01 + distancePercent);
                     SetMaxHandleValue01(maxHandle, dragStartMaxValue01 + distancePercent);
                 }
 
                 // set values
-                float min = Mathf.Lerp(minLimit, maxLimit, GetMinHandleValue01(minHandle));
-                float max = Mathf.Lerp(minLimit, maxLimit, GetMaxHandleValue01(maxHandle));
+                var min = Mathf.Lerp(minLimit, maxLimit, GetMinHandleValue01(minHandle));
+                var max = Mathf.Lerp(minLimit, maxLimit, GetMaxHandleValue01(maxHandle));
                 SetValues(min, max);
 
                 UpdateText();
@@ -247,101 +362,19 @@ namespace UnityEngine.UI.Extensions
             }
             else
             {
-                float minHandleValue = GetMinHandleValue01(minHandle);
-                float maxHandleValue = GetMaxHandleValue01(maxHandle);
+                var minHandleValue = GetMinHandleValue01(minHandle);
+                var maxHandleValue = GetMaxHandleValue01(maxHandle);
 
                 // this safe guards a possible situation where the slides can get stuck
-                if (Math.Abs(minHandleValue) < MinMaxValues.FLOAT_TOL && Math.Abs(maxHandleValue) < MinMaxValues.FLOAT_TOL)
-                {
+                if (Math.Abs(minHandleValue) < MinMaxValues.FLOAT_TOL
+                    && Math.Abs(maxHandleValue) < MinMaxValues.FLOAT_TOL)
                     maxHandle.SetAsLastSibling();
-                }
-                else if (Math.Abs(minHandleValue - 1) < MinMaxValues.FLOAT_TOL && Math.Abs(maxHandleValue - 1) < MinMaxValues.FLOAT_TOL)
-                {
+                else if (Math.Abs(minHandleValue - 1) < MinMaxValues.FLOAT_TOL
+                         && Math.Abs(maxHandleValue - 1) < MinMaxValues.FLOAT_TOL)
                     minHandle.SetAsLastSibling();
-                }
             }
         }
+
         #endregion IDragHandler
-
-        private void PassDragEvents<T>(Action<T> callback) where T : IEventSystemHandler
-        {
-            Transform parent = transform.parent;
-
-            while (parent != null)
-            {
-                foreach (var component in parent.GetComponents<Component>())
-                {
-                    if (!(component is T)) continue;
-
-                    callback.Invoke((T)(IEventSystemHandler)component);
-                    return;
-                }
-
-                parent = parent.parent;
-            }
-        }
-
-        /// <summary>
-        /// Sets position of max handle RectTransform
-        /// </summary>
-        /// <param name="handle"></param>
-        /// <param name="value01">Normalized handle position</param>
-        private void SetMaxHandleValue01(RectTransform handle, float value01)
-        {
-            handle.anchoredPosition = new Vector2(value01 * sliderBounds.rect.width - sliderBounds.rect.width + sliderBounds.offsetMax.x, handle.anchoredPosition.y);
-        }
-
-        /// <summary>
-        /// Sets position of min handle RectTransform
-        /// </summary>
-        /// <param name="handle"></param>
-        /// <param name="value01">Normalized handle position</param>
-        private void SetMinHandleValue01(RectTransform handle, float value01)
-        {
-            handle.anchoredPosition = new Vector2(value01 * sliderBounds.rect.width + sliderBounds.offsetMin.x, handle.anchoredPosition.y);
-        }
-
-        /// <summary>
-        /// Returns normalized position of max handle RectTransform
-        /// </summary>
-        /// <param name="handle"></param>
-        /// <returns>Normalized position of max handle RectTransform</returns>
-        private float GetMaxHandleValue01(RectTransform handle)
-        {
-            return 1 + (handle.anchoredPosition.x - sliderBounds.offsetMax.x) / sliderBounds.rect.width;
-        }
-
-        /// <summary>
-        /// Returns normalized position of min handle RectTransform
-        /// </summary>
-        /// <param name="handle"></param>
-        /// <returns>Normalized position of min handle RectTransform</returns>
-        private float GetMinHandleValue01(RectTransform handle)
-        {
-            return (handle.anchoredPosition.x - sliderBounds.offsetMin.x) / sliderBounds.rect.width;
-        }
-
-        /// <summary>
-        /// Returns normalized position of a point in a slider bounds rectangle
-        /// </summary>
-        /// <param name="position"></param>
-        /// <returns>Normalized position of a point in a slider bounds rectangle</returns>
-        private float GetValueOfPointInSliderBounds01(Vector2 position)
-        {
-            var width = sliderBounds.rect.width;
-            return Mathf.Clamp((position.x + width / 2) / width, 0, 1);
-        }
-
-        /// <summary>
-        /// Returns percentage of input based on min and max values
-        /// </summary>
-        /// <param name="min"></param>
-        /// <param name="max"></param>
-        /// <param name="input"></param>
-        /// <returns></returns>
-        private static float GetPercentage(float min, float max, float input)
-        {
-            return (input - min) / (max - min);
-        }
     }
 }

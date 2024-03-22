@@ -1,5 +1,5 @@
-﻿
-using static System.Net.Mime.MediaTypeNames;
+﻿using TMPro;
+
 /// Credit NemoKrad (aka Charles Humphrey) / valtain
 /// Sourced from - http://www.randomchaos.co.uk/SoftAlphaUIMask.aspx
 /// Updated by valtain - https://bitbucket.org/SimonDarksideJ/unity-ui-extensions/pull-requests/33
@@ -10,45 +10,43 @@ namespace UnityEngine.UI.Extensions
     [AddComponentMenu("UI/Effects/Extensions/SoftMaskScript")]
     public class SoftMaskScript : MonoBehaviour
     {
-        Material mat;
-
-        Canvas cachedCanvas = null;
-        Transform cachedCanvasTransform = null;
-        readonly Vector3[] m_WorldCorners = new Vector3[4];
-        readonly Vector3[] m_CanvasCorners = new Vector3[4];
-
         [Tooltip("The area that is to be used as the container.")]
         public RectTransform MaskArea;
 
         [Tooltip("Texture to be used to do the soft alpha")]
         public Texture AlphaMask;
 
-        [Tooltip("At what point to apply the alpha min range 0-1")]
-        [Range(0, 1)]
-        public float CutOff = 0;
+        [Tooltip("At what point to apply the alpha min range 0-1")] [Range(0, 1)]
+        public float CutOff;
 
         [Tooltip("Implement a hard blend based on the Cutoff")]
-        public bool HardBlend = false;
+        public bool HardBlend;
 
         [Tooltip("Flip the masks alpha value")]
-        public bool FlipAlphaMask = false;
+        public bool FlipAlphaMask;
 
-        [Tooltip("If a different Mask Scaling Rect is given, and this value is true, the area around the mask will not be clipped")]
-        public bool DontClipMaskScalingRect = false;
+        [Tooltip(
+            "If a different Mask Scaling Rect is given, and this value is true, the area around the mask will not be clipped"
+        )]
+        public bool DontClipMaskScalingRect;
 
-        Vector2 maskOffset = Vector2.zero;
-        Vector2 maskScale = Vector2.one;
+        private readonly Vector3[] m_CanvasCorners = new Vector3[4];
+        private readonly Vector3[] m_WorldCorners = new Vector3[4];
+
+        private Canvas cachedCanvas;
+        private Transform cachedCanvasTransform;
+
+        private Vector2 maskOffset = Vector2.zero;
+        private Vector2 maskScale = Vector2.one;
+        private Material mat;
 
         // Use this for initialization
-        void Start()
+        private void Start()
         {
-            if (MaskArea == null)
-            {
-                MaskArea = GetComponent<RectTransform>();
-            }
+            if (MaskArea == null) MaskArea = GetComponent<RectTransform>();
 
 #if UNITY_2022_1_OR_NEWER
-            var text = GetComponent<TMPro.TMP_Text>();
+            var text = GetComponent<TMP_Text>();
 #else
             var text = GetComponent<Text>();
 #endif
@@ -60,8 +58,7 @@ namespace UnityEngine.UI.Extensions
                 cachedCanvasTransform = cachedCanvas.transform;
                 // For some reason, having the mask control on the parent and disabled stops the mouse interacting
                 // with the texture layer that is not visible.. Not needed for the Image.
-                if (transform.parent.GetComponent<Mask>() == null)
-                    transform.parent.gameObject.AddComponent<Mask>();
+                if (transform.parent.GetComponent<Mask>() == null) transform.parent.gameObject.AddComponent<Mask>();
 
                 transform.parent.GetComponent<Mask>().enabled = false;
                 return;
@@ -77,15 +74,12 @@ namespace UnityEngine.UI.Extensions
             }
         }
 
-        void Update()
+        private void Update()
         {
-            if (cachedCanvas != null)
-            {
-                SetMask();
-            }
+            if (cachedCanvas != null) SetMask();
         }
 
-        void SetMask()
+        private void SetMask()
         {
             var worldRect = GetCanvasRect();
             var size = worldRect.size;
@@ -105,14 +99,18 @@ namespace UnityEngine.UI.Extensions
 
         public Rect GetCanvasRect()
         {
-            if (cachedCanvas == null)
-                return new Rect();
+            if (cachedCanvas == null) return new Rect();
 
             MaskArea.GetWorldCorners(m_WorldCorners);
-            for (int i = 0; i < 4; ++i)
+            for (var i = 0; i < 4; ++i)
                 m_CanvasCorners[i] = cachedCanvasTransform.InverseTransformPoint(m_WorldCorners[i]);
 
-            return new Rect(m_CanvasCorners[0].x, m_CanvasCorners[0].y, m_CanvasCorners[2].x - m_CanvasCorners[0].x, m_CanvasCorners[2].y - m_CanvasCorners[0].y);
+            return new Rect(
+                m_CanvasCorners[0].x,
+                m_CanvasCorners[0].y,
+                m_CanvasCorners[2].x - m_CanvasCorners[0].x,
+                m_CanvasCorners[2].y - m_CanvasCorners[0].y
+            );
         }
     }
 }

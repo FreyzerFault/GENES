@@ -7,17 +7,17 @@ namespace UnityEngine.UI.Extensions.Examples
     {
         public TextPic textPic;
 
-        void Awake()
+        private void Awake()
         {
             textPic = GetComponent<TextPic>();
         }
 
-        void OnEnable()
+        private void OnEnable()
         {
             textPic.onHrefClick.AddListener(OnHrefClick);
         }
 
-        void OnDisable()
+        private void OnDisable()
         {
             textPic.onHrefClick.RemoveListener(OnHrefClick);
         }

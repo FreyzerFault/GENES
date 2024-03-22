@@ -6,7 +6,7 @@ using System;
 namespace UnityEngine.UI.Extensions
 {
     /// <summary>
-    /// <see cref="FancyCellGroup{TItemData, TContext}"/> のコンテキストインターフェース.
+    ///     <see cref="FancyCellGroup{TItemData, TContext}" /> のコンテキストインターフェース.
     /// </summary>
     public interface IFancyCellGroupContext
     {

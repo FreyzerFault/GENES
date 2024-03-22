@@ -1,30 +1,28 @@
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.UI.Extensions;
 
 public class CreateDynamicScrollSnap : MonoBehaviour
 {
-    [SerializeField]
-    private GameObject ScrollSnapPrefab;
+    [SerializeField] private GameObject ScrollSnapPrefab;
+
+    [SerializeField] private GameObject ScrollSnapContent;
+
+    [SerializeField] private int startingPage;
 
     private HorizontalScrollSnap hss;
 
-    [SerializeField]
-    private GameObject ScrollSnapContent;
-
-    [SerializeField]
-    private int startingPage = 0;
-
-    private bool isInitialized = false;
+    private bool isInitialized;
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
-        hss = Instantiate(ScrollSnapPrefab, this.transform).GetComponent<HorizontalScrollSnap>();
+        hss = Instantiate(ScrollSnapPrefab, transform).GetComponent<HorizontalScrollSnap>();
         hss.ChangePage(0);
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         if (!isInitialized && hss != null && Input.GetKeyDown(KeyCode.K))
         {
@@ -38,12 +36,13 @@ public class CreateDynamicScrollSnap : MonoBehaviour
         var contentGO = hss.transform.Find("Content");
         if (contentGO != null)
         {
-            for (int i = 0; i < 10; i++)
+            for (var i = 0; i < 10; i++)
             {
-                GameObject item = Instantiate(ScrollSnapContent);
+                var item = Instantiate(ScrollSnapContent);
                 SetHSSItemTest(item, $"Page {i}");
                 hss.AddChild(item);
             }
+
             hss.StartingScreen = startingPage;
             hss.UpdateLayout(true);
         }
@@ -56,6 +55,6 @@ public class CreateDynamicScrollSnap : MonoBehaviour
     private void SetHSSItemTest(GameObject prefab, string value)
     {
         prefab.gameObject.name = value;
-        prefab.GetComponentInChildren<UnityEngine.UI.Text>().text = value;
+        prefab.GetComponentInChildren<Text>().text = value;
     }
 }

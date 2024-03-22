@@ -11,7 +11,7 @@ namespace UnityEngine.UI.Extensions.Examples
         // Use this for initialization
         public void AddNewPoint()
         {
-            var point = new Vector2() { x = float.Parse(XValue.text), y = float.Parse(YValue.text) };
+            var point = new Vector2 { x = float.Parse(XValue.text), y = float.Parse(YValue.text) };
             var pointlist = new List<Vector2>(LineRenderer.Points);
             pointlist.Add(point);
             LineRenderer.Points = pointlist.ToArray();

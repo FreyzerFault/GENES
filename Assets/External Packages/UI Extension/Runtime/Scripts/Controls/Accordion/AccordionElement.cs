@@ -11,90 +11,75 @@ namespace UnityEngine.UI.Extensions
     [AddComponentMenu("UI/Extensions/Accordion/Accordion Element")]
     public class AccordionElement : Toggle
     {
-
         [SerializeField] private float m_MinHeight = 18f;
-
-        public float MinHeight => m_MinHeight;
 
         [SerializeField] private float m_MinWidth = 40f;
 
-        public float MinWidth => m_MinWidth;
+        [NonSerialized] private readonly TweenRunner<FloatTween> m_FloatTweenRunner;
 
         private Accordion m_Accordion;
-        private RectTransform m_RectTransform;
         private LayoutElement m_LayoutElement;
-
-        [NonSerialized]
-        private readonly TweenRunner<FloatTween> m_FloatTweenRunner;
+        private RectTransform m_RectTransform;
 
         protected AccordionElement()
         {
-            if (this.m_FloatTweenRunner == null)
-                this.m_FloatTweenRunner = new TweenRunner<FloatTween>();
+            if (m_FloatTweenRunner == null) m_FloatTweenRunner = new TweenRunner<FloatTween>();
 
-            this.m_FloatTweenRunner.Init(this);
+            m_FloatTweenRunner.Init(this);
         }
+
+        public float MinHeight => m_MinHeight;
+
+        public float MinWidth => m_MinWidth;
 
         protected override void Awake()
         {
             base.Awake();
-            base.transition = Transition.None;
-            base.toggleTransition = ToggleTransition.None;
-            this.m_Accordion = this.gameObject.GetComponentInParent<Accordion>();
-            this.m_RectTransform = this.transform as RectTransform;
-            this.m_LayoutElement = this.gameObject.GetComponent<LayoutElement>();
-            this.onValueChanged.AddListener(OnValueChanged);
+            transition = Transition.None;
+            toggleTransition = ToggleTransition.None;
+            m_Accordion = gameObject.GetComponentInParent<Accordion>();
+            m_RectTransform = transform as RectTransform;
+            m_LayoutElement = gameObject.GetComponent<LayoutElement>();
+            onValueChanged.AddListener(OnValueChanged);
         }
 
         private new IEnumerator Start()
         {
             base.Start();
             yield return new WaitForEndOfFrame(); // Wait for the first frame
-            OnValueChanged(this.isOn);
+            OnValueChanged(isOn);
         }
 
 #if UNITY_EDITOR
         protected override void OnValidate()
         {
             base.OnValidate();
-            this.m_Accordion = this.gameObject.GetComponentInParent<Accordion>();
+            m_Accordion = gameObject.GetComponentInParent<Accordion>();
 
-            if (this.group == null)
+            if (group == null)
             {
-                ToggleGroup tg = this.GetComponentInParent<ToggleGroup>();
+                var tg = GetComponentInParent<ToggleGroup>();
 
-                if (tg != null)
-                {
-                    this.group = tg;
-                }
+                if (tg != null) group = tg;
             }
 
-            LayoutElement le = this.gameObject.GetComponent<LayoutElement>();
+            var le = gameObject.GetComponent<LayoutElement>();
 
             if (le != null && m_Accordion != null)
             {
-                if (this.isOn)
+                if (isOn)
                 {
                     if (m_Accordion.ExpandVerticval)
-                    {
                         le.preferredHeight = -1f;
-                    }
                     else
-                    {
                         le.preferredWidth = -1f;
-                    }
                 }
                 else
                 {
                     if (m_Accordion.ExpandVerticval)
-                    {
-                        le.preferredHeight = this.m_MinHeight;
-                    }
+                        le.preferredHeight = m_MinHeight;
                     else
-                    {
-                        le.preferredWidth = this.m_MinWidth;
-
-                    }
+                        le.preferredWidth = m_MinWidth;
                 }
             }
         }
@@ -102,34 +87,25 @@ namespace UnityEngine.UI.Extensions
 
         public void OnValueChanged(bool state)
         {
-            if (this.m_LayoutElement == null)
-                return;
+            if (m_LayoutElement == null) return;
 
-            Accordion.Transition transition = (this.m_Accordion != null) ? this.m_Accordion.transition : Accordion.Transition.Instant;
+            var transition = m_Accordion != null ? m_Accordion.transition : Accordion.Transition.Instant;
 
             if (transition == Accordion.Transition.Instant && m_Accordion != null)
             {
                 if (state)
                 {
                     if (m_Accordion.ExpandVerticval)
-                    {
-                        this.m_LayoutElement.preferredHeight = -1f;
-                    }
+                        m_LayoutElement.preferredHeight = -1f;
                     else
-                    {
-                        this.m_LayoutElement.preferredWidth = -1f;
-                    }
+                        m_LayoutElement.preferredWidth = -1f;
                 }
                 else
                 {
                     if (m_Accordion.ExpandVerticval)
-                    {
-                        this.m_LayoutElement.preferredHeight = this.m_MinHeight;
-                    }
+                        m_LayoutElement.preferredHeight = m_MinHeight;
                     else
-                    {
-                        this.m_LayoutElement.preferredWidth = this.m_MinWidth;
-                    }
+                        m_LayoutElement.preferredWidth = m_MinWidth;
                 }
             }
             else if (transition == Accordion.Transition.Tween)
@@ -137,90 +113,74 @@ namespace UnityEngine.UI.Extensions
                 if (state)
                 {
                     if (m_Accordion.ExpandVerticval)
-                    {
-                        this.StartTween(this.m_MinHeight, this.GetExpandedHeight());
-                    }
+                        StartTween(m_MinHeight, GetExpandedHeight());
                     else
-                    {
-                        this.StartTween(this.m_MinWidth, this.GetExpandedWidth());
-                    }
+                        StartTween(m_MinWidth, GetExpandedWidth());
                 }
                 else
                 {
                     if (m_Accordion.ExpandVerticval)
-                    {
-                        this.StartTween(this.m_RectTransform.rect.height, this.m_MinHeight);
-                    }
+                        StartTween(m_RectTransform.rect.height, m_MinHeight);
                     else
-                    {
-                        this.StartTween(this.m_RectTransform.rect.width, this.m_MinWidth);
-                    }
+                        StartTween(m_RectTransform.rect.width, m_MinWidth);
                 }
             }
         }
 
         protected float GetExpandedHeight()
         {
-            if (this.m_LayoutElement == null)
-                return this.m_MinHeight;
+            if (m_LayoutElement == null) return m_MinHeight;
 
-            float originalPrefH = this.m_LayoutElement.preferredHeight;
-            this.m_LayoutElement.preferredHeight = -1f;
-            float h = LayoutUtility.GetPreferredHeight(this.m_RectTransform);
-            this.m_LayoutElement.preferredHeight = originalPrefH;
+            var originalPrefH = m_LayoutElement.preferredHeight;
+            m_LayoutElement.preferredHeight = -1f;
+            var h = LayoutUtility.GetPreferredHeight(m_RectTransform);
+            m_LayoutElement.preferredHeight = originalPrefH;
 
             return h;
         }
 
         protected float GetExpandedWidth()
         {
-            if (this.m_LayoutElement == null)
-                return this.m_MinWidth;
+            if (m_LayoutElement == null) return m_MinWidth;
 
-            float originalPrefW = this.m_LayoutElement.preferredWidth;
-            this.m_LayoutElement.preferredWidth = -1f;
-            float w = LayoutUtility.GetPreferredWidth(this.m_RectTransform);
-            this.m_LayoutElement.preferredWidth = originalPrefW;
+            var originalPrefW = m_LayoutElement.preferredWidth;
+            m_LayoutElement.preferredWidth = -1f;
+            var w = LayoutUtility.GetPreferredWidth(m_RectTransform);
+            m_LayoutElement.preferredWidth = originalPrefW;
 
             return w;
         }
 
         protected void StartTween(float startFloat, float targetFloat)
         {
-            float duration = (this.m_Accordion != null) ? this.m_Accordion.transitionDuration : 0.3f;
+            var duration = m_Accordion != null ? m_Accordion.transitionDuration : 0.3f;
 
-            FloatTween info = new FloatTween
+            var info = new FloatTween
             {
                 duration = duration,
                 startFloat = startFloat,
                 targetFloat = targetFloat
             };
             if (m_Accordion.ExpandVerticval)
-            {
                 info.AddOnChangedCallback(SetHeight);
-            }
             else
-            {
                 info.AddOnChangedCallback(SetWidth);
-            }
             info.ignoreTimeScale = true;
-            this.m_FloatTweenRunner.StartTween(info);
+            m_FloatTweenRunner.StartTween(info);
         }
 
         protected void SetHeight(float height)
         {
-            if (this.m_LayoutElement == null)
-                return;
+            if (m_LayoutElement == null) return;
 
-            this.m_LayoutElement.preferredHeight = height;
+            m_LayoutElement.preferredHeight = height;
         }
 
         protected void SetWidth(float width)
         {
-            if (this.m_LayoutElement == null)
-                return;
+            if (m_LayoutElement == null) return;
 
-            this.m_LayoutElement.preferredWidth = width;
+            m_LayoutElement.preferredWidth = width;
         }
     }
 }

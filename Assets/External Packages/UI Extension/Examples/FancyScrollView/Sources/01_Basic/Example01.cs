@@ -8,11 +8,11 @@ using System.Linq;
 
 namespace UnityEngine.UI.Extensions.Examples.FancyScrollViewExample01
 {
-    class Example01 : MonoBehaviour
+    internal class Example01 : MonoBehaviour
     {
-        [SerializeField] ScrollView scrollView = default;
+        [SerializeField] private ScrollView scrollView;
 
-        void Start()
+        private void Start()
         {
             var items = Enumerable.Range(0, 20)
                 .Select(i => new ItemData($"Cell {i}"))

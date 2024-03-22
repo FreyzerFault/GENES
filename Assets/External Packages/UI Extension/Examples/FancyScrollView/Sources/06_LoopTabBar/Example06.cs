@@ -8,15 +8,15 @@ using System.Linq;
 
 namespace UnityEngine.UI.Extensions.Examples.FancyScrollViewExample06
 {
-    class Example06 : MonoBehaviour
+    internal class Example06 : MonoBehaviour
     {
-        [SerializeField] ScrollView scrollView = default;
-        [SerializeField] Text selectedItemInfo = default;
-        [SerializeField] Window[] windows = default;
+        [SerializeField] private ScrollView scrollView;
+        [SerializeField] private Text selectedItemInfo;
+        [SerializeField] private Window[] windows;
 
-        Window currentWindow;
+        private Window currentWindow;
 
-        void Start()
+        private void Start()
         {
             scrollView.OnSelectionChanged(OnSelectionChanged);
 
@@ -28,7 +28,7 @@ namespace UnityEngine.UI.Extensions.Examples.FancyScrollViewExample06
             scrollView.SelectCell(0);
         }
 
-        void OnSelectionChanged(int index, MovementDirection direction)
+        private void OnSelectionChanged(int index, MovementDirection direction)
         {
             selectedItemInfo.text = $"Selected tab info: index {index}";
 

@@ -6,20 +6,20 @@ using System.Linq;
 namespace UnityEngine.UI.Extensions
 {
     /// <summary>
-    /// 複数の <see cref="FancyCell{TItemData, TContext}"/> を持つセルグループ実装するための抽象基底クラス.
+    ///     複数の <see cref="FancyCell{TItemData, TContext}" /> を持つセルグループ実装するための抽象基底クラス.
     /// </summary>
     /// <typeparam name="TItemData">アイテムのデータ型.</typeparam>
-    /// <typeparam name="TContext"><see cref="FancyCell{TItemData, TContext}.Context"/> の型.</typeparam>
+    /// <typeparam name="TContext"><see cref="FancyCell{TItemData, TContext}.Context" /> の型.</typeparam>
     public abstract class FancyCellGroup<TItemData, TContext> : FancyCell<TItemData[], TContext>
         where TContext : class, IFancyCellGroupContext, new()
     {
         /// <summary>
-        /// このグループで表示するセルの配列.
+        ///     このグループで表示するセルの配列.
         /// </summary>
         protected virtual FancyCell<TItemData, TContext>[] Cells { get; private set; }
 
         /// <summary>
-        /// このグループで表示するセルの配列をインスタンス化します.
+        ///     このグループで表示するセルの配列をインスタンス化します.
         /// </summary>
         /// <returns>このグループで表示するセルの配列.</returns>
         protected virtual FancyCell<TItemData, TContext>[] InstantiateCells()
@@ -30,7 +30,7 @@ namespace UnityEngine.UI.Extensions
                 .ToArray();
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public override void Initialize()
         {
             Cells = InstantiateCells();
@@ -43,7 +43,7 @@ namespace UnityEngine.UI.Extensions
             }
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public override void UpdateContent(TItemData[] contents)
         {
             var firstCellIndex = Index * Context.GetGroupCount();
@@ -53,20 +53,14 @@ namespace UnityEngine.UI.Extensions
                 Cells[i].Index = i + firstCellIndex;
                 Cells[i].SetVisible(i < contents.Length);
 
-                if (Cells[i].IsVisible)
-                {
-                    Cells[i].UpdateContent(contents[i]);
-                }
+                if (Cells[i].IsVisible) Cells[i].UpdateContent(contents[i]);
             }
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public override void UpdatePosition(float position)
         {
-            for (var i = 0; i < Cells.Length; i++)
-            {
-                Cells[i].UpdatePosition(position);
-            }
+            for (var i = 0; i < Cells.Length; i++) Cells[i].UpdatePosition(position);
         }
     }
 }

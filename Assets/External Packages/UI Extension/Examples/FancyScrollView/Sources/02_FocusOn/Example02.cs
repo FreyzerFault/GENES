@@ -8,14 +8,14 @@ using System.Linq;
 
 namespace UnityEngine.UI.Extensions.Examples.FancyScrollViewExample02
 {
-    class Example02 : MonoBehaviour
+    internal class Example02 : MonoBehaviour
     {
-        [SerializeField] ScrollView scrollView = default;
-        [SerializeField] Button prevCellButton = default;
-        [SerializeField] Button nextCellButton = default;
-        [SerializeField] Text selectedItemInfo = default;
+        [SerializeField] private ScrollView scrollView;
+        [SerializeField] private Button prevCellButton;
+        [SerializeField] private Button nextCellButton;
+        [SerializeField] private Text selectedItemInfo;
 
-        void Start()
+        private void Start()
         {
             prevCellButton.onClick.AddListener(scrollView.SelectPrevCell);
             nextCellButton.onClick.AddListener(scrollView.SelectNextCell);
@@ -29,7 +29,7 @@ namespace UnityEngine.UI.Extensions.Examples.FancyScrollViewExample02
             scrollView.SelectCell(0);
         }
 
-        void OnSelectionChanged(int index)
+        private void OnSelectionChanged(int index)
         {
             selectedItemInfo.text = $"Selected item info: index {index}";
         }

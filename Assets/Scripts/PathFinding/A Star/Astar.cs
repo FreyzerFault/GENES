@@ -18,7 +18,8 @@ namespace PathFinding.A_Star
         protected Path FindPathAstar(
             Node start, Node end, Terrain terrain, PathFindingConfigSo paramsConfig,
             Func<Node, Node, PathFindingConfigSo, float> costFunction,
-            Func<Node, Node, PathFindingConfigSo, float> heuristicFunction)
+            Func<Node, Node, PathFindingConfigSo, float> heuristicFunction
+        )
         {
             if (start.Collision(end)) return Path.EmptyPath;
 
@@ -71,7 +72,11 @@ namespace PathFinding.A_Star
                 // Crear vecinos si es la 1º vez que se exploran
                 if (currentNode.Neighbours == null || currentNode.Neighbours.Length == 0)
                     currentNode.Neighbours = CreateNeighbours(
-                        currentNode, paramsConfig, terrain, allNodes, false
+                        currentNode,
+                        paramsConfig,
+                        terrain,
+                        allNodes,
+                        false
                     );
 
                 // Explorar vecinos

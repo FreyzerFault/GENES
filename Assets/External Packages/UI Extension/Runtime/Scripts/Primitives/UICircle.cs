@@ -27,8 +27,7 @@ namespace UnityEngine.UI.Extensions
         [Tooltip("The Arc Invert property will invert the construction of the Arc.")]
         public bool ArcInvert = true;
 
-        [Tooltip("The Arc property is a percentage of the entire circumference of the circle.")]
-        [Range(0, 1)]
+        [Tooltip("The Arc property is a percentage of the entire circumference of the circle.")] [Range(0, 1)]
         public float Arc = 1;
 
         [Tooltip("The Arc Steps property defines the number of segments that the Arc will be divided into.")]
@@ -37,42 +36,43 @@ namespace UnityEngine.UI.Extensions
 
         [Tooltip("The Arc Rotation property permits adjusting the geometry orientation around the Z axis.")]
         [Range(0, 360)]
-        public int ArcRotation = 0;
+        public int ArcRotation;
 
-        [Tooltip("The Progress property allows the primitive to be used as a progression indicator.")]
-        [Range(0, 1)]
-        public float Progress = 0;
-        private float _progress = 0;
+        [Tooltip("The Progress property allows the primitive to be used as a progression indicator.")] [Range(0, 1)]
+        public float Progress;
 
-        public Color ProgressColor = new Color(255, 255, 255, 255);
+        public Color ProgressColor = new(255, 255, 255, 255);
         public bool Fill = true; //solid circle
         public float Thickness = 5;
-        public int Padding = 0;
+        public int Padding;
 
-        private List<int> indices = new List<int>();  //ordered list of vertices per tri
-        private List<UIVertex> vertices = new List<UIVertex>();
-        private Vector2 uvCenter = new Vector2(0.5f, 0.5f);
+        private readonly List<int> indices = new(); //ordered list of vertices per tri
+        private readonly Vector2 uvCenter = new(0.5f, 0.5f);
+        private readonly List<UIVertex> vertices = new();
+        private float _progress;
 
         protected override void OnPopulateMesh(VertexHelper vh)
         {
-            int _inversion = ArcInvert ? -1 : 1;
-            float Diameter = (rectTransform.rect.width < rectTransform.rect.height ? rectTransform.rect.width : rectTransform.rect.height) - Padding; //correct for padding and always fit RectTransform
-            float outerDiameter = -rectTransform.pivot.x * Diameter;
-            float innerDiameter = -rectTransform.pivot.x * Diameter + Thickness;
+            var _inversion = ArcInvert ? -1 : 1;
+            var Diameter = (rectTransform.rect.width < rectTransform.rect.height
+                ? rectTransform.rect.width
+                : rectTransform.rect.height) - Padding; //correct for padding and always fit RectTransform
+            var outerDiameter = -rectTransform.pivot.x * Diameter;
+            var innerDiameter = -rectTransform.pivot.x * Diameter + Thickness;
 
             vh.Clear();
             indices.Clear();
             vertices.Clear();
 
-            int i = 0;
-            int j = 1;
-            int k = 0;
+            var i = 0;
+            var j = 1;
+            var k = 0;
 
-            float stepDegree = (Arc * 360f) / ArcSteps;
+            var stepDegree = Arc * 360f / ArcSteps;
             _progress = ArcSteps * Progress;
-            float rad = _inversion * Mathf.Deg2Rad * ArcRotation;
-            float X = Mathf.Cos(rad);
-            float Y = Mathf.Sin(rad);
+            var rad = _inversion * Mathf.Deg2Rad * ArcRotation;
+            var X = Mathf.Cos(rad);
+            var Y = Mathf.Sin(rad);
 
             var vertex = UIVertex.simpleVert;
             vertex.color = _progress > 0 ? ProgressColor : color;
@@ -85,10 +85,12 @@ namespace UnityEngine.UI.Extensions
             var iV = new Vector2(innerDiameter * X, innerDiameter * Y);
             if (Fill) iV = Vector2.zero; //center vertex to pivot
             vertex.position = iV;
-            vertex.uv0 = Fill ? uvCenter : new Vector2(vertex.position.x / Diameter + 0.5f, vertex.position.y / Diameter + 0.5f);
+            vertex.uv0 = Fill
+                ? uvCenter
+                : new Vector2(vertex.position.x / Diameter + 0.5f, vertex.position.y / Diameter + 0.5f);
             vertices.Add(vertex);
 
-            for (int counter = 1; counter <= ArcSteps; counter++)
+            for (var counter = 1; counter <= ArcSteps; counter++)
             {
                 rad = _inversion * Mathf.Deg2Rad * (counter * stepDegree + ArcRotation);
                 X = Mathf.Cos(rad);
@@ -123,13 +125,9 @@ namespace UnityEngine.UI.Extensions
                     //Fills (solid circle) with progress require an additional vertex to 
                     // prevent the base circle from becoming a gradient from center to edge
                     if (counter > _progress)
-                    {
                         indices.Add(ArcSteps + 2);
-                    }
                     else
-                    {
                         indices.Add(1);
-                    }
 
                     j++;
                     i = j;
@@ -144,6 +142,7 @@ namespace UnityEngine.UI.Extensions
                 vertex.uv0 = uvCenter;
                 vertices.Add(vertex);
             }
+
             vh.AddUIVertexStream(vertices, indices);
         }
 
@@ -193,9 +192,9 @@ namespace UnityEngine.UI.Extensions
 
         public void UpdateBaseAlpha(float value)
         {
-            var _color = this.color;
+            var _color = color;
             _color.a = value;
-            this.color = _color;
+            color = _color;
             SetVerticesDirty();
         }
 

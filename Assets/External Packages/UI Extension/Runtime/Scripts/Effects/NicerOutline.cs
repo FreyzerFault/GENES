@@ -1,4 +1,3 @@
-
 #if !UNITY_2022_1_OR_NEWER
 using System.Collections.Generic;
 #endif
@@ -12,9 +11,9 @@ using System;
 namespace UnityEngine.UI.Extensions
 {
 #if UNITY_2022_1_OR_NEWER
-	[Obsolete("BestFitOutline is not supported in Unity 2022.1 or newer. Use TMPro instead.")]
-	public class NicerOutline : BaseMeshEffect
-	{
+    [Obsolete("BestFitOutline is not supported in Unity 2022.1 or newer. Use TMPro instead.")]
+    public class NicerOutline : BaseMeshEffect
+    {
         public override void ModifyMesh(VertexHelper vh)
         {
         }
@@ -122,7 +121,8 @@ namespace UnityEngine.UI.Extensions
 
 			if (foundtext && foundtext.resizeTextForBestFit)
 			{
-				best_fit_adjustment = (float)foundtext.cachedTextGenerator.fontSizeUsedForBestFit / (foundtext.resizeTextMaxSize-1); //max size seems to be exclusive
+				best_fit_adjustment =
+ (float)foundtext.cachedTextGenerator.fontSizeUsedForBestFit / (foundtext.resizeTextMaxSize-1); //max size seems to be exclusive
 
 			}
 
@@ -170,7 +170,7 @@ namespace UnityEngine.UI.Extensions
 			}
 
 			int triangleCount = length / 3;
-			for(int i=0; i<triangleCount; ++i)
+			for(int i = 0; i<triangleCount; ++i)
 			{
 				int start = startIndex + 3 * i;
 				vh.AddTriangle(start + 0, start + 1, start + 2);
@@ -208,4 +208,4 @@ namespace UnityEngine.UI.Extensions
 #endif
 	}
 #endif
-    }
+}

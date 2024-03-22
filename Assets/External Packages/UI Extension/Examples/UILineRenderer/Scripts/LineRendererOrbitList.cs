@@ -1,47 +1,54 @@
-﻿using System.Collections.Generic;
-
-namespace UnityEngine.UI.Extensions.Examples
+﻿namespace UnityEngine.UI.Extensions.Examples
 {
     [RequireComponent(typeof(UILineRendererList))]
     public class LineRendererOrbitList : MonoBehaviour
     {
-        UILineRendererList lr;
-        Circle circle;
         public GameObject OrbitGO;
-        RectTransform orbitGOrt;
-        float orbitTime;
 
-        [SerializeField]
-        private float _xAxis = 3;
+        [SerializeField] private float _xAxis = 3;
+
+        [SerializeField] private float _yAxis = 3;
+
+        [SerializeField] private int _steps = 10;
+
+        private Circle circle;
+        private UILineRendererList lr;
+        private RectTransform orbitGOrt;
+        private float orbitTime;
 
         public float xAxis
         {
-            get { return _xAxis; }
-            set { _xAxis = value; GenerateOrbit(); }
+            get => _xAxis;
+            set
+            {
+                _xAxis = value;
+                GenerateOrbit();
+            }
         }
-
-        [SerializeField]
-        private float _yAxis = 3;
 
         public float yAxis
         {
-            get { return _yAxis; }
-            set { _yAxis = value; GenerateOrbit(); }
+            get => _yAxis;
+            set
+            {
+                _yAxis = value;
+                GenerateOrbit();
+            }
         }
-
-        [SerializeField]
-        private int _steps = 10;
 
         public int Steps
         {
-            get { return _steps; }
-            set { _steps = value; GenerateOrbit(); }
+            get => _steps;
+            set
+            {
+                _steps = value;
+                GenerateOrbit();
+            }
         }
 
 
-
         // Use this for initialization
-        void Awake()
+        private void Awake()
         {
             lr = GetComponent<UILineRendererList>();
             orbitGOrt = OrbitGO.GetComponent<RectTransform>();
@@ -49,28 +56,22 @@ namespace UnityEngine.UI.Extensions.Examples
         }
 
         // Update is called once per frame
-        void Update()
+        private void Update()
         {
             orbitTime = orbitTime > _steps ? orbitTime = 0 : orbitTime + Time.deltaTime;
             orbitGOrt.localPosition = circle.Evaluate(orbitTime);
         }
 
-        void GenerateOrbit()
-        {
-            circle = new Circle(xAxis: _xAxis, yAxis: _yAxis, steps: _steps);
-            for (int i = 0; i < _steps; i++)
-            {
-                lr.AddPoint(circle.Evaluate(i));
-            }
-            lr.AddPoint(circle.Evaluate(0));
-        }
-
         private void OnValidate()
         {
-            if (lr != null)
-            {
-                GenerateOrbit();
-            }
+            if (lr != null) GenerateOrbit();
+        }
+
+        private void GenerateOrbit()
+        {
+            circle = new Circle(_xAxis, _yAxis, _steps);
+            for (var i = 0; i < _steps; i++) lr.AddPoint(circle.Evaluate(i));
+            lr.AddPoint(circle.Evaluate(0));
         }
     }
 }

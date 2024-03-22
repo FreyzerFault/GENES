@@ -10,15 +10,15 @@ namespace UnityEngine.UI.Extensions
     {
         public Vector2 minSize;
         public Vector2 maxSize;
-
-        private RectTransform rectTransform;
         private Vector2 currentPointerPosition;
         private Vector2 previousPointerPosition;
 
         private float ratio;
 
+        private RectTransform rectTransform;
 
-        void Awake()
+
+        private void Awake()
         {
             rectTransform = transform.parent.GetComponent<RectTransform>();
             float originalWidth;
@@ -30,31 +30,40 @@ namespace UnityEngine.UI.Extensions
             maxSize = new Vector2(10f * originalWidth, 10f * originalHeight);
         }
 
-        public void OnPointerDown(PointerEventData data)
-        {
-            rectTransform.SetAsLastSibling();
-            RectTransformUtility.ScreenPointToLocalPointInRectangle(rectTransform, data.position, data.pressEventCamera, out previousPointerPosition);
-        }
-
         public void OnDrag(PointerEventData data)
         {
-            if (rectTransform == null)
-                return;
+            if (rectTransform == null) return;
 
-            Vector2 sizeDelta = rectTransform.sizeDelta;
+            var sizeDelta = rectTransform.sizeDelta;
 
-            RectTransformUtility.ScreenPointToLocalPointInRectangle(rectTransform, data.position, data.pressEventCamera, out currentPointerPosition);
-            Vector2 resizeValue = currentPointerPosition - previousPointerPosition;
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                rectTransform,
+                data.position,
+                data.pressEventCamera,
+                out currentPointerPosition
+            );
+            var resizeValue = currentPointerPosition - previousPointerPosition;
 
             sizeDelta += new Vector2(resizeValue.x, ratio * resizeValue.x);
             sizeDelta = new Vector2(
                 Mathf.Clamp(sizeDelta.x, minSize.x, maxSize.x),
                 Mathf.Clamp(sizeDelta.y, minSize.y, maxSize.y)
-                );
+            );
 
             rectTransform.sizeDelta = sizeDelta;
 
             previousPointerPosition = currentPointerPosition;
+        }
+
+        public void OnPointerDown(PointerEventData data)
+        {
+            rectTransform.SetAsLastSibling();
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                rectTransform,
+                data.position,
+                data.pressEventCamera,
+                out previousPointerPosition
+            );
         }
     }
 }

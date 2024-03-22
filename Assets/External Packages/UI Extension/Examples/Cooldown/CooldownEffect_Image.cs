@@ -6,49 +6,34 @@ namespace UnityEngine.UI.Extensions.Examples
     [RequireComponent(typeof(Image))]
     public class CooldownEffect_Image : MonoBehaviour
     {
-
         public CooldownButton cooldown;
         public Text displayText;
+
+        private string originalText;
         private Image target;
 
-        string originalText;
-
         // Use this for initialization
-        void Start()
+        private void Start()
         {
-            if (cooldown == null)
-            {
-                Debug.LogError("Missing Cooldown Button assignment");
-            }
+            if (cooldown == null) Debug.LogError("Missing Cooldown Button assignment");
             target = GetComponent<Image>();
         }
 
         // Update is called once per frame
-        void Update()
+        private void Update()
         {
             target.fillAmount = Mathf.Lerp(0, 1, cooldown.CooldownTimeRemaining / cooldown.CooldownTimeout);
-            if (displayText)
-            {
-                displayText.text = string.Format("{0}%", cooldown.CooldownPercentComplete);
-            }
-        }
-
-        private void OnDisable()
-        {
-            if (displayText)
-            {
-                displayText.text = originalText;
-            }
+            if (displayText) displayText.text = string.Format("{0}%", cooldown.CooldownPercentComplete);
         }
 
         private void OnEnable()
         {
-            if (displayText)
-            {
-                originalText = displayText.text;
-            }
+            if (displayText) originalText = displayText.text;
         }
 
-
+        private void OnDisable()
+        {
+            if (displayText) displayText.text = originalText;
+        }
     }
 }

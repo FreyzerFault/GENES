@@ -11,24 +11,31 @@ using UnityEngine.Networking;
 
 namespace UnityEngine.UI.Extensions.Examples.FancyScrollViewExample09
 {
-    static class TextureLoader
+    internal static class TextureLoader
     {
         public static void Load(string url, Action<(string Url, Texture Texture)> onSuccess) =>
             Loader.Instance.Load(url, onSuccess);
 
-        class Loader : MonoBehaviour
+        private class Loader : MonoBehaviour
         {
-            readonly Dictionary<string, Texture> cache = new Dictionary<string, Texture>();
-
-            static Loader instance;
+            private static Loader instance;
+            private readonly Dictionary<string, Texture> cache = new();
 
             public static Loader Instance => instance ??
 #if UNITY_2023_1_OR_NEWER
                 (instance = FindFirstObjectByType<Loader>() ??
 #else
-                (instance = FindObjectOfType<Loader>() ??
+                                             (instance = FindObjectOfType<Loader>() ??
 #endif
-                    new GameObject(typeof(TextureLoader).Name).AddComponent<Loader>());
+                                                         new GameObject(typeof(TextureLoader).Name)
+                                                             .AddComponent<Loader>());
+
+            private void OnDestroy()
+            {
+                foreach (var kv in cache) Destroy(kv.Value);
+
+                instance = null;
+            }
 
             public void Load(string url, Action<(string Url, Texture Texture)> onSuccess)
             {
@@ -38,14 +45,19 @@ namespace UnityEngine.UI.Extensions.Examples.FancyScrollViewExample09
                     return;
                 }
 
-                StartCoroutine(DownloadTexture(url, result =>
-                {
-                    cache[result.Url] = result.Texture;
-                    onSuccess(result);
-                }));
+                StartCoroutine(
+                    DownloadTexture(
+                        url,
+                        result =>
+                        {
+                            cache[result.Url] = result.Texture;
+                            onSuccess(result);
+                        }
+                    )
+                );
             }
 
-            IEnumerator DownloadTexture(string url, Action<(string Url, Texture Texture)> onSuccess)
+            private IEnumerator DownloadTexture(string url, Action<(string Url, Texture Texture)> onSuccess)
             {
                 using (var request = UnityWebRequestTexture.GetTexture(url))
                 {
@@ -61,21 +73,13 @@ namespace UnityEngine.UI.Extensions.Examples.FancyScrollViewExample09
                         yield break;
                     }
 
-                    onSuccess((
-                        url,
-                        ((DownloadHandlerTexture) request.downloadHandler).texture
-                    ));
+                    onSuccess(
+                        (
+                            url,
+                            ((DownloadHandlerTexture)request.downloadHandler).texture
+                        )
+                    );
                 }
-            }
-
-            void OnDestroy()
-            {
-                foreach (var kv in cache)
-                {
-                    Destroy(kv.Value);
-                }
-
-                instance = null;
             }
         }
     }

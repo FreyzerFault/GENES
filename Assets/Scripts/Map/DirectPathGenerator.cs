@@ -7,7 +7,8 @@ namespace Map
     public class DirectPathGenerator : PathGenerator
     {
         protected override Path BuildPath(
-            Vector3 start, Vector3 end, Vector2? initialDirection = null, Vector2? endDirection = null)
+            Vector3 start, Vector3 end, Vector2? initialDirection = null, Vector2? endDirection = null
+        )
         {
             var startNode = new Node(start, direction: initialDirection);
             var endNode = new Node(end, direction: endDirection);

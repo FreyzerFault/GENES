@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 
 /// adaption for cylindrical bending by herbst
 /// Credit Breyer

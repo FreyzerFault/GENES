@@ -9,10 +9,7 @@ namespace UnityEngine.UI.Extensions.Examples
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            if (hss != null)
-            {
-                hss.GoToScreen(Page);
-            }
+            if (hss != null) hss.GoToScreen(Page);
         }
     }
 }

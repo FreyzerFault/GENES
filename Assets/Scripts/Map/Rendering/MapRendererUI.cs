@@ -97,17 +97,15 @@ namespace Map.Rendering
         // ================================== TERRAIN VISUALIZATION ==================================
         private void RenderTerrain()
         {
+            var heightMap = MapManager.Instance.heightMap;
             // Create Texture of Map
-            var texture = TextureGenerator.BuildTexture2D(
-                MapManager.Instance.heightMap,
-                heightGradient
-            );
+            var texture = TextureGenerator.BuildTexture2D(heightMap, heightGradient);
 
             texture.Apply();
             image.sprite = Sprite.Create(
                 texture,
-                imageRectTransform.rect,
-                imageRectTransform.pivot
+                new Rect(0, 0, heightMap.Size, heightMap.Size),
+                Vector2.one / 2
             );
         }
 

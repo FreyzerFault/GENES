@@ -29,21 +29,28 @@ namespace Map
         }
 
         // ================== PATH FINDING ==================
-        protected override Path BuildPath(Vector3 start, Vector3 end, Vector2? initialDirection = null,
-            Vector2? endDirection = null)
+        protected override Path BuildPath(
+            Vector3 start,
+            Vector3 end,
+            Vector2? initialDirection = null,
+            Vector2? endDirection = null
+        )
         {
             if (start == end) return Path.EmptyPath;
 
-            var startNode = new Node(start, size: pathFindingConfig.cellSize, direction: initialDirection);
-            var endNode = new Node(end, size: pathFindingConfig.cellSize, direction: endDirection);
-            return PathFinding.FindPath(
-                startNode, endNode,
-                MapManager.Terrain,
-                pathFindingConfig
+            var startNode = new Node(
+                start,
+                size: pathFindingConfig.cellSize,
+                direction: initialDirection
             );
+            var endNode = new Node(end, size: pathFindingConfig.cellSize, direction: endDirection);
+            return PathFinding.FindPath(startNode, endNode, MapManager.Terrain, pathFindingConfig);
         }
 
-        protected override List<Path> BuildPath(Vector3[] checkPoints, Vector2[] initialDirections = null)
+        protected override List<Path> BuildPath(
+            Vector3[] checkPoints,
+            Vector2[] initialDirections = null
+        )
         {
             var pathsBuilt = new List<Path>();
             var haveDirections = initialDirections is { Length: > 0 };
@@ -53,12 +60,14 @@ namespace Map
                 var start = checkPoints[i - 1];
                 var end = checkPoints[i];
 
-                var startDirection = haveDirections && initialDirections.Length > i - 1
-                    ? initialDirections[i - 1]
-                    : Vector2.zero;
-                var endDirection = haveDirections && initialDirections.Length > i
-                    ? initialDirections[i]
-                    : Vector2.zero;
+                var startDirection =
+                    haveDirections && initialDirections.Length > i - 1
+                        ? initialDirections[i - 1]
+                        : Vector2.zero;
+                var endDirection =
+                    haveDirections && initialDirections.Length > i
+                        ? initialDirections[i]
+                        : Vector2.zero;
 
                 pathsBuilt.Add(BuildPath(start, end, startDirection, endDirection));
             }

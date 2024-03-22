@@ -2,24 +2,24 @@
 {
     public class UpdateScrollSnap : MonoBehaviour
     {
-
-        public UnityEngine.UI.Extensions.HorizontalScrollSnap HSS;
-        public UnityEngine.UI.Extensions.VerticalScrollSnap VSS;
+        public HorizontalScrollSnap HSS;
+        public VerticalScrollSnap VSS;
         public GameObject HorizontalPagePrefab;
         public GameObject VerticalPagePrefab;
-        public UnityEngine.UI.InputField JumpPage;
+        public InputField JumpPage;
 
 
         public void AddButton()
         {
             if (HSS)
             {
-                var newHSSPage = GameObject.Instantiate(HorizontalPagePrefab);
+                var newHSSPage = Instantiate(HorizontalPagePrefab);
                 HSS.AddChild(newHSSPage);
             }
+
             if (VSS)
             {
-                var newVSSPage = GameObject.Instantiate(VerticalPagePrefab);
+                var newVSSPage = Instantiate(VerticalPagePrefab);
                 VSS.AddChild(newVSSPage);
             }
         }
@@ -32,6 +32,7 @@
                 HSS.RemoveChild(HSS.CurrentPage, out removed);
                 removed.SetActive(false);
             }
+
             if (VSS)
             {
                 VSS.RemoveChild(VSS.CurrentPage, out removed2);
@@ -41,25 +42,21 @@
 
         public void JumpToPage()
         {
-            int jumpPage = int.Parse(JumpPage.text);
-            if (HSS)
-            {
-                HSS.GoToScreen(jumpPage);
-            }
-            if (VSS)
-            {
-                VSS.GoToScreen(jumpPage);
-            }
+            var jumpPage = int.Parse(JumpPage.text);
+            if (HSS) HSS.GoToScreen(jumpPage);
+            if (VSS) VSS.GoToScreen(jumpPage);
         }
 
         public void SelectionStartChange()
         {
             Debug.Log("Scroll Snap change started");
         }
+
         public void SelectionEndChange()
         {
             Debug.Log("Scroll Snap change finished");
         }
+
         public void PageChange(int page)
         {
             Debug.Log(string.Format("Scroll Snap page changed to {0}", page));

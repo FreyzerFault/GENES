@@ -8,10 +8,10 @@ using System.Collections.Generic;
 
 namespace UnityEngine.UI.Extensions.Examples.FancyScrollViewExample09
 {
-    class ScrollView : FancyScrollView<ItemData>
+    internal class ScrollView : FancyScrollView<ItemData>
     {
-        [SerializeField] Scroller scroller = default;
-        [SerializeField] GameObject cellPrefab = default;
+        [SerializeField] private Scroller scroller;
+        [SerializeField] private GameObject cellPrefab;
 
         protected override GameObject CellPrefab => cellPrefab;
 

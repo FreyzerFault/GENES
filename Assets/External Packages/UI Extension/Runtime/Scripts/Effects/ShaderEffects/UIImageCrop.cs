@@ -9,31 +9,36 @@ namespace UnityEngine.UI.Extensions
     [RequireComponent(typeof(RectTransform))]
     public class UIImageCrop : MonoBehaviour
     {
-        MaskableGraphic mGraphic;
-        Material mat;
-        int XCropProperty, YCropProperty;
-        public float XCrop = 0f;
-        public float YCrop = 0f;
+        public float XCrop;
+        public float YCrop;
+        private Material mat;
+        private MaskableGraphic mGraphic;
+        private int XCropProperty, YCropProperty;
 
 
         // Use this for initialization
-        void Start()
+        private void Start()
         {
             SetMaterial();
         }
 
+        public void OnValidate()
+        {
+            SetMaterial();
+            SetXCrop(XCrop);
+            SetYCrop(YCrop);
+        }
+
         public void SetMaterial()
         {
-            mGraphic = this.GetComponent<MaskableGraphic>();
+            mGraphic = GetComponent<MaskableGraphic>();
             XCropProperty = Shader.PropertyToID("_XCrop");
             YCropProperty = Shader.PropertyToID("_YCrop");
             if (mGraphic != null)
             {
                 if (mGraphic.material == null || mGraphic.material.name == "Default UI Material")
-                {
                     //Applying default material with UI Image Crop shader
                     mGraphic.material = new Material(ShaderLibrary.GetShaderInstance("UI Extensions/UI Image Crop"));
-                }
                 mat = mGraphic.material;
             }
             else
@@ -41,14 +46,9 @@ namespace UnityEngine.UI.Extensions
                 Debug.LogError("Please attach component to a Graphical UI component");
             }
         }
-        public void OnValidate()
-        {
-            SetMaterial();
-            SetXCrop(XCrop);
-            SetYCrop(YCrop);
-        }
+
         /// <summary>
-        /// Set the x crop factor, with x being a normalized value 0-1f.  
+        ///     Set the x crop factor, with x being a normalized value 0-1f.
         /// </summary>
         /// <param name="xcrop"></param>
         public void SetXCrop(float xcrop)
@@ -58,7 +58,7 @@ namespace UnityEngine.UI.Extensions
         }
 
         /// <summary>
-        /// Set the y crop factor, with y being a normalized value 0-1f.  
+        ///     Set the y crop factor, with y being a normalized value 0-1f.
         /// </summary>
         /// <param name="ycrop"></param>
         public void SetYCrop(float ycrop)

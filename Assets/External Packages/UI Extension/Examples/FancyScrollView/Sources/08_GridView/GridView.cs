@@ -9,13 +9,9 @@ using UnityEngine.UI.Extensions.EasingCore;
 
 namespace UnityEngine.UI.Extensions.Examples.FancyScrollViewExample08
 {
-    class GridView : FancyGridView<ItemData, Context>
+    internal class GridView : FancyGridView<ItemData, Context>
     {
-        class CellGroup : DefaultCellGroup { }
-
-        [SerializeField] Cell cellPrefab = default;
-
-        protected override void SetupCellTemplate() => Setup<CellGroup>(cellPrefab);
+        [SerializeField] private Cell cellPrefab;
 
         public float PaddingTop
         {
@@ -57,12 +53,11 @@ namespace UnityEngine.UI.Extensions.Examples.FancyScrollViewExample08
             }
         }
 
+        protected override void SetupCellTemplate() => Setup<CellGroup>(cellPrefab);
+
         public void UpdateSelection(int index)
         {
-            if (Context.SelectedIndex == index)
-            {
-                return;
-            }
+            if (Context.SelectedIndex == index) return;
 
             Context.SelectedIndex = index;
             Refresh();
@@ -85,7 +80,7 @@ namespace UnityEngine.UI.Extensions.Examples.FancyScrollViewExample08
             JumpTo(index, GetAlignment(alignment));
         }
 
-        float GetAlignment(Alignment alignment)
+        private float GetAlignment(Alignment alignment)
         {
             switch (alignment)
             {
@@ -94,6 +89,10 @@ namespace UnityEngine.UI.Extensions.Examples.FancyScrollViewExample08
                 case Alignment.Lower: return 1.0f;
                 default: return GetAlignment(Alignment.Middle);
             }
+        }
+
+        private class CellGroup : DefaultCellGroup
+        {
         }
     }
 }

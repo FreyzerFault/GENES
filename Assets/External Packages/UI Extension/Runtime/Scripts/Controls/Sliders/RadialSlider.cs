@@ -10,98 +10,86 @@ namespace UnityEngine.UI.Extensions
 {
     [RequireComponent(typeof(Image))]
     [AddComponentMenu("UI/Extensions/Sliders/Radial Slider")]
-    public class RadialSlider : MonoBehaviour, IPointerEnterHandler, IPointerDownHandler, IPointerUpHandler, IDragHandler
+    public class RadialSlider : MonoBehaviour, IPointerEnterHandler, IPointerDownHandler, IPointerUpHandler,
+        IDragHandler
     {
-        private bool isPointerDown, isPointerReleased, lerpInProgress;
-        private Vector2 m_localPos, m_screenPos; 
-        private float m_targetAngle, m_lerpTargetAngle, m_startAngle, m_currentLerpTime, m_lerpTime;
+        [SerializeField] [Tooltip("Radial Gradient Start Color")]
+        private Color m_startColor = Color.green;
+
+        [SerializeField] [Tooltip("Radial Gradient End Color")]
+        private Color m_endColor = Color.red;
+
+        [Tooltip("Move slider absolute or use Lerping?\nDragging only supported with absolute")] [SerializeField]
+        private bool m_lerpToTarget;
+
+        [Tooltip("Curve to apply to the Lerp\nMust be set to enable Lerp")] [SerializeField]
+        private AnimationCurve m_lerpCurve;
+
+        [Tooltip("Event fired when value of control changes, outputs an INT angle value")] [SerializeField]
+        private RadialSliderValueChangedEvent _onValueChanged = new();
+
+        [Tooltip("Event fired when value of control changes, outputs a TEXT angle value")] [SerializeField]
+        private RadialSliderTextValueChangedEvent _onTextValueChanged = new();
+
+        private bool isPointerDown, isPointerReleased;
         private Camera m_eventCamera;
         private Image m_image;
-
-        [SerializeField]
-        [Tooltip("Radial Gradient Start Color")]
-        private Color m_startColor = Color.green;
-        [SerializeField]
-        [Tooltip("Radial Gradient End Color")]
-        private Color m_endColor = Color.red;
-        [Tooltip("Move slider absolute or use Lerping?\nDragging only supported with absolute")]
-        [SerializeField]
-        private bool m_lerpToTarget;
-        [Tooltip("Curve to apply to the Lerp\nMust be set to enable Lerp")]
-        [SerializeField]
-        private AnimationCurve m_lerpCurve;
-        [Tooltip("Event fired when value of control changes, outputs an INT angle value")]
-        [SerializeField]
-        private RadialSliderValueChangedEvent _onValueChanged = new RadialSliderValueChangedEvent();
-        [Tooltip("Event fired when value of control changes, outputs a TEXT angle value")]
-        [SerializeField]
-        private RadialSliderTextValueChangedEvent _onTextValueChanged = new RadialSliderTextValueChangedEvent();
+        private Vector2 m_localPos, m_screenPos;
+        private float m_targetAngle, m_lerpTargetAngle, m_startAngle, m_currentLerpTime, m_lerpTime;
 
         public float Angle
         {
-            get { return RadialImage.fillAmount * 360f; }
+            get => RadialImage.fillAmount * 360f;
             set
             {
                 if (LerpToTarget)
-                {
                     StartLerp(value / 360f);
-                }
                 else
-                {
                     UpdateRadialImage(value / 360f);
-                }
             }
         }
 
         public float Value
         {
-            get { return RadialImage.fillAmount; }
+            get => RadialImage.fillAmount;
             set
             {
                 if (LerpToTarget)
-                {
                     StartLerp(value);
-                }
                 else
-                {
                     UpdateRadialImage(value);
-                }
             }
         }
 
         public Color EndColor
         {
-            get { return m_endColor; }
-            set { m_endColor = value; }
+            get => m_endColor;
+            set => m_endColor = value;
         }
 
         public Color StartColor
         {
-            get { return m_startColor; }
-            set { m_startColor = value; }
+            get => m_startColor;
+            set => m_startColor = value;
         }
 
         public bool LerpToTarget
         {
-            get { return m_lerpToTarget; }
-            set { m_lerpToTarget = value; }
+            get => m_lerpToTarget;
+            set => m_lerpToTarget = value;
         }
 
         public AnimationCurve LerpCurve
         {
-            get { return m_lerpCurve; }
-            set { m_lerpCurve = value; m_lerpTime = LerpCurve[LerpCurve.length - 1].time; }
+            get => m_lerpCurve;
+            set
+            {
+                m_lerpCurve = value;
+                m_lerpTime = LerpCurve[LerpCurve.length - 1].time;
+            }
         }
 
-        public bool LerpInProgress
-        {
-            get { return lerpInProgress; }
-        }
-
-        [Serializable]
-        public class RadialSliderValueChangedEvent : UnityEvent<int> { }
-        [Serializable]
-        public class RadialSliderTextValueChangedEvent : UnityEvent<string> { }
+        public bool LerpInProgress { get; private set; }
 
         public Image RadialImage
         {
@@ -114,31 +102,29 @@ namespace UnityEngine.UI.Extensions
                     m_image.fillMethod = Image.FillMethod.Radial360;
                     m_image.fillAmount = 0;
                 }
+
                 return m_image;
             }
         }
 
         public RadialSliderValueChangedEvent onValueChanged
         {
-            get { return _onValueChanged; }
-            set { _onValueChanged = value; }
+            get => _onValueChanged;
+            set => _onValueChanged = value;
         }
+
         public RadialSliderTextValueChangedEvent onTextValueChanged
         {
-            get { return _onTextValueChanged; }
-            set { _onTextValueChanged = value; }
+            get => _onTextValueChanged;
+            set => _onTextValueChanged = value;
         }
 
         private void Awake()
         {
             if (LerpCurve != null && LerpCurve.length > 0)
-            {
                 m_lerpTime = LerpCurve[LerpCurve.length - 1].time;
-            }
             else
-            {
                 m_lerpTime = 1;
-            }
         }
 
         private void Update()
@@ -146,7 +132,7 @@ namespace UnityEngine.UI.Extensions
             if (isPointerDown)
             {
                 m_targetAngle = GetAngleFromMousePoint();
-                if (!lerpInProgress)
+                if (!LerpInProgress)
                 {
                     if (!LerpToTarget)
                     {
@@ -161,22 +147,20 @@ namespace UnityEngine.UI.Extensions
                     }
                 }
             }
-            if (lerpInProgress && Value != m_lerpTargetAngle)
+
+            if (LerpInProgress && Value != m_lerpTargetAngle)
             {
                 m_currentLerpTime += Time.deltaTime;
-                float perc = m_currentLerpTime / m_lerpTime;
+                var perc = m_currentLerpTime / m_lerpTime;
                 if (LerpCurve != null && LerpCurve.length > 0)
-                {
                     UpdateRadialImage(Mathf.Lerp(m_startAngle, m_lerpTargetAngle, LerpCurve.Evaluate(perc)));
-                }
                 else
-                {
                     UpdateRadialImage(Mathf.Lerp(m_startAngle, m_lerpTargetAngle, perc));
-                }
             }
+
             if (m_currentLerpTime >= m_lerpTime || Value == m_lerpTargetAngle)
             {
-                lerpInProgress = false;
+                LerpInProgress = false;
                 UpdateRadialImage(m_lerpTargetAngle);
                 NotifyValueChanged();
             }
@@ -184,18 +168,23 @@ namespace UnityEngine.UI.Extensions
 
         private void StartLerp(float targetAngle)
         {
-            if (!lerpInProgress)
+            if (!LerpInProgress)
             {
                 m_startAngle = Value;
                 m_lerpTargetAngle = targetAngle;
                 m_currentLerpTime = 0f;
-                lerpInProgress = true;
+                LerpInProgress = true;
             }
         }
 
         private float GetAngleFromMousePoint()
         {
-            RectTransformUtility.ScreenPointToLocalPointInRectangle(transform as RectTransform, m_screenPos, m_eventCamera, out m_localPos);
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                transform as RectTransform,
+                m_screenPos,
+                m_eventCamera,
+                out m_localPos
+            );
 
             // radial pos of the mouse position.
             return (Mathf.Atan2(-m_localPos.y, m_localPos.x) * 180f / Mathf.PI + 180f) / 360f;
@@ -214,6 +203,16 @@ namespace UnityEngine.UI.Extensions
             _onTextValueChanged.Invoke(((int)(m_targetAngle * 360f)).ToString());
         }
 
+        [Serializable]
+        public class RadialSliderValueChangedEvent : UnityEvent<int>
+        {
+        }
+
+        [Serializable]
+        public class RadialSliderTextValueChangedEvent : UnityEvent<string>
+        {
+        }
+
 //#if UNITY_EDITOR
 
 //        private void OnValidate()
@@ -227,6 +226,7 @@ namespace UnityEngine.UI.Extensions
 //#endif
 
         #region Interfaces
+
         // Called when the pointer enters our GUI component.
         // Start tracking the mouse
         public void OnPointerEnter(PointerEventData eventData)
@@ -253,6 +253,7 @@ namespace UnityEngine.UI.Extensions
         {
             m_screenPos = eventData.position;
         }
+
         #endregion
     }
 }

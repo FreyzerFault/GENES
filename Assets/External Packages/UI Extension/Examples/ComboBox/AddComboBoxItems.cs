@@ -11,25 +11,16 @@ public class AddComboBoxItems : MonoBehaviour
 
     public void AddComboBox()
     {
-        if (!string.IsNullOrWhiteSpace(input.text))
-        {
-            comboBox.AddItem(input.text);
-        }
+        if (!string.IsNullOrWhiteSpace(input.text)) comboBox.AddItem(input.text);
     }
 
     public void AddDropDownList()
     {
-        if (!string.IsNullOrWhiteSpace(input.text))
-        {
-            dropDownList.AddItem(input.text);
-        }
+        if (!string.IsNullOrWhiteSpace(input.text)) dropDownList.AddItem(input.text);
     }
 
     public void AddAutoComplete()
     {
-        if (!string.IsNullOrWhiteSpace(input.text))
-        {
-            autoComplete.AddItem(input.text);
-        }
+        if (!string.IsNullOrWhiteSpace(input.text)) autoComplete.AddItem(input.text);
     }
 }

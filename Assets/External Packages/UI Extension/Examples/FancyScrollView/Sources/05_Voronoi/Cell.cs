@@ -7,26 +7,30 @@
 namespace UnityEngine.UI.Extensions.Examples.FancyScrollViewExample05
 {
     [ExecuteInEditMode]
-    class Cell : FancyCell<ItemData, Context>
+    internal class Cell : FancyCell<ItemData, Context>
     {
-        [SerializeField] Animator scrollAnimator = default;
-        [SerializeField] Animator selectAnimator = default;
-        [SerializeField] Text message = default;
-        [SerializeField] Image image = default;
-        [SerializeField] Button button = default;
-        [SerializeField] RectTransform rectTransform = default;
-        [SerializeField, HideInInspector] Vector3 position = default;
+        [SerializeField] private Animator scrollAnimator;
+        [SerializeField] private Animator selectAnimator;
+        [SerializeField] private Text message;
+        [SerializeField] private Image image;
+        [SerializeField] private Button button;
+        [SerializeField] private RectTransform rectTransform;
+        [SerializeField] [HideInInspector] private Vector3 position;
 
-        static class AnimatorHash
+        // GameObject が非アクティブになると Animator がリセットされてしまうため
+        // 現在位置を保持しておいて OnEnable のタイミングで現在位置を再設定します
+        private float currentPosition;
+        private bool currentSelection;
+
+        private float hash;
+        private float updateSelectionTime;
+
+        private void LateUpdate()
         {
-            public static readonly int Scroll = Animator.StringToHash("scroll");
-            public static readonly int In = Animator.StringToHash("in");
-            public static readonly int Out = Animator.StringToHash("out");
+            image.rectTransform.localPosition = position + GetFluctuation();
         }
 
-        float hash;
-        bool currentSelection;
-        float updateSelectionTime;
+        private void OnEnable() => UpdatePosition(currentPosition);
 
         public override void Initialize()
         {
@@ -46,12 +50,7 @@ namespace UnityEngine.UI.Extensions.Examples.FancyScrollViewExample05
             };
         }
 
-        void LateUpdate()
-        {
-            image.rectTransform.localPosition = position + GetFluctuation();
-        }
-
-        Vector3 GetFluctuation()
+        private Vector3 GetFluctuation()
         {
             var fluctX = Mathf.Sin(Time.time + hash * 40) * 10;
             var fluctY = Mathf.Sin(Time.time + hash) * 10;
@@ -68,30 +67,25 @@ namespace UnityEngine.UI.Extensions.Examples.FancyScrollViewExample05
         {
             currentPosition = position;
 
-            if (scrollAnimator.isActiveAndEnabled)
-            {
-                scrollAnimator.Play(AnimatorHash.Scroll, -1, position);
-            }
+            if (scrollAnimator.isActiveAndEnabled) scrollAnimator.Play(AnimatorHash.Scroll, -1, position);
 
             scrollAnimator.speed = 0;
         }
 
-        void SetSelection(bool selected)
+        private void SetSelection(bool selected)
         {
-            if (currentSelection == selected)
-            {
-                return;
-            }
+            if (currentSelection == selected) return;
 
             currentSelection = selected;
             selectAnimator.SetTrigger(selected ? AnimatorHash.In : AnimatorHash.Out);
             updateSelectionTime = Time.time;
         }
 
-        // GameObject が非アクティブになると Animator がリセットされてしまうため
-        // 現在位置を保持しておいて OnEnable のタイミングで現在位置を再設定します
-        float currentPosition = 0;
-
-        void OnEnable() => UpdatePosition(currentPosition);
+        private static class AnimatorHash
+        {
+            public static readonly int Scroll = Animator.StringToHash("scroll");
+            public static readonly int In = Animator.StringToHash("in");
+            public static readonly int Out = Animator.StringToHash("out");
+        }
     }
 }

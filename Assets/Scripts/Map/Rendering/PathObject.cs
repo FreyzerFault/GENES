@@ -27,7 +27,6 @@ namespace Map.Rendering
 
         private Terrain _terrain;
 
-
         public Path Path
         {
             get => _path;
@@ -91,13 +90,9 @@ namespace Map.Rendering
         {
             var openedColor = Color.Lerp(Color, Color.white, 0.9f);
             if (showExplored && _path.ExploredNodes.Length > 0)
-                _path.ExploredNodes.ToList().ForEach(
-                    node => DrawNodeGizmos(node, Color)
-                );
+                _path.ExploredNodes.ToList().ForEach(node => DrawNodeGizmos(node, Color));
             if (showOpened && _path.OpenNodes.Length > 0)
-                _path.OpenNodes.ToList().ForEach(
-                    node => DrawNodeGizmos(node, openedColor)
-                );
+                _path.OpenNodes.ToList().ForEach(node => DrawNodeGizmos(node, openedColor));
         }
 
         private void DrawNodeGizmos(Node node, Color color, bool wire = false)
@@ -119,7 +114,6 @@ namespace Map.Rendering
             else
                 Gizmos.DrawCube(pos, size);
 
-
             // PENDIENTE
             if (node.slopeAngle > 0)
             {
@@ -139,7 +133,6 @@ namespace Map.Rendering
                 DrawArrow(pos, new Vector3(node.direction.x, 0, node.direction.y), node.size / 2);
             }
 
-
             // Line to Parent
             if (node.Parent != null)
             {
@@ -148,23 +141,24 @@ namespace Map.Rendering
             }
 
             // [F,G,H] Labels
-            if (showValues)
-                DrawLabel(node, Vector3.left * node.size / 3 + Vector3.up * heightOffset);
+            if (showValues) DrawLabel(node, Vector3.left * node.size / 3 + Vector3.up * heightOffset);
         }
 
         private void DrawArrow(Vector3 pos, Vector3 direction, float size = 1)
         {
             var tangent = Vector3.Cross(direction, Vector3.up);
             var arrowVector = direction * size;
-            Gizmos.DrawLineList(new[]
-            {
-                pos,
-                pos + arrowVector,
-                pos + arrowVector,
-                pos + arrowVector - Quaternion.AngleAxis(30, tangent) * arrowVector * 0.4f,
-                pos + arrowVector,
-                pos + arrowVector - Quaternion.AngleAxis(-30, tangent) * arrowVector * 0.4f
-            });
+            Gizmos.DrawLineList(
+                new[]
+                {
+                    pos,
+                    pos + arrowVector,
+                    pos + arrowVector,
+                    pos + arrowVector - Quaternion.AngleAxis(30, tangent) * arrowVector * 0.4f,
+                    pos + arrowVector,
+                    pos + arrowVector - Quaternion.AngleAxis(-30, tangent) * arrowVector * 0.4f
+                }
+            );
         }
 
         private void DrawLabel(Node node, Vector3 positionOffset = default)

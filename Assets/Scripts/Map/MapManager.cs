@@ -2,7 +2,6 @@ using System;
 using ExtensionMethods;
 using MapGeneration;
 using UnityEngine;
-using Utils;
 
 namespace Map
 {
@@ -15,23 +14,25 @@ namespace Map
 
     public class MapManager : Singleton<MapManager>
     {
+        public Gradient heightGradient = new();
+
+        // PATH FINDING
+        public PathFindingGenerator mainPathFindingGenerator;
+
+        [SerializeField] private MapState mapState;
+
         [SerializeField] private GameObject player;
 
         [SerializeField] private GameObject water;
-
-        // MAP
-        public TerrainSettingsSo terrainSettings;
-        public Gradient heightGradient = new();
-
-        [SerializeField] private MapState mapState;
 
         [SerializeField] private float zoomMap = 1;
 
         [SerializeField] private float zoomMinimap = 1;
 
-        // PATH FINDING
-        public PathFindingGenerator mainPathFindingGenerator;
         public HeightMap heightMap;
+
+        // MAP
+        public TerrainSettingsSo terrainSettings;
 
         public MapState MapState
         {
@@ -94,7 +95,7 @@ namespace Map
         public Quaternion PlayerRotationForUI =>
             Quaternion.AngleAxis(90 + PlayerRotationAngle, Vector3.back);
 
-        private new void Awake()
+        private void Awake()
         {
             base.Awake();
 

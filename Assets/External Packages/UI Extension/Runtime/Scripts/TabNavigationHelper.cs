@@ -11,15 +11,12 @@ using UnityEngine.EventSystems;
 
 namespace UnityEngine.UI.Extensions
 {
-    public enum NavigationMode { Auto = 0, Manual = 1};
+    public enum NavigationMode { Auto = 0, Manual = 1 }
+
     [RequireComponent(typeof(EventSystem))]
     [AddComponentMenu("Event/Extensions/Tab Navigation Helper")]
     public class TabNavigationHelper : MonoBehaviour
     {
-        private EventSystem _system;
-        private Selectable startingObject;
-        private Selectable lastObject;
-
         [Tooltip("The path to take when user is tabbing through ui components.")]
         public Selectable[] NavigationPath;
 
@@ -28,23 +25,19 @@ namespace UnityEngine.UI.Extensions
 
         [Tooltip("If True, this will loop the tab order from last to first automatically")]
         public bool CircularNavigation;
-        
 
-        void Start()
+        private EventSystem _system;
+        private Selectable lastObject;
+        private Selectable startingObject;
+
+
+        private void Start()
         {
             _system = GetComponent<EventSystem>();
-            if (_system == null)
-            {
-                Debug.LogError("Needs to be attached to the Event System component in the scene");
-            }
+            if (_system == null) Debug.LogError("Needs to be attached to the Event System component in the scene");
             if (NavigationMode == NavigationMode.Manual && NavigationPath.Length > 0)
-            {
                 startingObject = NavigationPath[0].gameObject.GetComponent<Selectable>();
-            }
-            if (startingObject == null && CircularNavigation)
-            {
-                SelectDefaultObject(out startingObject); 
-            }
+            if (startingObject == null && CircularNavigation) SelectDefaultObject(out startingObject);
         }
 
         public void Update()
@@ -66,6 +59,7 @@ namespace UnityEngine.UI.Extensions
                         selectableItems.Clear();
                         break;
                     }
+
                     lastObject = next;
                     selectableItems.Push(next);
                     next = next.FindSelectableOnDown();
@@ -90,10 +84,7 @@ namespace UnityEngine.UI.Extensions
                     if (_system.currentSelectedGameObject != null)
                     {
                         next = _system.currentSelectedGameObject.GetComponent<Selectable>().FindSelectableOnUp();
-                        if (next == null && CircularNavigation)
-                        {
-                            next = lastObject;
-                        }
+                        if (next == null && CircularNavigation) next = lastObject;
                     }
                     else
                     {
@@ -109,7 +100,7 @@ namespace UnityEngine.UI.Extensions
                     {
                         if (_system.currentSelectedGameObject != NavigationPath[i].gameObject) continue;
 
-                        next = i == (NavigationPath.Length - 1) ? NavigationPath[0] : NavigationPath[i + 1];
+                        next = i == NavigationPath.Length - 1 ? NavigationPath[0] : NavigationPath[i + 1];
 
                         break;
                     }
@@ -119,10 +110,7 @@ namespace UnityEngine.UI.Extensions
                     if (_system.currentSelectedGameObject != null)
                     {
                         next = _system.currentSelectedGameObject.GetComponent<Selectable>().FindSelectableOnDown();
-                        if (next == null && CircularNavigation)
-                        {
-                            next = startingObject;
-                        }
+                        if (next == null && CircularNavigation) next = startingObject;
                     }
                     else
                     {
@@ -135,31 +123,27 @@ namespace UnityEngine.UI.Extensions
                 SelectDefaultObject(out next);
             }
 
-            if (CircularNavigation && startingObject == null)
-            {
-                startingObject = next;
-            }
+            if (CircularNavigation && startingObject == null) startingObject = next;
             selectGameObject(next);
         }
 
         private void SelectDefaultObject(out Selectable next)
         {
             if (_system.firstSelectedGameObject)
-            {
                 next = _system.firstSelectedGameObject.GetComponent<Selectable>();
-            }
             else
-            {
                 next = null;
-            }
         }
 
         private void selectGameObject(Selectable selectable)
         {
             if (selectable != null)
             {
-                InputField inputfield = selectable.GetComponent<InputField>();
-                if (inputfield != null) inputfield.OnPointerClick(new PointerEventData(_system));  //if it's an input field, also set the text caret
+                var inputfield = selectable.GetComponent<InputField>();
+                if (inputfield != null)
+                    inputfield.OnPointerClick(
+                        new PointerEventData(_system)
+                    ); //if it's an input field, also set the text caret
 
                 _system.SetSelectedGameObject(selectable.gameObject, new BaseEventData(_system));
             }

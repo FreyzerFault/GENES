@@ -13,20 +13,20 @@ namespace UnityEngine.UI.Extensions
     [CanEditMultipleObjects]
     public class ScrollPositionControllerEditor : Editor
     {
-        SerializedProperty viewport;
-        SerializedProperty directionOfRecognize;
-        SerializedProperty movementType;
-        SerializedProperty elasticity;
-        SerializedProperty scrollSensitivity;
-        SerializedProperty inertia;
-        SerializedProperty decelerationRate;
-        SerializedProperty snap;
-        SerializedProperty snapEnable;
-        SerializedProperty snapVelocityThreshold;
-        SerializedProperty snapDuration;
-        SerializedProperty dataCount;
+        private SerializedProperty dataCount;
+        private SerializedProperty decelerationRate;
+        private SerializedProperty directionOfRecognize;
+        private SerializedProperty elasticity;
+        private SerializedProperty inertia;
+        private SerializedProperty movementType;
+        private SerializedProperty scrollSensitivity;
+        private SerializedProperty snap;
+        private SerializedProperty snapDuration;
+        private SerializedProperty snapEnable;
+        private SerializedProperty snapVelocityThreshold;
+        private SerializedProperty viewport;
 
-        void OnEnable()
+        private void OnEnable()
         {
             viewport = serializedObject.FindProperty("viewport");
             directionOfRecognize = serializedObject.FindProperty("directionOfRecognize");
@@ -56,7 +56,7 @@ namespace UnityEngine.UI.Extensions
             serializedObject.ApplyModifiedProperties();
         }
 
-        void DrawInertiaRelatedValues()
+        private void DrawInertiaRelatedValues()
         {
             if (inertia.boolValue)
             {
@@ -70,7 +70,7 @@ namespace UnityEngine.UI.Extensions
             }
         }
 
-        void DrawSnapRelatedValues()
+        private void DrawSnapRelatedValues()
         {
             if (snap.isExpanded)
             {

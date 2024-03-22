@@ -12,23 +12,23 @@ namespace UnityEngine.UI.Extensions
     [CanEditMultipleObjects]
     public class RangeSliderEditor : SelectableEditor
     {
-        SerializedProperty m_Direction;
-        SerializedProperty m_LowHandleRect;
-        SerializedProperty m_HighHandleRect;
-        SerializedProperty m_FillRect;
-
-        SerializedProperty m_MinValue;
-        SerializedProperty m_MaxValue;
-        SerializedProperty m_WholeNumbers;
-
-        SerializedProperty m_LowValue;
-        SerializedProperty m_HighValue;
+        private float high = 1;
 
         //need ref values for the editor MinMaxSlider
-        float low = 0;
-        float high = 1;
+        private float low;
+        private SerializedProperty m_Direction;
+        private SerializedProperty m_FillRect;
+        private SerializedProperty m_HighHandleRect;
+        private SerializedProperty m_HighValue;
+        private SerializedProperty m_LowHandleRect;
 
-        SerializedProperty m_OnValueChanged;
+        private SerializedProperty m_LowValue;
+        private SerializedProperty m_MaxValue;
+
+        private SerializedProperty m_MinValue;
+
+        private SerializedProperty m_OnValueChanged;
+        private SerializedProperty m_WholeNumbers;
 
 
         protected override void OnEnable()
@@ -71,10 +71,10 @@ namespace UnityEngine.UI.Extensions
                 EditorGUILayout.PropertyField(m_Direction);
                 if (EditorGUI.EndChangeCheck())
                 {
-                    RangeSlider.Direction direction = (RangeSlider.Direction)m_Direction.enumValueIndex;
+                    var direction = (RangeSlider.Direction)m_Direction.enumValueIndex;
                     foreach (var obj in serializedObject.targetObjects)
                     {
-                        RangeSlider rangeSlider = obj as RangeSlider;
+                        var rangeSlider = obj as RangeSlider;
                         rangeSlider.SetDirection(direction, true);
                     }
                 }
@@ -100,7 +100,13 @@ namespace UnityEngine.UI.Extensions
                 //Slider
                 EditorGUILayout.BeginVertical();
                 GUILayout.FlexibleSpace();
-                EditorGUILayout.MinMaxSlider(ref low, ref high, m_MinValue.floatValue, m_MaxValue.floatValue, GUILayout.ExpandWidth(true));
+                EditorGUILayout.MinMaxSlider(
+                    ref low,
+                    ref high,
+                    m_MinValue.floatValue,
+                    m_MaxValue.floatValue,
+                    GUILayout.ExpandWidth(true)
+                );
                 EditorGUILayout.EndVertical();
 
                 GUILayout.FlexibleSpace();
@@ -124,11 +130,13 @@ namespace UnityEngine.UI.Extensions
             }
             else
             {
-                EditorGUILayout.HelpBox("Specify a RectTransform for the RangeSlider fill or the RangeSlider handles or both. Each must have a parent RectTransform that it can slide within.", MessageType.Info);
+                EditorGUILayout.HelpBox(
+                    "Specify a RectTransform for the RangeSlider fill or the RangeSlider handles or both. Each must have a parent RectTransform that it can slide within.",
+                    MessageType.Info
+                );
             }
 
             serializedObject.ApplyModifiedProperties();
         }
     }
-
 }

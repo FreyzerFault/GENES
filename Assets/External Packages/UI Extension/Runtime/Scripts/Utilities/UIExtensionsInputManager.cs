@@ -5,9 +5,6 @@
 #define NEW_INPUT_SYSTEM
 #endif
 
-using System;
-using System.Collections.Generic;
-
 #if NEW_INPUT_SYSTEM
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Controls;

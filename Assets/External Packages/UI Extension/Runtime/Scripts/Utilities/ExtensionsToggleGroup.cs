@@ -10,29 +10,32 @@ namespace UnityEngine.UI
     [DisallowMultipleComponent]
     public class ExtensionsToggleGroup : UIBehaviour
     {
-        [SerializeField]
-        private bool m_AllowSwitchOff = false;
-        public bool AllowSwitchOff { get { return m_AllowSwitchOff; } set { m_AllowSwitchOff = value; } }
+        [SerializeField] private bool m_AllowSwitchOff;
 
-        private List<ExtensionsToggle> m_Toggles = new List<ExtensionsToggle>();
+        public ToggleGroupEvent onToggleGroupChanged = new();
+        public ToggleGroupEvent onToggleGroupToggleChanged = new();
 
-        [Serializable]
-        public class ToggleGroupEvent : UnityEvent<bool>
-        { }
-
-        public ToggleGroupEvent onToggleGroupChanged = new ToggleGroupEvent();
-        public ToggleGroupEvent onToggleGroupToggleChanged = new ToggleGroupEvent();
-
-        public ExtensionsToggle SelectedToggle { get; private set; }
+        private readonly List<ExtensionsToggle> m_Toggles = new();
 
 
         protected ExtensionsToggleGroup()
-        { }
+        {
+        }
+
+        public bool AllowSwitchOff
+        {
+            get => m_AllowSwitchOff;
+            set => m_AllowSwitchOff = value;
+        }
+
+        public ExtensionsToggle SelectedToggle { get; private set; }
 
         private void ValidateToggleIsInGroup(ExtensionsToggle toggle)
         {
             if (toggle == null || !m_Toggles.Contains(toggle))
-                throw new ArgumentException(string.Format("Toggle {0} is not part of ToggleGroup {1}", new object[] { toggle, this }));
+                throw new ArgumentException(
+                    string.Format("Toggle {0} is not part of ToggleGroup {1}", new object[] { toggle, this })
+                );
         }
 
         public void NotifyToggleOn(ExtensionsToggle toggle)
@@ -50,6 +53,7 @@ namespace UnityEngine.UI
 
                 m_Toggles[i].IsOn = false;
             }
+
             onToggleGroupChanged.Invoke(AnyTogglesOn());
         }
 
@@ -88,11 +92,10 @@ namespace UnityEngine.UI
 
         public void SetAllTogglesOff()
         {
-            bool oldAllowSwitchOff = m_AllowSwitchOff;
+            var oldAllowSwitchOff = m_AllowSwitchOff;
             m_AllowSwitchOff = true;
 
-            for (var i = 0; i < m_Toggles.Count; i++)
-                m_Toggles[i].IsOn = false;
+            for (var i = 0; i < m_Toggles.Count; i++) m_Toggles[i].IsOn = false;
 
             m_AllowSwitchOff = oldAllowSwitchOff;
         }
@@ -105,6 +108,11 @@ namespace UnityEngine.UI
         public void HasAToggleFlipped(bool value)
         {
             Debug.Log("Testing, a toggle has toggled [" + value + "]");
+        }
+
+        [Serializable]
+        public class ToggleGroupEvent : UnityEvent<bool>
+        {
         }
     }
 }

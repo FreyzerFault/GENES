@@ -8,6 +8,6 @@ namespace UnityEngine.UI.Extensions
         Left,
         Right,
         Up,
-        Down,
+        Down
     }
 }

@@ -108,8 +108,10 @@ public class BezierCurveEditor : Editor
         EditorGUI.indentLevel++;
 
         var newType =
-            (int)(object)EditorGUILayout.EnumPopup("Handle Type",
-                (BezierPoint.HandleStyle)handleStyleProp.enumValueIndex);
+            (int)(object)EditorGUILayout.EnumPopup(
+                "Handle Type",
+                (BezierPoint.HandleStyle)handleStyleProp.enumValueIndex
+            );
 
         if (newType != handleStyleProp.enumValueIndex)
         {
@@ -191,12 +193,19 @@ public class BezierCurveEditor : Editor
 
     private static void DrawPointSceneGUI(BezierPoint point)
     {
-        Handles.Label(point.position + new Vector3(0, HandleUtility.GetHandleSize(point.position) * 0.4f, 0),
-            point.gameObject.name);
+        Handles.Label(
+            point.position + new Vector3(0, HandleUtility.GetHandleSize(point.position) * 0.4f, 0),
+            point.gameObject.name
+        );
 
         Handles.color = Color.green;
-        var fmh_198_66_638388323322493089 = point.transform.rotation; var newPosition = Handles.FreeMoveHandle(point.position,
-            HandleUtility.GetHandleSize(point.position) * 0.1f, Vector3.zero, Handles.RectangleHandleCap);
+        var fmh_198_66_638388323322493089 = point.transform.rotation;
+        var newPosition = Handles.FreeMoveHandle(
+            point.position,
+            HandleUtility.GetHandleSize(point.position) * 0.1f,
+            Vector3.zero,
+            Handles.RectangleHandleCap
+        );
 
         if (newPosition != point.position)
         {
@@ -207,8 +216,13 @@ public class BezierCurveEditor : Editor
         if (point.handleStyle != BezierPoint.HandleStyle.None)
         {
             Handles.color = Color.cyan;
-            var fmh_210_74_638388323322521948 = point.transform.rotation; var newGlobal1 = Handles.FreeMoveHandle(point.globalHandle1,
-                HandleUtility.GetHandleSize(point.globalHandle1) * 0.075f, Vector3.zero, Handles.CircleHandleCap);
+            var fmh_210_74_638388323322521948 = point.transform.rotation;
+            var newGlobal1 = Handles.FreeMoveHandle(
+                point.globalHandle1,
+                HandleUtility.GetHandleSize(point.globalHandle1) * 0.075f,
+                Vector3.zero,
+                Handles.CircleHandleCap
+            );
             if (point.globalHandle1 != newGlobal1)
             {
                 Undo.RegisterUndo(point, "Move Handle");
@@ -217,8 +231,13 @@ public class BezierCurveEditor : Editor
                     point.globalHandle2 = -(newGlobal1 - point.position) + point.position;
             }
 
-            var fmh_220_74_638388323322526079 = point.transform.rotation; var newGlobal2 = Handles.FreeMoveHandle(point.globalHandle2,
-                HandleUtility.GetHandleSize(point.globalHandle2) * 0.075f, Vector3.zero, Handles.CircleHandleCap);
+            var fmh_220_74_638388323322526079 = point.transform.rotation;
+            var newGlobal2 = Handles.FreeMoveHandle(
+                point.globalHandle2,
+                HandleUtility.GetHandleSize(point.globalHandle2) * 0.075f,
+                Vector3.zero,
+                Handles.CircleHandleCap
+            );
             if (point.globalHandle2 != newGlobal2)
             {
                 Undo.RegisterUndo(point, "Move Handle");

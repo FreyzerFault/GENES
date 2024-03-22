@@ -120,8 +120,8 @@ Material:
     - _GlossyReflections: 0
     - _GridSpacing: 0.19
     - _GridThickness: 0.05
-    - _Line_Spacing: 0.23
-    - _Line_Thickness: 0.131
+    - _Line_Spacing: 0.72
+    - _Line_Thickness: 0.174
     - _Metallic: 0
     - _OcclusionStrength: 1
     - _Octaves: 8
@@ -146,7 +146,7 @@ Material:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _GridColor: {r: 0.7311321, g: 0.7311321, b: 1, a: 1}
-    - _Line_Color: {r: 0.21333212, g: 0.7679467, b: 0.8867924, a: 1}
+    - _Line_Color: {r: 0.2117647, g: 0.8108436, b: 0.8862745, a: 1}
     - _OutsideColor: {r: 0, g: 0, b: 0, a: 0}
     - _SpecColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
     - _Transparent_Color: {r: 0, g: 0, b: 0, a: 0}

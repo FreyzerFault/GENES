@@ -9,11 +9,11 @@ namespace UnityEngine.UI.Extensions
     [CustomEditor(typeof(TextPic))]
     public class TextPicEditor : UnityEditor.UI.TextEditor
     {
+        private SerializedProperty hyperlinkColorProp;
+        private SerializedProperty iconList;
+        private SerializedProperty imageOffsetProp;
 
         private SerializedProperty ImageScalingFactorProp;
-        private SerializedProperty hyperlinkColorProp;
-        private SerializedProperty imageOffsetProp;
-        private SerializedProperty iconList;
 
         protected override void OnEnable()
         {

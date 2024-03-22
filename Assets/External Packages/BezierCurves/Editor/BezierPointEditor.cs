@@ -26,8 +26,12 @@ public class BezierPointEditor : Editor
     {
         Handles.color = Color.green;
         var fmh_28_66_638388323699096612 = point.transform.rotation;
-        var newPosition = Handles.FreeMoveHandle(point.position,
-            HandleUtility.GetHandleSize(point.position) * 0.2f, Vector3.zero, Handles.CubeHandleCap);
+        var newPosition = Handles.FreeMoveHandle(
+            point.position,
+            HandleUtility.GetHandleSize(point.position) * 0.2f,
+            Vector3.zero,
+            Handles.CubeHandleCap
+        );
         if (point.position != newPosition) point.position = newPosition;
 
         handlers[(int)point.handleStyle](point);
@@ -44,8 +48,10 @@ public class BezierPointEditor : Editor
         serializedObject.Update();
 
         var newHandleType =
-            (BezierPoint.HandleStyle)EditorGUILayout.EnumPopup("Handle Type",
-                (BezierPoint.HandleStyle)handleTypeProp.intValue);
+            (BezierPoint.HandleStyle)EditorGUILayout.EnumPopup(
+                "Handle Type",
+                (BezierPoint.HandleStyle)handleTypeProp.intValue
+            );
 
         if (newHandleType != (BezierPoint.HandleStyle)handleTypeProp.intValue)
         {
@@ -123,8 +129,12 @@ public class BezierPointEditor : Editor
         Handles.color = Color.cyan;
 
         var fmh_124_66_638388323699125598 = p.transform.rotation;
-        var newGlobal1 = Handles.FreeMoveHandle(p.globalHandle1,
-            HandleUtility.GetHandleSize(p.globalHandle1) * 0.15f, Vector3.zero, Handles.SphereHandleCap);
+        var newGlobal1 = Handles.FreeMoveHandle(
+            p.globalHandle1,
+            HandleUtility.GetHandleSize(p.globalHandle1) * 0.15f,
+            Vector3.zero,
+            Handles.SphereHandleCap
+        );
 
         if (newGlobal1 != p.globalHandle1)
         {
@@ -134,8 +144,12 @@ public class BezierPointEditor : Editor
         }
 
         var fmh_134_66_638388323699129350 = p.transform.rotation;
-        var newGlobal2 = Handles.FreeMoveHandle(p.globalHandle2,
-            HandleUtility.GetHandleSize(p.globalHandle2) * 0.15f, Vector3.zero, Handles.SphereHandleCap);
+        var newGlobal2 = Handles.FreeMoveHandle(
+            p.globalHandle2,
+            HandleUtility.GetHandleSize(p.globalHandle2) * 0.15f,
+            Vector3.zero,
+            Handles.SphereHandleCap
+        );
 
         if (newGlobal2 != p.globalHandle2)
         {
@@ -150,11 +164,19 @@ public class BezierPointEditor : Editor
         Handles.color = Color.cyan;
 
         var fmh_149_66_638388323699133631 = Quaternion.identity;
-        var newGlobal1 = Handles.FreeMoveHandle(p.globalHandle1,
-            HandleUtility.GetHandleSize(p.globalHandle1) * 0.15f, Vector3.zero, Handles.SphereHandleCap);
+        var newGlobal1 = Handles.FreeMoveHandle(
+            p.globalHandle1,
+            HandleUtility.GetHandleSize(p.globalHandle1) * 0.15f,
+            Vector3.zero,
+            Handles.SphereHandleCap
+        );
         var fmh_151_66_638388323699136951 = Quaternion.identity;
-        var newGlobal2 = Handles.FreeMoveHandle(p.globalHandle2,
-            HandleUtility.GetHandleSize(p.globalHandle2) * 0.15f, Vector3.zero, Handles.SphereHandleCap);
+        var newGlobal2 = Handles.FreeMoveHandle(
+            p.globalHandle2,
+            HandleUtility.GetHandleSize(p.globalHandle2) * 0.15f,
+            Vector3.zero,
+            Handles.SphereHandleCap
+        );
 
         if (newGlobal1 != p.globalHandle1)
         {

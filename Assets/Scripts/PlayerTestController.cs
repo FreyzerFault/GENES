@@ -44,8 +44,7 @@ public class PlayerTestController : MonoBehaviour
                 Cursor.lockState = CursorLockMode.Locked;
                 Cursor.visible = true;
                 break;
-            case GameManager.GameState.Paused:
-                break;
+            case GameManager.GameState.Paused: break;
         }
     }
 

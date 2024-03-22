@@ -9,32 +9,31 @@ using UnityEngine.UI.Extensions.EasingCore;
 
 namespace UnityEngine.UI.Extensions.Examples.FancyScrollViewExample09
 {
-    class Cell : FancyCell<ItemData>
+    internal class Cell : FancyCell<ItemData>
     {
-        readonly EasingFunction alphaEasing = Easing.Get(Ease.OutQuint);
+        [SerializeField] private Text title;
+        [SerializeField] private Text description;
+        [SerializeField] private RawImage image;
+        [SerializeField] private Image background;
+        [SerializeField] private CanvasGroup canvasGroup;
+        private readonly EasingFunction alphaEasing = Easing.Get(Ease.OutQuint);
 
-        [SerializeField] Text title = default;
-        [SerializeField] Text description = default;
-        [SerializeField] RawImage image = default;
-        [SerializeField] Image background = default;
-        [SerializeField] CanvasGroup canvasGroup = default;
-
-        ItemData data;
+        private ItemData data;
 
         public override void UpdateContent(ItemData itemData)
         {
             data = itemData;
             image.texture = null;
 
-            TextureLoader.Load(itemData.Url, result =>
-            {
-                if (image == null || result.Url != data.Url)
+            TextureLoader.Load(
+                itemData.Url,
+                result =>
                 {
-                    return;
-                }
+                    if (image == null || result.Url != data.Url) return;
 
-                image.texture = result.Texture;
-            });
+                    image.texture = result.Texture;
+                }
+            );
 
             title.text = itemData.Title;
             description.text = itemData.Description;
@@ -42,21 +41,15 @@ namespace UnityEngine.UI.Extensions.Examples.FancyScrollViewExample09
             UpdateSibling();
         }
 
-        void UpdateSibling()
+        private void UpdateSibling()
         {
             var cells = transform.parent.Cast<Transform>()
                 .Select(t => t.GetComponent<Cell>())
                 .Where(cell => cell.IsVisible);
 
-            if (Index == cells.Min(x => x.Index))
-            {
-                transform.SetAsLastSibling();
-            }
+            if (Index == cells.Min(x => x.Index)) transform.SetAsLastSibling();
 
-            if (Index == cells.Max(x => x.Index))
-            {
-                transform.SetAsFirstSibling();
-            }
+            if (Index == cells.Max(x => x.Index)) transform.SetAsFirstSibling();
         }
 
         public override void UpdatePosition(float t)

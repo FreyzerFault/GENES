@@ -4,7 +4,6 @@
 /// Updated by SionDarksideJ - Fixed implementation as it assumed GO's we automatically assigned to instances
 
 using System.Collections.Generic;
-using System.Reflection;
 
 namespace UnityEngine.UI.Extensions
 {
@@ -12,25 +11,23 @@ namespace UnityEngine.UI.Extensions
     [DisallowMultipleComponent]
     public class MenuManager : MonoBehaviour
     {
-        [SerializeField]
-        private Menu[] menuScreens;
+        [SerializeField] private Menu[] menuScreens;
+
+        [SerializeField] private int startScreen;
+
+        private readonly Stack<Menu> menuStack = new();
 
         public Menu[] MenuScreens
         {
-            get { return menuScreens; }
-            set { menuScreens = value; }
+            get => menuScreens;
+            set => menuScreens = value;
         }
-
-        [SerializeField]
-        private int startScreen = 0;
 
         public int StartScreen
         {
-            get { return startScreen; }
-            set { startScreen = value; }
+            get => startScreen;
+            set => startScreen = value;
         }
-
-        private Stack<Menu> menuStack = new Stack<Menu>();
 
         public static MenuManager Instance { get; set; }
 
@@ -46,6 +43,13 @@ namespace UnityEngine.UI.Extensions
             {
                 Debug.LogError("Not enough Menu Screens configured");
             }
+        }
+
+        private void Update()
+        {
+            // On Android the back button is sent as Esc
+            if (UIExtensionsInputManager.GetKeyDown(KeyCode.Escape) && menuStack.Count > 0)
+                menuStack.Peek().OnBackPressed();
         }
 
         private void OnDestroy()
@@ -73,27 +77,20 @@ namespace UnityEngine.UI.Extensions
             if (menuStack.Count > 0)
             {
                 if (menuInstance.DisableMenusUnderneath)
-                {
                     foreach (var menu in menuStack)
                     {
                         menu.gameObject.SetActive(false);
 
-                        if (menu.DisableMenusUnderneath)
-                            break;
+                        if (menu.DisableMenusUnderneath) break;
                     }
-                }
 
-                Canvas topCanvas = menuInstance.GetComponent<Canvas>();
+                var topCanvas = menuInstance.GetComponent<Canvas>();
                 if (topCanvas != null)
                 {
-                    Canvas previousCanvas = menuStack.Peek().GetComponent<Canvas>();
+                    var previousCanvas = menuStack.Peek().GetComponent<Canvas>();
 
-                    if(previousCanvas != null)
-                    {
-                        topCanvas.sortingOrder = previousCanvas.sortingOrder + 1;
-                    }
+                    if (previousCanvas != null) topCanvas.sortingOrder = previousCanvas.sortingOrder + 1;
                 }
-
             }
 
             menuStack.Push(menuInstance);
@@ -101,13 +98,9 @@ namespace UnityEngine.UI.Extensions
 
         private GameObject GetPrefab(string PrefabName)
         {
-            for (int i = 0; i < MenuScreens.Length; i++)
-            {
+            for (var i = 0; i < MenuScreens.Length; i++)
                 if (MenuScreens[i].name == PrefabName)
-                {
                     return MenuScreens[i].gameObject;
-                }
-            }
             throw new MissingReferenceException("Prefab not found for " + PrefabName);
         }
 
@@ -143,27 +136,13 @@ namespace UnityEngine.UI.Extensions
             {
                 menu.gameObject.SetActive(true);
 
-                if (menu.DisableMenusUnderneath)
-                    break;
-            }
-        }
-
-        private void Update()
-        {
-            // On Android the back button is sent as Esc
-            if (UIExtensionsInputManager.GetKeyDown(KeyCode.Escape) && menuStack.Count > 0)
-            {
-                menuStack.Peek().OnBackPressed();
+                if (menu.DisableMenusUnderneath) break;
             }
         }
     }
 
     public static class MenuExtensions
     {
-        public static Menu GetMenu(this GameObject go)
-        {
-            return go.GetComponent<Menu>();
-        }
+        public static Menu GetMenu(this GameObject go) => go.GetComponent<Menu>();
     }
-
 }

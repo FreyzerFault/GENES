@@ -6,36 +6,49 @@
 
 namespace UnityEngine.UI.Extensions.Examples.FancyScrollViewExample06
 {
-    class SlideScreenTransition : MonoBehaviour
+    internal class SlideScreenTransition : MonoBehaviour
     {
-        [SerializeField] RectTransform targetTransform = default;
-        [SerializeField] GraphicRaycaster graphicRaycaster = default;
+        private const float Duration = 0.3f; // example purpose, a fixed number, the same with scroll view duration
+        [SerializeField] private RectTransform targetTransform;
+        [SerializeField] private GraphicRaycaster graphicRaycaster;
 
-        const float Duration = 0.3f; // example purpose, a fixed number, the same with scroll view duration
+        private bool shouldAnimate, isOutAnimation;
+        private float timer, startX, endX;
 
-        bool shouldAnimate, isOutAnimation;
-        float timer, startX, endX;
+        private void Update()
+        {
+            if (!shouldAnimate) return;
+
+            timer -= Time.deltaTime;
+
+            if (timer > 0)
+            {
+                UpdatePosition(1f - timer / Duration);
+                return;
+            }
+
+            shouldAnimate = false;
+            graphicRaycaster.enabled = true;
+
+            if (isOutAnimation) gameObject.SetActive(false);
+
+            UpdatePosition(1f);
+        }
 
         public void In(MovementDirection direction) => Animate(direction, false);
 
         public void Out(MovementDirection direction) => Animate(direction, true);
 
-        void Animate(MovementDirection direction, bool isOut)
+        private void Animate(MovementDirection direction, bool isOut)
         {
-            if (shouldAnimate)
-            {
-                return;
-            }
+            if (shouldAnimate) return;
 
             timer = Duration;
             isOutAnimation = isOut;
             shouldAnimate = true;
             graphicRaycaster.enabled = false;
 
-            if (!isOutAnimation)
-            {
-                gameObject.SetActive(true);
-            }
+            if (!isOutAnimation) gameObject.SetActive(true);
 
             switch (direction)
             {
@@ -58,33 +71,7 @@ namespace UnityEngine.UI.Extensions.Examples.FancyScrollViewExample06
             UpdatePosition(0f);
         }
 
-        void Update()
-        {
-            if (!shouldAnimate)
-            {
-                return;
-            }
-
-            timer -= Time.deltaTime;
-
-            if (timer > 0)
-            {
-                UpdatePosition(1f - timer / Duration);
-                return;
-            }
-
-            shouldAnimate = false;
-            graphicRaycaster.enabled = true;
-
-            if (isOutAnimation)
-            {
-                gameObject.SetActive(false);
-            }
-
-            UpdatePosition(1f);
-        }
-
-        void UpdatePosition(float position)
+        private void UpdatePosition(float position)
         {
             var x = Mathf.Lerp(startX, endX, position);
             targetTransform.anchoredPosition = new Vector2(x, targetTransform.anchoredPosition.y);

@@ -16,23 +16,24 @@ namespace Map
         None
     }
 
-    public class MarkerManager : Utils.Singleton<MarkerManager>
+    public class MarkerManager : Singleton<MarkerManager>
     {
-        public Color defaultColor = Color.white;
-        public Color selectedColor = Color.yellow;
         public Color checkedColor = Color.green;
-        public Color hoverColor = Color.blue;
-        public Color deleteColor = Color.red;
 
         public float collisionRadius = 0.05f;
-
-        // UI Markers
-        public GameObject markerUIPrefab;
-
-        [SerializeField] private MarkerStorageSo markersStorage;
+        public Color defaultColor = Color.white;
+        public Color deleteColor = Color.red;
 
         [FormerlySerializedAs("markerMode")] [SerializeField]
         private EditMarkerMode editMarkerMode = EditMarkerMode.None;
+
+        public Color hoverColor = Color.blue;
+
+        [SerializeField] private MarkerStorageSo markersStorage;
+
+        // UI Markers
+        public GameObject markerUIPrefab;
+        public Color selectedColor = Color.yellow;
 
         private int totalMarkersAdded;
 
@@ -65,7 +66,6 @@ namespace Map
 
         public event Action<EditMarkerMode> OnMarkerModeChanged;
 
-
         public event Action OnAllMarkerDeselected;
         public event Action<Marker, int> OnMarkerAdded;
         public event Action<Marker> OnMarkerDeselected;
@@ -79,9 +79,7 @@ namespace Map
             EditMarkerMode = newState == MapState.Minimap ? EditMarkerMode.None : EditMarkerMode;
         }
 
-
-        private int FindIndex(Marker marker) =>
-            Markers.FindIndex(m => ReferenceEquals(m, marker));
+        private int FindIndex(Marker marker) => Markers.FindIndex(m => ReferenceEquals(m, marker));
 
         // Buscar el Marcador dentro de un radio de colision (el mas cercano si hay varios)
         public int FindIndex(Vector2 normalizedPos)
@@ -93,13 +91,12 @@ namespace Map
 
             // No hay => -1
             // Hay mas de 1 => El mas cercano
-            return
-                collisions.Count switch
-                {
-                    0 => -1,
-                    1 => collisions[0],
-                    _ => collisions.OrderBy(index => Markers[index].Distance2D(normalizedPos)).First()
-                };
+            return collisions.Count switch
+            {
+                0 => -1,
+                1 => collisions[0],
+                _ => collisions.OrderBy(index => Markers[index].Distance2D(normalizedPos)).First()
+            };
         }
 
         public void AddOrSelectMarker(Vector2 normalizedPos)
@@ -134,19 +131,20 @@ namespace Map
             var label = totalMarkersAdded.ToString();
 
             // El estado depende de la posicion relativa a otros markers y el estado de sus adyacentes
-            var state = isLast && isFirst
-                // 1º Marker added => NExt
-                ? MarkerState.Next
-                : isLast && Markers[^1].IsChecked
-                    // Last Marker & todos estan checked => Next
+            var state =
+                isLast && isFirst
+                    // 1º Marker added => NExt
                     ? MarkerState.Next
-                    : isFirst
-                        // 1º Marker => Hereda el estado del siguiente
-                        ? Markers[0].State
-                        : Markers[index - 1].IsChecked
-                            // Añadido entre 2 markers
-                            ? MarkerState.Checked
-                            : MarkerState.Unchecked;
+                    : isLast && Markers[^1].IsChecked
+                        // Last Marker & todos estan checked => Next
+                        ? MarkerState.Next
+                        : isFirst
+                            // 1º Marker => Hereda el estado del siguiente
+                            ? Markers[0].State
+                            : Markers[index - 1].IsChecked
+                                // Añadido entre 2 markers
+                                ? MarkerState.Checked
+                                : MarkerState.Unchecked;
 
             var marker = markersStorage.Add(normalizedPos, label, index);
             marker.State = state;
@@ -197,13 +195,15 @@ namespace Map
 
             var isSelected = markersStorage.markers[index].Selected;
             var twoSelected = markersStorage.SelectedCount == 2;
-            var notAdyacentToSelected = markersStorage.SelectedCount == 1 &&
-                                        Math.Abs(markersStorage.SelectedIndex - index) > 1;
+            var notAdyacentToSelected =
+                markersStorage.SelectedCount == 1
+                && Math.Abs(markersStorage.SelectedIndex - index) > 1;
 
             // Deselect si ya habia 2 seleccionados, o si el seleccionado no es adyacente
             if (!isSelected)
             {
-                if (twoSelected) DeselectAllMarkers();
+                if (twoSelected)
+                    DeselectAllMarkers();
                 else if (notAdyacentToSelected) DeselectMarker(markersStorage.Selected);
             }
 

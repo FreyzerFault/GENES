@@ -1,15 +1,18 @@
 ﻿///Credit judah4
 ///Sourced from - http://forum.unity3d.com/threads/color-picker.267043/
 
+using System;
+
 namespace UnityEngine.UI.Extensions.ColorPicker
 {
-    [RequireComponent(typeof(RawImage)), ExecuteInEditMode()]
+    [RequireComponent(typeof(RawImage))]
+    [ExecuteInEditMode]
     public class ColorSliderImage : MonoBehaviour
     {
         public ColorPickerControl picker;
 
         /// <summary>
-        /// Which value this slider can edit.
+        ///     Which value this slider can edit.
         /// </summary>
         public ColorValues type;
 
@@ -17,25 +20,15 @@ namespace UnityEngine.UI.Extensions.ColorPicker
 
         private RawImage image;
 
-        private RectTransform RectTransform
-        {
-            get
-            {
-                return transform as RectTransform;
-            }
-        }
+        private RectTransform RectTransform => transform as RectTransform;
 
         private void Awake()
         {
             image = GetComponent<RawImage>();
             if (image)
-            {
                 RegenerateTexture();
-            }
             else
-            {
                 Debug.LogWarning("Missing RawImage on object [" + name + "]");
-            }
         }
 
         private void OnEnable()
@@ -58,10 +51,7 @@ namespace UnityEngine.UI.Extensions.ColorPicker
 
         private void OnDestroy()
         {
-            if (image.texture != null)
-            {
-                DestroyImmediate(image.texture);
-            }
+            if (image.texture != null) DestroyImmediate(image.texture);
         }
 
 #if UNITY_EDITOR
@@ -69,13 +59,9 @@ namespace UnityEngine.UI.Extensions.ColorPicker
         {
             image = GetComponent<RawImage>();
             if (image)
-            {
                 RegenerateTexture();
-            }
             else
-            {
                 Debug.LogWarning("Missing RawImage on object [" + name + "]");
-            }
         }
 #endif
 
@@ -117,21 +103,18 @@ namespace UnityEngine.UI.Extensions.ColorPicker
 
         private void RegenerateTexture()
         {
-            if (!picker)
-            {
-                Debug.LogWarning("Missing Picker on object [" + name + "]");
-            }
+            if (!picker) Debug.LogWarning("Missing Picker on object [" + name + "]");
             Color32 baseColor = picker != null ? picker.CurrentColor : Color.black;
 
-            float h = picker != null ? picker.H : 0;
-            float s = picker != null ? picker.S : 0;
-            float v = picker != null ? picker.V : 0;
+            var h = picker != null ? picker.H : 0;
+            var s = picker != null ? picker.S : 0;
+            var v = picker != null ? picker.V : 0;
 
             Texture2D texture;
             Color32[] colors;
 
-            bool vertical = direction == Slider.Direction.BottomToTop || direction == Slider.Direction.TopToBottom;
-            bool inverted = direction == Slider.Direction.TopToBottom || direction == Slider.Direction.RightToLeft;
+            var vertical = direction == Slider.Direction.BottomToTop || direction == Slider.Direction.TopToBottom;
+            var inverted = direction == Slider.Direction.TopToBottom || direction == Slider.Direction.RightToLeft;
 
             int size;
             switch (type)
@@ -149,9 +132,9 @@ namespace UnityEngine.UI.Extensions.ColorPicker
                 case ColorValues.Value:
                     size = 100;
                     break;
-                default:
-                    throw new System.NotImplementedException("");
+                default: throw new NotImplementedException("");
             }
+
             if (vertical)
                 texture = new Texture2D(1, size);
             else
@@ -164,54 +147,38 @@ namespace UnityEngine.UI.Extensions.ColorPicker
             {
                 case ColorValues.R:
                     for (byte i = 0; i < size; i++)
-                    {
                         colors[inverted ? size - 1 - i : i] = new Color32(i, baseColor.g, baseColor.b, 255);
-                    }
                     break;
                 case ColorValues.G:
                     for (byte i = 0; i < size; i++)
-                    {
                         colors[inverted ? size - 1 - i : i] = new Color32(baseColor.r, i, baseColor.b, 255);
-                    }
                     break;
                 case ColorValues.B:
                     for (byte i = 0; i < size; i++)
-                    {
                         colors[inverted ? size - 1 - i : i] = new Color32(baseColor.r, baseColor.g, i, 255);
-                    }
                     break;
                 case ColorValues.A:
-                    for (byte i = 0; i < size; i++)
-                    {
-                        colors[inverted ? size - 1 - i : i] = new Color32(i, i, i, 255);
-                    }
+                    for (byte i = 0; i < size; i++) colors[inverted ? size - 1 - i : i] = new Color32(i, i, i, 255);
                     break;
                 case ColorValues.Hue:
-                    for (int i = 0; i < size; i++)
-                    {
+                    for (var i = 0; i < size; i++)
                         colors[inverted ? size - 1 - i : i] = HSVUtil.ConvertHsvToRgb(i, 1, 1, 1);
-                    }
                     break;
                 case ColorValues.Saturation:
-                    for (int i = 0; i < size; i++)
-                    {
+                    for (var i = 0; i < size; i++)
                         colors[inverted ? size - 1 - i : i] = HSVUtil.ConvertHsvToRgb(h * 360, (float)i / size, v, 1);
-                    }
                     break;
                 case ColorValues.Value:
-                    for (int i = 0; i < size; i++)
-                    {
+                    for (var i = 0; i < size; i++)
                         colors[inverted ? size - 1 - i : i] = HSVUtil.ConvertHsvToRgb(h * 360, s, (float)i / size, 1);
-                    }
                     break;
-                default:
-                    throw new System.NotImplementedException("");
+                default: throw new NotImplementedException("");
             }
+
             texture.SetPixels32(colors);
             texture.Apply();
 
-            if (image.texture != null)
-                DestroyImmediate(image.texture);
+            if (image.texture != null) DestroyImmediate(image.texture);
             image.texture = texture;
 
             switch (direction)
@@ -224,10 +191,7 @@ namespace UnityEngine.UI.Extensions.ColorPicker
                 case Slider.Direction.RightToLeft:
                     image.uvRect = new Rect(0, 0, 1, 2);
                     break;
-                default:
-                    break;
             }
         }
-
     }
 }

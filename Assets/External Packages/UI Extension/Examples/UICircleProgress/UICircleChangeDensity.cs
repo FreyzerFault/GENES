@@ -6,15 +6,16 @@ public class UICircleChangeDensity : MonoBehaviour
 {
     public GameObject MultiColorObject;
     public GameObject TextOutputObject;
+    private Text _densityOutput;
 
     private UICircle _uiCircleComponent;
-    private Text _densityOutput;
 
     private void Awake()
     {
         _uiCircleComponent = MultiColorObject.GetComponent<UICircle>();
         _densityOutput = TextOutputObject.GetComponent<Text>();
     }
+
     private void OnEnable()
     {
         _densityOutput.text = _uiCircleComponent.ArcSteps.ToString();

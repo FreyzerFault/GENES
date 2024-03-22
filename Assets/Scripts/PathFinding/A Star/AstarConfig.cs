@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using Utils;
 
 namespace PathFinding.A_Star
 {

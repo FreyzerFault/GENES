@@ -5,16 +5,13 @@ namespace UnityEngine.UI.Extensions
 {
     public class ShineEffect : MaskableGraphic
     {
+        [SerializeField] private float yoffset = -1;
 
-        [SerializeField]
-        float yoffset = -1;
+        [SerializeField] private float width = 1;
 
         public float Yoffset
         {
-            get
-            {
-                return yoffset;
-            }
+            get => yoffset;
             set
             {
                 SetVerticesDirty();
@@ -22,15 +19,9 @@ namespace UnityEngine.UI.Extensions
             }
         }
 
-        [SerializeField]
-        float width = 1;
-
         public float Width
         {
-            get
-            {
-                return width;
-            }
+            get => width;
             set
             {
                 SetAllDirty();
@@ -42,11 +33,11 @@ namespace UnityEngine.UI.Extensions
         {
             var r = GetPixelAdjustedRect();
             var v = new Vector4(r.x, r.y, r.x + r.width, r.y + r.height);
-            float dif = (v.w - v.y) * 2;
+            var dif = (v.w - v.y) * 2;
             Color32 color32 = color;
             vh.Clear();
 
-            color32.a = (byte)0;
+            color32.a = 0;
             vh.AddVert(new Vector3(v.x - 50, width * v.y + yoffset * dif), color32, new Vector2(0f, 0f));
             vh.AddVert(new Vector3(v.z + 50, width * v.y + yoffset * dif), color32, new Vector2(1f, 0f));
 
@@ -59,7 +50,7 @@ namespace UnityEngine.UI.Extensions
             vh.AddVert(new Vector3(v.z + 50, width * (v.w / 4) + yoffset * dif), color32, new Vector2(1f, 1f));
             color32.a = (byte)(color.a * 255);
 
-            color32.a = (byte)0;
+            color32.a = 0;
             vh.AddVert(new Vector3(v.x - 50, width * v.w + yoffset * dif), color32, new Vector2(0f, 1f));
             vh.AddVert(new Vector3(v.z + 50, width * v.w + yoffset * dif), color32, new Vector2(1f, 1f));
 
@@ -75,9 +66,9 @@ namespace UnityEngine.UI.Extensions
 
         public void Triangulate(VertexHelper vh)
         {
-            int triangleCount = vh.currentVertCount - 2;
+            var triangleCount = vh.currentVertCount - 2;
             Debug.Log(triangleCount);
-            for (int i = 0; i <= triangleCount / 2 + 1; i += 2)
+            for (var i = 0; i <= triangleCount / 2 + 1; i += 2)
             {
                 vh.AddTriangle(i, i + 1, i + 2);
                 vh.AddTriangle(i + 2, i + 3, i + 1);
@@ -90,6 +81,5 @@ namespace UnityEngine.UI.Extensions
             base.OnRebuildRequested();
         }
 #endif
-
     }
 }

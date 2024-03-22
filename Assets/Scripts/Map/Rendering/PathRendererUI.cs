@@ -12,13 +12,17 @@ namespace Map.Rendering
     {
         // RENDERER
         [SerializeField] protected UILineRenderer linePrefab;
+
         [SerializeField] protected List<UILineRenderer> lineRenderers = new();
 
         [SerializeField] private float lineThickness = 1f;
+
         private RectTransform _parentRectTransform;
 
         private Terrain _terrain;
-        private static PathGenerator PathFindingGenerator => MapManager.Instance.mainPathFindingGenerator;
+
+        private static PathGenerator PathFindingGenerator =>
+            MapManager.Instance.mainPathFindingGenerator;
 
         public float LineThickness
         {
@@ -48,7 +52,6 @@ namespace Map.Rendering
             UpdateAllLines(PathFindingGenerator.paths.ToArray());
         }
 
-
         private void OnDestroy()
         {
             PathFindingGenerator.OnPathAdded -= AddPath;
@@ -70,8 +73,10 @@ namespace Map.Rendering
         public void UpdateAllLines(Path[] paths)
         {
             for (var i = 0; i < paths.Length; i++)
-                if (i >= lineRenderers.Count) AddPath(paths[i]);
-                else UpdateLine(paths[i], i);
+                if (i >= lineRenderers.Count)
+                    AddPath(paths[i]);
+                else
+                    UpdateLine(paths[i], i);
         }
 
         // ============================= MODIFY LIST =============================
@@ -79,7 +84,6 @@ namespace Map.Rendering
         public void AddPath(Path path, int index = -1)
         {
             if (index == -1) index = lineRenderers.Count;
-
 
             var lineRenderer = Instantiate(linePrefab, transform);
             lineRenderers.Insert(index, lineRenderer);
@@ -121,8 +125,7 @@ namespace Map.Rendering
         private Vector2[] PathToLine(Path path)
         {
             if (path.NodeCount < 2 || path.IsIllegal) return Array.Empty<Vector2>();
-            return path
-                .GetPathNormalizedPoints(_terrain)
+            return path.GetPathNormalizedPoints(_terrain)
                 .Select(_parentRectTransform.NormalizedToLocalPoint)
                 .ToArray();
         }

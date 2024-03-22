@@ -3,80 +3,82 @@
 /// Sourced from - https://github.com/ryanslikesocool/Unity-Card-UI
 /// </summary>
 
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 namespace UnityEngine.UI.Extensions
 {
-
-[RequireComponent(typeof(Rigidbody))]
-public class CardPopup2D : MonoBehaviour
-{
-    [SerializeField]
-    private float rotationSpeed = 1f;
-    [SerializeField]
-    private float centeringSpeed = 4f;
-    [SerializeField]
-    private bool singleScene = false;
-
-    private Rigidbody rbody;
-    private bool isFalling;
-    private Vector3 cardFallRotation;
-    private bool fallToZero;
-    private float startZPos;
-
-    void Start()
+    [RequireComponent(typeof(Rigidbody))]
+    public class CardPopup2D : MonoBehaviour
     {
-        rbody = GetComponent<Rigidbody>();
-        rbody.useGravity = false;
-        startZPos = transform.position.z;
-    }
+        [SerializeField] private float rotationSpeed = 1f;
 
-    void Update()
-    {
-        if (isFalling)
-        {
-            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(cardFallRotation), Time.deltaTime * rotationSpeed);
-        }
+        [SerializeField] private float centeringSpeed = 4f;
 
-        ///This conditional makes the popup fall nicely into place.		
-        if (fallToZero)
-        {
-            transform.position = Vector3.Lerp(transform.position, new Vector3(0, 0, startZPos), Time.deltaTime * centeringSpeed);
-            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(Vector3.zero), Time.deltaTime * centeringSpeed);
-            if (Vector3.Distance(transform.position, new Vector3(0, 0, startZPos)) < 0.0025f)
-            {
-                transform.position = new Vector3(0, 0, startZPos);
-                fallToZero = false;
-            }
-        }
+        [SerializeField] private bool singleScene;
 
-        ///This is totally unnecessary.
-        if (transform.position.y < -4)
+        private Vector3 cardFallRotation;
+        private bool fallToZero;
+        private bool isFalling;
+
+        private Rigidbody rbody;
+        private float startZPos;
+
+        private void Start()
         {
-            isFalling = false;
+            rbody = GetComponent<Rigidbody>();
             rbody.useGravity = false;
-            rbody.velocity = Vector3.zero;
-            transform.position = new Vector3(0, 8, startZPos);
-            if (singleScene)
+            startZPos = transform.position.z;
+        }
+
+        private void Update()
+        {
+            if (isFalling)
+                transform.rotation = Quaternion.Lerp(
+                    transform.rotation,
+                    Quaternion.Euler(cardFallRotation),
+                    Time.deltaTime * rotationSpeed
+                );
+
+            ///This conditional makes the popup fall nicely into place.		
+            if (fallToZero)
             {
-                CardEnter();
+                transform.position = Vector3.Lerp(
+                    transform.position,
+                    new Vector3(0, 0, startZPos),
+                    Time.deltaTime * centeringSpeed
+                );
+                transform.rotation = Quaternion.Lerp(
+                    transform.rotation,
+                    Quaternion.Euler(Vector3.zero),
+                    Time.deltaTime * centeringSpeed
+                );
+                if (Vector3.Distance(transform.position, new Vector3(0, 0, startZPos)) < 0.0025f)
+                {
+                    transform.position = new Vector3(0, 0, startZPos);
+                    fallToZero = false;
+                }
+            }
+
+            ///This is totally unnecessary.
+            if (transform.position.y < -4)
+            {
+                isFalling = false;
+                rbody.useGravity = false;
+                rbody.velocity = Vector3.zero;
+                transform.position = new Vector3(0, 8, startZPos);
+                if (singleScene) CardEnter();
             }
         }
-    }
 
-    public void CardEnter()
-    {
-        fallToZero = true;
-    }
+        public void CardEnter()
+        {
+            fallToZero = true;
+        }
 
-    ///A negative fallRotation will result in the card turning clockwise, while a positive fallRotation makes the card turn counterclockwise.
-    public void CardFallAway(float fallRotation)
-    {
-        rbody.useGravity = true;
-        isFalling = true;
-        cardFallRotation = new Vector3(0, 0, fallRotation);
+        ///A negative fallRotation will result in the card turning clockwise, while a positive fallRotation makes the card turn counterclockwise.
+        public void CardFallAway(float fallRotation)
+        {
+            rbody.useGravity = true;
+            isFalling = true;
+            cardFallRotation = new Vector3(0, 0, fallRotation);
+        }
     }
-}
 }

@@ -6,73 +6,77 @@ using System.Collections.Generic;
 
 namespace UnityEngine.UI.Extensions
 {
-	[AddComponentMenu("UI/Extensions/Primitives/UILineRendererFIFO")]
-	[RequireComponent(typeof(RectTransform))]
-	public class UILineRendererFIFO : UIPrimitiveBase
-	{
-        private static readonly Vector2[] middleUvs = new[] { new Vector2(0.5f, 0), new Vector2(0.5f, 1), new Vector2(0.5f, 1), new Vector2(0.5f, 0) };
-        private List<Vector2> addedPoints = new List<Vector2>();
-        private bool needsResize;
+    [AddComponentMenu("UI/Extensions/Primitives/UILineRendererFIFO")]
+    [RequireComponent(typeof(RectTransform))]
+    public class UILineRendererFIFO : UIPrimitiveBase
+    {
+        private static readonly Vector2[] middleUvs =
+            { new(0.5f, 0), new(0.5f, 1), new(0.5f, 1), new(0.5f, 0) };
 
-        [SerializeField, Tooltip("Thickness of the line")]
+        [SerializeField] [Tooltip("Thickness of the line")]
         private float lineThickness = 1;
 
-		[SerializeField, Tooltip("Points to draw lines between\n Can be improved using the Resolution Option")]
-		private List<Vector2> points = new List<Vector2>();
+        [SerializeField] [Tooltip("Points to draw lines between\n Can be improved using the Resolution Option")]
+        private List<Vector2> points = new();
 
-		[SerializeField, Tooltip("Segments to be drawn\n This is a list of arrays of points")]
-		private List<UIVertex[]> segments = new List<UIVertex[]>();
+        [SerializeField] [Tooltip("Segments to be drawn\n This is a list of arrays of points")]
+        private readonly List<UIVertex[]> segments = new();
+
+        private List<Vector2> addedPoints = new();
+        private bool needsResize;
 
         /// <summary>
-		/// Thickness of the line
-		/// </summary>
-		public float LineThickness
+        ///     Thickness of the line
+        /// </summary>
+        public float LineThickness
         {
-            get { return lineThickness; }
-            set { lineThickness = value; SetAllDirty(); }
+            get => lineThickness;
+            set
+            {
+                lineThickness = value;
+                SetAllDirty();
+            }
         }
 
         /// <summary>
-        /// Points to be drawn in the line.
+        ///     Points to be drawn in the line.
         /// </summary>
         /// <remarks>Don't add points to the list directly, use the add / remove functions</remarks>
         public List<Vector2> Points
         {
-            get
-            {
-                return points;
-            }
+            get => points;
 
             set
             {
-                if (points == value)
-                    return;
+                if (points == value) return;
                 points = value;
                 SetAllDirty();
             }
         }
 
         /// <summary>
-        /// Adds to head
+        ///     Adds to head
         /// </summary>
         /// <param name="point"></param>
-        public void AddPoint(Vector2 point) {
-			points.Add(point);
-			addedPoints.Add(point);
-		}
-
-		/// <summary>
-		/// Removes from tail (FIFO)
-		/// </summary>
-		public void RemovePoint() {
-			points.RemoveAt(0);
-			needsResize = true;
-		}
+        public void AddPoint(Vector2 point)
+        {
+            points.Add(point);
+            addedPoints.Add(point);
+        }
 
         /// <summary>
-		/// Clear all the points from the LineRenderer
-		/// </summary>
-		public void ClearPoints()
+        ///     Removes from tail (FIFO)
+        /// </summary>
+        public void RemovePoint()
+        {
+            points.RemoveAt(0);
+            needsResize = true;
+        }
+
+        /// <summary>
+        ///     Clear all the points from the LineRenderer
+        /// </summary>
+        public void ClearPoints()
         {
             segments.Clear();
             points.Clear();
@@ -80,67 +84,83 @@ namespace UnityEngine.UI.Extensions
             needsResize = false;
         }
 
-        public void Resize() {
-			needsResize = true;
-		}
+        public void Resize()
+        {
+            needsResize = true;
+        }
 
-		protected override void OnPopulateMesh(VertexHelper vertexHelper) {
-			vertexHelper.Clear();
-			if(needsResize) {
-				needsResize = false;
-				segments.Clear();
-				addedPoints = new List<Vector2>(points);
-			}
-			int count = addedPoints.Count;
-			if(count > 1) {
-				PopulateMesh(addedPoints, vertexHelper);
-				if(count % 2 == 0) {
-					addedPoints.Clear();
-				} else {
-					Vector2 extraPoint = addedPoints[count - 1];
-					addedPoints.Clear();
-					addedPoints.Add(extraPoint);
-				}
-			}
-		}
+        protected override void OnPopulateMesh(VertexHelper vertexHelper)
+        {
+            vertexHelper.Clear();
+            if (needsResize)
+            {
+                needsResize = false;
+                segments.Clear();
+                addedPoints = new List<Vector2>(points);
+            }
 
-		void PopulateMesh(List<Vector2> pointsToDraw, VertexHelper vertexHelper) {
-			if(ImproveResolution != ResolutionMode.None) {
-				pointsToDraw = IncreaseResolution(pointsToDraw);
-			}
-			float sizeX = rectTransform.rect.width;
-			float sizeY = rectTransform.rect.height;
-			float offsetX = -rectTransform.pivot.x * sizeX;
-			float offsetY = -rectTransform.pivot.y * sizeY;
-			for(int i = 1; i < pointsToDraw.Count; i += 2) {
-				Vector2 start = pointsToDraw[i - 1];
-				Vector2 end = pointsToDraw[i];
-				start = new Vector2(start.x * sizeX + offsetX, start.y * sizeY + offsetY);
-				end = new Vector2(end.x * sizeX + offsetX, end.y * sizeY + offsetY);
-				UIVertex[] segment = CreateLineSegment(start, end, segments.Count > 1 ? segments[segments.Count - 2] : null);
-				segments.Add(segment);
-			}
-			for(int i = 0; i < segments.Count; i++) {
-				vertexHelper.AddUIVertexQuad(segments[i]);
-			}
-			if(vertexHelper.currentVertCount > 64000) {
-				Debug.LogError("Max Verticies size is 64000, current mesh vertcies count is [" + vertexHelper.currentVertCount + "] - Cannot Draw");
-				vertexHelper.Clear();
-			}
-		}
+            var count = addedPoints.Count;
+            if (count > 1)
+            {
+                PopulateMesh(addedPoints, vertexHelper);
+                if (count % 2 == 0)
+                {
+                    addedPoints.Clear();
+                }
+                else
+                {
+                    var extraPoint = addedPoints[count - 1];
+                    addedPoints.Clear();
+                    addedPoints.Add(extraPoint);
+                }
+            }
+        }
 
-		UIVertex[] CreateLineSegment(Vector2 start, Vector2 end, UIVertex[] previousVert = null) {
-			Vector2 offset = new Vector2(start.y - end.y, end.x - start.x).normalized * lineThickness * 0.5f;
-			Vector2 v1;
-			Vector2 v2;
-			if(previousVert != null) {
-				v1 = new Vector2(previousVert[3].position.x, previousVert[3].position.y);
-				v2 = new Vector2(previousVert[2].position.x, previousVert[2].position.y);
-			} else {
-				v1 = start - offset;
-				v2 = start + offset;
-			}
-			return SetVbo(new[] { v1, v2, end + offset, end - offset }, middleUvs);
-		}
-	}
+        private void PopulateMesh(List<Vector2> pointsToDraw, VertexHelper vertexHelper)
+        {
+            if (ImproveResolution != ResolutionMode.None) pointsToDraw = IncreaseResolution(pointsToDraw);
+            var sizeX = rectTransform.rect.width;
+            var sizeY = rectTransform.rect.height;
+            var offsetX = -rectTransform.pivot.x * sizeX;
+            var offsetY = -rectTransform.pivot.y * sizeY;
+            for (var i = 1; i < pointsToDraw.Count; i += 2)
+            {
+                var start = pointsToDraw[i - 1];
+                var end = pointsToDraw[i];
+                start = new Vector2(start.x * sizeX + offsetX, start.y * sizeY + offsetY);
+                end = new Vector2(end.x * sizeX + offsetX, end.y * sizeY + offsetY);
+                var segment = CreateLineSegment(start, end, segments.Count > 1 ? segments[segments.Count - 2] : null);
+                segments.Add(segment);
+            }
+
+            for (var i = 0; i < segments.Count; i++) vertexHelper.AddUIVertexQuad(segments[i]);
+            if (vertexHelper.currentVertCount > 64000)
+            {
+                Debug.LogError(
+                    "Max Verticies size is 64000, current mesh vertcies count is [" + vertexHelper.currentVertCount
+                    + "] - Cannot Draw"
+                );
+                vertexHelper.Clear();
+            }
+        }
+
+        private UIVertex[] CreateLineSegment(Vector2 start, Vector2 end, UIVertex[] previousVert = null)
+        {
+            var offset = new Vector2(start.y - end.y, end.x - start.x).normalized * lineThickness * 0.5f;
+            Vector2 v1;
+            Vector2 v2;
+            if (previousVert != null)
+            {
+                v1 = new Vector2(previousVert[3].position.x, previousVert[3].position.y);
+                v2 = new Vector2(previousVert[2].position.x, previousVert[2].position.y);
+            }
+            else
+            {
+                v1 = start - offset;
+                v2 = start + offset;
+            }
+
+            return SetVbo(new[] { v1, v2, end + offset, end - offset }, middleUvs);
+        }
+    }
 }

@@ -710,9 +710,9 @@
       <Project>{8bdb3e98-d617-0799-e30b-ad8b64bb0331}</Project>
       <Name>Assets.Scripts.Map</Name>
     </ProjectReference>
-    <ProjectReference Include="Assets.Scripts.Utils.csproj">
-      <Project>{51189add-f733-4179-0a42-6ac3c2a69b16}</Project>
-      <Name>Assets.Scripts.Utils</Name>
+    <ProjectReference Include="DavidUtils.csproj">
+      <Project>{b195b350-5f82-196a-330d-3c4e004004bf}</Project>
+      <Name>DavidUtils</Name>
     </ProjectReference>
     <ProjectReference Include="Assets.Scripts.Map.Rendering.csproj">
       <Project>{8079f6b5-b60b-89b7-4c91-9f8036b6585d}</Project>

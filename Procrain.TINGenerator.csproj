@@ -725,13 +725,13 @@
       <Project>{5e525b5f-f0be-0341-510c-ac0bbc3cfe1c}</Project>
       <Name>Procrain.Noise</Name>
     </ProjectReference>
-    <ProjectReference Include="Procrain.Utils.csproj">
-      <Project>{dff1b38a-820b-862c-0816-27baa1d9338c}</Project>
-      <Name>Procrain.Utils</Name>
-    </ProjectReference>
     <ProjectReference Include="Procrain.UI.csproj">
       <Project>{e996e243-0900-a7a0-ec7f-6d732b64f567}</Project>
       <Name>Procrain.UI</Name>
+    </ProjectReference>
+    <ProjectReference Include="DavidUtils.csproj">
+      <Project>{b195b350-5f82-196a-330d-3c4e004004bf}</Project>
+      <Name>DavidUtils</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

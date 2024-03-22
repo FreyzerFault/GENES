@@ -9,6 +9,7 @@ namespace Map.Rendering
     public class MarkerUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
         [SerializeField] private Marker marker;
+
         [SerializeField] private float selectedScale = 1.5f;
 
         private Image _image;
@@ -16,7 +17,6 @@ namespace Map.Rendering
 
         private RectTransform _rectTransform;
         private TMP_Text _text;
-
 
         public Marker Marker
         {
@@ -68,10 +68,15 @@ namespace Map.Rendering
         }
 
         private void HandleOnPositionChange(Vector2 pos) => UpdatePos(pos);
+
         private void HandleOnSelected(bool selected) => UpdateAspect();
+
         private void HandleOnStateChange(MarkerState state) => UpdateAspect();
+
         private void HandleOnEditMarkerModeChange(EditMarkerMode mode) => UpdateAspect();
+
         private void HandleOnZoomChange(float modezoom) => UpdateScaleByZoom();
+
         private void HandleOnLabelChange(string label) => _text.text = label;
 
         private void UpdatePos(Vector2 normalizePos)
@@ -91,7 +96,6 @@ namespace Map.Rendering
             _rectTransform.localScale = Vector3.one / MapManager.Instance.Zoom;
         }
 
-
         private void UpdateAspect()
         {
             // LABEL
@@ -104,14 +108,15 @@ namespace Map.Rendering
             Scale(marker.Selected || marker.hovered ? selectedScale : 1);
 
             // COLOR
-            if (marker.Selected) _image.color = mm.selectedColor;
+            if (marker.Selected)
+                _image.color = mm.selectedColor;
             else if (marker.hovered)
                 _image.color =
-                    mm.EditMarkerMode == EditMarkerMode.Delete
-                        ? mm.deleteColor
-                        : mm.hoverColor;
-            else if (marker.IsChecked) _image.color = mm.checkedColor;
-            else _image.color = mm.defaultColor;
+                    mm.EditMarkerMode == EditMarkerMode.Delete ? mm.deleteColor : mm.hoverColor;
+            else if (marker.IsChecked)
+                _image.color = mm.checkedColor;
+            else
+                _image.color = mm.defaultColor;
         }
 
         private void Scale(float scale) => _rectTransform.localScale *= scale;

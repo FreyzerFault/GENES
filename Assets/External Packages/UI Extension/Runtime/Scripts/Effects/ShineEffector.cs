@@ -3,23 +3,24 @@
 
 namespace UnityEngine.UI.Extensions
 {
-    [ExecuteInEditMode, RequireComponent(typeof(Image))]
+    [ExecuteInEditMode]
+    [RequireComponent(typeof(Image))]
     [AddComponentMenu("UI/Effects/Extensions/Shining Effect")]
     public class ShineEffector : MonoBehaviour
     {
-
         public ShineEffect effector;
-        [SerializeField, HideInInspector]
-        GameObject effectRoot;
-        [Range(-1, 1)]
-        public float yOffset = -1;
+
+        [SerializeField] [HideInInspector] private GameObject effectRoot;
+
+        [Range(-1, 1)] public float yOffset = -1;
+
+        [Range(0.1f, 1)] public float width = 0.5f;
+
+        private RectTransform effectorRect;
 
         public float YOffset
         {
-            get
-            {
-                return yOffset;
-            }
+            get => yOffset;
             set
             {
                 ChangeVal(value);
@@ -27,17 +28,14 @@ namespace UnityEngine.UI.Extensions
             }
         }
 
-        [Range(0.1f, 1)]
-        public float width = 0.5f;
-        RectTransform effectorRect;
-        void OnEnable()
+        private void OnEnable()
         {
             if (effector == null)
             {
-                GameObject effectorobj = new GameObject("effector");
+                var effectorobj = new GameObject("effector");
 
                 effectRoot = new GameObject("ShineEffect");
-                effectRoot.transform.SetParent(this.transform);
+                effectRoot.transform.SetParent(transform);
                 effectRoot.AddComponent<Image>().sprite = gameObject.GetComponent<Image>().sprite;
                 effectRoot.GetComponent<Image>().type = gameObject.GetComponent<Image>().type;
                 effectRoot.AddComponent<Mask>().showMaskGraphic = false;
@@ -67,47 +65,32 @@ namespace UnityEngine.UI.Extensions
             }
         }
 
-        void OnValidate()
+        private void OnDestroy()
+        {
+            if (!Application.isPlaying)
+                DestroyImmediate(effectRoot);
+            else
+                Destroy(effectRoot);
+        }
+
+        private void OnValidate()
         {
             effector.Yoffset = yOffset;
             effector.Width = width;
 
             if (yOffset <= -1 || yOffset >= 1)
-            {
                 effectRoot.SetActive(false);
-            }
-            else if (!effectRoot.activeSelf)
+            else if (!effectRoot.activeSelf) effectRoot.SetActive(true);
             {
-                effectRoot.SetActive(true);
-            }
-            {
-
             }
         }
 
-        void ChangeVal(float value)
+        private void ChangeVal(float value)
         {
             effector.Yoffset = value;
             if (value <= -1 || value >= 1)
-            {
                 effectRoot.SetActive(false);
-            }
-            else if (!effectRoot.activeSelf)
-            {
-                effectRoot.SetActive(true);
-            }
-        }
-
-        void OnDestroy()
-        {
-            if (!Application.isPlaying)
-            {
-                DestroyImmediate(effectRoot);
-            }
-            else
-            {
-                Destroy(effectRoot);
-            }
+            else if (!effectRoot.activeSelf) effectRoot.SetActive(true);
         }
     }
 }

@@ -1,19 +1,16 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI.Extensions;
 
 public class WarmUpComboboxes : MonoBehaviour
 {
-
     public AutoCompleteComboBox acb;
     public ComboBox cb;
     public DropDownList ddl;
 
-    private string[] dropDownItems = { "More", "ComboBox", "Example", "Goodness" };
+    private readonly string[] dropDownItems = { "More", "ComboBox", "Example", "Goodness" };
 
     // Refreshing the items in a DropDOwn can happen anytime after the initial initialisation
-    void Start()
+    private void Start()
     {
         // Set the currect set of items for the auto-complete combobox, removes original list
         acb.SetAvailableOptions(dropDownItems);

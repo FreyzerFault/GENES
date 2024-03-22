@@ -704,9 +704,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="Assets.Scripts.ExtensionMethods.csproj">
-      <Project>{afa59c38-eeaf-6b64-b46e-f23cb798a397}</Project>
-      <Name>Assets.Scripts.ExtensionMethods</Name>
+    <ProjectReference Include="DavidUtils.ExtensionMethods.csproj">
+      <Project>{a059d51e-f1cf-e313-c533-8ebffa5a8e8a}</Project>
+      <Name>DavidUtils.ExtensionMethods</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

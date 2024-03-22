@@ -1,3 +1,4 @@
+using PathFinding;
 using UnityEngine;
 
 namespace Map.Rendering
@@ -8,14 +9,14 @@ namespace Map.Rendering
 
         public bool IsEmpty { get; }
 
-        public void AddPath(PathFinding.Path path, int index = -1);
+        public void AddPath(Path path, int index = -1);
 
         public void RemovePath(int index = -1);
 
-        public void UpdateAllLines(PathFinding.Path[] paths);
+        public void UpdateAllLines(Path[] paths);
 
         // Asigna un Path a un LineRenderer
-        public void UpdateLine(PathFinding.Path path, int index);
+        public void UpdateLine(Path path, int index);
         public void ClearPaths();
     }
 }

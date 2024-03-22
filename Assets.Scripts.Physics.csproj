@@ -707,9 +707,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="Assets.Scripts.csproj">
-      <Project>{c598f215-6716-6b93-fc56-8b55cb542e19}</Project>
-      <Name>Assets.Scripts</Name>
+    <ProjectReference Include="Scripts.csproj">
+      <Project>{daedd835-da4f-71dc-3592-2249731111be}</Project>
+      <Name>Scripts</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

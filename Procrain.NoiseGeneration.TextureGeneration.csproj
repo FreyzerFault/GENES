@@ -710,10 +710,6 @@
       <Project>{5e525b5f-f0be-0341-510c-ac0bbc3cfe1c}</Project>
       <Name>Procrain.Noise</Name>
     </ProjectReference>
-    <ProjectReference Include="Procrain.Utils.csproj">
-      <Project>{dff1b38a-820b-862c-0816-27baa1d9338c}</Project>
-      <Name>Procrain.Utils</Name>
-    </ProjectReference>
     <ProjectReference Include="Procrain.Utils.Threading.csproj">
       <Project>{4333f93b-5b81-f984-48aa-c0c835acf638}</Project>
       <Name>Procrain.Utils.Threading</Name>
@@ -721,6 +717,14 @@
     <ProjectReference Include="Procrain.MapGeneration.csproj">
       <Project>{830defe6-8853-bf3d-3b4e-45670b5a5be4}</Project>
       <Name>Procrain.MapGeneration</Name>
+    </ProjectReference>
+    <ProjectReference Include="DavidUtils.csproj">
+      <Project>{b195b350-5f82-196a-330d-3c4e004004bf}</Project>
+      <Name>DavidUtils</Name>
+    </ProjectReference>
+    <ProjectReference Include="DavidUtils.ExtensionMethods.csproj">
+      <Project>{a059d51e-f1cf-e313-c533-8ebffa5a8e8a}</Project>
+      <Name>DavidUtils.ExtensionMethods</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

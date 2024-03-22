@@ -8,9 +8,9 @@ using System;
 
 namespace UnityEngine.UI.Extensions.Examples.FancyScrollViewExample07
 {
-    class Context : FancyScrollRectContext
+    internal class Context : FancyScrollRectContext
     {
-        public int SelectedIndex = -1;
         public Action<int> OnCellClicked;
+        public int SelectedIndex = -1;
     }
 }

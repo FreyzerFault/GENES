@@ -11,41 +11,49 @@ using UnityEngine.EventSystems;
 namespace UnityEngine.UI.Extensions
 {
     /// <summary>
-    /// Includes a few fixes of my own, mainly to tidy up duplicates, remove unneeded stuff and testing. (nothing major, all the crew above did the hard work!)
+    ///     Includes a few fixes of my own, mainly to tidy up duplicates, remove unneeded stuff and testing. (nothing major,
+    ///     all the crew above did the hard work!)
     /// </summary>
     [RequireComponent(typeof(RectTransform))]
     [AddComponentMenu("UI/Extensions/UI Window Base")]
     public class UIWindowBase : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
     {
-        private bool _isDragging = false;
-        public static bool ResetCoords = false;
-        private Vector3 m_originalCoods = Vector3.zero;
-        private Canvas m_canvas;
-        private RectTransform m_canvasRectTransform;
+        public static bool ResetCoords;
 
         [Tooltip("Number of pixels of the window that must stay inside the canvas view.")]
         public int KeepWindowInCanvas = 5;
 
-        [Tooltip("The transform that is moved when dragging, can be left empty in which case its own transform is used.")]
-        public RectTransform RootTransform = null;
+        [Tooltip(
+            "The transform that is moved when dragging, can be left empty in which case its own transform is used."
+        )]
+        public RectTransform RootTransform;
+
+        private bool _isDragging;
+        private Canvas m_canvas;
+        private RectTransform m_canvasRectTransform;
+        private Vector3 m_originalCoods = Vector3.zero;
 
         // Use this for initialization
-        void Start()
+        private void Start()
         {
-            if (RootTransform == null)
-            {
-                RootTransform = GetComponent<RectTransform>();
-            }
+            if (RootTransform == null) RootTransform = GetComponent<RectTransform>();
 
             m_originalCoods = RootTransform.position;
             m_canvas = GetComponentInParent<Canvas>();
             m_canvasRectTransform = m_canvas.GetComponent<RectTransform>();
         }
 
-        void Update()
+        private void Update()
         {
-            if (ResetCoords)
-                resetCoordinatePosition();
+            if (ResetCoords) resetCoordinatePosition();
+        }
+
+        //Note, the begin drag and end drag aren't actually needed to control the drag.  However, I'd recommend keeping it in case you want to do something else when dragging starts and stops
+        public void OnBeginDrag(PointerEventData eventData)
+        {
+            if (eventData.pointerCurrentRaycast.gameObject == null) return;
+
+            if (eventData.pointerCurrentRaycast.gameObject.name == name) _isDragging = true;
         }
 
         public void OnDrag(PointerEventData eventData)
@@ -57,25 +65,12 @@ namespace UnityEngine.UI.Extensions
             }
         }
 
-        //Note, the begin drag and end drag aren't actually needed to control the drag.  However, I'd recommend keeping it in case you want to do something else when dragging starts and stops
-        public void OnBeginDrag(PointerEventData eventData)
-        {
-
-            if (eventData.pointerCurrentRaycast.gameObject == null)
-                return;
-
-            if (eventData.pointerCurrentRaycast.gameObject.name == name)
-            {
-                _isDragging = true;
-            }
-        }
-
         public void OnEndDrag(PointerEventData eventData)
         {
             _isDragging = false;
         }
 
-        void resetCoordinatePosition()
+        private void resetCoordinatePosition()
         {
             RootTransform.position = m_originalCoods;
             ResetCoords = false;
@@ -88,7 +83,8 @@ namespace UnityEngine.UI.Extensions
             Vector2 max;
             var canvasSize = m_canvasRectTransform.sizeDelta;
 
-            if (m_canvas.renderMode == RenderMode.ScreenSpaceOverlay || (m_canvas.renderMode == RenderMode.ScreenSpaceCamera && m_canvas.worldCamera == null))
+            if (m_canvas.renderMode == RenderMode.ScreenSpaceOverlay
+                || (m_canvas.renderMode == RenderMode.ScreenSpaceCamera && m_canvas.worldCamera == null))
             {
                 localPosition = screenPosition;
 
@@ -101,10 +97,8 @@ namespace UnityEngine.UI.Extensions
                 var plane = new Plane(m_canvasRectTransform.forward, m_canvasRectTransform.position);
 
                 float distance;
-                if (plane.Raycast(ray, out distance) == false)
-                {
-                    throw new Exception("Is it practically possible?");
-                };
+                if (plane.Raycast(ray, out distance) == false) throw new Exception("Is it practically possible?");
+                ;
                 var worldPosition = ray.origin + ray.direction * distance;
                 localPosition = m_canvasRectTransform.InverseTransformPoint(worldPosition);
 

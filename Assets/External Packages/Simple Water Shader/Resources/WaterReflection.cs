@@ -1,25 +1,27 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class WaterReflection : MonoBehaviour
 {
-    // referenses
-    Camera mainCamera;
-    Camera reflectionCamera;
-
-    [Tooltip("The plane where the camera will be reflected, the water plane or any object with the same position and rotation")]
+    [Tooltip(
+        "The plane where the camera will be reflected, the water plane or any object with the same position and rotation"
+    )]
     public Transform reflectionPlane;
+
     [Tooltip("The texture used by the Water shader to display the reflection")]
     public RenderTexture outputTexture;
 
     // parameters
     public bool copyCameraParamerers;
     public float verticalOffset;
+
     private bool isReady;
+
+    // referenses
+    private Camera mainCamera;
 
     // cache
     private Transform mainCamTransform;
+    private Camera reflectionCamera;
     private Transform reflectionCamTransform;
 
     public void Awake()
@@ -33,23 +35,22 @@ public class WaterReflection : MonoBehaviour
 
     private void Update()
     {
-        if (isReady)
-            RenderReflection();
+        if (isReady) RenderReflection();
     }
 
     private void RenderReflection()
     {
         // take main camera directions and position world space
-        Vector3 cameraDirectionWorldSpace = mainCamTransform.forward;
-        Vector3 cameraUpWorldSpace = mainCamTransform.up;
-        Vector3 cameraPositionWorldSpace = mainCamTransform.position;
+        var cameraDirectionWorldSpace = mainCamTransform.forward;
+        var cameraUpWorldSpace = mainCamTransform.up;
+        var cameraPositionWorldSpace = mainCamTransform.position;
 
         cameraPositionWorldSpace.y += verticalOffset;
 
         // transform direction and position by reflection plane
-        Vector3 cameraDirectionPlaneSpace = reflectionPlane.InverseTransformDirection(cameraDirectionWorldSpace);
-        Vector3 cameraUpPlaneSpace = reflectionPlane.InverseTransformDirection(cameraUpWorldSpace);
-        Vector3 cameraPositionPlaneSpace = reflectionPlane.InverseTransformPoint(cameraPositionWorldSpace);
+        var cameraDirectionPlaneSpace = reflectionPlane.InverseTransformDirection(cameraDirectionWorldSpace);
+        var cameraUpPlaneSpace = reflectionPlane.InverseTransformDirection(cameraUpWorldSpace);
+        var cameraPositionPlaneSpace = reflectionPlane.InverseTransformPoint(cameraPositionWorldSpace);
 
         // invert direction and position by reflection plane
         cameraDirectionPlaneSpace.y *= -1;
@@ -74,7 +75,9 @@ public class WaterReflection : MonoBehaviour
             isReady = true;
         }
         else
+        {
             isReady = false;
+        }
 
         if (reflectionCamera != null)
         {
@@ -82,7 +85,9 @@ public class WaterReflection : MonoBehaviour
             isReady = true;
         }
         else
+        {
             isReady = false;
+        }
 
         if (isReady && copyCameraParamerers)
         {

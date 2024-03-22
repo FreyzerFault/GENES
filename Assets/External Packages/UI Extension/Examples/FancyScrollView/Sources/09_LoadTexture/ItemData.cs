@@ -6,17 +6,17 @@
 
 namespace UnityEngine.UI.Extensions.Examples.FancyScrollViewExample09
 {
-    class ItemData
+    internal class ItemData
     {
-        public string Title { get; }
-        public string Description { get; }
-        public string Url { get; }
-
         public ItemData(string title, string description, string url)
         {
             Title = title;
             Description = description;
             Url = url;
         }
+
+        public string Title { get; }
+        public string Description { get; }
+        public string Url { get; }
     }
 }

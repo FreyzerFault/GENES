@@ -59,8 +59,12 @@ public class VehicleController : MonoBehaviour
         var position = transform.position;
         var forward = transform.forward;
         var frontPosition = position + forward * 2;
-        var steerFrontDirection = Vector3.RotateTowards(forward, transform.right,
-            Mathf.Deg2Rad * steerAngle, Mathf.Deg2Rad * maxSteerAngle);
+        var steerFrontDirection = Vector3.RotateTowards(
+            forward,
+            transform.right,
+            Mathf.Deg2Rad * steerAngle,
+            Mathf.Deg2Rad * maxSteerAngle
+        );
         Gizmos.DrawRay(frontPosition, forward * torqueForce / maxTorqueForce);
         Gizmos.DrawRay(frontPosition, steerFrontDirection);
     }
@@ -69,8 +73,11 @@ public class VehicleController : MonoBehaviour
 
     private void HandleSteering()
     {
-        steerAngle = Mathf.MoveTowardsAngle(steerAngle, maxSteerAngle * horizontalInput,
-            steerAngularVelocity * Time.fixedDeltaTime);
+        steerAngle = Mathf.MoveTowardsAngle(
+            steerAngle,
+            maxSteerAngle * horizontalInput,
+            steerAngularVelocity * Time.fixedDeltaTime
+        );
         frontLeftW.Steer(steerAngle);
         frontRightW.Steer(steerAngle);
     }

@@ -21,84 +21,101 @@ namespace UnityEngine.UI.Extensions
     [AddComponentMenu("UI/Extensions/Primitives/Cut Corners")]
     public class UICornerCut : UIPrimitiveBase
     {
-         public Vector2 cornerSize = new Vector2(16, 16);
+        public Vector2 cornerSize = new(16, 16);
 
-        [Header("Corners to cut")]
-        [SerializeField]
+        [Header("Corners to cut")] [SerializeField]
         private bool m_cutUL = true;
-        [SerializeField]
-        private bool m_cutUR;
-        [SerializeField]
-        private bool m_cutLL;
-        [SerializeField]
-        private bool m_cutLR;
-        
-        [Tooltip("Up-Down colors become Left-Right colors")]
-        [SerializeField]
+
+        [SerializeField] private bool m_cutUR;
+
+        [SerializeField] private bool m_cutLL;
+
+        [SerializeField] private bool m_cutLR;
+
+        [Tooltip("Up-Down colors become Left-Right colors")] [SerializeField]
         private bool m_makeColumns;
 
-        [Header("Color the cut bars differently")]
-        [SerializeField]
+        [Header("Color the cut bars differently")] [SerializeField]
         private bool m_useColorUp;
-        [SerializeField]
-        private Color32 m_colorUp;
-        [SerializeField]
-        private bool m_useColorDown;
-        [SerializeField]
-        private Color32 m_colorDown;
+
+        [SerializeField] private Color32 m_colorUp;
+
+        [SerializeField] private bool m_useColorDown;
+
+        [SerializeField] private Color32 m_colorDown;
 
         public bool CutUL
         {
-            get { return m_cutUL; }
-            set { m_cutUL = value; SetAllDirty(); }
+            get => m_cutUL;
+            set
+            {
+                m_cutUL = value;
+                SetAllDirty();
+            }
         }
-        
+
         public bool CutUR
         {
-            get { return m_cutUR; }
-            set { m_cutUR = value; SetAllDirty(); }
+            get => m_cutUR;
+            set
+            {
+                m_cutUR = value;
+                SetAllDirty();
+            }
         }
 
         public bool CutLL
         {
-            get { return m_cutLL; }
-            set { m_cutLL = value; SetAllDirty(); }
+            get => m_cutLL;
+            set
+            {
+                m_cutLL = value;
+                SetAllDirty();
+            }
         }
-        
+
         public bool CutLR
         {
-            get { return m_cutLR; }
-            set { m_cutLR = value; SetAllDirty(); }
+            get => m_cutLR;
+            set
+            {
+                m_cutLR = value;
+                SetAllDirty();
+            }
         }
-        
+
         public bool MakeColumns
         {
-            get { return m_makeColumns; }
-            set { m_makeColumns = value; SetAllDirty(); }
+            get => m_makeColumns;
+            set
+            {
+                m_makeColumns = value;
+                SetAllDirty();
+            }
         }
-        
+
         public bool UseColorUp
         {
-            get { return m_useColorUp; }
-            set { m_useColorUp = value; }
+            get => m_useColorUp;
+            set => m_useColorUp = value;
         }
-        
+
         public Color32 ColorUp
         {
-            get { return m_colorUp; }
-            set { m_colorUp = value; }
+            get => m_colorUp;
+            set => m_colorUp = value;
         }
-        
+
         public bool UseColorDown
         {
-            get { return m_useColorDown; }
-            set { m_useColorDown = value; }
+            get => m_useColorDown;
+            set => m_useColorDown = value;
         }
-        
+
         public Color32 ColorDown
         {
-            get { return m_colorDown; }
-            set { m_colorDown = value; }
+            get => m_colorDown;
+            set => m_colorDown = value;
         }
 
         protected override void OnPopulateMesh(VertexHelper vh)
@@ -107,25 +124,20 @@ namespace UnityEngine.UI.Extensions
             var rectNew = rect;
 
             Color32 color32 = color;
-            bool up = m_cutUL | m_cutUR;
-            bool down = m_cutLL | m_cutLR;
-            bool left = m_cutLL | m_cutUL;
-            bool right = m_cutLR | m_cutUR;
-            bool any = up | down;
+            var up = m_cutUL | m_cutUR;
+            var down = m_cutLL | m_cutLR;
+            var left = m_cutLL | m_cutUL;
+            var right = m_cutLR | m_cutUR;
+            var any = up | down;
 
             if (any && cornerSize.sqrMagnitude > 0)
             {
-
                 //nibble off the sides
                 vh.Clear();
-                if (left)
-                    rectNew.xMin += cornerSize.x;
-                if (down)
-                    rectNew.yMin += cornerSize.y;
-                if (up)
-                    rectNew.yMax -= cornerSize.y;
-                if (right)
-                    rectNew.xMax -= cornerSize.x;
+                if (left) rectNew.xMin += cornerSize.x;
+                if (down) rectNew.yMin += cornerSize.y;
+                if (up) rectNew.yMax -= cornerSize.y;
+                if (right) rectNew.xMax -= cornerSize.x;
 
                 //add two squares to the main square
                 Vector2 ul, ur, ll, lr;
@@ -139,16 +151,24 @@ namespace UnityEngine.UI.Extensions
 
                     if (left)
                         AddSquare(
-                            ll, ul,
+                            ll,
+                            ul,
                             new Vector2(rectNew.xMin, rect.yMax),
                             new Vector2(rectNew.xMin, rect.yMin),
-                            rect, m_useColorUp ? m_colorUp : color32, vh);
+                            rect,
+                            m_useColorUp ? m_colorUp : color32,
+                            vh
+                        );
                     if (right)
                         AddSquare(
-                            ur, lr,
+                            ur,
+                            lr,
                             new Vector2(rectNew.xMax, rect.yMin),
                             new Vector2(rectNew.xMax, rect.yMax),
-                            rect, m_useColorDown ? m_colorDown : color32, vh);
+                            rect,
+                            m_useColorDown ? m_colorDown : color32,
+                            vh
+                        );
                 }
                 else
                 {
@@ -158,16 +178,24 @@ namespace UnityEngine.UI.Extensions
                     lr = new Vector2(m_cutLR ? rectNew.xMax : rect.xMax, rect.yMin);
                     if (down)
                         AddSquare(
-                            lr, ll,
+                            lr,
+                            ll,
                             new Vector2(rect.xMin, rectNew.yMin),
                             new Vector2(rect.xMax, rectNew.yMin),
-                            rect, m_useColorDown ? m_colorDown : color32, vh);
+                            rect,
+                            m_useColorDown ? m_colorDown : color32,
+                            vh
+                        );
                     if (up)
                         AddSquare(
-                            ul, ur,
+                            ul,
+                            ur,
                             new Vector2(rect.xMax, rectNew.yMax),
                             new Vector2(rect.xMin, rectNew.yMax),
-                            rect, m_useColorUp ? m_colorUp : color32, vh);
+                            rect,
+                            m_useColorUp ? m_colorUp : color32,
+                            vh
+                        );
                 }
 
                 //center
@@ -175,39 +203,43 @@ namespace UnityEngine.UI.Extensions
                     AddSquare(new Rect(rectNew.xMin, rect.yMin, rectNew.width, rect.height), rect, color32, vh);
                 else
                     AddSquare(new Rect(rect.xMin, rectNew.yMin, rect.width, rectNew.height), rect, color32, vh);
-
             }
         }
- 
-        private static void AddSquare(Rect rect, Rect rectUV, Color32 color32, VertexHelper vh) {
-            int v0 = AddVert(rect.xMin, rect.yMin, rectUV, color32, vh);
-            int v1 = AddVert(rect.xMin, rect.yMax, rectUV, color32, vh);
-            int v2 = AddVert(rect.xMax, rect.yMax, rectUV, color32, vh);
-            int v3 = AddVert(rect.xMax, rect.yMin, rectUV, color32, vh);
- 
+
+        private static void AddSquare(Rect rect, Rect rectUV, Color32 color32, VertexHelper vh)
+        {
+            var v0 = AddVert(rect.xMin, rect.yMin, rectUV, color32, vh);
+            var v1 = AddVert(rect.xMin, rect.yMax, rectUV, color32, vh);
+            var v2 = AddVert(rect.xMax, rect.yMax, rectUV, color32, vh);
+            var v3 = AddVert(rect.xMax, rect.yMin, rectUV, color32, vh);
+
             vh.AddTriangle(v0, v1, v2);
             vh.AddTriangle(v2, v3, v0);
         }
- 
-        private static void AddSquare(Vector2 a, Vector2 b, Vector2 c, Vector2 d, Rect rectUV, Color32 color32, VertexHelper vh) {
-            int v0 = AddVert(a.x, a.y, rectUV, color32, vh);
-            int v1 = AddVert(b.x, b.y, rectUV, color32, vh);
-            int v2 = AddVert(c.x, c.y, rectUV, color32, vh);
-            int v3 = AddVert(d.x, d.y, rectUV, color32, vh);
- 
+
+        private static void AddSquare(
+            Vector2 a, Vector2 b, Vector2 c, Vector2 d, Rect rectUV, Color32 color32, VertexHelper vh
+        )
+        {
+            var v0 = AddVert(a.x, a.y, rectUV, color32, vh);
+            var v1 = AddVert(b.x, b.y, rectUV, color32, vh);
+            var v2 = AddVert(c.x, c.y, rectUV, color32, vh);
+            var v3 = AddVert(d.x, d.y, rectUV, color32, vh);
+
             vh.AddTriangle(v0, v1, v2);
             vh.AddTriangle(v2, v3, v0);
         }
- 
+
         /// <summary>
-        /// Auto UV handler within the assigned area
+        ///     Auto UV handler within the assigned area
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <param name="area"></param>
         /// <param name="color32"></param>
         /// <param name="vh"></param>
-        private static int AddVert(float x, float y, Rect area, Color32 color32, VertexHelper vh) {
+        private static int AddVert(float x, float y, Rect area, Color32 color32, VertexHelper vh)
+        {
             var uv = new Vector2(
                 Mathf.InverseLerp(area.xMin, area.xMax, x),
                 Mathf.InverseLerp(area.yMin, area.yMax, y)

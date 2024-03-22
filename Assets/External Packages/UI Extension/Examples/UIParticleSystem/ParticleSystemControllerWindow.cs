@@ -2,27 +2,26 @@
 
 public class ParticleSystemControllerWindow : MonoBehaviour
 {
-    ParticleSystem system
+    public Rect windowRect = new(0, 0, 300, 120);
+
+    public bool includeChildren = true;
+    private ParticleSystem _CachedSystem;
+
+    private ParticleSystem system
     {
         get
         {
-            if (_CachedSystem == null)
-                _CachedSystem = GetComponent<ParticleSystem>();
+            if (_CachedSystem == null) _CachedSystem = GetComponent<ParticleSystem>();
             return _CachedSystem;
         }
     }
-    private ParticleSystem _CachedSystem;
 
-    public Rect windowRect = new Rect(0, 0, 300, 120);
-
-    public bool includeChildren = true;
-
-    void OnGUI()
+    private void OnGUI()
     {
         windowRect = GUI.Window("ParticleController".GetHashCode(), windowRect, DrawWindowContents, system.name);
     }
 
-    void DrawWindowContents(int windowId)
+    private void DrawWindowContents(int windowId)
     {
         if (system)
         {
@@ -33,10 +32,8 @@ public class ParticleSystemControllerWindow : MonoBehaviour
             GUILayout.EndHorizontal();
 
             GUILayout.BeginHorizontal();
-            if (GUILayout.Button("Play"))
-                system.Play(includeChildren);
-            if (GUILayout.Button("Pause"))
-                system.Pause(includeChildren);
+            if (GUILayout.Button("Play")) system.Play(includeChildren);
+            if (GUILayout.Button("Pause")) system.Pause(includeChildren);
             if (GUILayout.Button("Stop Emitting"))
                 system.Stop(includeChildren, ParticleSystemStopBehavior.StopEmitting);
             if (GUILayout.Button("Stop & Clear"))
@@ -51,7 +48,9 @@ public class ParticleSystemControllerWindow : MonoBehaviour
             GUILayout.EndHorizontal();
         }
         else
+        {
             GUILayout.Label("No Particle System found");
+        }
 
         GUI.DragWindow();
     }

@@ -6,11 +6,11 @@
 
 namespace UnityEngine.UI.Extensions.Examples.FancyScrollViewExample07
 {
-    class Cell : FancyScrollRectCell<ItemData, Context>
+    internal class Cell : FancyScrollRectCell<ItemData, Context>
     {
-        [SerializeField] Text message = default;
-        [SerializeField] Image image = default;
-        [SerializeField] Button button = default;
+        [SerializeField] private Text message;
+        [SerializeField] private Image image;
+        [SerializeField] private Button button;
 
         public override void Initialize()
         {

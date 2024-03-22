@@ -16,177 +16,145 @@ namespace UnityEngine.UI.Extensions
             LeftToRight,
             RightToLeft,
             BottomToTop,
-            TopToBottom,
+            TopToBottom
         }
 
-        [Serializable]
-        public class BoxSliderEvent : UnityEvent<float, float> { }
+        [SerializeField] private RectTransform m_HandleRect;
 
-        [SerializeField]
-        private RectTransform m_HandleRect;
-        public RectTransform HandleRect { get { return m_HandleRect; } set { if (SetClass(ref m_HandleRect, value)) { UpdateCachedReferences(); UpdateVisuals(); } } }
+        [Space(6)] [SerializeField] private float m_MinValue;
 
-        [Space(6)]
+        [SerializeField] private float m_MaxValue = 1;
 
-        [SerializeField]
-        private float m_MinValue = 0;
-        public float MinValue { get { return m_MinValue; } set { if (SetStruct(ref m_MinValue, value)) { SetX(m_ValueX); SetY(m_ValueY); UpdateVisuals(); } } }
+        [SerializeField] private bool m_WholeNumbers;
 
-        [SerializeField]
-        private float m_MaxValue = 1;
-        public float MaxValue { get { return m_MaxValue; } set { if (SetStruct(ref m_MaxValue, value)) { SetX(m_ValueX); SetY(m_ValueY); UpdateVisuals(); } } }
+        [SerializeField] private float m_ValueX = 1f;
 
-        [SerializeField]
-        private bool m_WholeNumbers = false;
-        public bool WholeNumbers { get { return m_WholeNumbers; } set { if (SetStruct(ref m_WholeNumbers, value)) { SetX(m_ValueX); SetY(m_ValueY); UpdateVisuals(); } } }
-
-        [SerializeField]
-        private float m_ValueX = 1f;
-        public float ValueX
-        {
-            get
-            {
-                if (WholeNumbers)
-                    return Mathf.Round(m_ValueX);
-                return m_ValueX;
-            }
-            set
-            {
-                SetX(value);
-            }
-        }
-
-        public float NormalizedValueX
-        {
-            get
-            {
-                if (Mathf.Approximately(MinValue, MaxValue))
-                    return 0;
-                return Mathf.InverseLerp(MinValue, MaxValue, ValueX);
-            }
-            set
-            {
-                this.ValueX = Mathf.Lerp(MinValue, MaxValue, value);
-            }
-        }
-
-        [SerializeField]
-        private float m_ValueY = 1f;
-        public float ValueY
-        {
-            get
-            {
-                if (WholeNumbers)
-                    return Mathf.Round(m_ValueY);
-                return m_ValueY;
-            }
-            set
-            {
-                SetY(value);
-            }
-        }
-
-        public float NormalizedValueY
-        {
-            get
-            {
-                if (Mathf.Approximately(MinValue, MaxValue))
-                    return 0;
-                return Mathf.InverseLerp(MinValue, MaxValue, ValueY);
-            }
-            set
-            {
-                this.ValueY = Mathf.Lerp(MinValue, MaxValue, value);
-            }
-        }
+        [SerializeField] private float m_ValueY = 1f;
 
         [Space(6)]
 
         // Allow for delegate-based subscriptions for faster events than 'eventReceiver', and allowing for multiple receivers.
         [SerializeField]
-        private BoxSliderEvent m_OnValueChanged = new BoxSliderEvent();
-        public BoxSliderEvent OnValueChanged { get { return m_OnValueChanged; } set { m_OnValueChanged = value; } }
+        private BoxSliderEvent m_OnValueChanged = new();
+
+        private RectTransform m_HandleContainerRect;
 
         // Private fields
 
         private Transform m_HandleTransform;
-        private RectTransform m_HandleContainerRect;
 
         // The offset from handle position to mouse down position
         private Vector2 m_Offset = Vector2.zero;
 
         private DrivenRectTransformTracker m_Tracker;
 
-        // Size of each step.
-        float StepSize { get { return WholeNumbers ? 1 : (MaxValue - MinValue) * 0.1f; } }
-
         protected BoxSlider()
-        { }
-
-#if UNITY_EDITOR
-        protected override void OnValidate()
         {
-            base.OnValidate();
+        }
 
-            if (WholeNumbers)
+        public RectTransform HandleRect
+        {
+            get => m_HandleRect;
+            set
             {
-                m_MinValue = Mathf.Round(m_MinValue);
-                m_MaxValue = Mathf.Round(m_MaxValue);
-            }
-            UpdateCachedReferences();
-            SetX(m_ValueX, false);
-            SetY(m_ValueY, false);
-            // Update rects since other things might affect them even if value didn't change.
-            if(!Application.isPlaying) UpdateVisuals();
-
-#if UNITY_2018_3_OR_NEWER
-            if (!Application.isPlaying)
-#else
-            var prefabType = UnityEditor.PrefabUtility.GetPrefabType(this);
-            if (prefabType != UnityEditor.PrefabType.Prefab && !Application.isPlaying)
-#endif
-            {
-                CanvasUpdateRegistry.RegisterCanvasElementForLayoutRebuild(this);
+                if (SetClass(ref m_HandleRect, value))
+                {
+                    UpdateCachedReferences();
+                    UpdateVisuals();
+                }
             }
         }
 
-#endif // if UNITY_EDITOR
-
-        public virtual void Rebuild(CanvasUpdate executing)
+        public float MinValue
         {
-#if UNITY_EDITOR
-            if (executing == CanvasUpdate.Prelayout)
-                OnValueChanged.Invoke(ValueX, ValueY);
-#endif
+            get => m_MinValue;
+            set
+            {
+                if (SetStruct(ref m_MinValue, value))
+                {
+                    SetX(m_ValueX);
+                    SetY(m_ValueY);
+                    UpdateVisuals();
+                }
+            }
         }
 
-        public void LayoutComplete()
+        public float MaxValue
         {
-
+            get => m_MaxValue;
+            set
+            {
+                if (SetStruct(ref m_MaxValue, value))
+                {
+                    SetX(m_ValueX);
+                    SetY(m_ValueY);
+                    UpdateVisuals();
+                }
+            }
         }
 
-        public void GraphicUpdateComplete()
+        public bool WholeNumbers
         {
-
+            get => m_WholeNumbers;
+            set
+            {
+                if (SetStruct(ref m_WholeNumbers, value))
+                {
+                    SetX(m_ValueX);
+                    SetY(m_ValueY);
+                    UpdateVisuals();
+                }
+            }
         }
 
-        public static bool SetClass<T>(ref T currentValue, T newValue) where T : class
+        public float ValueX
         {
-            if ((currentValue == null && newValue == null) || (currentValue != null && currentValue.Equals(newValue)))
-                return false;
-
-            currentValue = newValue;
-            return true;
+            get
+            {
+                if (WholeNumbers) return Mathf.Round(m_ValueX);
+                return m_ValueX;
+            }
+            set => SetX(value);
         }
 
-        public static bool SetStruct<T>(ref T currentValue, T newValue) where T : struct
+        public float NormalizedValueX
         {
-            if (currentValue.Equals(newValue))
-                return false;
-
-            currentValue = newValue;
-            return true;
+            get
+            {
+                if (Mathf.Approximately(MinValue, MaxValue)) return 0;
+                return Mathf.InverseLerp(MinValue, MaxValue, ValueX);
+            }
+            set => ValueX = Mathf.Lerp(MinValue, MaxValue, value);
         }
+
+        public float ValueY
+        {
+            get
+            {
+                if (WholeNumbers) return Mathf.Round(m_ValueY);
+                return m_ValueY;
+            }
+            set => SetY(value);
+        }
+
+        public float NormalizedValueY
+        {
+            get
+            {
+                if (Mathf.Approximately(MinValue, MaxValue)) return 0;
+                return Mathf.InverseLerp(MinValue, MaxValue, ValueY);
+            }
+            set => ValueY = Mathf.Lerp(MinValue, MaxValue, value);
+        }
+
+        public BoxSliderEvent OnValueChanged
+        {
+            get => m_OnValueChanged;
+            set => m_OnValueChanged = value;
+        }
+
+        // Size of each step.
+        private float StepSize => WholeNumbers ? 1 : (MaxValue - MinValue) * 0.1f;
 
         protected override void OnEnable()
         {
@@ -204,9 +172,87 @@ namespace UnityEngine.UI.Extensions
             base.OnDisable();
         }
 
-        void UpdateCachedReferences()
-        {
 
+        protected override void OnRectTransformDimensionsChange()
+        {
+            base.OnRectTransformDimensionsChange();
+            UpdateVisuals();
+        }
+
+#if UNITY_EDITOR
+        protected override void OnValidate()
+        {
+            base.OnValidate();
+
+            if (WholeNumbers)
+            {
+                m_MinValue = Mathf.Round(m_MinValue);
+                m_MaxValue = Mathf.Round(m_MaxValue);
+            }
+
+            UpdateCachedReferences();
+            SetX(m_ValueX, false);
+            SetY(m_ValueY, false);
+            // Update rects since other things might affect them even if value didn't change.
+            if (!Application.isPlaying) UpdateVisuals();
+
+#if UNITY_2018_3_OR_NEWER
+            if (!Application.isPlaying)
+#else
+            var prefabType = UnityEditor.PrefabUtility.GetPrefabType(this);
+            if (prefabType != UnityEditor.PrefabType.Prefab && !Application.isPlaying)
+#endif
+                CanvasUpdateRegistry.RegisterCanvasElementForLayoutRebuild(this);
+        }
+
+#endif // if UNITY_EDITOR
+
+        public virtual void Rebuild(CanvasUpdate executing)
+        {
+#if UNITY_EDITOR
+            if (executing == CanvasUpdate.Prelayout) OnValueChanged.Invoke(ValueX, ValueY);
+#endif
+        }
+
+        public void LayoutComplete()
+        {
+        }
+
+        public void GraphicUpdateComplete()
+        {
+        }
+
+        public virtual void OnDrag(PointerEventData eventData)
+        {
+            if (!CanDrag(eventData)) return;
+
+            UpdateDrag(eventData, eventData.pressEventCamera);
+        }
+
+        public virtual void OnInitializePotentialDrag(PointerEventData eventData)
+        {
+            eventData.useDragThreshold = false;
+        }
+
+        public static bool SetClass<T>(ref T currentValue, T newValue) where T : class
+        {
+            if ((currentValue == null && newValue == null) || (currentValue != null && currentValue.Equals(newValue)))
+                return false;
+
+            currentValue = newValue;
+            return true;
+        }
+
+        public static bool SetStruct<T>(ref T currentValue, T newValue) where T : struct
+        {
+            if (currentValue.Equals(newValue)) return false;
+
+            currentValue = newValue;
+            return true;
+        }
+
+        private void UpdateCachedReferences()
+        {
             if (m_HandleRect)
             {
                 m_HandleTransform = m_HandleRect.transform;
@@ -220,61 +266,42 @@ namespace UnityEngine.UI.Extensions
         }
 
         // Set the valueUpdate the visible Image.
-        void SetX(float input)
+        private void SetX(float input)
         {
             SetX(input, true);
         }
 
-        void SetX(float input, bool sendCallback)
+        private void SetX(float input, bool sendCallback)
         {
             // Clamp the input
-            float newValue = Mathf.Clamp(input, MinValue, MaxValue);
-            if (WholeNumbers)
-                newValue = Mathf.Round(newValue);
+            var newValue = Mathf.Clamp(input, MinValue, MaxValue);
+            if (WholeNumbers) newValue = Mathf.Round(newValue);
 
             // If the stepped value doesn't match the last one, it's time to update
-            if (m_ValueX == newValue)
-                return;
+            if (m_ValueX == newValue) return;
 
             m_ValueX = newValue;
             UpdateVisuals();
-            if (sendCallback)
-                m_OnValueChanged.Invoke(newValue, ValueY);
+            if (sendCallback) m_OnValueChanged.Invoke(newValue, ValueY);
         }
 
-        void SetY(float input)
+        private void SetY(float input)
         {
             SetY(input, true);
         }
 
-        void SetY(float input, bool sendCallback)
+        private void SetY(float input, bool sendCallback)
         {
             // Clamp the input
-            float newValue = Mathf.Clamp(input, MinValue, MaxValue);
-            if (WholeNumbers)
-                newValue = Mathf.Round(newValue);
+            var newValue = Mathf.Clamp(input, MinValue, MaxValue);
+            if (WholeNumbers) newValue = Mathf.Round(newValue);
 
             // If the stepped value doesn't match the last one, it's time to update
-            if (m_ValueY == newValue)
-                return;
+            if (m_ValueY == newValue) return;
 
             m_ValueY = newValue;
             UpdateVisuals();
-            if (sendCallback)
-                m_OnValueChanged.Invoke(ValueX, newValue);
-        }
-
-
-        protected override void OnRectTransformDimensionsChange()
-        {
-            base.OnRectTransformDimensionsChange();
-            UpdateVisuals();
-        }
-
-        enum Axis
-        {
-            Horizontal = 0,
-            Vertical = 1
+            if (sendCallback) m_OnValueChanged.Invoke(ValueX, newValue);
         }
 
 
@@ -282,8 +309,7 @@ namespace UnityEngine.UI.Extensions
         private void UpdateVisuals()
         {
 #if UNITY_EDITOR
-            if (!Application.isPlaying)
-                UpdateCachedReferences();
+            if (!Application.isPlaying) UpdateCachedReferences();
 #endif
 
             m_Tracker.Clear();
@@ -293,57 +319,66 @@ namespace UnityEngine.UI.Extensions
             if (m_HandleContainerRect != null)
             {
                 m_Tracker.Add(this, m_HandleRect, DrivenTransformProperties.Anchors);
-                Vector2 anchorMin = Vector2.zero;
-                Vector2 anchorMax = Vector2.one;
-                anchorMin[0] = anchorMax[0] = (NormalizedValueX);
-                anchorMin[1] = anchorMax[1] = (NormalizedValueY);
+                var anchorMin = Vector2.zero;
+                var anchorMax = Vector2.one;
+                anchorMin[0] = anchorMax[0] = NormalizedValueX;
+                anchorMin[1] = anchorMax[1] = NormalizedValueY;
 
                 if (Application.isPlaying)
                 {
                     m_HandleRect.anchorMin = anchorMin;
                     m_HandleRect.anchorMax = anchorMax;
                 }
-
             }
         }
 
         // Update the slider's position based on the mouse.
-        void UpdateDrag(PointerEventData eventData, Camera cam)
+        private void UpdateDrag(PointerEventData eventData, Camera cam)
         {
-            RectTransform clickRect = m_HandleContainerRect;
+            var clickRect = m_HandleContainerRect;
             if (clickRect != null && clickRect.rect.size[0] > 0)
             {
                 Vector2 localCursor;
-                if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(clickRect, eventData.position, cam, out localCursor))
+                if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                        clickRect,
+                        eventData.position,
+                        cam,
+                        out localCursor
+                    ))
                     return;
                 localCursor -= clickRect.rect.position;
 
-                float val = Mathf.Clamp01((localCursor - m_Offset)[0] / clickRect.rect.size[0]);
-                NormalizedValueX = (val);
+                var val = Mathf.Clamp01((localCursor - m_Offset)[0] / clickRect.rect.size[0]);
+                NormalizedValueX = val;
 
-                float valY = Mathf.Clamp01((localCursor - m_Offset)[1] / clickRect.rect.size[1]);
-                NormalizedValueY = (valY);
-
+                var valY = Mathf.Clamp01((localCursor - m_Offset)[1] / clickRect.rect.size[1]);
+                NormalizedValueY = valY;
             }
         }
 
-        private bool CanDrag(PointerEventData eventData)
-        {
-            return IsActive() && IsInteractable() && eventData.button == PointerEventData.InputButton.Left;
-        }
+        private bool CanDrag(PointerEventData eventData) =>
+            IsActive() && IsInteractable() && eventData.button == PointerEventData.InputButton.Left;
 
         public override void OnPointerDown(PointerEventData eventData)
         {
-            if (!CanDrag(eventData))
-                return;
+            if (!CanDrag(eventData)) return;
 
             base.OnPointerDown(eventData);
 
             m_Offset = Vector2.zero;
-            if (m_HandleContainerRect != null && RectTransformUtility.RectangleContainsScreenPoint(m_HandleRect, eventData.position, eventData.enterEventCamera))
+            if (m_HandleContainerRect != null && RectTransformUtility.RectangleContainsScreenPoint(
+                    m_HandleRect,
+                    eventData.position,
+                    eventData.enterEventCamera
+                ))
             {
                 Vector2 localMousePos;
-                if (RectTransformUtility.ScreenPointToLocalPointInRectangle(m_HandleRect, eventData.position, eventData.pressEventCamera, out localMousePos))
+                if (RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                        m_HandleRect,
+                        eventData.position,
+                        eventData.pressEventCamera,
+                        out localMousePos
+                    ))
                     m_Offset = localMousePos;
                 m_Offset.y = -m_Offset.y;
             }
@@ -354,18 +389,15 @@ namespace UnityEngine.UI.Extensions
             }
         }
 
-        public virtual void OnDrag(PointerEventData eventData)
+        [Serializable]
+        public class BoxSliderEvent : UnityEvent<float, float>
         {
-            if (!CanDrag(eventData))
-                return;
-
-            UpdateDrag(eventData, eventData.pressEventCamera);
         }
 
-        public virtual void OnInitializePotentialDrag(PointerEventData eventData)
+        private enum Axis
         {
-            eventData.useDragThreshold = false;
+            Horizontal = 0,
+            Vertical = 1
         }
-
     }
 }

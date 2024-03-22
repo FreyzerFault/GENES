@@ -6,9 +6,9 @@
 
 namespace UnityEngine.UI.Extensions.Examples.FancyScrollViewExample06
 {
-    class Window : MonoBehaviour
+    internal class Window : MonoBehaviour
     {
-        [SerializeField] SlideScreenTransition transition = default;
+        [SerializeField] private SlideScreenTransition transition;
 
         public void In(MovementDirection direction) => transition?.In(direction);
 

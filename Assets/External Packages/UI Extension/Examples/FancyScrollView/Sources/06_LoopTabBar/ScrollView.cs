@@ -10,12 +10,12 @@ using UnityEngine.UI.Extensions.EasingCore;
 
 namespace UnityEngine.UI.Extensions.Examples.FancyScrollViewExample06
 {
-    class ScrollView : FancyScrollView<ItemData, Context>
+    internal class ScrollView : FancyScrollView<ItemData, Context>
     {
-        [SerializeField] Scroller scroller = default;
-        [SerializeField] GameObject cellPrefab = default;
+        [SerializeField] private Scroller scroller;
+        [SerializeField] private GameObject cellPrefab;
 
-        Action<int, MovementDirection> onSelectionChanged;
+        private Action<int, MovementDirection> onSelectionChanged;
 
         protected override GameObject CellPrefab => cellPrefab;
 
@@ -29,12 +29,9 @@ namespace UnityEngine.UI.Extensions.Examples.FancyScrollViewExample06
             scroller.OnSelectionChanged(UpdateSelection);
         }
 
-        void UpdateSelection(int index)
+        private void UpdateSelection(int index)
         {
-            if (Context.SelectedIndex == index)
-            {
-                return;
-            }
+            if (Context.SelectedIndex == index) return;
 
             var direction = scroller.GetMovementDirection(Context.SelectedIndex, index);
 
@@ -67,10 +64,7 @@ namespace UnityEngine.UI.Extensions.Examples.FancyScrollViewExample06
 
         public void SelectCell(int index)
         {
-            if (index < 0 || index >= ItemsSource.Count || index == Context.SelectedIndex)
-            {
-                return;
-            }
+            if (index < 0 || index >= ItemsSource.Count || index == Context.SelectedIndex) return;
 
             scroller.ScrollTo(index, 0.35f, Ease.OutCubic);
         }

@@ -725,9 +725,9 @@
       <Project>{4b06f23d-5e15-1f2c-044c-5b76847e3552}</Project>
       <Name>UnityUIExtensions</Name>
     </ProjectReference>
-    <ProjectReference Include="Assets.Scripts.Utils.csproj">
-      <Project>{51189add-f733-4179-0a42-6ac3c2a69b16}</Project>
-      <Name>Assets.Scripts.Utils</Name>
+    <ProjectReference Include="DavidUtils.csproj">
+      <Project>{b195b350-5f82-196a-330d-3c4e004004bf}</Project>
+      <Name>DavidUtils</Name>
     </ProjectReference>
     <ProjectReference Include="Assets.Scripts.Map.csproj">
       <Project>{8bdb3e98-d617-0799-e30b-ad8b64bb0331}</Project>
@@ -737,9 +737,9 @@
       <Project>{d98b3dbe-6626-470f-39bc-529ef39ee94d}</Project>
       <Name>Assets.Scripts.PathFinding</Name>
     </ProjectReference>
-    <ProjectReference Include="Assets.Scripts.ExtensionMethods.csproj">
-      <Project>{afa59c38-eeaf-6b64-b46e-f23cb798a397}</Project>
-      <Name>Assets.Scripts.ExtensionMethods</Name>
+    <ProjectReference Include="DavidUtils.ExtensionMethods.csproj">
+      <Project>{a059d51e-f1cf-e313-c533-8ebffa5a8e8a}</Project>
+      <Name>DavidUtils.ExtensionMethods</Name>
     </ProjectReference>
     <ProjectReference Include="Procrain.NoiseGeneration.TextureGeneration.csproj">
       <Project>{e9087f5d-4aa0-1a28-7bb6-8da8f4add820}</Project>

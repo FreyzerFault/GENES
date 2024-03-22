@@ -725,9 +725,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="Procrain.Utils.csproj">
-      <Project>{dff1b38a-820b-862c-0816-27baa1d9338c}</Project>
-      <Name>Procrain.Utils</Name>
+    <ProjectReference Include="DavidUtils.csproj">
+      <Project>{b195b350-5f82-196a-330d-3c4e004004bf}</Project>
+      <Name>DavidUtils</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

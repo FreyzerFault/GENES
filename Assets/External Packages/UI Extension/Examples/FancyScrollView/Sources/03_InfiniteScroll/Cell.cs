@@ -6,24 +6,25 @@
 
 namespace UnityEngine.UI.Extensions.Examples.FancyScrollViewExample03
 {
-    class Cell : FancyCell<ItemData, Context>
+    internal class Cell : FancyCell<ItemData, Context>
     {
-        [SerializeField] Animator animator = default;
-        [SerializeField] Text message = default;
-        [SerializeField] Text messageLarge = default;
-        [SerializeField] Image image = default;
-        [SerializeField] Image imageLarge = default;
-        [SerializeField] Button button = default;
+        [SerializeField] private Animator animator;
+        [SerializeField] private Text message;
+        [SerializeField] private Text messageLarge;
+        [SerializeField] private Image image;
+        [SerializeField] private Image imageLarge;
+        [SerializeField] private Button button;
 
-        static class AnimatorHash
-        {
-            public static readonly int Scroll = Animator.StringToHash("scroll");
-        }
+        // GameObject が非アクティブになると Animator がリセットされてしまうため
+        // 現在位置を保持しておいて OnEnable のタイミングで現在位置を再設定します
+        private float currentPosition;
 
-        void Start()
+        private void Start()
         {
             button.onClick.AddListener(() => Context.OnCellClicked?.Invoke(Index));
         }
+
+        private void OnEnable() => UpdatePosition(currentPosition);
 
         public override void UpdateContent(ItemData itemData)
         {
@@ -40,18 +41,14 @@ namespace UnityEngine.UI.Extensions.Examples.FancyScrollViewExample03
         {
             currentPosition = position;
 
-            if (animator.isActiveAndEnabled)
-            {
-                animator.Play(AnimatorHash.Scroll, -1, position);
-            }
+            if (animator.isActiveAndEnabled) animator.Play(AnimatorHash.Scroll, -1, position);
 
             animator.speed = 0;
         }
 
-        // GameObject が非アクティブになると Animator がリセットされてしまうため
-        // 現在位置を保持しておいて OnEnable のタイミングで現在位置を再設定します
-        float currentPosition = 0;
-
-        void OnEnable() => UpdatePosition(currentPosition);
+        private static class AnimatorHash
+        {
+            public static readonly int Scroll = Animator.StringToHash("scroll");
+        }
     }
 }

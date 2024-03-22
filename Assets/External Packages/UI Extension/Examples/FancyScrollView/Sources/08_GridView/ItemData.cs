@@ -6,10 +6,9 @@
 
 namespace UnityEngine.UI.Extensions.Examples.FancyScrollViewExample08
 {
-    class ItemData
+    internal class ItemData
     {
-        public int Index { get; }
-
         public ItemData(int index) => Index = index;
+        public int Index { get; }
     }
 }

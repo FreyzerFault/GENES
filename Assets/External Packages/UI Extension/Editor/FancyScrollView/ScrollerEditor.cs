@@ -10,21 +10,21 @@ namespace UnityEngine.UI.Extensions
     [CanEditMultipleObjects]
     public class ScrollerEditor : Editor
     {
-        SerializedProperty viewport;
-        SerializedProperty scrollDirection;
-        SerializedProperty movementType;
-        SerializedProperty elasticity;
-        SerializedProperty scrollSensitivity;
-        SerializedProperty inertia;
-        SerializedProperty decelerationRate;
-        SerializedProperty snap;
-        SerializedProperty draggable;
-        SerializedProperty scrollbar;
+        private SerializedProperty decelerationRate;
+        private SerializedProperty draggable;
+        private SerializedProperty elasticity;
+        private SerializedProperty inertia;
+        private SerializedProperty movementType;
+        private SerializedProperty scrollbar;
+        private SerializedProperty scrollDirection;
+        private SerializedProperty scrollSensitivity;
 
-        AnimBool showElasticity;
-        AnimBool showInertiaRelatedValues;
+        private AnimBool showElasticity;
+        private AnimBool showInertiaRelatedValues;
+        private SerializedProperty snap;
+        private SerializedProperty viewport;
 
-        void OnEnable()
+        private void OnEnable()
         {
             viewport = serializedObject.FindProperty("viewport");
             scrollDirection = serializedObject.FindProperty("scrollDirection");
@@ -42,28 +42,28 @@ namespace UnityEngine.UI.Extensions
             SetAnimBools(true);
         }
 
-        void OnDisable()
+        private void OnDisable()
         {
             showElasticity.valueChanged.RemoveListener(Repaint);
             showInertiaRelatedValues.valueChanged.RemoveListener(Repaint);
         }
 
-        void SetAnimBools(bool instant)
+        private void SetAnimBools(bool instant)
         {
-            SetAnimBool(showElasticity, !movementType.hasMultipleDifferentValues && movementType.enumValueIndex == (int)MovementType.Elastic, instant);
+            SetAnimBool(
+                showElasticity,
+                !movementType.hasMultipleDifferentValues && movementType.enumValueIndex == (int)MovementType.Elastic,
+                instant
+            );
             SetAnimBool(showInertiaRelatedValues, !inertia.hasMultipleDifferentValues && inertia.boolValue, instant);
         }
 
-        void SetAnimBool(AnimBool a, bool value, bool instant)
+        private void SetAnimBool(AnimBool a, bool value, bool instant)
         {
             if (instant)
-            {
                 a.value = value;
-            }
             else
-            {
                 a.target = value;
-            }
         }
 
         public override void OnInspectorGUI()
@@ -83,14 +83,11 @@ namespace UnityEngine.UI.Extensions
             serializedObject.ApplyModifiedProperties();
         }
 
-        void DrawMovementTypeRelatedValue()
+        private void DrawMovementTypeRelatedValue()
         {
             using (var group = new EditorGUILayout.FadeGroupScope(showElasticity.faded))
             {
-                if (!group.visible)
-                {
-                    return;
-                }
+                if (!group.visible) return;
 
                 using (new EditorGUI.IndentLevelScope())
                 {
@@ -99,14 +96,11 @@ namespace UnityEngine.UI.Extensions
             }
         }
 
-        void DrawInertiaRelatedValues()
+        private void DrawInertiaRelatedValues()
         {
             using (var group = new EditorGUILayout.FadeGroupScope(showInertiaRelatedValues.faded))
             {
-                if (!group.visible)
-                {
-                    return;
-                }
+                if (!group.visible) return;
 
                 using (new EditorGUI.IndentLevelScope())
                 {

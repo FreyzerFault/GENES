@@ -14,18 +14,15 @@ namespace UnityEngine.UI.Extensions
     {
         public int baseTH = 6;
         public int basePPI = 210;
-        public int dragTH = 0;
+        public int dragTH;
 
-        void Start()
+        private void Start()
         {
             dragTH = baseTH * (int)Screen.dpi / basePPI;
 
-            EventSystem es = GetComponent<EventSystem>();
+            var es = GetComponent<EventSystem>();
 
-            if (es)
-            {
-                es.pixelDragThreshold = dragTH;
-            }
+            if (es) es.pixelDragThreshold = dragTH;
         }
     }
 }

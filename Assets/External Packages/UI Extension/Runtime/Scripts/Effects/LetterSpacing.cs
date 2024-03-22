@@ -38,6 +38,7 @@ use HTML-like tags in your text. Try it out, you'll see what I mean. It doesn't
 break down entirely, but it doesn't really do what you'd want either.
 
 */
+
 #if !UNITY_2022_1_OR_NEWER
 using System.Collections.Generic;
 #endif
@@ -108,9 +109,9 @@ namespace UnityEngine.UI.Extensions
 			
 			string[] lines = text.text.Split('\n');
 			Vector3  pos;
-			float    letterOffset    = spacing * (float)text.fontSize / 100f;
+			float    letterOffset = spacing * (float)text.fontSize / 100f;
 			float    alignmentFactor = 0;
-			int      glyphIdx        = 0;
+			int      glyphIdx = 0;
 
             switch (text.alignment)
             {
@@ -133,7 +134,7 @@ namespace UnityEngine.UI.Extensions
                     break;
             }
       
-            for (int lineIdx=0; lineIdx < lines.Length; lineIdx++)
+            for (int lineIdx = 0; lineIdx < lines.Length; lineIdx++)
 			{
 				string line = lines[lineIdx];
 				float lineOffset = (line.Length -1) * letterOffset * alignmentFactor;

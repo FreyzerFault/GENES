@@ -11,9 +11,9 @@ using UnityEngine.SceneManagement;
 namespace UnityEngine.UI.Extensions.Examples.FancyScrollView
 {
     [RequireComponent(typeof(Dropdown))]
-    class ScenesDropdown : MonoBehaviour
+    internal class ScenesDropdown : MonoBehaviour
     {
-        readonly string[] scenes =
+        private readonly string[] scenes =
         {
             "01_Basic",
             "02_FocusOn",
@@ -26,13 +26,15 @@ namespace UnityEngine.UI.Extensions.Examples.FancyScrollView
             "09_LoadTexture"
         };
 
-        void Start()
+        private void Start()
         {
             var dropdown = GetComponent<Dropdown>();
             dropdown.AddOptions(scenes.Select(x => new Dropdown.OptionData(x)).ToList());
             dropdown.value = Mathf.Max(0, Array.IndexOf(scenes, SceneManager.GetActiveScene().name));
-            dropdown.onValueChanged.AddListener(value =>
-                SceneManager.LoadScene(scenes[value], LoadSceneMode.Single));
+            dropdown.onValueChanged.AddListener(
+                value =>
+                    SceneManager.LoadScene(scenes[value], LoadSceneMode.Single)
+            );
         }
     }
 }

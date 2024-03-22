@@ -6,28 +6,41 @@ namespace UnityEngine.UI.Extensions
     [AddComponentMenu("UI/Extensions/Bound Tooltip/Bound Tooltip Item")]
     public class BoundTooltipItem : MonoBehaviour
     {
-        public bool IsActive
+        // Standard Singleton Access
+        private static BoundTooltipItem instance;
+
+        public Text TooltipText;
+        public Vector3 ToolTipOffset;
+
+        public bool IsActive => gameObject.activeSelf;
+
+        public static BoundTooltipItem Instance
         {
             get
             {
-                return gameObject.activeSelf;
+                if (instance == null)
+                {
+#if UNITY_2023_1_OR_NEWER
+                    instance = GameObject.FindFirstObjectByType<BoundTooltipItem>();
+#else
+                    instance = FindObjectOfType<BoundTooltipItem>();
+#endif
+                }
+
+                return instance;
             }
         }
 
-        public UnityEngine.UI.Text TooltipText;
-        public Vector3 ToolTipOffset;
-
-        void Awake()
+        private void Awake()
         {
             instance = this;
-            if(!TooltipText) TooltipText = GetComponentInChildren<Text>();
+            if (!TooltipText) TooltipText = GetComponentInChildren<Text>();
             HideTooltip();
         }
 
         public void ShowTooltip(string text, Vector3 pos)
         {
-            if (TooltipText.text != text)
-                TooltipText.text = text;
+            if (TooltipText.text != text) TooltipText.text = text;
 
             transform.position = pos + ToolTipOffset;
 
@@ -38,25 +51,5 @@ namespace UnityEngine.UI.Extensions
         {
             gameObject.SetActive(false);
         }
-
-        // Standard Singleton Access
-        private static BoundTooltipItem instance;
-        public static BoundTooltipItem Instance
-        {
-            get
-            {
-                if (instance == null)
-                {
-#if UNITY_2023_1_OR_NEWER
-                    instance = GameObject.FindFirstObjectByType<BoundTooltipItem>();
-#else
-                    instance = GameObject.FindObjectOfType<BoundTooltipItem>();
-#endif
-                }
-                return instance;
-            }
-        }
     }
 }
-
- 

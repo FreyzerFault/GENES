@@ -711,9 +711,9 @@
       <Project>{d98b3dbe-6626-470f-39bc-529ef39ee94d}</Project>
       <Name>Assets.Scripts.PathFinding</Name>
     </ProjectReference>
-    <ProjectReference Include="Assets.Scripts.Utils.csproj">
-      <Project>{51189add-f733-4179-0a42-6ac3c2a69b16}</Project>
-      <Name>Assets.Scripts.Utils</Name>
+    <ProjectReference Include="DavidUtils.csproj">
+      <Project>{b195b350-5f82-196a-330d-3c4e004004bf}</Project>
+      <Name>DavidUtils</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

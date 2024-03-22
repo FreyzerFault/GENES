@@ -11,8 +11,7 @@ public class CameraManager : MonoBehaviour
     {
         var brain = GetComponent<CinemachineBrain>();
         _activeCam = brain.ActiveVirtualCamera;
-        if (_cams.Length == 0)
-            _cams = FindObjectsOfType<CinemachineVirtualCamera>();
+        if (_cams.Length == 0) _cams = FindObjectsOfType<CinemachineVirtualCamera>();
     }
 
     private void Start()

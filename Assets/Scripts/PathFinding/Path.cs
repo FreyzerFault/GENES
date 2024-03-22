@@ -19,9 +19,7 @@ namespace PathFinding
 
         public Path(Vector3[] points)
         {
-            nodes = points
-                .Select(point => new Node(point))
-                .ToArray();
+            nodes = points.Select(point => new Node(point)).ToArray();
         }
 
         public Node Start => nodes.Length > 0 ? nodes[0] : null;
@@ -62,22 +60,19 @@ namespace PathFinding
         public float GetPathLength()
         {
             float length = 0;
-            for (var i = 1; i < nodes.Length; i++)
-                length += Vector3.Distance(nodes[i - 1].position, nodes[i].position);
+            for (var i = 1; i < nodes.Length; i++) length += Vector3.Distance(nodes[i - 1].position, nodes[i].position);
 
             return length;
         }
 
-
-        public Vector3[] GetPathWorldPoints() =>
-            nodes.Select(node => node.position).ToArray();
+        public Vector3[] GetPathWorldPoints() => nodes.Select(node => node.position).ToArray();
 
         public Vector2[] GetPathNormalizedPoints(Terrain terrain) =>
             nodes.Select(node => terrain.GetNormalizedPosition(node.position)).ToArray();
 
-
         public void ProjectToTerrain(Terrain terrain) =>
-            nodes = terrain.ProjectSegmentToTerrain(Start.position, End.position)
+            nodes = terrain
+                .ProjectSegmentToTerrain(Start.position, End.position)
                 .Select(pos => new Node(pos))
                 .ToArray();
 
