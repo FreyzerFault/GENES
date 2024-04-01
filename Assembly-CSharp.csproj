@@ -851,10 +851,6 @@
       <Project>{8079f6b5-b60b-89b7-4c91-9f8036b6585d}</Project>
       <Name>Assets.Scripts.Map.Rendering</Name>
     </ProjectReference>
-    <ProjectReference Include="Assets.Scripts.Map.csproj">
-      <Project>{8bdb3e98-d617-0799-e30b-ad8b64bb0331}</Project>
-      <Name>Assets.Scripts.Map</Name>
-    </ProjectReference>
     <ProjectReference Include="UnityUIExtensions.csproj">
       <Project>{4b06f23d-5e15-1f2c-044c-5b76847e3552}</Project>
       <Name>UnityUIExtensions</Name>
@@ -962,6 +958,10 @@
     <ProjectReference Include="BezierCurves.Editor.csproj">
       <Project>{ba3033d2-828b-2be4-f4f7-5253d20f1cdf}</Project>
       <Name>BezierCurves.Editor</Name>
+    </ProjectReference>
+    <ProjectReference Include="Assets.Scripts.Map.csproj">
+      <Project>{8bdb3e98-d617-0799-e30b-ad8b64bb0331}</Project>
+      <Name>Assets.Scripts.Map</Name>
     </ProjectReference>
     <ProjectReference Include="Assets.Scripts.PathFinding.csproj">
       <Project>{d98b3dbe-6626-470f-39bc-529ef39ee94d}</Project>
