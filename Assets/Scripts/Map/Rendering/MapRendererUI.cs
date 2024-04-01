@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using ExtensionMethods;
 using MapGeneration.TextureGeneration;
 using MyBox;
 using UnityEngine;
@@ -27,7 +28,19 @@ namespace Map.Rendering
 
         [SerializeField] protected RectTransform imageRectTransform;
 
+        [SerializeField] private float zoom = 1;
+
         private readonly List<MarkerUI> _markersUIObjects = new();
+
+        public float Zoom
+        {
+            get => zoom;
+            set
+            {
+                zoom = value;
+                UpdateZoom();
+            }
+        }
 
         private float ImageWidth =>
             image.rectTransform.rect.width * image.rectTransform.localScale.x;
@@ -37,7 +50,7 @@ namespace Map.Rendering
 
         private Vector2 ImageSize => new(ImageWidth, ImageHeight);
 
-        private float ZoomScale => MapManager.Instance.Zoom;
+        // private float ZoomScale => MapManager.Instance.Zoom;
 
         protected MarkerManager MarkerManager => MarkerManager.Instance;
 
@@ -63,11 +76,11 @@ namespace Map.Rendering
             MarkerManager.OnMarkerAdded += HandleAdded;
             MarkerManager.OnMarkerRemoved += HandleRemoved;
             MarkerManager.OnMarkersClear += HandleClear;
-            MapManager.Instance.OnZoomChanged += HandleZoomChange;
+            MapManager.Instance.OnZoomChanged += HandleZoomIn;
 
             // RENDER
             RenderTerrain();
-            Zoom(ZoomScale);
+            UpdateZoom();
 
             // MARKERS
             UpdateMarkers();
@@ -84,7 +97,27 @@ namespace Map.Rendering
             MarkerManager.OnMarkerAdded -= HandleAdded;
             MarkerManager.OnMarkerRemoved -= HandleRemoved;
             MarkerManager.OnMarkersClear -= HandleClear;
-            MapManager.Instance.OnZoomChanged -= HandleZoomChange;
+            MapManager.Instance.OnZoomChanged -= HandleZoomIn;
+        }
+
+        // ============================= DEBUG =============================
+
+        private void OnDrawGizmos()
+        {
+            var imagePos = imageRectTransform.PivotGlobal();
+            var imageMinCorner = imageRectTransform.MinCorner();
+            var sizeScaled = imageRectTransform.SizeScaled();
+
+            // MIN y MAX
+            Gizmos.color = Color.green;
+            Gizmos.DrawSphere(imageMinCorner, 20);
+            // Gizmos.DrawSphere(imageMinCorner + sizeScaled, 20);
+            Gizmos.DrawSphere(imageRectTransform.PivotGlobal(), 20);
+            Gizmos.color = Color.red;
+            Gizmos.DrawLine(
+                imageRectTransform.PivotGlobal(),
+                imageRectTransform.PivotGlobal() + imageRectTransform.rect.position
+            );
         }
 
         // ================================== EVENT SUSCRIBERS ==================================
@@ -116,17 +149,14 @@ namespace Map.Rendering
                 MapManager.Instance.PlayerNormalizedPosition * frameRectTransform.rect.size;
             playerSprite.rotation = MapManager.Instance.PlayerRotationForUI;
 
-            Zoom(ZoomScale);
+            UpdateZoom();
         }
 
-        private void HandleZoomChange(float zoom)
-        {
-            Zoom(zoom);
-        }
+        private void HandleZoomIn(float zoomAmount) => Zoom = Mathf.Max(0, zoom + zoomAmount);
 
-        private void Zoom(float zoom)
+        private void UpdateZoom()
         {
-            // Posicion y Escalado relativos al jugador
+            // Asignar el pivot a la posicion del jugador normalizada para que cada movimiento sea relativo a él
             image.rectTransform.pivot = MapManager.Instance.PlayerNormalizedPosition;
 
             // Posicionar el mapa en el centro del frame
@@ -204,7 +234,7 @@ namespace Map.Rendering
         protected void UpdateMap()
         {
             RenderTerrain();
-            Zoom(ZoomScale);
+            UpdateZoom();
             UpdatePlayerPoint();
         }
 
@@ -218,7 +248,7 @@ namespace Map.Rendering
         [ButtonMethod]
         protected void ZoomMapToPlayerPosition()
         {
-            Zoom(ZoomScale);
+            UpdateZoom();
         }
 
         [ButtonMethod]

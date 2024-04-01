@@ -3,13 +3,32 @@ using UnityEngine.InputSystem;
 
 public class PlayerTestController : MonoBehaviour
 {
+    public enum PlayerState
+    {
+        Playing,
+        Pause
+    }
+
     public float speed = 1f;
     public float angularSpeed = 1f;
 
     [SerializeField] private Transform camPoint;
 
     private Vector3 _moveInput = Vector3.zero;
+
+    private PlayerState _state = PlayerState.Playing;
     private Terrain _terrain;
+
+    public PlayerState State
+    {
+        get => _state;
+        set
+        {
+            if (value == _state) return;
+            HandleStateChanged(value);
+            _state = value;
+        }
+    }
 
     private Vector3 Position => transform.position;
     private Vector3 Forward => transform.forward;
@@ -25,26 +44,42 @@ public class PlayerTestController : MonoBehaviour
 
     private void Start()
     {
+        HandleStateChanged(_state);
+
+        if (GameManager.Instance == null) return;
         GameManager.Instance.onGameStateChanged.AddListener(HandleGameStateChanged);
     }
 
     private void Update()
     {
-        if (GameManager.Instance.State != GameManager.GameState.Playing) return;
+        if (_state == PlayerState.Pause) return;
         HandleMovementInput();
         HandleRotationInput();
         StickToTerrainHeight();
     }
 
-    private void HandleGameStateChanged(GameManager.GameState state)
+    private void HandleGameStateChanged(GameManager.GameState gameState)
     {
-        switch (state)
+        State = gameState switch
         {
-            case GameManager.GameState.Playing:
+            GameManager.GameState.Playing => PlayerState.Playing,
+            GameManager.GameState.Paused => PlayerState.Pause,
+            _ => State
+        };
+    }
+
+    private void HandleStateChanged(PlayerState newState)
+    {
+        switch (newState)
+        {
+            case PlayerState.Playing:
                 Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+                break;
+            case PlayerState.Pause:
+                Cursor.lockState = CursorLockMode.None;
                 Cursor.visible = true;
                 break;
-            case GameManager.GameState.Paused: break;
         }
     }
 
@@ -54,33 +89,33 @@ public class PlayerTestController : MonoBehaviour
 
         if (mouseDelta == Vector2.zero) return;
 
-        // CAM POINT Rotation in X Axis
-        var rotation = camPoint.rotation;
-        rotation *= Quaternion.Euler(-mouseDelta.y * angularSpeed / 2 * Time.deltaTime, 0, 0);
+        // Vertical Rotation
+        var angle = -mouseDelta.y * angularSpeed * Time.deltaTime;
 
         // Convertir el ángulo a un rango de -180 a 180
-        var angle = rotation.eulerAngles.x > 180 ? rotation.eulerAngles.x - 360 : rotation.eulerAngles.x;
-
-        // Límites de la rotación
-        var minAngle = -45f; // Ángulo mínimo
-        var maxAngle = 45f; // Ángulo máximo
+        if (angle > 180) angle -= 360;
 
         // Clamp to 89º
-        rotation = Quaternion.Euler(
-            Mathf.Clamp(angle, minAngle, maxAngle),
-            rotation.eulerAngles.y,
-            rotation.eulerAngles.z
-        );
-        camPoint.rotation = rotation;
+        camPoint.localPosition = Quaternion.Euler(angle, 0, 0) * camPoint.localPosition;
 
+        // Limitar a un angulo maximo y minimo
+        var minAngle = -45f; // Ángulo mínimo
+        var maxAngle = 45f; // Ángulo máximo
+        var forward = Vector3.forward * camPoint.localPosition.magnitude;
+        var angleDif = Vector3.SignedAngle(forward, camPoint.localPosition, Vector3.right);
+        if (angleDif > maxAngle) camPoint.localPosition = Quaternion.Euler(maxAngle, 0, 0) * forward;
+        if (angleDif < minAngle) camPoint.localPosition = Quaternion.Euler(minAngle, 0, 0) * forward;
+
+        // Horizontal Rotation
         // PLAYER
         transform.rotation *= Quaternion.Euler(0, mouseDelta.x * angularSpeed * Time.deltaTime, 0);
     }
 
     private void HandleMovementInput()
     {
-        transform.position += Forward * (_moveInput.y * Time.deltaTime * speed) +
-                              Right * (_moveInput.x * Time.deltaTime * speed);
+        transform.position +=
+            Forward * (_moveInput.y * Time.deltaTime * speed)
+            + Right * (_moveInput.x * Time.deltaTime * speed);
     }
 
     private void StickToTerrainHeight()

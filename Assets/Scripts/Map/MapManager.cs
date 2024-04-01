@@ -12,6 +12,7 @@ namespace Map
         Hidden
     }
 
+    [ExecuteAlways]
     public class MapManager : Singleton<MapManager>
     {
         public Gradient heightGradient = new();
@@ -19,25 +20,20 @@ namespace Map
         // PATH FINDING
         public PathFindingGenerator mainPathFindingGenerator;
 
-        [SerializeField]
-        private MapState mapState;
+        [SerializeField] private MapState mapState;
 
-        [SerializeField]
-        private GameObject player;
+        [SerializeField] private GameObject player;
 
-        [SerializeField]
-        private GameObject water;
+        [SerializeField] private GameObject water;
 
-        [SerializeField]
-        private float zoomMap = 1;
+        [SerializeField] private float zoomMap = 1;
 
-        [SerializeField]
-        private float zoomMinimap = 1;
-
-        public HeightMap heightMap;
+        [SerializeField] private float zoomMinimap = 1;
 
         // MAP
         public TerrainSettingsSo terrainSettings;
+
+        public HeightMap heightMap;
 
         public MapState MapState
         {
@@ -106,6 +102,8 @@ namespace Map
 
             player = GameObject.FindGameObjectWithTag("Player");
             water = GameObject.FindGameObjectWithTag("Water");
+
+            UpdateMap();
         }
 
         private void Start()
@@ -113,8 +111,6 @@ namespace Map
             var mainPathFindingObj = GameObject.FindWithTag("Map Path Main");
             if (mainPathFindingObj != null)
                 mainPathFindingGenerator = mainPathFindingObj.GetComponent<PathFindingGenerator>();
-
-            UpdateMap();
         }
 
         public event Action<MapState> OnStateChanged;
@@ -129,14 +125,25 @@ namespace Map
                     )
                     : new HeightMap(Terrain);
 
-        public void ZoomIn(float zoomAmount = 0.1f) => Zoom += zoomAmount;
+        public void ZoomIn(float zoomAmount = 0.1f) => OnZoomChanged?.Invoke(zoomAmount);
 
-        public bool IsLegalPos(Vector2 normPos)
+        public bool IsLegalPos(Vector2 normPos) => IsLegalPos(Terrain.GetWorldPosition(normPos));
+
+        public bool IsLegalPos(Vector3 pos)
         {
-            var worldPos = Terrain.GetWorldPosition(normPos);
-            return !(worldPos.y < WaterHeight) && IsLegalPos(worldPos);
-        }
+            var aboveWater = pos.y >= WaterHeight;
 
-        public bool IsLegalPos(Vector3 normPos) => mainPathFindingGenerator.IsLegalPos(normPos);
+            // TODO : Test this en todas las coords
+            var inBounds = Terrain.terrainData.bounds.Contains(pos);
+
+            // If Pathfinding used, check legality in PathFinding rules
+            if (mainPathFindingGenerator != null)
+            {
+                var pathFindingLegalPos = mainPathFindingGenerator.IsLegalPos(pos);
+                return aboveWater && inBounds && pathFindingLegalPos;
+            }
+
+            return aboveWater && inBounds;
+        }
     }
 }

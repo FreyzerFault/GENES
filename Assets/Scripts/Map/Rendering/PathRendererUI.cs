@@ -43,6 +43,8 @@ namespace Map.Rendering
 
         private void Start()
         {
+            if (PathFindingGenerator == null) return;
+
             PathFindingGenerator.OnPathAdded += AddPath;
             PathFindingGenerator.OnPathDeleted += RemovePath;
             PathFindingGenerator.OnPathUpdated += UpdateLine;
@@ -54,6 +56,7 @@ namespace Map.Rendering
 
         private void OnDestroy()
         {
+            if (PathFindingGenerator == null) return;
             PathFindingGenerator.OnPathAdded -= AddPath;
             PathFindingGenerator.OnPathDeleted -= RemovePath;
             PathFindingGenerator.OnPathUpdated -= UpdateLine;
