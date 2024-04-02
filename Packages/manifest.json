@@ -1,6 +1,5 @@
 {
   "dependencies": {
-    "com.david.utils": "file:C:/Users/dalcanta/Unity Projects/Local Packages/DavidUtils",
     "com.domybest.mybox": "https://github.com/Deadcows/MyBox.git",
     "com.unity.2d.sprite": "1.0.0",
     "com.unity.cinemachine": "2.9.7",
@@ -15,7 +14,6 @@
     "com.unity.timeline": "1.7.6",
     "com.unity.ugui": "1.0.0",
     "com.unity.visualscripting": "1.9.2",
-    "procrain": "file:C:/Users/dalcanta/Unity Projects/Local Packages/Procrain",
     "com.unity.modules.ai": "1.0.0",
     "com.unity.modules.androidjni": "1.0.0",
     "com.unity.modules.animation": "1.0.0",

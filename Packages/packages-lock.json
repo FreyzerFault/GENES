@@ -1,9 +1,17 @@
 {
   "dependencies": {
-    "com.david.utils": {
-      "version": "file:C:/Users/dalcanta/Unity Projects/Local Packages/DavidUtils",
+    "com.david.procrain": {
+      "version": "file:Procrain",
       "depth": 0,
-      "source": "local",
+      "source": "embedded",
+      "dependencies": {
+        "com.david.utils": "0.1.0"
+      }
+    },
+    "com.david.utils": {
+      "version": "file:David-Unity-Utils",
+      "depth": 0,
+      "source": "embedded",
       "dependencies": {}
     },
     "com.domybest.mybox": {
@@ -246,14 +254,6 @@
         "com.unity.modules.jsonserialize": "1.0.0"
       },
       "url": "https://packages.unity.com"
-    },
-    "procrain": {
-      "version": "file:C:/Users/dalcanta/Unity Projects/Local Packages/Procrain",
-      "depth": 0,
-      "source": "local",
-      "dependencies": {
-        "com.david.utils": "0.1.0"
-      }
     },
     "com.unity.modules.ai": {
       "version": "1.0.0",
