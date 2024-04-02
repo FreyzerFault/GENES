@@ -12,18 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bcfeeaff4ed61944f9e0f24417334a96, type: 3}
   m_Name: Simple Olivar
   m_EditorClassIdentifier: 
-  autoUpdate: 1
   dirty: 0
-  noiseParams:
-    size: 256
-    scale: 100
-    numOctaves: 5
-    persistance: 0.5
-    lacunarity: 2
-    offset:
-      x: 0
-      y: 0
-    seed: 1
   heightCurve:
     serializedVersion: 2
     m_Curve:
@@ -86,3 +75,13 @@ MonoBehaviour:
     m_RotationOrder: 4
   heightMultiplier: 100
   lod: 0
+  noiseParams:
+    size: 256
+    scale: 100
+    numOctaves: 5
+    persistance: 0.5
+    lacunarity: 2
+    offset:
+      x: 0
+      y: 0
+    seed: 725960977

@@ -16,7 +16,7 @@ namespace Map
         None
     }
 
-    public class MarkerManager : Singleton<MarkerManager>
+    public class MarkerManager : DavidUtils.Singleton<MarkerManager>
     {
         public Color checkedColor = Color.green;
 

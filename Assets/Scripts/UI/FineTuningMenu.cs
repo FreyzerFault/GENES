@@ -1,6 +1,6 @@
 using System.Collections.Generic;
-using PathFinding;
-using PathFinding.A_Star;
+using Map.PathFinding;
+using Map.PathFinding.A_Star;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;

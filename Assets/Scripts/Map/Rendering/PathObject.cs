@@ -1,8 +1,8 @@
 using System;
 using System.Globalization;
 using System.Linq;
-using ExtensionMethods;
-using PathFinding;
+using DavidUtils.ExtensionMethods;
+using Map.PathFinding;
 using UnityEngine;
 #if UNITY_EDITOR
 using UnityEditor;

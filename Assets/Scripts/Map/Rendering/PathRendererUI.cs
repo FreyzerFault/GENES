@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using ExtensionMethods;
-using PathFinding;
+using DavidUtils.ExtensionMethods;
+using Map.PathFinding;
 using UnityEngine;
 using UnityEngine.UI.Extensions;
 

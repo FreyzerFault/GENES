@@ -1,6 +1,6 @@
 using System.Collections.Generic;
-using ExtensionMethods;
-using PathFinding;
+using DavidUtils.ExtensionMethods;
+using Map.PathFinding;
 using UnityEngine;
 #if UNITY_EDITOR
 #endif

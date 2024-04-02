@@ -1,4 +1,4 @@
-using PathFinding;
+using Map.PathFinding;
 using UnityEngine;
 
 namespace Map.Rendering

@@ -1,0 +1,10 @@
+# Default ignored files
+/shelf/
+/workspace.xml
+# Rider ignored files
+/projectSettingsUpdater.xml
+/contentModel.xml
+/.idea.GENES.iml
+/modules.xml
+# GitHub Copilot persisted chat sessions
+/copilot/chatSessions

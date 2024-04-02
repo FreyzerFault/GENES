@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
-using ExtensionMethods;
-using MapGeneration.TextureGeneration;
+using DavidUtils.ExtensionMethods;
 using MyBox;
+using Procrain.MapGeneration.Texture;
 using UnityEngine;
 using UnityEngine.UI;
 using Gradient = UnityEngine.Gradient;

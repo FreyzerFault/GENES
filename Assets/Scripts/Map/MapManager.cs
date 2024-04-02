@@ -1,6 +1,7 @@
 using System;
-using ExtensionMethods;
-using MapGeneration;
+using DavidUtils;
+using DavidUtils.ExtensionMethods;
+using Procrain.MapGeneration;
 using UnityEngine;
 
 namespace Map
@@ -75,7 +76,7 @@ namespace Map
         }
 
         // TERRAIN
-        public static Terrain Terrain => Terrain.activeTerrain;
+        public static UnityEngine.Terrain Terrain => Terrain.activeTerrain;
 
         public float TerrainWidth => Terrain.terrainData.size.x;
         public float TerrainHeight => Terrain.terrainData.size.z;

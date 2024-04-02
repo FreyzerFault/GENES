@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using ExtensionMethods;
-using PathFinding;
+using Map.PathFinding;
 using UnityEngine;
+using DavidUtils.ExtensionMethods;
 #if UNITY_EDITOR
 using MyBox;
 #endif
@@ -75,8 +75,7 @@ namespace Map
             return pathsBuilt;
         }
 
-        public bool IsLegalPos(Vector2 normPos) =>
-            IsLegalPos(MapManager.Terrain.GetWorldPosition(normPos));
+        public bool IsLegalPos(Vector2 normPos) => IsLegalPos(MapManager.Terrain.GetWorldPosition(normPos));
 
         public bool IsLegalPos(Vector3 pos) =>
             PathFinding.IsLegal(new Node(pos, size: pathFindingConfig.cellSize), pathFindingConfig);

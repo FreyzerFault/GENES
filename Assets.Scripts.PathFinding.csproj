@@ -12,7 +12,7 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{d98b3dbe-6626-470f-39bc-529ef39ee94d}</ProjectGuid>
+    <ProjectGuid>{2f9f29a2-5ccc-d6f3-2134-89da5f392080}</ProjectGuid>
     <ProjectTypeGuids>{E097FAD1-6243-4DAD-9C02-E9B9EFC3FFC1};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -45,15 +45,15 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\2022.3.16f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.Properties.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Scripts\PathFinding\A Star\AstarConfig.cs" />
-    <Compile Include="Assets\Scripts\PathFinding\A Star\AstarDirectional.cs" />
-    <Compile Include="Assets\Scripts\PathFinding\Node.cs" />
-    <Compile Include="Assets\Scripts\PathFinding\PathFindingAlgorithm.cs" />
-    <Compile Include="Assets\Scripts\PathFinding\PathFindingConfigSO.cs" />
-    <Compile Include="Assets\Scripts\PathFinding\Path.cs" />
-    <Compile Include="Assets\Scripts\PathFinding\A Star\Astar.cs" />
-    <Compile Include="Assets\Scripts\PathFinding\Dijkstra\DijkstraAlgorithm.cs" />
-    <None Include="Assets\Scripts\PathFinding\Assets.Scripts.PathFinding.asmdef" />
+    <Compile Include="Assets\Scripts\Map\PathFinding\A Star\AstarConfig.cs" />
+    <Compile Include="Assets\Scripts\Map\PathFinding\PathFindingAlgorithm.cs" />
+    <Compile Include="Assets\Scripts\Map\PathFinding\A Star\Astar.cs" />
+    <Compile Include="Assets\Scripts\Map\PathFinding\PathFindingConfigSO.cs" />
+    <Compile Include="Assets\Scripts\Map\PathFinding\A Star\AstarDirectional.cs" />
+    <Compile Include="Assets\Scripts\Map\PathFinding\Path.cs" />
+    <Compile Include="Assets\Scripts\Map\PathFinding\Node.cs" />
+    <Compile Include="Assets\Scripts\Map\PathFinding\Dijkstra\DijkstraAlgorithm.cs" />
+    <None Include="Assets\Scripts\Map\PathFinding\Assets.Scripts.PathFinding.asmdef" />
     <Reference Include="UnityEngine">
       <HintPath>C:\Program Files\Unity\Hub\Editor\2022.3.16f1\Editor\Data\Managed\UnityEngine\UnityEngine.dll</HintPath>
     </Reference>
@@ -310,31 +310,31 @@
       <HintPath>C:\Program Files\Unity\Hub\Editor\2022.3.16f1\Editor\Data\PlaybackEngines\WindowsStandaloneSupport\UnityEditor.WindowsStandalone.Extensions.dll</HintPath>
     </Reference>
     <Reference Include="Unity.VisualScripting.YamlDotNet">
-      <HintPath>D:\Unity Projects\Proyecto Campo\Library\PackageCache\com.unity.visualscripting@1.9.2\Editor\VisualScripting.Core\Dependencies\YamlDotNet\Unity.VisualScripting.YamlDotNet.dll</HintPath>
+      <HintPath>D:\Unity Projects\GENES\Library\PackageCache\com.unity.visualscripting@1.9.2\Editor\VisualScripting.Core\Dependencies\YamlDotNet\Unity.VisualScripting.YamlDotNet.dll</HintPath>
     </Reference>
     <Reference Include="ReportGeneratorMerged">
-      <HintPath>D:\Unity Projects\Proyecto Campo\Library\PackageCache\com.unity.testtools.codecoverage@1.2.4\lib\ReportGenerator\ReportGeneratorMerged.dll</HintPath>
+      <HintPath>D:\Unity Projects\GENES\Library\PackageCache\com.unity.testtools.codecoverage@1.2.4\lib\ReportGenerator\ReportGeneratorMerged.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Plastic.Antlr3.Runtime">
-      <HintPath>D:\Unity Projects\Proyecto Campo\Library\PackageCache\com.unity.collab-proxy@2.2.0\Lib\Editor\PlasticSCM\Unity.Plastic.Antlr3.Runtime.dll</HintPath>
+      <HintPath>D:\Unity Projects\GENES\Library\PackageCache\com.unity.collab-proxy@2.2.0\Lib\Editor\PlasticSCM\Unity.Plastic.Antlr3.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="unityplastic">
-      <HintPath>D:\Unity Projects\Proyecto Campo\Library\PackageCache\com.unity.collab-proxy@2.2.0\Lib\Editor\PlasticSCM\unityplastic.dll</HintPath>
+      <HintPath>D:\Unity Projects\GENES\Library\PackageCache\com.unity.collab-proxy@2.2.0\Lib\Editor\PlasticSCM\unityplastic.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Plastic.Newtonsoft.Json">
-      <HintPath>D:\Unity Projects\Proyecto Campo\Library\PackageCache\com.unity.collab-proxy@2.2.0\Lib\Editor\PlasticSCM\Unity.Plastic.Newtonsoft.Json.dll</HintPath>
+      <HintPath>D:\Unity Projects\GENES\Library\PackageCache\com.unity.collab-proxy@2.2.0\Lib\Editor\PlasticSCM\Unity.Plastic.Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="log4netPlastic">
-      <HintPath>D:\Unity Projects\Proyecto Campo\Library\PackageCache\com.unity.collab-proxy@2.2.0\Lib\Editor\PlasticSCM\log4netPlastic.dll</HintPath>
+      <HintPath>D:\Unity Projects\GENES\Library\PackageCache\com.unity.collab-proxy@2.2.0\Lib\Editor\PlasticSCM\log4netPlastic.dll</HintPath>
     </Reference>
     <Reference Include="Unity.VisualScripting.IonicZip">
-      <HintPath>D:\Unity Projects\Proyecto Campo\Library\PackageCache\com.unity.visualscripting@1.9.2\Editor\VisualScripting.Core\Dependencies\DotNetZip\Unity.VisualScripting.IonicZip.dll</HintPath>
+      <HintPath>D:\Unity Projects\GENES\Library\PackageCache\com.unity.visualscripting@1.9.2\Editor\VisualScripting.Core\Dependencies\DotNetZip\Unity.VisualScripting.IonicZip.dll</HintPath>
     </Reference>
     <Reference Include="Unity.VisualScripting.Antlr3.Runtime">
-      <HintPath>D:\Unity Projects\Proyecto Campo\Library\PackageCache\com.unity.visualscripting@1.9.2\Runtime\VisualScripting.Flow\Dependencies\NCalc\Unity.VisualScripting.Antlr3.Runtime.dll</HintPath>
+      <HintPath>D:\Unity Projects\GENES\Library\PackageCache\com.unity.visualscripting@1.9.2\Runtime\VisualScripting.Flow\Dependencies\NCalc\Unity.VisualScripting.Antlr3.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="Unity.VisualScripting.TextureAssets">
-      <HintPath>D:\Unity Projects\Proyecto Campo\Library\PackageCache\com.unity.visualscripting@1.9.2\Editor\VisualScripting.Core\EditorAssetResources\Unity.VisualScripting.TextureAssets.dll</HintPath>
+      <HintPath>D:\Unity Projects\GENES\Library\PackageCache\com.unity.visualscripting@1.9.2\Editor\VisualScripting.Core\EditorAssetResources\Unity.VisualScripting.TextureAssets.dll</HintPath>
     </Reference>
     <Reference Include="netstandard">
       <HintPath>C:\Program Files\Unity\Hub\Editor\2022.3.16f1\Editor\Data\NetStandard\ref\2.1.0\netstandard.dll</HintPath>
@@ -703,22 +703,22 @@
       <HintPath>C:\Program Files\Unity\Hub\Editor\2022.3.16f1\Editor\Data\NetStandard\compat\2.1.0\shims\netfx\System.Xml.Serialization.dll</HintPath>
     </Reference>
     <Reference Include="MyBox">
-      <HintPath>D:\Unity Projects\Proyecto Campo\Library\ScriptAssemblies\MyBox.dll</HintPath>
+      <HintPath>D:\Unity Projects\GENES\Library\ScriptAssemblies\MyBox.dll</HintPath>
     </Reference>
     <Reference Include="UnityEditor.UI">
-      <HintPath>D:\Unity Projects\Proyecto Campo\Library\ScriptAssemblies\UnityEditor.UI.dll</HintPath>
+      <HintPath>D:\Unity Projects\GENES\Library\ScriptAssemblies\UnityEditor.UI.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UI">
-      <HintPath>D:\Unity Projects\Proyecto Campo\Library\ScriptAssemblies\UnityEngine.UI.dll</HintPath>
+      <HintPath>D:\Unity Projects\GENES\Library\ScriptAssemblies\UnityEngine.UI.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="DavidUtils.ExtensionMethods.csproj">
-      <Project>{a059d51e-f1cf-e313-c533-8ebffa5a8e8a}</Project>
+      <Project>{5f7aa8d4-210d-fddf-27f1-75bbcbd202c3}</Project>
       <Name>DavidUtils.ExtensionMethods</Name>
     </ProjectReference>
     <ProjectReference Include="DavidUtils.csproj">
-      <Project>{b195b350-5f82-196a-330d-3c4e004004bf}</Project>
+      <Project>{6ef4c5d9-9eba-7675-cd16-eed5900260f3}</Project>
       <Name>DavidUtils</Name>
     </ProjectReference>
   </ItemGroup>
