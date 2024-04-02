@@ -1,4 +1,4 @@
-# Proyecto de Conducción Autónoma para CETEDEX
+# Proyecto GENES para CETEDEX
 
 ## Generación de rutas transitables por robots a partir de modelos 3D en escenarios no estructurados
 
