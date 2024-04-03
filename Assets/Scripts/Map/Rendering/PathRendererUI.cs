@@ -50,19 +50,19 @@ namespace Map.Rendering
             PathFindingGenerator.OnPathUpdated += UpdateLine;
             PathFindingGenerator.OnAllPathsUpdated += UpdateAllLines;
             PathFindingGenerator.OnPathsCleared += ClearPaths;
-            MapManager.Instance.OnZoomChanged += HandleOnZoomChange;
+            MapManager.Instance.OnZoomMapChanged += HandleOnZoomMapChange;
             UpdateAllLines(PathFindingGenerator.paths.ToArray());
         }
 
         private void OnDestroy()
         {
-            if (PathFindingGenerator == null) return;
+            if (MapManager.Instance == null || PathFindingGenerator == null) return;
             PathFindingGenerator.OnPathAdded -= AddPath;
             PathFindingGenerator.OnPathDeleted -= RemovePath;
             PathFindingGenerator.OnPathUpdated -= UpdateLine;
             PathFindingGenerator.OnAllPathsUpdated -= UpdateAllLines;
             PathFindingGenerator.OnPathsCleared -= ClearPaths;
-            MapManager.Instance.OnZoomChanged -= HandleOnZoomChange;
+            MapManager.Instance.OnZoomMapChanged -= HandleOnZoomMapChange;
             ClearPaths();
         }
 
@@ -119,7 +119,7 @@ namespace Map.Rendering
             lineRenderers.Clear();
         }
 
-        private void HandleOnZoomChange(float zoomAmount)
+        private void HandleOnZoomMapChange(float zoomAmount)
         {
             foreach (var uiLineRenderer in lineRenderers) uiLineRenderer.LineThickness = lineThickness / zoomAmount;
         }

@@ -1,4 +1,5 @@
 using Core;
+using Map.Rendering;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -6,9 +7,13 @@ namespace Map
 {
     public class MapInputController : MonoBehaviour
     {
-        [SerializeField] private GameObject minimapParent;
+        [SerializeField] private MapRendererUI minimap;
 
-        [SerializeField] private GameObject fullScreenMapParent;
+        [SerializeField] private MapRendererUI fullScreenMap;
+
+        [SerializeField] private GameObject MinimapParent => minimap.transform.parent.gameObject;
+
+        [SerializeField] private GameObject FullScreenMapParent => fullScreenMap.transform.parent.gameObject;
 
         private MapState MapState => MapManager.Instance.MapState;
         private int MarkersSelectedCount => MarkerManager.Instance.SelectedCount;
@@ -35,17 +40,17 @@ namespace Map
 
         private void HandleStateChanged(MapState state)
         {
-            if (fullScreenMapParent == null || minimapParent == null) return;
-            fullScreenMapParent.SetActive(false);
-            minimapParent.SetActive(false);
+            if (FullScreenMapParent == null || MinimapParent == null) return;
+            FullScreenMapParent.SetActive(false);
+            MinimapParent.SetActive(false);
 
             switch (state)
             {
                 case MapState.Fullscreen:
-                    fullScreenMapParent.SetActive(true);
+                    FullScreenMapParent.SetActive(true);
                     break;
                 case MapState.Minimap:
-                    minimapParent.SetActive(true);
+                    MinimapParent.SetActive(true);
                     break;
                 case MapState.Hidden:
                 default:
@@ -69,8 +74,21 @@ namespace Map
                     : GameManager.GameState.Playing;
         }
 
-        private void OnZoomInOut(InputValue value) =>
-            MapManager.Instance.ZoomIn(Mathf.Clamp(value.Get<float>(), -1, 1) / 10f);
+        private void OnZoomInOut(InputValue value)
+        {
+            var zoomScale = Mathf.Clamp(value.Get<float>(), -1, 1);
+            if (zoomScale == 0) return;
+
+            switch (MapManager.Instance.MapState)
+            {
+                case MapState.Minimap:
+                    minimap.ZoomIn(zoomScale);
+                    break;
+                case MapState.Fullscreen:
+                    fullScreenMap.ZoomIn(zoomScale);
+                    break;
+            }
+        }
 
         private void OnDeselectAll()
         {

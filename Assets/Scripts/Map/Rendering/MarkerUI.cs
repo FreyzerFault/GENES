@@ -42,7 +42,7 @@ namespace Map.Rendering
             marker.OnSelected += HandleOnSelected;
             marker.OnStateChange += HandleOnStateChange;
             MarkerManager.Instance.OnMarkerModeChanged += HandleOnEditMarkerModeChange;
-            MapManager.Instance.OnZoomChanged += HandleOnZoomChange;
+            MapManager.Instance.OnZoomMapChanged += HandleOnZoomMapChange;
         }
 
         private void OnDestroy()
@@ -52,7 +52,7 @@ namespace Map.Rendering
             marker.OnSelected -= HandleOnSelected;
             marker.OnStateChange -= HandleOnStateChange;
             MarkerManager.Instance.OnMarkerModeChanged -= HandleOnEditMarkerModeChange;
-            MapManager.Instance.OnZoomChanged -= HandleOnZoomChange;
+            MapManager.Instance.OnZoomMapChanged -= HandleOnZoomMapChange;
         }
 
         public void OnPointerEnter(PointerEventData eventData)
@@ -75,7 +75,7 @@ namespace Map.Rendering
 
         private void HandleOnEditMarkerModeChange(EditMarkerMode mode) => UpdateAspect();
 
-        private void HandleOnZoomChange(float modezoom) => UpdateScaleByZoom();
+        private void HandleOnZoomMapChange(float modezoom) => UpdateScaleByZoom();
 
         private void HandleOnLabelChange(string label) => _text.text = label;
 

@@ -13,7 +13,6 @@ namespace Map
         Hidden
     }
 
-    [ExecuteAlways]
     public class MapManager : Singleton<MapManager>
     {
         public Gradient heightGradient = new();
@@ -62,11 +61,11 @@ namespace Map
                 {
                     case MapState.Fullscreen:
                         zoomMap = value;
-                        OnZoomChanged?.Invoke(value);
+                        OnZoomMapChanged?.Invoke(value);
                         break;
                     case MapState.Minimap:
                         zoomMinimap = value;
-                        OnZoomChanged?.Invoke(value);
+                        OnZoomMapChanged?.Invoke(value);
                         break;
                     case MapState.Hidden:
                     default:
@@ -76,7 +75,7 @@ namespace Map
         }
 
         // TERRAIN
-        public static UnityEngine.Terrain Terrain => Terrain.activeTerrain;
+        public static Terrain Terrain => Terrain.activeTerrain;
 
         public float TerrainWidth => Terrain.terrainData.size.x;
         public float TerrainHeight => Terrain.terrainData.size.z;
@@ -100,7 +99,6 @@ namespace Map
         protected override void Awake()
         {
             base.Awake();
-
             player = GameObject.FindGameObjectWithTag("Player");
             water = GameObject.FindGameObjectWithTag("Water");
 
@@ -115,7 +113,7 @@ namespace Map
         }
 
         public event Action<MapState> OnStateChanged;
-        public event Action<float> OnZoomChanged;
+        public event Action<float> OnZoomMapChanged;
 
         public void UpdateMap() =>
             heightMap =
@@ -125,8 +123,6 @@ namespace Map
                         terrainSettings.HeightCurve
                     )
                     : new HeightMap(Terrain);
-
-        public void ZoomIn(float zoomAmount = 0.1f) => OnZoomChanged?.Invoke(zoomAmount);
 
         public bool IsLegalPos(Vector2 normPos) => IsLegalPos(Terrain.GetWorldPosition(normPos));
 

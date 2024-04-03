@@ -18,19 +18,20 @@ namespace Map.Rendering
 
         // MARKERS
         [SerializeField] private Transform markersUIParent;
-
         [SerializeField] private MarkerUI markerUIPrefab;
 
         // Image
         [SerializeField] private Image image;
-
         [SerializeField] protected RectTransform frameRectTransform;
-
         [SerializeField] protected RectTransform imageRectTransform;
-
         [SerializeField] private float zoom = 1;
+        [SerializeField] private float zoomChangeRate = 2;
+        [Range(1.001f, 4f)] [SerializeField] private float zoomInScale = 1.5f;
+        [Range(0.1f, 0.99f)] [SerializeField] private float zoomOutScale = 0.75f;
 
         private readonly List<MarkerUI> _markersUIObjects = new();
+        private float zoomTarget = 1;
+
 
         public float Zoom
         {
@@ -76,7 +77,6 @@ namespace Map.Rendering
             MarkerManager.OnMarkerAdded += HandleAdded;
             MarkerManager.OnMarkerRemoved += HandleRemoved;
             MarkerManager.OnMarkersClear += HandleClear;
-            MapManager.Instance.OnZoomChanged += HandleZoomIn;
 
             // RENDER
             RenderTerrain();
@@ -93,32 +93,37 @@ namespace Map.Rendering
 
         private void OnDestroy()
         {
+            if (MarkerManager == null) return;
+
             // SUBSCRIBERS:
             MarkerManager.OnMarkerAdded -= HandleAdded;
             MarkerManager.OnMarkerRemoved -= HandleRemoved;
             MarkerManager.OnMarkersClear -= HandleClear;
-            MapManager.Instance.OnZoomChanged -= HandleZoomIn;
         }
 
         // ============================= DEBUG =============================
 
-        private void OnDrawGizmos()
-        {
-            var imagePos = imageRectTransform.PivotGlobal();
-            var imageMinCorner = imageRectTransform.MinCorner();
-            var sizeScaled = imageRectTransform.SizeScaled();
-
-            // MIN y MAX
-            Gizmos.color = Color.green;
-            Gizmos.DrawSphere(imageMinCorner, 20);
-            // Gizmos.DrawSphere(imageMinCorner + sizeScaled, 20);
-            Gizmos.DrawSphere(imageRectTransform.PivotGlobal(), 20);
-            Gizmos.color = Color.red;
-            Gizmos.DrawLine(
-                imageRectTransform.PivotGlobal(),
-                imageRectTransform.PivotGlobal() + imageRectTransform.rect.position
-            );
-        }
+        // private void OnDrawGizmos()
+        // {
+        //     // IMAGE
+        //     var imagePos = imageRectTransform.PivotGlobal();
+        //     var imageBotLeft = imageRectTransform.Corners().BottomLeft;
+        //     var imageTopRight = imageRectTransform.Corners().TopRight;
+        //
+        //     var corners = new Vector3[4];
+        //     imageRectTransform.GetWorldCorners(corners);
+        //
+        //     // MIN y MAX
+        //     Gizmos.color = Color.blue;
+        //     Gizmos.DrawSphere(imagePos, 10);
+        //
+        //     Gizmos.color = Color.green;
+        //     Gizmos.DrawSphere(imageBotLeft, 10);
+        //     Gizmos.DrawSphere(imageTopRight, 10);
+        //
+        //     Gizmos.color = Color.gray;
+        //     Gizmos.DrawLine(imageBotLeft, imageTopRight);
+        // }
 
         // ================================== EVENT SUSCRIBERS ==================================
         private void HandleAdded(Marker marker, int index) => InstantiateMarker(marker, index);
@@ -152,15 +157,27 @@ namespace Map.Rendering
             UpdateZoom();
         }
 
-        private void HandleZoomIn(float zoomAmount) => Zoom = Mathf.Max(0, zoom + zoomAmount);
+        public void ZoomIn(float zoomScale)
+        {
+            // [-1,1] => [0, 1] => [0.75, 1.5]
+            zoomScale = zoomScale / 2 + 0.5f;
+            zoomScale = Mathf.Lerp(zoomOutScale, zoomInScale, zoomScale);
+
+            zoomTarget = Mathf.Max(1, zoom * zoomScale);
+        }
 
         private void UpdateZoom()
         {
+            float velRef = 0;
+            zoom = Mathf.SmoothDamp(zoom, zoomTarget, ref velRef, Time.deltaTime / zoomChangeRate);
+
             // Asignar el pivot a la posicion del jugador normalizada para que cada movimiento sea relativo a él
             image.rectTransform.pivot = MapManager.Instance.PlayerNormalizedPosition;
 
             // Posicionar el mapa en el centro del frame
-            var frameCenter = frameRectTransform.TransformPoint(frameRectTransform.rect.size / 2);
+            var frameCenter =
+                frameRectTransform.Corners().BottomLeft + frameRectTransform.Diagonal() / 2;
+            // var frameCenter = frameRectTransform.TransformPoint(frameRectTransform.rect.size / 2);
             imageRectTransform.position = frameCenter;
 
             // Escalar el mapa relativo al centro donde está el Player
