@@ -46,10 +46,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Packages\David-Unity-Utils\Runtime\Singleton.cs" />
+    <Compile Include="Packages\David-Unity-Utils\Runtime\UI\Text\TutorialMsg.cs" />
+    <Compile Include="Packages\David-Unity-Utils\Runtime\UI\Text\NumberCounter.cs" />
+    <Compile Include="Packages\David-Unity-Utils\Runtime\UI\Text\DialogueBoxTutorial.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\Audio\Sound.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\ExtensionMethods\VectorExtensions.cs" />
+    <Compile Include="Packages\David-Unity-Utils\Runtime\UI\Debug\FPSCounter.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\Settings\Settings.cs" />
-    <Compile Include="Packages\David-Unity-Utils\Runtime\UI\DynamicIcon.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\AnimationCurveUtils.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\Audio\AudioManager.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\TextureUtils.cs" />
@@ -62,24 +65,27 @@
     <Compile Include="Packages\David-Unity-Utils\Runtime\ScriptableObjectsUtils\AutoUpdatableSo.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\BillboardObject.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\DictionarySerializable.cs" />
+    <Compile Include="Packages\David-Unity-Utils\Runtime\UI\Icons\DynamicIcon.cs" />
+    <Compile Include="Packages\David-Unity-Utils\Runtime\UI\Text\TemporalMessage.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\Spawning\Spawneable.cs" />
-    <Compile Include="Packages\David-Unity-Utils\Runtime\UI\TemporalMessage.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\ExtensionMethods\TerrainExtensionMethods.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\ExtensionMethods\MeshExtensions.cs" />
+    <Compile Include="Packages\David-Unity-Utils\Runtime\UI\Text\DialogueBox.cs" />
+    <Compile Include="Packages\David-Unity-Utils\Runtime\UI\Sliders\DynamicBar.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\ExtensionMethods\TransformExtensionMethods.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\Spawning\SpawnerBox.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\ScriptableObjectsUtils\AutoUpdatableSoWithBackup.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\ExtensionMethods\ColorExtensions.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\ThreadingUtils\GradientThreadSafe.cs" />
+    <Compile Include="Packages\David-Unity-Utils\Runtime\UI\Icons\ArrowPointer.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\ExtensionMethods\BoundsExtensions.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\Spawning\SpawnerBoxInTerrain.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\Scenes\SceneController.cs" />
+    <Compile Include="Packages\David-Unity-Utils\Runtime\UI\Text\TextBlock.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\ValidationUtility.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\ExtensionMethods\ArrayExtensions.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\CameraUtils\CameraIdleRotation.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\GradientUtils.cs" />
-    <Compile Include="Packages\David-Unity-Utils\Runtime\UI\FPSCounter.cs" />
-    <Compile Include="Packages\David-Unity-Utils\Runtime\UI\DynamicBar.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\ExtensionMethods\RectTransformExtensionMethods.cs" />
     <None Include="Packages\David-Unity-Utils\Runtime\DavidUtils.asmdef" />
     <Reference Include="UnityEngine">
@@ -738,6 +744,9 @@
     </Reference>
     <Reference Include="MyBox">
       <HintPath>C:\Users\dalcanta\Unity Projects\Proyecto Campo\Library\ScriptAssemblies\MyBox.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.TextMeshPro">
+      <HintPath>C:\Users\dalcanta\Unity Projects\Proyecto Campo\Library\ScriptAssemblies\Unity.TextMeshPro.dll</HintPath>
     </Reference>
     <Reference Include="UnityEditor.UI">
       <HintPath>C:\Users\dalcanta\Unity Projects\Proyecto Campo\Library\ScriptAssemblies\UnityEditor.UI.dll</HintPath>

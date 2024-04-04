@@ -60,9 +60,11 @@
     <None Include="Assets\External Packages\TextMesh Pro\Resources\LineBreaking Leading Characters.txt" />
     <None Include="Packages\Procrain\Shaders\Water\Libraries\Caustics\Caustics.shader" />
     <None Include="Assets\External Packages\TextMesh Pro\Shaders\TMPro_Properties.cginc" />
+    <None Include="Packages\David-Unity-Utils\Textures\Input Icons\Icons\license.txt" />
     <None Include="Assets\External Packages\TextMesh Pro\Shaders\TMPro_Surface.cginc" />
     <None Include="Packages\Procrain\Shaders\Water\Libraries\WaterColor.hlsl" />
     <None Include="Packages\Procrain\Shaders\Water\Libraries\StylizedWaterForURP.hlsl" />
+    <None Include="Packages\David-Unity-Utils\Fonts\Jupiter\LICENSE.txt" />
     <None Include="Assets\External Packages\TextMesh Pro\Resources\LineBreaking Following Characters.txt" />
     <None Include="Packages\Procrain\Shaders\Water\Libraries\WaterWaves.hlsl" />
     <None Include="Packages\Procrain\package.json" />
