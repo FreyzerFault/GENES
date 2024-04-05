@@ -15,7 +15,7 @@ MonoBehaviour:
   cellSize: 1
   maxIterations: 3000
   maxSlopeAngle: 30
-  minHeight: 23.82
+  minHeight: 24.251
   useCache: 1
   algorithm: 1
   aStarConfig:

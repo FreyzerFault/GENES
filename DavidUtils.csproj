@@ -49,10 +49,8 @@
     <Compile Include="Packages\David-Unity-Utils\Runtime\UI\Text\TutorialMsg.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\UI\Text\NumberCounter.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\UI\Text\DialogueBoxTutorial.cs" />
-    <Compile Include="Packages\David-Unity-Utils\Runtime\Audio\Sound.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\ExtensionMethods\VectorExtensions.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\UI\Debug\FPSCounter.cs" />
-    <Compile Include="Packages\David-Unity-Utils\Runtime\Settings\Settings.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\AnimationCurveUtils.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\Audio\AudioManager.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\TextureUtils.cs" />
@@ -63,6 +61,7 @@
     <Compile Include="Packages\David-Unity-Utils\Runtime\Spawning\Spawner.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\CameraUtils\SwitchCamera.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\ScriptableObjectsUtils\AutoUpdatableSo.cs" />
+    <Compile Include="Packages\David-Unity-Utils\Runtime\Settings\SettingsData.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\BillboardObject.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\DictionarySerializable.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\UI\Icons\DynamicIcon.cs" />
@@ -71,6 +70,7 @@
     <Compile Include="Packages\David-Unity-Utils\Runtime\ExtensionMethods\TerrainExtensionMethods.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\ExtensionMethods\MeshExtensions.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\UI\Text\DialogueBox.cs" />
+    <Compile Include="Packages\David-Unity-Utils\Runtime\Settings\SettingsManager.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\UI\Sliders\DynamicBar.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\ExtensionMethods\TransformExtensionMethods.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\Spawning\SpawnerBox.cs" />
@@ -78,6 +78,7 @@
     <Compile Include="Packages\David-Unity-Utils\Runtime\ExtensionMethods\ColorExtensions.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\ThreadingUtils\GradientThreadSafe.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\UI\Icons\ArrowPointer.cs" />
+    <Compile Include="Packages\David-Unity-Utils\Runtime\Audio\Audio.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\ExtensionMethods\BoundsExtensions.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\Spawning\SpawnerBoxInTerrain.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\Scenes\SceneController.cs" />

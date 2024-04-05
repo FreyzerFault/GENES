@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using DavidUtils.ExtensionMethods;
 using Map.PathFinding;
 using UnityEngine;
 
@@ -13,10 +14,13 @@ namespace Map
         public bool singlePath;
 
         public Path Path => generatePlayerPath || singlePath ? paths[0] : paths[1];
-        public List<Path> Paths => generatePlayerPath || singlePath ? paths : paths.Skip(0).ToList();
+        public List<Path> Paths =>
+            generatePlayerPath || singlePath ? paths : paths.Skip(0).ToList();
 
         // PLAYER
         protected static Vector3 PlayerPosition => MapManager.Instance.PlayerPosition;
+        protected static Vector3 PlayerPositionOnTerrain =>
+            MapManager.Terrain.Project(MapManager.Instance.PlayerPosition);
         protected static Vector3 PlayerDirection => MapManager.Instance.PlayerForward;
 
         protected MarkerManager MarkerManager => MarkerManager.Instance;
@@ -37,7 +41,6 @@ namespace Map
             if (generatePlayerPath) UpdatePlayerPath();
         }
 
-
         // EVENTS
         public event Action<Path, int> OnPathAdded;
         public event Action<int> OnPathDeleted;
@@ -55,9 +58,14 @@ namespace Map
                 return;
             }
 
-            index = index < 0 || index >= MarkerManager.MarkerCount ? MarkerManager.MarkerCount - 1 : index;
+            index =
+                index < 0 || index >= MarkerManager.MarkerCount
+                    ? MarkerManager.MarkerCount - 1
+                    : index;
 
-            Vector3 mid = Vector3.zero, start = Vector3.zero, end = Vector3.zero;
+            Vector3 mid = Vector3.zero,
+                start = Vector3.zero,
+                end = Vector3.zero;
 
             var isBackPath = index == paths.Count;
             var isFrontPath = index == 0;
@@ -95,7 +103,6 @@ namespace Map
                 mid = marker.WorldPosition;
                 end = MarkerManager.Markers[index + 1].WorldPosition;
             }
-
 
             if (start != Vector3.zero && mid != Vector3.zero)
             {
@@ -191,16 +198,20 @@ namespace Map
             OnPathUpdated?.Invoke(paths[index + 1], index + 1);
         }
 
-
         protected void UpdatePath()
         {
             // Player -> Marker 1 -> Marker 2 -> ... -> Marker N
-            var checkpoints = MarkerManager.Markers
-                .Where(marker => !marker.IsChecked)
+            var checkpoints = MarkerManager
+                .Markers.Where(marker => !marker.IsChecked)
                 .Select(marker => marker.WorldPosition)
                 .ToArray();
 
-            if (generatePlayerPath) checkpoints = checkpoints.Prepend(PlayerPosition).ToArray();
+            // Add Player as 1st Checkpoint if in Legal Position
+            if (generatePlayerPath && MapManager.Instance.IsLegalPos(PlayerPositionOnTerrain))
+                checkpoints = checkpoints.Prepend(PlayerPositionOnTerrain).ToArray();
+
+            // Filter Illegal Checkpoints
+            checkpoints = checkpoints.Where(MapManager.Instance.IsLegalPos).ToArray();
 
             paths = BuildPath(
                 checkpoints,
@@ -220,7 +231,12 @@ namespace Map
 
         private void UpdatePlayerPath()
         {
-            if (!generatePlayerPath || MarkerManager.MarkerCount == 0) return;
+            if (
+                !generatePlayerPath
+                || MarkerManager.MarkerCount == 0
+                || !MapManager.Instance.IsLegalPos(PlayerPositionOnTerrain)
+            )
+                return;
 
             if (singlePath)
             {
@@ -255,9 +271,15 @@ namespace Map
         // ========================= PATH BUILDER =========================
 
         protected abstract Path BuildPath(
-            Vector3 start, Vector3 end, Vector2? initialDirection = null, Vector2? endDirection = null
+            Vector3 start,
+            Vector3 end,
+            Vector2? initialDirection = null,
+            Vector2? endDirection = null
         );
 
-        protected abstract List<Path> BuildPath(Vector3[] checkPoints, Vector2[] initialDirections = null);
+        protected abstract List<Path> BuildPath(
+            Vector3[] checkPoints,
+            Vector2[] initialDirections = null
+        );
     }
 }

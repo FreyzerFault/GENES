@@ -261,4 +261,8 @@ MonoBehaviour:
   image: {fileID: 6856140469032391993}
   frameRectTransform: {fileID: 3703168610110074516}
   imageRectTransform: {fileID: 4232888335184811702}
+  zoom: 1
+  zoomChangeRate: 2
+  zoomInScale: 1.5
+  zoomOutScale: 0.75
   markerPlaceholderDraggedPrefab: {fileID: 7675491264772692944, guid: 0757a51cb39e448418d5116a36769558, type: 3}

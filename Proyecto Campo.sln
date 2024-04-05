@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assets.Scripts.Physics", "A
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnityUIExtensions.editor", "UnityUIExtensions.editor.csproj", "{83339d5f-47c5-ef55-039a-13a5618cd120}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp-Editor", "Assembly-CSharp-Editor.csproj", "{e659e24c-5470-a1e7-4dda-4d9e5ae178c6}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assets.Scripts.Map", "Assets.Scripts.Map.csproj", "{8bdb3e98-d617-0799-e30b-ad8b64bb0331}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Procrain.MapDisplay", "Procrain.MapDisplay.csproj", "{7b050475-1642-87f1-9d07-29ecf9463dff}"
@@ -16,6 +18,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Procrain.UI", "Procrain.UI.csproj", "{e996e243-0900-a7a0-ec7f-6d732b64f567}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DavidUtils", "DavidUtils.csproj", "{b195b350-5f82-196a-330d-3c4e004004bf}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp", "Assembly-CSharp.csproj", "{3ca90688-9d82-ac2a-892c-30afa2d8b85e}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Procrain.Editor", "Procrain.Editor.csproj", "{b090b373-1aab-a0a9-1319-3f6529b40998}"
 EndProject
@@ -43,8 +47,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assets.ExternalPackages.Sim
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assets.External_Packages.AutoSave", "Assets.External_Packages.AutoSave.csproj", "{a672ddb6-619f-8d56-be61-2df5c81634c0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp", "Assembly-CSharp.csproj", "{3ca90688-9d82-ac2a-892c-30afa2d8b85e}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -58,6 +60,8 @@ Global
 		{1ed6883c-23d3-0411-77ba-20b801729070}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{83339d5f-47c5-ef55-039a-13a5618cd120}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{83339d5f-47c5-ef55-039a-13a5618cd120}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{e659e24c-5470-a1e7-4dda-4d9e5ae178c6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{e659e24c-5470-a1e7-4dda-4d9e5ae178c6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8bdb3e98-d617-0799-e30b-ad8b64bb0331}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8bdb3e98-d617-0799-e30b-ad8b64bb0331}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7b050475-1642-87f1-9d07-29ecf9463dff}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -66,6 +70,8 @@ Global
 		{e996e243-0900-a7a0-ec7f-6d732b64f567}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{b195b350-5f82-196a-330d-3c4e004004bf}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{b195b350-5f82-196a-330d-3c4e004004bf}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3ca90688-9d82-ac2a-892c-30afa2d8b85e}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3ca90688-9d82-ac2a-892c-30afa2d8b85e}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{b090b373-1aab-a0a9-1319-3f6529b40998}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{b090b373-1aab-a0a9-1319-3f6529b40998}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{acfc75c1-ec13-e18c-2f08-3ce669335049}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -92,8 +98,6 @@ Global
 		{96969dfd-3584-eeda-3b17-9c5bae63aaac}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{a672ddb6-619f-8d56-be61-2df5c81634c0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{a672ddb6-619f-8d56-be61-2df5c81634c0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3ca90688-9d82-ac2a-892c-30afa2d8b85e}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3ca90688-9d82-ac2a-892c-30afa2d8b85e}.Debug|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

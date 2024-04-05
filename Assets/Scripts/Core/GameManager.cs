@@ -42,7 +42,10 @@ namespace Core
         {
             switch (newState)
             {
-                case GameState.Playing: break;
+                case GameState.Playing:
+                    Cursor.lockState = CursorLockMode.Locked;
+                    Cursor.visible = false;
+                    break;
                 case GameState.Paused:
                     Cursor.lockState = CursorLockMode.None;
                     Cursor.visible = true;

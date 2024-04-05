@@ -40,7 +40,7 @@ namespace Map
 
         private void HandleStateChanged(MapState state)
         {
-            if (FullScreenMapParent == null || MinimapParent == null) return;
+            if (fullScreenMap == null || minimap == null) return;
             FullScreenMapParent.SetActive(false);
             MinimapParent.SetActive(false);
 
