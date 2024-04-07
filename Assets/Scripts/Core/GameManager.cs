@@ -1,4 +1,5 @@
 using DavidUtils;
+using DavidUtils.PlayerControl;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -12,33 +13,40 @@ namespace Core
             Paused
         }
 
-        public UnityEvent<GameState> onGameStateChanged;
+        public Player player;
 
+        public UnityEvent<GameState> onGameStateChanged;
         [SerializeField] private GameState state = GameState.Playing;
+        public bool IsPlaying => state == GameState.Playing;
+        public bool IsPaused => state == GameState.Paused;
 
         public GameState State
         {
             get => state;
             set
             {
+                OnStateChange(value);
                 onGameStateChanged?.Invoke(value);
                 state = value;
             }
         }
-
-        public bool IsPlaying => State == GameState.Playing;
-        public bool IsPaused => State == GameState.Paused;
-
+        
         protected override void Awake()
         {
             base.Awake();
-
+            
+            OnStateChange(State);
             onGameStateChanged ??= new UnityEvent<GameState>();
-
-            onGameStateChanged.AddListener(HandleChangeState);
+            
+            player = FindObjectOfType<Player>();
+        }
+        
+        private void OnDestroy()
+        {
+            onGameStateChanged.RemoveAllListeners();
         }
 
-        private void HandleChangeState(GameState newState)
+        private static void OnStateChange(GameState newState)
         {
             switch (newState)
             {

@@ -36,7 +36,7 @@ namespace Map.Rendering
         // ============================= INITIALIZATION =============================
         private void Awake()
         {
-            pathFindingGenerator = GetComponent<PathFindingGenerator>();
+            pathFindingGenerator = GetComponent<PathGenerator>();
         }
 
         private void Start()
@@ -47,7 +47,7 @@ namespace Map.Rendering
             pathFindingGenerator.OnPathUpdated += UpdateLine;
             pathFindingGenerator.OnAllPathsUpdated += UpdateAllLines;
             pathFindingGenerator.OnPathsCleared += ClearPaths;
-            UpdateAllLines(pathFindingGenerator.paths.ToArray());
+            UpdateAllLines(pathFindingGenerator.Paths);
         }
 
         private void OnDestroy()
@@ -69,7 +69,7 @@ namespace Map.Rendering
 
         public void UpdateAllLines(Path[] paths)
         {
-            for (var i = 0; i < paths.Length; i++)
+            for ( var i = 0; i < paths.Length; i++)
                 if (i >= pathObjects.Count)
                     AddPath(paths[i]);
                 else
@@ -112,7 +112,7 @@ namespace Map.Rendering
 
         public void ClearPaths()
         {
-            foreach (var pathObject in pathObjects)
+            foreach (PathObject pathObject in pathObjects)
                 if (Application.isPlaying)
                     Destroy(pathObject.gameObject);
                 else

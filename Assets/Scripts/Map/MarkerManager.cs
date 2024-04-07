@@ -18,25 +18,38 @@ namespace Map
 
     public class MarkerManager : DavidUtils.Singleton<MarkerManager>
     {
-        public Color checkedColor = Color.green;
-
-        public float collisionRadius = 0.05f;
-        public Color defaultColor = Color.white;
-        public Color deleteColor = Color.red;
-
-        [FormerlySerializedAs("markerMode")] [SerializeField]
-        private EditMarkerMode editMarkerMode = EditMarkerMode.None;
-
-        public Color hoverColor = Color.blue;
-
         [SerializeField] private MarkerStorageSo markersStorage;
 
-        // UI Markers
-        public GameObject markerUIPrefab;
-        public Color selectedColor = Color.yellow;
+        public float collisionRadius = 0.05f;
+        private int _totalMarkersAdded;
+        
+        public List<Marker> Markers => markersStorage.markers;
+        public int MarkerCount => markersStorage.Count;
+        public Marker NextMarker => Markers.First(marker => marker.IsNext);
 
-        private int totalMarkersAdded;
+        public Marker SelectedMarker => markersStorage.Selected;
+        public int SelectedCount => markersStorage.SelectedCount;
 
+        public Marker HoveredMarker => markersStorage.Hovered;
+        public int HoveredMarkerIndex => markersStorage.HoveredIndex;
+        public bool AnyHovered => markersStorage.AnyHovered;
+        
+        
+        private void Start()
+        {
+            MapManager.Instance.OnStateChanged += HandleOnMapStateChanged;
+        }
+
+        private void OnDestroy()
+        {
+            MapManager.Instance.OnStateChanged -= HandleOnMapStateChanged;
+        }
+        
+
+        #region MODE
+
+        public event Action<EditMarkerMode> OnMarkerModeChanged;
+        [SerializeField] private EditMarkerMode editMarkerMode = EditMarkerMode.None;
         public EditMarkerMode EditMarkerMode
         {
             get => editMarkerMode;
@@ -48,24 +61,20 @@ namespace Map
             }
         }
 
-        public List<Marker> Markers => markersStorage.markers;
-        public int MarkerCount => markersStorage.Count;
-        public Marker NextMarker => Markers.First(marker => marker.IsNext);
+        #endregion
 
-        public Marker SelectedMarker => markersStorage.Selected;
-        public int SelectedCount => markersStorage.SelectedCount;
 
-        public Marker HoveredMarker => markersStorage.Hovered;
-        public int HoveredMarkerIndex => markersStorage.HoveredIndex;
-        public bool AnyHovered => markersStorage.AnyHovered;
+        #region MAP CHANGES
 
-        private void Start()
-        {
-            MapManager.Instance.OnStateChanged += HandleOnMapStateChanged;
-        }
+        // Permite editar si no estamos en modo Minimapa
+        private void HandleOnMapStateChanged(MapState newState) => 
+            EditMarkerMode = newState == MapState.Minimap ? EditMarkerMode.None : EditMarkerMode;
 
-        public event Action<EditMarkerMode> OnMarkerModeChanged;
+        #endregion
+        
 
+        #region CRUD
+        
         public event Action OnAllMarkerDeselected;
         public event Action<Marker, int> OnMarkerAdded;
         public event Action<Marker> OnMarkerDeselected;
@@ -73,13 +82,7 @@ namespace Map
         public event Action<Marker, int> OnMarkerRemoved;
         public event Action OnMarkersClear;
         public event Action<Marker> OnMarkerSelected;
-
-        private void HandleOnMapStateChanged(MapState newState)
-        {
-            EditMarkerMode = newState == MapState.Minimap ? EditMarkerMode.None : EditMarkerMode;
-        }
-
-        private int FindIndex(Marker marker) => Markers.FindIndex(m => ReferenceEquals(m, marker));
+private int FindIndex(Marker marker) => Markers.FindIndex(m => ReferenceEquals(m, marker));
 
         // Buscar el Marcador dentro de un radio de colision (el mas cercano si hay varios)
         public int FindIndex(Vector2 normalizedPos)
@@ -128,7 +131,7 @@ namespace Map
             var isFirst = index == 0;
             var isLast = index == MarkerCount;
 
-            var label = totalMarkersAdded.ToString();
+            var label = _totalMarkersAdded.ToString();
 
             // El estado depende de la posicion relativa a otros markers y el estado de sus adyacentes
             var state =
@@ -149,7 +152,7 @@ namespace Map
             var marker = markersStorage.Add(normalizedPos, label, index);
             marker.State = state;
 
-            totalMarkersAdded++;
+            _totalMarkersAdded++;
 
             Log("Point added: " + marker.LabelText);
             OnMarkerAdded?.Invoke(marker, index);
@@ -188,6 +191,9 @@ namespace Map
 
             return marker;
         }
+        #endregion
+
+        #region SELECT MARKER
 
         public Marker ToggleSelectMarker(int index)
         {
@@ -266,6 +272,10 @@ namespace Map
             OnAllMarkerDeselected?.Invoke();
         }
 
+        #endregion
+
+        #region MOVE MARKER
+        
         public Marker MoveMarker(int index, Vector2 targetPos)
         {
             if (index < 0 || index >= MarkerCount) return null;
@@ -292,6 +302,10 @@ namespace Map
 
             return moved;
         }
+        
+        #endregion
+
+        #region CHECK MARKER
 
         public void CheckMarker(int index)
         {
@@ -312,13 +326,18 @@ namespace Map
             CheckMarker(FindIndex(marker));
         }
 
+        #endregion
+        
+
+        
+
 #if UNITY_EDITOR
         [ButtonMethod]
 #endif
         public void ClearMarkers()
         {
             markersStorage.ClearAll();
-            totalMarkersAdded = 0;
+            _totalMarkersAdded = 0;
             OnMarkersClear?.Invoke();
         }
 

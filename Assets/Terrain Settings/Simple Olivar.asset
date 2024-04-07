@@ -76,12 +76,12 @@ MonoBehaviour:
   heightMultiplier: 100
   lod: 0
   noiseParams:
-    size: 256
-    scale: 100
-    numOctaves: 5
-    persistance: 0.5
-    lacunarity: 2
+    size: 1024
+    scale: 600
+    numOctaves: 8
+    persistance: 0.3
+    lacunarity: 2.36
     offset:
       x: 0
       y: 0
-    seed: 744
+    seed: 1284921429

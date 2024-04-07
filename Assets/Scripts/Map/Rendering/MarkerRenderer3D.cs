@@ -10,11 +10,23 @@ namespace Map.Rendering
 
         private void Start()
         {
-            foreach (var marker in MarkerManager.Instance.Markers) SpawnMarkerInWorld(marker);
-
             MarkerManager.Instance.OnMarkerAdded += SpawnMarkerInWorld;
             MarkerManager.Instance.OnMarkerRemoved += DestroyMarkerInWorld;
             MarkerManager.Instance.OnMarkersClear += ClearMarkersInWorld;
+            
+            SpawnAllMarkersInWorld();
+        }
+
+        private void OnDestroy()
+        {
+            MarkerManager.Instance.OnMarkerAdded -= SpawnMarkerInWorld;
+            MarkerManager.Instance.OnMarkerRemoved -= DestroyMarkerInWorld;
+            MarkerManager.Instance.OnMarkersClear -= ClearMarkersInWorld;
+        }
+        
+        private void SpawnAllMarkersInWorld()
+        {
+            foreach (Marker marker in MarkerManager.Instance.Markers) SpawnMarkerInWorld(marker);
         }
 
         private void SpawnMarkerInWorld(Marker marker, int index = -1)

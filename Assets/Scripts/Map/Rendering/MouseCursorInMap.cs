@@ -16,13 +16,9 @@ namespace Map.Rendering
     public class MouseCursorInMap : MonoBehaviour
     {
         [SerializeField] private Texture2D cursorTexture;
-
         [SerializeField] private Texture2D cursorDeleteTexture;
-
         [SerializeField] private Texture2D cursorSelectTexture;
-
         [SerializeField] private Texture2D cursorIllegalTexture;
-
         [SerializeField] private Texture2D cursorIllegalSelectedTexture;
 
         private CursorDisplayMode _displayMode;
@@ -42,7 +38,7 @@ namespace Map.Rendering
         }
 
         private static Vector2 MousePosition => Input.mousePosition;
-
+        
         private Vector2 NormalizedPositionInMap =>
             _parentRectTransform.ScreenToNormalizedPoint(MousePosition);
 

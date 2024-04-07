@@ -83,7 +83,7 @@ namespace Map.Rendering
         // Simple Click
         private void HandleClickWithoutDrag(Vector2 normPos)
         {
-            var anyHovered = MarkerManager.AnyHovered;
+            bool anyHovered = MarkerManager.AnyHovered;
 
             switch (MarkerManager.EditMarkerMode)
             {

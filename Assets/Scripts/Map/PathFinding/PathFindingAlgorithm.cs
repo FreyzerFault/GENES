@@ -45,7 +45,7 @@ namespace Map.PathFinding
             for (var i = 1; i < checkPoints.Length; i++)
                 nodes = nodes
                     .Concat(
-                        FindPath(checkPoints[i - 1], checkPoints[i], terrain, paramsConfig).Nodes
+                        FindPath(checkPoints[i - 1], checkPoints[i], terrain, paramsConfig).nodes
                     )
                     .ToArray();
 
@@ -153,7 +153,7 @@ namespace Map.PathFinding
 
         protected bool IsCached(Node start, Node end) =>
             Cache.path != null
-            && Cache.path.Nodes.Length > 0
+            && Cache.path.nodes.Length > 0
             && Cache.path.Start.Equals(start)
             && Cache.path.End.Equals(end);
 

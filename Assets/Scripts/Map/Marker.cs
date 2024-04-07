@@ -5,24 +5,33 @@ using UnityEngine;
 namespace Map
 {
     [Serializable]
+    public enum MarkerState
+    {
+        Next,
+        Checked,
+        Unchecked
+    }
+    
+    [Serializable]
     public class Marker
     {
         [SerializeField] private Vector2 normalizedPosition;
-
         [SerializeField] private Vector3 worldPosition;
-
         [SerializeField] private string labelText;
-
+        
         [SerializeField] private MarkerState state;
-
         [SerializeField] private bool selected;
-
         [SerializeField] public bool hovered;
+        
+        public event Action<string> OnLabelChange;
+        public event Action<Vector2> OnPositionChange;
+        public event Action<MarkerState> OnStateChange;
+        public event Action<bool> OnSelected;
 
         public Marker(Vector2 normalizedPos, Vector3? worldPos = null, string label = "")
         {
             normalizedPosition = normalizedPos;
-            worldPosition = worldPos ?? Terrain.GetWorldPosition(normalizedPos);
+            worldPosition = worldPos ?? MapManager.Terrain.GetWorldPosition(normalizedPos);
 
             labelText = label == "" ? Vector3Int.RoundToInt(worldPosition).ToString() : label;
 
@@ -30,9 +39,6 @@ namespace Map
             state = MarkerState.Unchecked;
         }
 
-        public float CollisionRadius => MarkerManager.Instance.collisionRadius;
-
-        private Terrain Terrain => MapManager.Terrain;
 
         public Vector2 NormalizedPosition
         {
@@ -40,7 +46,7 @@ namespace Map
             set
             {
                 normalizedPosition = value;
-                worldPosition = Terrain.GetWorldPosition(value);
+                worldPosition = MapManager.Terrain.GetWorldPosition(value);
                 OnPositionChange?.Invoke(value);
             }
         }
@@ -51,7 +57,7 @@ namespace Map
             set
             {
                 worldPosition = value;
-                normalizedPosition = Terrain.GetNormalizedPosition(value);
+                normalizedPosition = MapManager.Terrain.GetNormalizedPosition(value);
                 OnPositionChange?.Invoke(normalizedPosition);
             }
         }
@@ -90,17 +96,13 @@ namespace Map
             }
         }
 
-        public event Action<string> OnLabelChange;
-        public event Action<Vector2> OnPositionChange;
-        public event Action<MarkerState> OnStateChange;
-        public event Action<bool> OnSelected;
 
         // ==================== //
 
         // Collision Test
-        public bool Collide(Marker marker) => Distance2D(marker) < CollisionRadius;
+        public bool Collide(Marker marker) => Distance2D(marker) < MarkerManager.Instance.collisionRadius;
 
-        public bool IsAtPoint(Vector2 normalizedPos) => Distance2D(normalizedPos) < CollisionRadius;
+        public bool IsAtPoint(Vector2 normalizedPos) => Distance2D(normalizedPos) < MarkerManager.Instance.collisionRadius;
 
         // 2D Distance
         public float Distance2D(Vector2 normalizedPos) =>
@@ -112,13 +114,8 @@ namespace Map
         public float Distance3D(Vector3 globalPos) => Vector3.Distance(WorldPosition, globalPos);
 
         public float Distance3D(Marker marker) => Distance3D(marker.WorldPosition);
-    }
 
-    [Serializable]
-    public enum MarkerState
-    {
-        Next,
-        Checked,
-        Unchecked
+        public override string ToString() => 
+            $"Marker {LabelText} {'{'} {NormalizedPosition} => {WorldPosition} {'}'}";
     }
 }

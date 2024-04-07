@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Map.PathFinding;
 using UnityEngine;
@@ -16,19 +17,28 @@ namespace Map
 
         private new void Start()
         {
-            base.Start();
-
-            // Subscribe to PathFindingConfig changes
-            pathFindingConfig.OnFineTune += RedoPathFinding;
-
             // Min Height depends on water height
             pathFindingConfig.minHeight = MapManager.Instance.WaterHeight;
-
+            
             // Redo PathFinding from zero
             PathFinding.CleanCache();
+            
+            // Subscribe to PathFindingConfig changes
+            pathFindingConfig.OnFineTune += RedoPathFinding;
+            
+            base.Start();
+        }
+
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+            pathFindingConfig.OnFineTune -= RedoPathFinding;
         }
 
         // ================== PATH FINDING ==================
+
+        #region BUILD PATH
+
         protected override Path BuildPath(
             Vector3 start,
             Vector3 end,
@@ -75,10 +85,17 @@ namespace Map
             return pathsBuilt;
         }
 
+        #endregion
+
+        #region LEGAL POS
+        
         public bool IsLegalPos(Vector2 normPos) => IsLegalPos(MapManager.Terrain.GetWorldPosition(normPos));
 
         public bool IsLegalPos(Vector3 pos) =>
             PathFinding.IsLegal(new Node(pos, size: pathFindingConfig.cellSize), pathFindingConfig);
+
+        #endregion
+
 
 #if UNITY_EDITOR
         [ButtonMethod]
@@ -87,7 +104,7 @@ namespace Map
         {
             PathFinding.CleanCache();
 
-            UpdatePath();
+            RedoPath();
         }
     }
 }

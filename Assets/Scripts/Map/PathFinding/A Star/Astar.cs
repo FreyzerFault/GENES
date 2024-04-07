@@ -114,19 +114,19 @@ namespace Map.PathFinding.A_Star
         // ==================== COSTE Y HEURÍSTICA ====================
         protected override float CalculateCost(Node a, Node b, PathFindingConfigSo paramsConfig)
         {
-            var distanceCost = a.Distance2D(b) * paramsConfig.aStarConfig.DistanceCost;
-            var heightCost = Math.Abs(a.position.y - b.position.y) * paramsConfig.aStarConfig.HeightCost;
+            var distanceCost = a.Distance2D(b) * paramsConfig.Config.DistanceCost;
+            var heightCost = Math.Abs(a.position.y - b.position.y) * paramsConfig.Config.HeightCost;
 
             return distanceCost + heightCost;
         }
 
         protected override float CalculateHeuristic(Node node, Node end, PathFindingConfigSo paramsConfig)
         {
-            var distHeuristic = node.Distance2D(end) * paramsConfig.aStarConfig.DistanceHeuristic;
+            var distHeuristic = node.Distance2D(end) * paramsConfig.Config.DistanceHeuristic;
             var heightHeuristic =
-                Mathf.Abs(node.position.y - end.position.y) * paramsConfig.aStarConfig.HeightHeuristic;
+                Mathf.Abs(node.position.y - end.position.y) * paramsConfig.Config.HeightHeuristic;
 
-            var slopeHeuristic = node.slopeAngle * paramsConfig.aStarConfig.SlopeHeuristic;
+            var slopeHeuristic = node.slopeAngle * paramsConfig.Config.SlopeHeuristic;
 
             return distHeuristic + heightHeuristic + slopeHeuristic;
         }

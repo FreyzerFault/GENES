@@ -218,13 +218,13 @@ namespace Map.Rendering
             ClearMarkersUI();
 
             // Se instancian de nuevo todos los markers
-            foreach (var marker in MarkerManager.Markers) InstantiateMarker(marker);
+            foreach (Marker marker in MarkerManager.Markers) InstantiateMarker(marker);
         }
 
         private void InstantiateMarker(Marker marker, int index = -1)
         {
             var markerUI = Instantiate(markerUIPrefab, markersUIParent).GetComponent<MarkerUI>();
-            markerUI.Marker = marker;
+            markerUI.marker = marker;
             _markersUIObjects.Insert(index == -1 ? _markersUIObjects.Count : index, markerUI);
         }
 

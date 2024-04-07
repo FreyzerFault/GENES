@@ -11,29 +11,16 @@ namespace Map.PathFinding
     {
         public static Path EmptyPath = new(Array.Empty<Node>());
 
-        [SerializeField] private Node[] nodes;
-
-        public Path(Node start, Node end) => nodes = ExtractPath(start, end);
-
-        public Path(Node[] nodes) => this.nodes = nodes;
-
-        public Path(Vector3[] points)
-        {
-            nodes = points.Select(point => new Node(point)).ToArray();
-        }
-
+        [SerializeField] public Node[] nodes;
+        public int NodeCount => nodes.Length;
+        public bool IsEmpty => nodes.Length == 0;
+        
         public Node Start => nodes.Length > 0 ? nodes[0] : null;
         public Node End => nodes.Length > 0 ? nodes[^1] : null;
 
-        public Node[] Nodes
-        {
-            get => nodes;
-            set => nodes = value;
-        }
-
-        public bool IsEmpty => nodes.Length == 0;
-
-        public int NodeCount => nodes.Length;
+        public Path(Node[] nodes) => this.nodes = nodes;
+        public Path(Vector3[] points) => nodes = points.Select(point => new Node(point)).ToArray();
+        public Path(Node start, Node end) => nodes = ExtractPath(start, end);
 
         public bool IsIllegal => !nodes[0].Legal || !nodes[^1].Legal;
 
@@ -85,6 +72,10 @@ namespace Map.PathFinding
 
             return new Path(a.Start, b.End);
         }
+
+        // Convierte una lista de Paths en un solo Path
+        public static Path FromPathList(IEnumerable<Path> paths)
+            => paths.Aggregate(EmptyPath, (current, path) => current + path);
 
         #region DEBUG INFO
 
