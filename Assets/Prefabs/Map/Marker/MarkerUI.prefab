@@ -269,3 +269,8 @@ MonoBehaviour:
     selected: 0
     hovered: 0
   selectedScale: 1.2
+  checkedColor: {r: 0, g: 1, b: 0, a: 1}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  deleteColor: {r: 1, g: 0, b: 0, a: 1}
+  hoverColor: {r: 1, g: 0.9665489, b: 0.5801887, a: 1}
+  selectedColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}

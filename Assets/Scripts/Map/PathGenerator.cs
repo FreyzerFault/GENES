@@ -25,7 +25,7 @@ namespace Map
         private static Vector3 PlayerDirection => MapManager.Instance.PlayerForward;
 
         private static MarkerManager MarkerManager => MarkerManager.Instance;
-        
+
         protected void Start()
         {
             // EVENTS
@@ -33,7 +33,7 @@ namespace Map
             MarkerManager.OnMarkerRemoved += HandleOnMarkerRemoved;
             MarkerManager.OnMarkerMoved += HandleOnMarkerMoved;
             MarkerManager.OnMarkersClear += ClearPaths;
-            
+
             GameManager.Instance.player.OnPlayerStop += _ => RedoPlayerPath();
 
             RedoPath();
@@ -45,11 +45,6 @@ namespace Map
             MarkerManager.OnMarkerRemoved -= HandleOnMarkerRemoved;
             MarkerManager.OnMarkerMoved -= HandleOnMarkerMoved;
             MarkerManager.OnMarkersClear -= ClearPaths;
-        }
-
-        private void Update()
-        {
-            Debug.Log("A");
         }
 
         #region CRUD
@@ -67,7 +62,7 @@ namespace Map
             OnPathAdded?.Invoke(path, index);
         }
 
-        public Path GetPath(int index) => 
+        public Path GetPath(int index) =>
             index >= paths.Count || index < 0 ? null : paths[index];
 
         private void SetPath(int index, Path path)
@@ -81,7 +76,7 @@ namespace Map
             paths.RemoveAt(index);
             OnPathDeleted?.Invoke(index);
         }
-        
+
         private void ClearPaths()
         {
             paths.Clear();
@@ -102,46 +97,42 @@ namespace Map
 
             index = index < 0 || index >= MarkerManager.MarkerCount ? MarkerManager.MarkerCount - 1 : index;
 
-            PathPos pathPos = GetMarkerRelativePos(index);
+            var pathPos = GetMarkerRelativePos(index);
 
             Vector3 mid = default, start = default, end = default;
-            
+
             switch (pathPos)
             {
                 // Es el 1º Marker añadido => [New Marker]
                 case PathPos.Alone:
                     RedoPlayerPath();
                     return;
-                
+
                 // Se coloca el último => [... -> Nº Marker ===> New Marker]
                 case PathPos.Back:
                     start = MarkerManager.Markers[index - 1].WorldPosition;
                     mid = marker.WorldPosition;
+                    AddPath(BuildPath(start, mid));
                     break;
-                
+
                 // Se coloca el primero => [Player ===> New Marker ===> 2º Marker -> ...]
                 case PathPos.Front:
                     RedoPlayerPath();
                     mid = marker.WorldPosition;
-                    end = MarkerManager.Markers[index + 1].WorldPosition;
+                    end = MarkerManager.Markers[1].WorldPosition;
+                    AddPath(BuildPath(mid, end), 1);
                     break;
-                
+
                 // El Marker se ha insertado en medio del camino
                 // [... -> i-1º Marker ===> New Marker ===> i+1º Marker -> ...]
                 case PathPos.Mid:
                     start = MarkerManager.Markers[index - 1].WorldPosition;
                     mid = marker.WorldPosition;
                     end = MarkerManager.Markers[index + 1].WorldPosition;
+                    SetPath(index, BuildPath(start, mid));
+                    AddPath(BuildPath(mid, end), index + 1);
                     break;
             }
-
-            // NUEVO PATH (empuja el path[index] a path[index + 1])
-            if (start != Vector3.zero && mid != Vector3.zero)
-                AddPath(BuildPath(start, mid), index);
-
-            // PATH ANTERIOR
-            if (mid != Vector3.zero && end != Vector3.zero)
-                AddPath(BuildPath(mid, end), index + 1);
         }
 
         private void HandleOnMarkerRemoved(Marker marker, int index)
@@ -186,20 +177,23 @@ namespace Map
             // [Marker[i-1] =Path[i]=> Marker[i] =Path[i+1]=> Marker[i+1]]
 
             // PREVIOUS PATH:
-            
+
             // Si es el 1º marcador se actualiza el camino del jugador
             if (index == 0 && generatePlayerPath)
                 RedoPlayerPath();
             else
-                SetPath(index, BuildPath(
-                    MarkerManager.Markers[index - 1].WorldPosition,
-                    marker.WorldPosition
-                ));
+                SetPath(
+                    index,
+                    BuildPath(
+                        MarkerManager.Markers[index - 1].WorldPosition,
+                        marker.WorldPosition
+                    )
+                );
 
             if (index == paths.Count - 1) return;
 
             // NEXT PATH:
-            Path path = BuildPath(marker.WorldPosition, MarkerManager.Markers[index + 1].WorldPosition);
+            var path = BuildPath(marker.WorldPosition, MarkerManager.Markers[index + 1].WorldPosition);
             SetPath(index + 1, path);
         }
 
@@ -207,15 +201,15 @@ namespace Map
 
         #region PATH POSITION CLASSIFIER
 
-        private enum PathPos {Back, Front, Mid, Alone}
-        
+        private enum PathPos { Back, Front, Mid, Alone }
+
         private PathPos GetMarkerRelativePos(int index) =>
             paths.Count == 0
-                ? PathPos.Alone 
+                ? PathPos.Alone
                 : index == 0
-                    ? PathPos.Front 
+                    ? PathPos.Front
                     : index == paths.Count
-                        ? PathPos.Back 
+                        ? PathPos.Back
                         : PathPos.Mid;
 
         #endregion
@@ -233,7 +227,7 @@ namespace Map
             Vector3[] checkPoints,
             Vector2[] initialDirections = null
         );
-        
+
         protected void RedoPath()
         {
             // Player -> Marker 1 -> Marker 2 -> ... -> Marker N
@@ -252,9 +246,9 @@ namespace Map
             ClearPaths();
 
             paths = BuildPath(checkpoints, new[] { new Vector2(PlayerDirection.x, PlayerDirection.z) });
-            
+
             if (singlePath) paths = new List<Path> { Path.FromPathList(paths) };
-            
+
             OnAllPathsUpdated?.Invoke(paths.ToArray());
         }
 
@@ -273,7 +267,7 @@ namespace Map
                 return;
             }
 
-            Path playerPath = BuildPath(
+            var playerPath = BuildPath(
                 PlayerPosition,
                 MarkerManager.NextMarker.WorldPosition,
                 new Vector2(PlayerDirection.x, PlayerDirection.z)
@@ -284,7 +278,7 @@ namespace Map
             else
                 SetPath(0, playerPath);
         }
-        
+
         #endregion
     }
 }

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using MyBox;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Map
 {
@@ -22,7 +21,7 @@ namespace Map
 
         public float collisionRadius = 0.05f;
         private int _totalMarkersAdded;
-        
+
         public List<Marker> Markers => markersStorage.markers;
         public int MarkerCount => markersStorage.Count;
         public Marker NextMarker => Markers.First(marker => marker.IsNext);
@@ -33,8 +32,8 @@ namespace Map
         public Marker HoveredMarker => markersStorage.Hovered;
         public int HoveredMarkerIndex => markersStorage.HoveredIndex;
         public bool AnyHovered => markersStorage.AnyHovered;
-        
-        
+
+
         private void Start()
         {
             MapManager.Instance.OnStateChanged += HandleOnMapStateChanged;
@@ -44,7 +43,7 @@ namespace Map
         {
             MapManager.Instance.OnStateChanged -= HandleOnMapStateChanged;
         }
-        
+
 
         #region MODE
 
@@ -63,18 +62,16 @@ namespace Map
 
         #endregion
 
-
         #region MAP CHANGES
 
         // Permite editar si no estamos en modo Minimapa
-        private void HandleOnMapStateChanged(MapState newState) => 
+        private void HandleOnMapStateChanged(MapState newState) =>
             EditMarkerMode = newState == MapState.Minimap ? EditMarkerMode.None : EditMarkerMode;
 
         #endregion
-        
 
         #region CRUD
-        
+
         public event Action OnAllMarkerDeselected;
         public event Action<Marker, int> OnMarkerAdded;
         public event Action<Marker> OnMarkerDeselected;
@@ -82,7 +79,7 @@ namespace Map
         public event Action<Marker, int> OnMarkerRemoved;
         public event Action OnMarkersClear;
         public event Action<Marker> OnMarkerSelected;
-private int FindIndex(Marker marker) => Markers.FindIndex(m => ReferenceEquals(m, marker));
+        private int FindIndex(Marker marker) => Markers.FindIndex(m => ReferenceEquals(m, marker));
 
         // Buscar el Marcador dentro de un radio de colision (el mas cercano si hay varios)
         public int FindIndex(Vector2 normalizedPos)
@@ -191,6 +188,14 @@ private int FindIndex(Marker marker) => Markers.FindIndex(m => ReferenceEquals(m
 
             return marker;
         }
+
+        public void ClearAll()
+        {
+            markersStorage.ClearAll();
+            _totalMarkersAdded = 0;
+            OnMarkersClear?.Invoke();
+        }
+
         #endregion
 
         #region SELECT MARKER
@@ -275,7 +280,7 @@ private int FindIndex(Marker marker) => Markers.FindIndex(m => ReferenceEquals(m
         #endregion
 
         #region MOVE MARKER
-        
+
         public Marker MoveMarker(int index, Vector2 targetPos)
         {
             if (index < 0 || index >= MarkerCount) return null;
@@ -302,7 +307,7 @@ private int FindIndex(Marker marker) => Markers.FindIndex(m => ReferenceEquals(m
 
             return moved;
         }
-        
+
         #endregion
 
         #region CHECK MARKER
@@ -327,18 +332,14 @@ private int FindIndex(Marker marker) => Markers.FindIndex(m => ReferenceEquals(m
         }
 
         #endregion
-        
 
-        
 
 #if UNITY_EDITOR
         [ButtonMethod]
 #endif
         public void ClearMarkers()
         {
-            markersStorage.ClearAll();
-            _totalMarkersAdded = 0;
-            OnMarkersClear?.Invoke();
+            ClearAll();
         }
 
         private static void Log(string msg)

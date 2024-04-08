@@ -12,7 +12,7 @@ namespace Map.Rendering
     {
         [SerializeField] private GameObject markerPlaceholderDraggedPrefab;
 
-        private readonly float _minDragDistanceToMove = 0.05f;
+        private readonly float _minDragDistanceToMove = 0.005f;
         private bool _isDragging;
         private int _markerDraggedIndex = -1;
         private GameObject _markerPlaceholderDragged;
@@ -83,7 +83,7 @@ namespace Map.Rendering
         // Simple Click
         private void HandleClickWithoutDrag(Vector2 normPos)
         {
-            bool anyHovered = MarkerManager.AnyHovered;
+            var anyHovered = MarkerManager.AnyHovered;
 
             switch (MarkerManager.EditMarkerMode)
             {
@@ -172,36 +172,25 @@ namespace Map.Rendering
 
         // ============================= DEBUG =============================
 
-        // private void OnDrawGizmos()
-        // {
-        //     var imagePos = ImageRectTransform.PivotGlobal();
-        //     var imageMinCorner = ImageRectTransform.MinCorner();
-        //     var sizeScaled = ImageRectTransform.SizeScaled();
-        //
-        //     RectTransformUtility.ScreenPointToLocalPointInRectangle(
-        //         ImageRectTransform,
-        //         Input.mousePosition,
-        //         null,
-        //         out var localPos
-        //     );
-        //
-        //     // MIN y MAX
-        //     Gizmos.color = Color.green;
-        //     Gizmos.DrawSphere(imageMinCorner, 20);
-        //     Gizmos.DrawSphere(imageMinCorner + sizeScaled, 20);
-        //     Gizmos.DrawSphere(ImageRectTransform.PivotGlobal(), 20);
-        //
-        //     Gizmos.color = Color.yellow;
-        //     Gizmos.DrawSphere(imageMinCorner + localPos, 20);
-        //
-        //     Gizmos.color = Color.red;
-        //     Gizmos.DrawSphere(
-        //         imageMinCorner + ImageRectTransform.ScreenToNormalizedPoint(Input.mousePosition) * sizeScaled, 20);
-        //
-        //
-        //     // ESTE ES EL BUENOOOOOOOOO
-        //     Gizmos.color = Color.blue;
-        //     Gizmos.DrawSphere(imageMinCorner + ImageRectTransform.ScreenToLocalPoint(Input.mousePosition), 20);
-        // }
+        private void OnDrawGizmos()
+        {
+            var imageMinCorner = imageRectTransform.Corners().bottomLeft;
+            var imageSize = imageRectTransform.Size();
+            var mousePosition = Input.mousePosition;
+
+            // MIN y MAX
+            Gizmos.color = Color.green;
+            Gizmos.DrawSphere(imageMinCorner, 20);
+            Gizmos.DrawSphere(imageMinCorner + imageSize, 20);
+            Gizmos.DrawSphere(imageRectTransform.PivotGlobal(), 20);
+
+            // Mouse Global Position
+            Gizmos.color = Color.red;
+            Gizmos.DrawSphere(imageRectTransform.ScreenToGlobalPoint(Input.mousePosition), 30);
+
+            // Mouse Local Position
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawSphere(imageMinCorner + imageRectTransform.ScreenToLocalPoint(mousePosition), 30);
+        }
     }
 }

@@ -26,41 +26,32 @@ MonoBehaviour:
       inWeight: 0.33333334
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 0.10840002
-      value: 0.06205079
-      inSlope: 0.6354714
-      outSlope: 0.6354714
+      time: 0.13618457
+      value: 0.35251006
+      inSlope: 1.319376
+      outSlope: 1.319376
       tangentMode: 136
       weightedMode: 0
       inWeight: 0.33333334
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 0.22579828
-      value: 0.14885838
-      inSlope: 0.72894853
-      outSlope: 0.72894853
-      tangentMode: 136
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 0.36178428
-      value: 0.24675487
-      inSlope: 0.47548166
-      outSlope: 0.47548166
-      tangentMode: 136
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 0.60698366
-      value: 0.33010504
-      inSlope: 1.0015031
-      outSlope: 1.0015031
+      time: 0.39419731
+      value: 0.5238108
+      inSlope: 0.25018868
+      outSlope: 0.25018868
       tangentMode: 0
       weightedMode: 0
       inWeight: 0.33333334
-      outWeight: 0.27863345
+      outWeight: 0.67670447
+    - serializedVersion: 3
+      time: 0.74590755
+      value: 0.642911
+      inSlope: 0.5876271
+      outSlope: 0.5876271
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.35107902
     - serializedVersion: 3
       time: 1.1138
       value: 1.0704346
@@ -73,15 +64,15 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  heightMultiplier: 100
+  heightMultiplier: 50
   lod: 0
   noiseParams:
-    size: 1024
-    scale: 600
+    size: 512
+    scale: 200
     numOctaves: 8
     persistance: 0.3
     lacunarity: 2.36
     offset:
       x: 0
       y: 0
-    seed: 1284921429
+    seed: 436

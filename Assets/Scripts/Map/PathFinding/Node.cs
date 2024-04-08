@@ -82,6 +82,6 @@ namespace Map.PathFinding
             return xDelta * xDelta + zDelta * zDelta;
         }
 
-        public bool Collision(Node node) => Distance2DnoSqrt(node) < size;
+        public bool Collision(Node node) => Distance2DnoSqrt(node) < size * size;
     }
 }

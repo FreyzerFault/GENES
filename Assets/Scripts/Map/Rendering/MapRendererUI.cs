@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using DavidUtils.ExtensionMethods;
 using MyBox;
+using Procrain.MapGeneration;
 using Procrain.MapGeneration.Texture;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,7 +12,9 @@ namespace Map.Rendering
 {
     public class MapRendererUI : MonoBehaviour
     {
-        public Gradient heightGradient = new();
+        // MAP
+        [SerializeField] private IHeightMap heightMap;
+        [SerializeField] private Gradient heightGradient = new();
 
         // Icono del Player
         [SerializeField] private RectTransform playerSprite;
@@ -78,6 +81,8 @@ namespace Map.Rendering
             MarkerManager.OnMarkerRemoved += HandleRemoved;
             MarkerManager.OnMarkersClear += HandleClear;
 
+            heightMap = MapManager.Instance.HeightMap;
+
             // RENDER
             RenderTerrain();
             UpdateZoom();
@@ -135,7 +140,8 @@ namespace Map.Rendering
         // ================================== TERRAIN VISUALIZATION ==================================
         private void RenderTerrain()
         {
-            var heightMap = MapManager.Instance.heightMap;
+            if (MapManager.Instance != null) heightGradient = MapManager.Instance.heightGradient;
+
             // Create Texture of Map
             var texture = TextureGenerator.BuildTexture2D(heightMap, heightGradient);
 
@@ -176,7 +182,7 @@ namespace Map.Rendering
 
             // Posicionar el mapa en el centro del frame
             var frameCenter =
-                frameRectTransform.Corners().BottomLeft + frameRectTransform.Diagonal() / 2;
+                frameRectTransform.Corners().bottomLeft + frameRectTransform.Size() / 2;
             // var frameCenter = frameRectTransform.TransformPoint(frameRectTransform.rect.size / 2);
             imageRectTransform.position = frameCenter;
 
@@ -218,7 +224,7 @@ namespace Map.Rendering
             ClearMarkersUI();
 
             // Se instancian de nuevo todos los markers
-            foreach (Marker marker in MarkerManager.Markers) InstantiateMarker(marker);
+            foreach (var marker in MarkerManager.Markers) InstantiateMarker(marker);
         }
 
         private void InstantiateMarker(Marker marker, int index = -1)
