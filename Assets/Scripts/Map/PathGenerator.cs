@@ -4,6 +4,7 @@ using System.Linq;
 using Core;
 using DavidUtils.ExtensionMethods;
 using Map.PathFinding;
+using Procrain;
 using UnityEngine;
 
 namespace Map
@@ -57,13 +58,13 @@ namespace Map
 
         private void AddPath(Path path, int index = -1)
         {
-            if (index == -1) index = paths.Count;
+            if (index == -1)
+                index = paths.Count;
             paths.Insert(index, path);
             OnPathAdded?.Invoke(path, index);
         }
 
-        public Path GetPath(int index) =>
-            index >= paths.Count || index < 0 ? null : paths[index];
+        public Path GetPath(int index) => index >= paths.Count || index < 0 ? null : paths[index];
 
         private void SetPath(int index, Path path)
         {
@@ -95,11 +96,16 @@ namespace Map
                 return;
             }
 
-            index = index < 0 || index >= MarkerManager.MarkerCount ? MarkerManager.MarkerCount - 1 : index;
+            index =
+                index < 0 || index >= MarkerManager.MarkerCount
+                    ? MarkerManager.MarkerCount - 1
+                    : index;
 
             var pathPos = GetMarkerRelativePos(index);
 
-            Vector3 mid = default, start = default, end = default;
+            Vector3 mid = default,
+                start = default,
+                end = default;
 
             switch (pathPos)
             {
@@ -147,7 +153,8 @@ namespace Map
             if (index == 0)
             {
                 DeletePath(0);
-                if (generatePlayerPath) RedoPlayerPath();
+                if (generatePlayerPath)
+                    RedoPlayerPath();
                 return;
             }
 
@@ -184,16 +191,17 @@ namespace Map
             else
                 SetPath(
                     index,
-                    BuildPath(
-                        MarkerManager.Markers[index - 1].WorldPosition,
-                        marker.WorldPosition
-                    )
+                    BuildPath(MarkerManager.Markers[index - 1].WorldPosition, marker.WorldPosition)
                 );
 
-            if (index == paths.Count - 1) return;
+            if (index == paths.Count - 1)
+                return;
 
             // NEXT PATH:
-            var path = BuildPath(marker.WorldPosition, MarkerManager.Markers[index + 1].WorldPosition);
+            var path = BuildPath(
+                marker.WorldPosition,
+                MarkerManager.Markers[index + 1].WorldPosition
+            );
             SetPath(index + 1, path);
         }
 
@@ -201,7 +209,13 @@ namespace Map
 
         #region PATH POSITION CLASSIFIER
 
-        private enum PathPos { Back, Front, Mid, Alone }
+        private enum PathPos
+        {
+            Back,
+            Front,
+            Mid,
+            Alone
+        }
 
         private PathPos GetMarkerRelativePos(int index) =>
             paths.Count == 0
@@ -245,9 +259,13 @@ namespace Map
 
             ClearPaths();
 
-            paths = BuildPath(checkpoints, new[] { new Vector2(PlayerDirection.x, PlayerDirection.z) });
+            paths = BuildPath(
+                checkpoints,
+                new[] { new Vector2(PlayerDirection.x, PlayerDirection.z) }
+            );
 
-            if (singlePath) paths = new List<Path> { Path.FromPathList(paths) };
+            if (singlePath)
+                paths = new List<Path> { Path.FromPathList(paths) };
 
             OnAllPathsUpdated?.Invoke(paths.ToArray());
         }

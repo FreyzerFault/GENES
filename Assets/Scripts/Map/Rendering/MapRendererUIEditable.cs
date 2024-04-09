@@ -1,4 +1,5 @@
 using DavidUtils.ExtensionMethods;
+using Procrain;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -10,7 +11,8 @@ namespace Map.Rendering
             IPointerUpHandler,
             IPointerDownHandler
     {
-        [SerializeField] private GameObject markerPlaceholderDraggedPrefab;
+        [SerializeField]
+        private GameObject markerPlaceholderDraggedPrefab;
 
         private readonly float _minDragDistanceToMove = 0.005f;
         private bool _isDragging;
@@ -19,10 +21,7 @@ namespace Map.Rendering
 
         private bool IsDraggingMarker => _isDragging && _markerDraggedIndex != -1;
 
-        private void OnEnable()
-        {
-            ResetDragState();
-        }
+        private void OnEnable() => ResetDragState();
 
         // ============================= MOUSE EVENTS =============================
         public void OnDrag(PointerEventData eventData)
@@ -39,15 +38,13 @@ namespace Map.Rendering
             _isDragging = true;
         }
 
-        public void OnPointerDown(PointerEventData eventData)
-        {
-            HandleStartDrag();
-        }
+        public void OnPointerDown(PointerEventData eventData) => HandleStartDrag();
 
         public void OnPointerUp(PointerEventData eventData)
         {
             // LEFT BUTTON ONLY
-            if (eventData.button != PointerEventData.InputButton.Left) return;
+            if (eventData.button != PointerEventData.InputButton.Left)
+                return;
 
             var editMarkerModeIsAdd = MarkerManager.EditMarkerMode == EditMarkerMode.Add;
             var normalizedPosition = imageRectTransform.ScreenToNormalizedPoint(eventData.position);
@@ -90,7 +87,7 @@ namespace Map.Rendering
                 case EditMarkerMode.Add:
 
                     if (anyHovered)
-                        // Cursor sobre Marker
+                    // Cursor sobre Marker
                     {
                         MarkerManager.ToggleSelectMarker(normPos);
                     }
@@ -116,7 +113,8 @@ namespace Map.Rendering
 
                     break;
                 case EditMarkerMode.Delete:
-                    if (anyHovered) MarkerManager.RemoveMarker(MarkerManager.HoveredMarkerIndex);
+                    if (anyHovered)
+                        MarkerManager.RemoveMarker(MarkerManager.HoveredMarkerIndex);
                     break;
                 case EditMarkerMode.Select:
                 case EditMarkerMode.None:
@@ -125,14 +123,12 @@ namespace Map.Rendering
             }
         }
 
-        private void HandleStartDrag()
-        {
-            _markerDraggedIndex = MarkerManager.HoveredMarkerIndex;
-        }
+        private void HandleStartDrag() => _markerDraggedIndex = MarkerManager.HoveredMarkerIndex;
 
         private void HandleEndDrag(Vector2 normalizedPosition)
         {
-            if (!IsLegalPos(normalizedPosition)) return;
+            if (!IsLegalPos(normalizedPosition))
+                return;
             MarkerManager.MoveMarker(_markerDraggedIndex, normalizedPosition);
             MarkerManager.DeselectMarker(_markerDraggedIndex);
         }
@@ -162,7 +158,8 @@ namespace Map.Rendering
             _markerDraggedIndex = -1;
             _isDragging = false;
 
-            if (_markerPlaceholderDragged == null) return;
+            if (_markerPlaceholderDragged == null)
+                return;
 
             if (Application.isEditor)
                 DestroyImmediate(_markerPlaceholderDragged);
@@ -190,7 +187,10 @@ namespace Map.Rendering
 
             // Mouse Local Position
             Gizmos.color = Color.yellow;
-            Gizmos.DrawSphere(imageMinCorner + imageRectTransform.ScreenToLocalPoint(mousePosition), 30);
+            Gizmos.DrawSphere(
+                imageMinCorner + imageRectTransform.ScreenToLocalPoint(mousePosition),
+                30
+            );
         }
     }
 }

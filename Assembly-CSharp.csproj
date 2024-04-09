@@ -928,6 +928,10 @@
       <Project>{830defe6-8853-bf3d-3b4e-45670b5a5be4}</Project>
       <Name>Procrain.MapGeneration</Name>
     </ProjectReference>
+    <ProjectReference Include="Procrain.Core.csproj">
+      <Project>{95208784-cf22-d1c9-dc9c-b2828bfc165e}</Project>
+      <Name>Procrain.Core</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

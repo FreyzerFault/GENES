@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
-using Map.PathFinding;
-using UnityEngine;
 using DavidUtils.ExtensionMethods;
+using Map.PathFinding;
+using Procrain;
+using UnityEngine;
 #if UNITY_EDITOR
 using MyBox;
 #endif
@@ -11,7 +12,8 @@ namespace Map
 {
     public class PathFindingGenerator : PathGenerator
     {
-        [SerializeField] private PathFindingConfigSo pathFindingConfig;
+        [SerializeField]
+        private PathFindingConfigSo pathFindingConfig;
 
         private PathFindingAlgorithm PathFinding => pathFindingConfig.Algorithm;
 
@@ -19,13 +21,13 @@ namespace Map
         {
             // Min Height depends on water height
             pathFindingConfig.minHeight = MapManager.Instance.WaterHeight;
-            
+
             // Redo PathFinding from zero
             PathFinding.CleanCache();
-            
+
             // Subscribe to PathFindingConfig changes
             pathFindingConfig.OnFineTune += RedoPathFinding;
-            
+
             base.Start();
         }
 
@@ -46,7 +48,8 @@ namespace Map
             Vector2? endDirection = null
         )
         {
-            if (start == end) return Path.EmptyPath;
+            if (start == end)
+                return Path.EmptyPath;
 
             var startNode = new Node(
                 start,
@@ -88,8 +91,9 @@ namespace Map
         #endregion
 
         #region LEGAL POS
-        
-        public bool IsLegalPos(Vector2 normPos) => IsLegalPos(MapManager.Terrain.GetWorldPosition(normPos));
+
+        public bool IsLegalPos(Vector2 normPos) =>
+            IsLegalPos(MapManager.Terrain.GetWorldPosition(normPos));
 
         public bool IsLegalPos(Vector3 pos) =>
             PathFinding.IsLegal(new Node(pos, size: pathFindingConfig.cellSize), pathFindingConfig);

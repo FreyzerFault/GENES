@@ -1,5 +1,6 @@
 using System;
 using DavidUtils.ExtensionMethods;
+using Procrain;
 using UnityEngine;
 
 namespace Map
@@ -11,18 +12,28 @@ namespace Map
         Checked,
         Unchecked
     }
-    
+
     [Serializable]
     public class Marker
     {
-        [SerializeField] private Vector2 normalizedPosition;
-        [SerializeField] private Vector3 worldPosition;
-        [SerializeField] private string labelText;
-        
-        [SerializeField] private MarkerState state;
-        [SerializeField] private bool selected;
-        [SerializeField] public bool hovered;
-        
+        [SerializeField]
+        private Vector2 normalizedPosition;
+
+        [SerializeField]
+        private Vector3 worldPosition;
+
+        [SerializeField]
+        private string labelText;
+
+        [SerializeField]
+        private MarkerState state;
+
+        [SerializeField]
+        private bool selected;
+
+        [SerializeField]
+        public bool hovered;
+
         public event Action<string> OnLabelChange;
         public event Action<Vector2> OnPositionChange;
         public event Action<MarkerState> OnStateChange;
@@ -38,7 +49,6 @@ namespace Map
             Selected = false;
             state = MarkerState.Unchecked;
         }
-
 
         public Vector2 NormalizedPosition
         {
@@ -96,13 +106,14 @@ namespace Map
             }
         }
 
-
         // ==================== //
 
         // Collision Test
-        public bool Collide(Marker marker) => Distance2D(marker) < MarkerManager.Instance.collisionRadius;
+        public bool Collide(Marker marker) =>
+            Distance2D(marker) < MarkerManager.Instance.collisionRadius;
 
-        public bool IsAtPoint(Vector2 normalizedPos) => Distance2D(normalizedPos) < MarkerManager.Instance.collisionRadius;
+        public bool IsAtPoint(Vector2 normalizedPos) =>
+            Distance2D(normalizedPos) < MarkerManager.Instance.collisionRadius;
 
         // 2D Distance
         public float Distance2D(Vector2 normalizedPos) =>
@@ -115,7 +126,7 @@ namespace Map
 
         public float Distance3D(Marker marker) => Distance3D(marker.WorldPosition);
 
-        public override string ToString() => 
+        public override string ToString() =>
             $"Marker {LabelText} {'{'} {NormalizedPosition} => {WorldPosition} {'}'}";
     }
 }

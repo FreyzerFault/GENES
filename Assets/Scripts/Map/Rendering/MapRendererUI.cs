@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using DavidUtils.ExtensionMethods;
 using MyBox;
+using Procrain;
 using Procrain.MapGeneration;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,9 +12,8 @@ namespace Map.Rendering
 {
     public class MapRendererUI : MonoBehaviour
     {
-        protected MapManager MapManager => MapManager.Instance;
-        protected IHeightMap HeightMap => MapManager.HeightMap;
-        protected Gradient HeightGradient => MapManager.heightGradient;
+        protected IHeightMap HeightMap => MapManager.Instance.HeightMap;
+        protected Gradient HeightGradient => MapManager.Instance.heightGradient;
 
         // MARKERS
         protected MarkerManager MarkerManager => MarkerManager.Instance;
@@ -79,7 +79,7 @@ namespace Map.Rendering
             frameRectTransform = imageRectTransform.parent.GetComponent<RectTransform>();
 
             // SUBSCRIBERS:
-            MapManager.OnMapUpdated += RenderTerrain;
+            MapManager.Instance.OnMapUpdated += RenderTerrain;
             if (MarkerManager != null)
             {
                 MarkerManager.OnMarkerAdded += HandleMarkerAdded;
@@ -98,7 +98,7 @@ namespace Map.Rendering
 
         private void OnDestroy()
         {
-            MapManager.OnMapUpdated -= RenderTerrain;
+            MapManager.Instance.OnMapUpdated -= RenderTerrain;
 
             if (MarkerManager == null)
                 return;
@@ -167,12 +167,12 @@ namespace Map.Rendering
 
         private void RenderTerrain(IHeightMap heightMap)
         {
-            if (MapManager == null)
+            if (MapManager.Instance == null)
                 return;
 
             // Create Texture of Map
             if (Texture == null)
-                MapManager.BuildTexture2D_Sequential();
+                MapManager.Instance.BuildTexture2D_Sequential();
 
             Texture.Apply();
             image.sprite = Sprite.Create(
@@ -188,8 +188,8 @@ namespace Map.Rendering
                 return;
 
             playerSprite.anchoredPosition =
-                MapManager.PlayerNormalizedPosition * frameRectTransform.rect.size;
-            playerSprite.rotation = MapManager.PlayerRotationForUI;
+                MapManager.Instance.PlayerNormalizedPosition * frameRectTransform.rect.size;
+            playerSprite.rotation = MapManager.Instance.PlayerRotationForUI;
 
             // Asignar el pivot a la posicion del jugador normalizada para que cada movimiento sea relativo a él
             image.rectTransform.pivot = MapManager.Instance.PlayerNormalizedPosition;
@@ -273,7 +273,7 @@ namespace Map.Rendering
         protected void ZoomMapToPlayerPosition() => ApplyZoomSmooth();
 
         [ButtonMethod]
-        protected void ReRenderTerrain() => RenderTerrain(MapManager.HeightMap);
+        protected void ReRenderTerrain() => RenderTerrain(MapManager.Instance.HeightMap);
 #endif
         // private void OnDrawGizmos()
         // {

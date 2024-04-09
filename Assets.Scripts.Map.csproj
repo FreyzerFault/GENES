@@ -69,7 +69,6 @@
     <Compile Include="Assets\Scripts\Map\Rendering\MapRendererUIEditable.cs" />
     <Compile Include="Assets\Scripts\Map\Rendering\MouseCursorInMap.cs" />
     <Compile Include="Assets\Scripts\Map\PathFinding\Dijkstra\DijkstraAlgorithm.cs" />
-    <Compile Include="Assets\Scripts\Map\MapManager.cs" />
     <Compile Include="Assets\Scripts\Map\Rendering\PathRenderer3D.cs" />
     <Compile Include="Assets\Scripts\Map\Marker.cs" />
     <Compile Include="Assets\Scripts\Map\PathFindingGenerator.cs" />
@@ -768,6 +767,14 @@
     <ProjectReference Include="Procrain.Geometry.csproj">
       <Project>{395f6aa2-5f07-7998-8833-40ad9d50b9bf}</Project>
       <Name>Procrain.Geometry</Name>
+    </ProjectReference>
+    <ProjectReference Include="Procrain.UI.csproj">
+      <Project>{e996e243-0900-a7a0-ec7f-6d732b64f567}</Project>
+      <Name>Procrain.UI</Name>
+    </ProjectReference>
+    <ProjectReference Include="Procrain.Core.csproj">
+      <Project>{95208784-cf22-d1c9-dc9c-b2828bfc165e}</Project>
+      <Name>Procrain.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

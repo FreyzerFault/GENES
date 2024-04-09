@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using MyBox;
+using Procrain;
 using UnityEngine;
 
 namespace Map
@@ -17,7 +18,8 @@ namespace Map
 
     public class MarkerManager : DavidUtils.Singleton<MarkerManager>
     {
-        [SerializeField] private MarkerStorageSo markersStorage;
+        [SerializeField]
+        private MarkerStorageSo markersStorage;
 
         public float collisionRadius = 0.05f;
         private int _totalMarkersAdded;
@@ -33,28 +35,23 @@ namespace Map
         public int HoveredMarkerIndex => markersStorage.HoveredIndex;
         public bool AnyHovered => markersStorage.AnyHovered;
 
+        private void Start() => MapManager.Instance.OnStateChanged += HandleOnMapStateChanged;
 
-        private void Start()
-        {
-            MapManager.Instance.OnStateChanged += HandleOnMapStateChanged;
-        }
-
-        private void OnDestroy()
-        {
-            MapManager.Instance.OnStateChanged -= HandleOnMapStateChanged;
-        }
-
+        private void OnDestroy() => MapManager.Instance.OnStateChanged -= HandleOnMapStateChanged;
 
         #region MODE
 
         public event Action<EditMarkerMode> OnMarkerModeChanged;
-        [SerializeField] private EditMarkerMode editMarkerMode = EditMarkerMode.None;
+
+        [SerializeField]
+        private EditMarkerMode editMarkerMode = EditMarkerMode.None;
         public EditMarkerMode EditMarkerMode
         {
             get => editMarkerMode;
             set
             {
-                if (value == editMarkerMode) return;
+                if (value == editMarkerMode)
+                    return;
                 editMarkerMode = value;
                 OnMarkerModeChanged?.Invoke(value);
             }
@@ -79,6 +76,7 @@ namespace Map
         public event Action<Marker, int> OnMarkerRemoved;
         public event Action OnMarkersClear;
         public event Action<Marker> OnMarkerSelected;
+
         private int FindIndex(Marker marker) => Markers.FindIndex(m => ReferenceEquals(m, marker));
 
         // Buscar el Marcador dentro de un radio de colision (el mas cercano si hay varios)
@@ -122,7 +120,8 @@ namespace Map
 
         public Marker AddMarker(Vector2 normalizedPos, int index = -1)
         {
-            if (index < 0 || index > MarkerCount) index = MarkerCount;
+            if (index < 0 || index > MarkerCount)
+                index = MarkerCount;
 
             // Actualizacion de Estado y Label segun si va primero o ultimo
             var isFirst = index == 0;
@@ -159,7 +158,8 @@ namespace Map
 
         public Marker AddMarkerBetweenSelectedPair(Vector2 normalizedPos)
         {
-            if (markersStorage.SelectedCount != 2) return null;
+            if (markersStorage.SelectedCount != 2)
+                return null;
 
             var index = markersStorage.SelectedIndexPair!.Item2;
             var marker = AddMarker(normalizedPos, index);
@@ -177,7 +177,8 @@ namespace Map
         {
             var marker = markersStorage.Remove(index);
 
-            if (marker == null) return null;
+            if (marker == null)
+                return null;
 
             // Si tiene de Estado Next, el siguiente pasa a ser Next
             if (marker.State == MarkerState.Next && markersStorage.Count > index)
@@ -202,7 +203,8 @@ namespace Map
 
         public Marker ToggleSelectMarker(int index)
         {
-            if (index < 0 || index >= MarkerCount) return null;
+            if (index < 0 || index >= MarkerCount)
+                return null;
 
             var isSelected = markersStorage.markers[index].Selected;
             var twoSelected = markersStorage.SelectedCount == 2;
@@ -215,7 +217,8 @@ namespace Map
             {
                 if (twoSelected)
                     DeselectAllMarkers();
-                else if (notAdyacentToSelected) DeselectMarker(markersStorage.Selected);
+                else if (notAdyacentToSelected)
+                    DeselectMarker(markersStorage.Selected);
             }
 
             var marker = markersStorage.markers[index];
@@ -238,14 +241,12 @@ namespace Map
                 SelectMarker(marker);
         }
 
-        public void ToggleSelectMarker()
-        {
-            ToggleSelectMarker(HoveredMarkerIndex);
-        }
+        public void ToggleSelectMarker() => ToggleSelectMarker(HoveredMarkerIndex);
 
         public void SelectMarker(int index)
         {
-            if (index < 0 || index >= MarkerCount) return;
+            if (index < 0 || index >= MarkerCount)
+                return;
 
             SelectMarker(Markers[index]);
         }
@@ -259,7 +260,8 @@ namespace Map
 
         public void DeselectMarker(int index)
         {
-            if (index < 0 || index >= MarkerCount) return;
+            if (index < 0 || index >= MarkerCount)
+                return;
 
             DeselectMarker(Markers[index]);
         }
@@ -283,7 +285,8 @@ namespace Map
 
         public Marker MoveMarker(int index, Vector2 targetPos)
         {
-            if (index < 0 || index >= MarkerCount) return null;
+            if (index < 0 || index >= MarkerCount)
+                return null;
 
             var marker = Markers[index];
 
@@ -314,22 +317,21 @@ namespace Map
 
         public void CheckMarker(int index)
         {
-            if (index < 0 || index >= Markers.Count) return;
+            if (index < 0 || index >= Markers.Count)
+                return;
 
             var marker = Markers[index];
             marker.State = MarkerState.Checked;
 
-            if (index >= MarkerCount - 1) return;
+            if (index >= MarkerCount - 1)
+                return;
 
             // El Marker siguiente pasa a ser Next
             var nextMarker = Markers[index + 1];
             nextMarker.State = MarkerState.Next;
         }
 
-        public void CheckMarker(Marker marker)
-        {
-            CheckMarker(FindIndex(marker));
-        }
+        public void CheckMarker(Marker marker) => CheckMarker(FindIndex(marker));
 
         #endregion
 
@@ -342,9 +344,7 @@ namespace Map
             ClearAll();
         }
 
-        private static void Log(string msg)
-        {
+        private static void Log(string msg) =>
             Debug.Log("<color=green>Map Marker Generator: </color>" + msg);
-        }
     }
 }
