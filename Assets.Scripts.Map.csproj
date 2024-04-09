@@ -765,6 +765,10 @@
       <Project>{4b06f23d-5e15-1f2c-044c-5b76847e3552}</Project>
       <Name>UnityUIExtensions</Name>
     </ProjectReference>
+    <ProjectReference Include="Procrain.Geometry.csproj">
+      <Project>{395f6aa2-5f07-7998-8833-40ad9d50b9bf}</Project>
+      <Name>Procrain.Geometry</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
