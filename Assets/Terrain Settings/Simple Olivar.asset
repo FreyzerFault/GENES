@@ -65,7 +65,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   heightMultiplier: 50
-  lod: 0
+  lod: 4
   noiseParams:
     size: 512
     scale: 200
@@ -75,4 +75,4 @@ MonoBehaviour:
     offset:
       x: 0
       y: 0
-    seed: 436
+    seed: 173813062

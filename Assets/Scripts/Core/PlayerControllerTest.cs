@@ -11,9 +11,6 @@ namespace Core
 
         private Terrain _terrain;
 
-        public event Action<Vector3> OnPositionChanged;
-        
-
         protected override void Awake()
         {
             base.Awake();

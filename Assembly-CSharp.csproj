@@ -12,7 +12,7 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace>GENES</RootNamespace>
-    <ProjectGuid>{3ca90688-9d82-ac2a-892c-30afa2d8b85e}</ProjectGuid>
+    <ProjectGuid>{af92edb9-e79a-694f-be7e-43c4d8fc4b16}</ProjectGuid>
     <ProjectTypeGuids>{E097FAD1-6243-4DAD-9C02-E9B9EFC3FFC1};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -330,10 +330,10 @@
       <HintPath>C:\Program Files\Unity\Hub\Editor\2022.3.16f1\Editor\Data\Managed\UnityEngine\UnityEditor.UnityConnectModule.dll</HintPath>
     </Reference>
     <Reference Include="ReportGeneratorMerged">
-      <HintPath>C:\Users\dalcanta\Unity Projects\Proyecto Campo\Library\PackageCache\com.unity.testtools.codecoverage@1.2.4\lib\ReportGenerator\ReportGeneratorMerged.dll</HintPath>
+      <HintPath>D:\Unity Projects\GENES\Library\PackageCache\com.unity.testtools.codecoverage@1.2.4\lib\ReportGenerator\ReportGeneratorMerged.dll</HintPath>
     </Reference>
     <Reference Include="Unity.VisualScripting.Antlr3.Runtime">
-      <HintPath>C:\Users\dalcanta\Unity Projects\Proyecto Campo\Library\PackageCache\com.unity.visualscripting@1.9.2\Runtime\VisualScripting.Flow\Dependencies\NCalc\Unity.VisualScripting.Antlr3.Runtime.dll</HintPath>
+      <HintPath>D:\Unity Projects\GENES\Library\PackageCache\com.unity.visualscripting@1.9.2\Runtime\VisualScripting.Flow\Dependencies\NCalc\Unity.VisualScripting.Antlr3.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="netstandard">
       <HintPath>C:\Program Files\Unity\Hub\Editor\2022.3.16f1\Editor\Data\NetStandard\ref\2.1.0\netstandard.dll</HintPath>
@@ -702,235 +702,247 @@
       <HintPath>C:\Program Files\Unity\Hub\Editor\2022.3.16f1\Editor\Data\NetStandard\compat\2.1.0\shims\netfx\System.Xml.Serialization.dll</HintPath>
     </Reference>
     <Reference Include="Unity.RenderPipelines.Core.Runtime">
-      <HintPath>C:\Users\dalcanta\Unity Projects\Proyecto Campo\Library\ScriptAssemblies\Unity.RenderPipelines.Core.Runtime.dll</HintPath>
+      <HintPath>D:\Unity Projects\GENES\Library\ScriptAssemblies\Unity.RenderPipelines.Core.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="com.unity.cinemachine.editor">
-      <HintPath>C:\Users\dalcanta\Unity Projects\Proyecto Campo\Library\ScriptAssemblies\com.unity.cinemachine.editor.dll</HintPath>
+      <HintPath>D:\Unity Projects\GENES\Library\ScriptAssemblies\com.unity.cinemachine.editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Burst.Editor">
-      <HintPath>C:\Users\dalcanta\Unity Projects\Proyecto Campo\Library\ScriptAssemblies\Unity.Burst.Editor.dll</HintPath>
+      <HintPath>D:\Unity Projects\GENES\Library\ScriptAssemblies\Unity.Burst.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Rider.Editor">
-      <HintPath>C:\Users\dalcanta\Unity Projects\Proyecto Campo\Library\ScriptAssemblies\Unity.Rider.Editor.dll</HintPath>
+      <HintPath>D:\Unity Projects\GENES\Library\ScriptAssemblies\Unity.Rider.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.2D.Sprite.Editor">
-      <HintPath>C:\Users\dalcanta\Unity Projects\Proyecto Campo\Library\ScriptAssemblies\Unity.2D.Sprite.Editor.dll</HintPath>
+      <HintPath>D:\Unity Projects\GENES\Library\ScriptAssemblies\Unity.2D.Sprite.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.RenderPipelines.Universal.Config.Runtime">
-      <HintPath>C:\Users\dalcanta\Unity Projects\Proyecto Campo\Library\ScriptAssemblies\Unity.RenderPipelines.Universal.Config.Runtime.dll</HintPath>
+      <HintPath>D:\Unity Projects\GENES\Library\ScriptAssemblies\Unity.RenderPipelines.Universal.Config.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="Unity.RenderPipelines.Core.Editor">
-      <HintPath>C:\Users\dalcanta\Unity Projects\Proyecto Campo\Library\ScriptAssemblies\Unity.RenderPipelines.Core.Editor.dll</HintPath>
+      <HintPath>D:\Unity Projects\GENES\Library\ScriptAssemblies\Unity.RenderPipelines.Core.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.VisualScripting.Flow">
-      <HintPath>C:\Users\dalcanta\Unity Projects\Proyecto Campo\Library\ScriptAssemblies\Unity.VisualScripting.Flow.dll</HintPath>
+      <HintPath>D:\Unity Projects\GENES\Library\ScriptAssemblies\Unity.VisualScripting.Flow.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Mathematics.Editor">
-      <HintPath>C:\Users\dalcanta\Unity Projects\Proyecto Campo\Library\ScriptAssemblies\Unity.Mathematics.Editor.dll</HintPath>
+      <HintPath>D:\Unity Projects\GENES\Library\ScriptAssemblies\Unity.Mathematics.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.TestTools.CodeCoverage.Editor.OpenCover.Mono.Reflection">
-      <HintPath>C:\Users\dalcanta\Unity Projects\Proyecto Campo\Library\ScriptAssemblies\Unity.TestTools.CodeCoverage.Editor.OpenCover.Mono.Reflection.dll</HintPath>
+      <HintPath>D:\Unity Projects\GENES\Library\ScriptAssemblies\Unity.TestTools.CodeCoverage.Editor.OpenCover.Mono.Reflection.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Performance.Profile-Analyzer.Editor">
-      <HintPath>C:\Users\dalcanta\Unity Projects\Proyecto Campo\Library\ScriptAssemblies\Unity.Performance.Profile-Analyzer.Editor.dll</HintPath>
+      <HintPath>D:\Unity Projects\GENES\Library\ScriptAssemblies\Unity.Performance.Profile-Analyzer.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.RenderPipelines.Core.ShaderLibrary">
-      <HintPath>C:\Users\dalcanta\Unity Projects\Proyecto Campo\Library\ScriptAssemblies\Unity.RenderPipelines.Core.ShaderLibrary.dll</HintPath>
+      <HintPath>D:\Unity Projects\GENES\Library\ScriptAssemblies\Unity.RenderPipelines.Core.ShaderLibrary.dll</HintPath>
     </Reference>
     <Reference Include="Unity.TestTools.CodeCoverage.Editor">
-      <HintPath>C:\Users\dalcanta\Unity Projects\Proyecto Campo\Library\ScriptAssemblies\Unity.TestTools.CodeCoverage.Editor.dll</HintPath>
+      <HintPath>D:\Unity Projects\GENES\Library\ScriptAssemblies\Unity.TestTools.CodeCoverage.Editor.dll</HintPath>
     </Reference>
     <Reference Include="PPv2URPConverters">
-      <HintPath>C:\Users\dalcanta\Unity Projects\Proyecto Campo\Library\ScriptAssemblies\PPv2URPConverters.dll</HintPath>
+      <HintPath>D:\Unity Projects\GENES\Library\ScriptAssemblies\PPv2URPConverters.dll</HintPath>
     </Reference>
     <Reference Include="Unity.TextMeshPro">
-      <HintPath>C:\Users\dalcanta\Unity Projects\Proyecto Campo\Library\ScriptAssemblies\Unity.TextMeshPro.dll</HintPath>
+      <HintPath>D:\Unity Projects\GENES\Library\ScriptAssemblies\Unity.TextMeshPro.dll</HintPath>
     </Reference>
     <Reference Include="Unity.VSCode.Editor">
-      <HintPath>C:\Users\dalcanta\Unity Projects\Proyecto Campo\Library\ScriptAssemblies\Unity.VSCode.Editor.dll</HintPath>
+      <HintPath>D:\Unity Projects\GENES\Library\ScriptAssemblies\Unity.VSCode.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.RenderPipelines.Universal.Editor">
-      <HintPath>C:\Users\dalcanta\Unity Projects\Proyecto Campo\Library\ScriptAssemblies\Unity.RenderPipelines.Universal.Editor.dll</HintPath>
+      <HintPath>D:\Unity Projects\GENES\Library\ScriptAssemblies\Unity.RenderPipelines.Universal.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.RenderPipelines.ShaderGraph.ShaderGraphLibrary">
-      <HintPath>C:\Users\dalcanta\Unity Projects\Proyecto Campo\Library\ScriptAssemblies\Unity.RenderPipelines.ShaderGraph.ShaderGraphLibrary.dll</HintPath>
+      <HintPath>D:\Unity Projects\GENES\Library\ScriptAssemblies\Unity.RenderPipelines.ShaderGraph.ShaderGraphLibrary.dll</HintPath>
     </Reference>
     <Reference Include="Unity.EditorCoroutines.Editor">
-      <HintPath>C:\Users\dalcanta\Unity Projects\Proyecto Campo\Library\ScriptAssemblies\Unity.EditorCoroutines.Editor.dll</HintPath>
+      <HintPath>D:\Unity Projects\GENES\Library\ScriptAssemblies\Unity.EditorCoroutines.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.TerrainTools.Editor">
-      <HintPath>C:\Users\dalcanta\Unity Projects\Proyecto Campo\Library\ScriptAssemblies\Unity.TerrainTools.Editor.dll</HintPath>
+      <HintPath>D:\Unity Projects\GENES\Library\ScriptAssemblies\Unity.TerrainTools.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.RenderPipelines.Universal.Runtime">
-      <HintPath>C:\Users\dalcanta\Unity Projects\Proyecto Campo\Library\ScriptAssemblies\Unity.RenderPipelines.Universal.Runtime.dll</HintPath>
+      <HintPath>D:\Unity Projects\GENES\Library\ScriptAssemblies\Unity.RenderPipelines.Universal.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="Unity.PlasticSCM.Editor">
-      <HintPath>C:\Users\dalcanta\Unity Projects\Proyecto Campo\Library\ScriptAssemblies\Unity.PlasticSCM.Editor.dll</HintPath>
+      <HintPath>D:\Unity Projects\GENES\Library\ScriptAssemblies\Unity.PlasticSCM.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Burst">
-      <HintPath>C:\Users\dalcanta\Unity Projects\Proyecto Campo\Library\ScriptAssemblies\Unity.Burst.dll</HintPath>
+      <HintPath>D:\Unity Projects\GENES\Library\ScriptAssemblies\Unity.Burst.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Timeline.Editor">
-      <HintPath>C:\Users\dalcanta\Unity Projects\Proyecto Campo\Library\ScriptAssemblies\Unity.Timeline.Editor.dll</HintPath>
+      <HintPath>D:\Unity Projects\GENES\Library\ScriptAssemblies\Unity.Timeline.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.VisualScripting.Shared.Editor">
-      <HintPath>C:\Users\dalcanta\Unity Projects\Proyecto Campo\Library\ScriptAssemblies\Unity.VisualScripting.Shared.Editor.dll</HintPath>
+      <HintPath>D:\Unity Projects\GENES\Library\ScriptAssemblies\Unity.VisualScripting.Shared.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.TerrainTools">
-      <HintPath>C:\Users\dalcanta\Unity Projects\Proyecto Campo\Library\ScriptAssemblies\Unity.TerrainTools.dll</HintPath>
+      <HintPath>D:\Unity Projects\GENES\Library\ScriptAssemblies\Unity.TerrainTools.dll</HintPath>
     </Reference>
     <Reference Include="Unity.ShaderGraph.Editor">
-      <HintPath>C:\Users\dalcanta\Unity Projects\Proyecto Campo\Library\ScriptAssemblies\Unity.ShaderGraph.Editor.dll</HintPath>
+      <HintPath>D:\Unity Projects\GENES\Library\ScriptAssemblies\Unity.ShaderGraph.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.VisualStudio.Editor">
-      <HintPath>C:\Users\dalcanta\Unity Projects\Proyecto Campo\Library\ScriptAssemblies\Unity.VisualStudio.Editor.dll</HintPath>
+      <HintPath>D:\Unity Projects\GENES\Library\ScriptAssemblies\Unity.VisualStudio.Editor.dll</HintPath>
     </Reference>
     <Reference Include="UnityEditor.UI">
-      <HintPath>C:\Users\dalcanta\Unity Projects\Proyecto Campo\Library\ScriptAssemblies\UnityEditor.UI.dll</HintPath>
+      <HintPath>D:\Unity Projects\GENES\Library\ScriptAssemblies\UnityEditor.UI.dll</HintPath>
     </Reference>
     <Reference Include="Unity.VisualScripting.Core">
-      <HintPath>C:\Users\dalcanta\Unity Projects\Proyecto Campo\Library\ScriptAssemblies\Unity.VisualScripting.Core.dll</HintPath>
+      <HintPath>D:\Unity Projects\GENES\Library\ScriptAssemblies\Unity.VisualScripting.Core.dll</HintPath>
     </Reference>
     <Reference Include="Unity.VisualScripting.Core.Editor">
-      <HintPath>C:\Users\dalcanta\Unity Projects\Proyecto Campo\Library\ScriptAssemblies\Unity.VisualScripting.Core.Editor.dll</HintPath>
+      <HintPath>D:\Unity Projects\GENES\Library\ScriptAssemblies\Unity.VisualScripting.Core.Editor.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UI">
-      <HintPath>C:\Users\dalcanta\Unity Projects\Proyecto Campo\Library\ScriptAssemblies\UnityEngine.UI.dll</HintPath>
+      <HintPath>D:\Unity Projects\GENES\Library\ScriptAssemblies\UnityEngine.UI.dll</HintPath>
     </Reference>
     <Reference Include="Unity.VisualScripting.Flow.Editor">
-      <HintPath>C:\Users\dalcanta\Unity Projects\Proyecto Campo\Library\ScriptAssemblies\Unity.VisualScripting.Flow.Editor.dll</HintPath>
+      <HintPath>D:\Unity Projects\GENES\Library\ScriptAssemblies\Unity.VisualScripting.Flow.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.RenderPipeline.Universal.ShaderLibrary">
-      <HintPath>C:\Users\dalcanta\Unity Projects\Proyecto Campo\Library\ScriptAssemblies\Unity.RenderPipeline.Universal.ShaderLibrary.dll</HintPath>
+      <HintPath>D:\Unity Projects\GENES\Library\ScriptAssemblies\Unity.RenderPipeline.Universal.ShaderLibrary.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Timeline">
-      <HintPath>C:\Users\dalcanta\Unity Projects\Proyecto Campo\Library\ScriptAssemblies\Unity.Timeline.dll</HintPath>
+      <HintPath>D:\Unity Projects\GENES\Library\ScriptAssemblies\Unity.Timeline.dll</HintPath>
     </Reference>
     <Reference Include="Unity.InputSystem">
-      <HintPath>C:\Users\dalcanta\Unity Projects\Proyecto Campo\Library\ScriptAssemblies\Unity.InputSystem.dll</HintPath>
+      <HintPath>D:\Unity Projects\GENES\Library\ScriptAssemblies\Unity.InputSystem.dll</HintPath>
     </Reference>
     <Reference Include="Unity.InputSystem.ForUI">
-      <HintPath>C:\Users\dalcanta\Unity Projects\Proyecto Campo\Library\ScriptAssemblies\Unity.InputSystem.ForUI.dll</HintPath>
+      <HintPath>D:\Unity Projects\GENES\Library\ScriptAssemblies\Unity.InputSystem.ForUI.dll</HintPath>
     </Reference>
     <Reference Include="Unity.VisualScripting.SettingsProvider.Editor">
-      <HintPath>C:\Users\dalcanta\Unity Projects\Proyecto Campo\Library\ScriptAssemblies\Unity.VisualScripting.SettingsProvider.Editor.dll</HintPath>
+      <HintPath>D:\Unity Projects\GENES\Library\ScriptAssemblies\Unity.VisualScripting.SettingsProvider.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.TestTools.CodeCoverage.Editor.OpenCover.Model">
-      <HintPath>C:\Users\dalcanta\Unity Projects\Proyecto Campo\Library\ScriptAssemblies\Unity.TestTools.CodeCoverage.Editor.OpenCover.Model.dll</HintPath>
+      <HintPath>D:\Unity Projects\GENES\Library\ScriptAssemblies\Unity.TestTools.CodeCoverage.Editor.OpenCover.Model.dll</HintPath>
     </Reference>
     <Reference Include="MyBox">
-      <HintPath>C:\Users\dalcanta\Unity Projects\Proyecto Campo\Library\ScriptAssemblies\MyBox.dll</HintPath>
+      <HintPath>D:\Unity Projects\GENES\Library\ScriptAssemblies\MyBox.dll</HintPath>
     </Reference>
     <Reference Include="Unity.VisualScripting.State.Editor">
-      <HintPath>C:\Users\dalcanta\Unity Projects\Proyecto Campo\Library\ScriptAssemblies\Unity.VisualScripting.State.Editor.dll</HintPath>
+      <HintPath>D:\Unity Projects\GENES\Library\ScriptAssemblies\Unity.VisualScripting.State.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Mathematics">
-      <HintPath>C:\Users\dalcanta\Unity Projects\Proyecto Campo\Library\ScriptAssemblies\Unity.Mathematics.dll</HintPath>
+      <HintPath>D:\Unity Projects\GENES\Library\ScriptAssemblies\Unity.Mathematics.dll</HintPath>
     </Reference>
     <Reference Include="Unity.RenderPipelines.Universal.Shaders">
-      <HintPath>C:\Users\dalcanta\Unity Projects\Proyecto Campo\Library\ScriptAssemblies\Unity.RenderPipelines.Universal.Shaders.dll</HintPath>
+      <HintPath>D:\Unity Projects\GENES\Library\ScriptAssemblies\Unity.RenderPipelines.Universal.Shaders.dll</HintPath>
     </Reference>
     <Reference Include="Unity.TextMeshPro.Editor">
-      <HintPath>C:\Users\dalcanta\Unity Projects\Proyecto Campo\Library\ScriptAssemblies\Unity.TextMeshPro.Editor.dll</HintPath>
+      <HintPath>D:\Unity Projects\GENES\Library\ScriptAssemblies\Unity.TextMeshPro.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Searcher.Editor">
-      <HintPath>C:\Users\dalcanta\Unity Projects\Proyecto Campo\Library\ScriptAssemblies\Unity.Searcher.Editor.dll</HintPath>
+      <HintPath>D:\Unity Projects\GENES\Library\ScriptAssemblies\Unity.Searcher.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.VisualScripting.State">
-      <HintPath>C:\Users\dalcanta\Unity Projects\Proyecto Campo\Library\ScriptAssemblies\Unity.VisualScripting.State.dll</HintPath>
+      <HintPath>D:\Unity Projects\GENES\Library\ScriptAssemblies\Unity.VisualScripting.State.dll</HintPath>
     </Reference>
     <Reference Include="Cinemachine">
-      <HintPath>C:\Users\dalcanta\Unity Projects\Proyecto Campo\Library\ScriptAssemblies\Cinemachine.dll</HintPath>
+      <HintPath>D:\Unity Projects\GENES\Library\ScriptAssemblies\Cinemachine.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="Assets.Scripts.Physics.csproj">
-      <Project>{1ed6883c-23d3-0411-77ba-20b801729070}</Project>
+      <Project>{4d92cc89-70d8-60a3-9a8b-e4703f3d9c8e}</Project>
       <Name>Assets.Scripts.Physics</Name>
     </ProjectReference>
     <ProjectReference Include="Procrain.Utils.csproj">
-      <Project>{dff1b38a-820b-862c-0816-27baa1d9338c}</Project>
+      <Project>{d96f593b-8440-e1b4-8c85-dc703e38ae57}</Project>
       <Name>Procrain.Utils</Name>
     </ProjectReference>
     <ProjectReference Include="UnityUIExtensions.csproj">
-      <Project>{4b06f23d-5e15-1f2c-044c-5b76847e3552}</Project>
+      <Project>{0f0a25e8-0d41-9351-403f-671eb8e7a331}</Project>
       <Name>UnityUIExtensions</Name>
     </ProjectReference>
+    <ProjectReference Include="PathFinding.csproj">
+      <Project>{9acaacf8-e0ef-0633-b3b4-dc24da87b609}</Project>
+      <Name>PathFinding</Name>
+    </ProjectReference>
     <ProjectReference Include="Procrain.Geometry.csproj">
-      <Project>{395f6aa2-5f07-7998-8833-40ad9d50b9bf}</Project>
+      <Project>{59adaf3a-3466-963f-1a56-41ed22cc04ef}</Project>
       <Name>Procrain.Geometry</Name>
     </ProjectReference>
+    <ProjectReference Include="Markers.csproj">
+      <Project>{b8c727cc-c3a0-10c8-40d1-38f71a5bcccb}</Project>
+      <Name>Markers</Name>
+    </ProjectReference>
     <ProjectReference Include="Assets.External_Packages.AutoSave.csproj">
-      <Project>{a672ddb6-619f-8d56-be61-2df5c81634c0}</Project>
+      <Project>{ead60a96-858b-65d9-7cc2-6c8b5a25aba3}</Project>
       <Name>Assets.External_Packages.AutoSave</Name>
     </ProjectReference>
-    <ProjectReference Include="Assets.Scripts.UI.csproj">
-      <Project>{d0bca65a-23bf-530a-653d-d2794386f727}</Project>
-      <Name>Assets.Scripts.UI</Name>
-    </ProjectReference>
     <ProjectReference Include="Procrain.MapDisplay.csproj">
-      <Project>{7b050475-1642-87f1-9d07-29ecf9463dff}</Project>
+      <Project>{056a805b-2a80-e34c-827d-766eb95eaa72}</Project>
       <Name>Procrain.MapDisplay</Name>
     </ProjectReference>
     <ProjectReference Include="Procrain.UI.csproj">
-      <Project>{e996e243-0900-a7a0-ec7f-6d732b64f567}</Project>
+      <Project>{24f13432-bb61-d6a0-d2b5-c07db4b2fb1b}</Project>
       <Name>Procrain.UI</Name>
     </ProjectReference>
     <ProjectReference Include="StylizedWaterForURP.csproj">
-      <Project>{6ceef332-3f85-242c-2769-ab8c364208cd}</Project>
+      <Project>{db236e53-a3c8-d523-9135-606fc5324a38}</Project>
       <Name>StylizedWaterForURP</Name>
     </ProjectReference>
     <ProjectReference Include="UnityUIExtensions.editor.csproj">
-      <Project>{83339d5f-47c5-ef55-039a-13a5618cd120}</Project>
+      <Project>{532d2c72-dbdf-2a00-d111-7da24e668700}</Project>
       <Name>UnityUIExtensions.editor</Name>
     </ProjectReference>
+    <ProjectReference Include="Utils.csproj">
+      <Project>{a47c4ef6-8da7-f594-464c-72b5fda1c310}</Project>
+      <Name>Utils</Name>
+    </ProjectReference>
     <ProjectReference Include="Assets.ExternalPackages.BezierCurves.csproj">
-      <Project>{1a8157ab-6310-9bdc-bddc-f16864838230}</Project>
+      <Project>{b85943ca-4484-51b5-85f4-cc1788eae86f}</Project>
       <Name>Assets.ExternalPackages.BezierCurves</Name>
     </ProjectReference>
+    <ProjectReference Include="UI.csproj">
+      <Project>{7108290b-d2d8-8cf3-e8ff-5071ab44320f}</Project>
+      <Name>UI</Name>
+    </ProjectReference>
     <ProjectReference Include="Core.csproj">
-      <Project>{acfc75c1-ec13-e18c-2f08-3ce669335049}</Project>
+      <Project>{ad92af71-0ba9-1f9d-c4a2-8857b4878f5d}</Project>
       <Name>Core</Name>
     </ProjectReference>
     <ProjectReference Include="Procrain.Editor.csproj">
-      <Project>{b090b373-1aab-a0a9-1319-3f6529b40998}</Project>
+      <Project>{1c890a46-d737-b61d-8a49-8e7a68c3eb57}</Project>
       <Name>Procrain.Editor</Name>
     </ProjectReference>
     <ProjectReference Include="UnityUIExtensions.examples.csproj">
-      <Project>{eb1a7507-d84a-f3e9-9242-512025745a50}</Project>
+      <Project>{6463b29a-a29a-e066-646f-aed9f14c232b}</Project>
       <Name>UnityUIExtensions.examples</Name>
     </ProjectReference>
     <ProjectReference Include="BezierCurves.Editor.csproj">
-      <Project>{ba3033d2-828b-2be4-f4f7-5253d20f1cdf}</Project>
+      <Project>{7c331c10-1890-d1f6-9da1-8d9eca9f5bb0}</Project>
       <Name>BezierCurves.Editor</Name>
     </ProjectReference>
-    <ProjectReference Include="Assets.Scripts.Map.csproj">
-      <Project>{8bdb3e98-d617-0799-e30b-ad8b64bb0331}</Project>
-      <Name>Assets.Scripts.Map</Name>
-    </ProjectReference>
     <ProjectReference Include="Procrain.Noise.csproj">
-      <Project>{5e525b5f-f0be-0341-510c-ac0bbc3cfe1c}</Project>
+      <Project>{d5a5fa5a-4b04-4653-2cd5-44f0fc1a6994}</Project>
       <Name>Procrain.Noise</Name>
     </ProjectReference>
     <ProjectReference Include="DavidUtils.Editor.csproj">
-      <Project>{0f7a7cde-a24e-c84f-d785-e4b0323d8a48}</Project>
+      <Project>{c8cfa900-c82f-76bd-8968-205a321cc42a}</Project>
       <Name>DavidUtils.Editor</Name>
     </ProjectReference>
     <ProjectReference Include="Assets.ExternalPackages.SimpleWater.csproj">
-      <Project>{96969dfd-3584-eeda-3b17-9c5bae63aaac}</Project>
+      <Project>{3f9a6875-961d-fe8b-dc78-e4ff9b8f62af}</Project>
       <Name>Assets.ExternalPackages.SimpleWater</Name>
     </ProjectReference>
     <ProjectReference Include="DavidUtils.csproj">
-      <Project>{b195b350-5f82-196a-330d-3c4e004004bf}</Project>
+      <Project>{6ef4c5d9-9eba-7675-cd16-eed5900260f3}</Project>
       <Name>DavidUtils</Name>
     </ProjectReference>
     <ProjectReference Include="Procrain.MapGeneration.csproj">
-      <Project>{830defe6-8853-bf3d-3b4e-45670b5a5be4}</Project>
+      <Project>{725ee3bd-97c6-f759-626f-6dccda1f06ea}</Project>
       <Name>Procrain.MapGeneration</Name>
     </ProjectReference>
     <ProjectReference Include="Procrain.Core.csproj">
-      <Project>{95208784-cf22-d1c9-dc9c-b2828bfc165e}</Project>
+      <Project>{994aadef-6fdc-1388-61c3-50f618debae1}</Project>
       <Name>Procrain.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="UI.Editor.csproj">
+      <Project>{a3c5d71c-c12e-4fb6-42fa-ee29e2ceea0f}</Project>
+      <Name>UI.Editor</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

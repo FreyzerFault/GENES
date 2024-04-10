@@ -1,5 +1,6 @@
 using DavidUtils;
 using DavidUtils.PlayerControl;
+using Procrain.Core;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -25,9 +26,8 @@ namespace Core
             get => state;
             set
             {
-                OnStateChange(value);
-                onGameStateChanged?.Invoke(value);
                 state = value;
+                OnStateChange(value);
             }
         }
         
@@ -46,7 +46,7 @@ namespace Core
             onGameStateChanged.RemoveAllListeners();
         }
 
-        private static void OnStateChange(GameState newState)
+        private void OnStateChange(GameState newState)
         {
             switch (newState)
             {
@@ -59,6 +59,10 @@ namespace Core
                     Cursor.visible = true;
                     break;
             }
+            
+            onGameStateChanged?.Invoke(newState);
         }
+        
+        private void OnPause() => State = State == GameState.Paused ? GameState.Playing : GameState.Paused; 
     }
 }

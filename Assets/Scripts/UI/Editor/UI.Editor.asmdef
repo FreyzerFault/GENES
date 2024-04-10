@@ -1,0 +1,21 @@
+{
+    "name": "UI.Editor",
+    "rootNamespace": "",
+    "references": [
+        "Procrain.Editor",
+        "UI",
+        "Procrain.MapDisplay",
+        "Procrain.Core"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

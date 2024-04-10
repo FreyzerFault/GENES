@@ -1,7 +1,6 @@
 /// Credit ChoMPHi
 /// Sourced from - http://forum.unity3d.com/threads/script-flippable-for-ui-graphics.291711/
 
-using UnityEditorInternal;
 
 namespace UnityEngine.UI.Extensions
 {
@@ -48,7 +47,7 @@ namespace UnityEngine.UI.Extensions
             var components = gameObject.GetComponents(typeof(BaseMeshEffect));
             foreach (var comp in components)
                 if (comp.GetType() != typeof(UIFlippable))
-                    ComponentUtility.MoveComponentUp(this);
+                    UnityEditorInternal.ComponentUtility.MoveComponentUp(this);
                 else
                     break;
             GetComponent<Graphic>().SetVerticesDirty();

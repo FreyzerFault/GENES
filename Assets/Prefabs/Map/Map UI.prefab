@@ -46,6 +46,7 @@ GameObject:
   - component: {fileID: 204655917141326999}
   - component: {fileID: 5730505046443892245}
   - component: {fileID: 2432459439981759789}
+  - component: {fileID: 828289304271686814}
   m_Layer: 5
   m_Name: Map Image
   m_TagString: Map Fullscreen
@@ -62,7 +63,7 @@ RectTransform:
   m_GameObject: {fileID: 1708639798252241461}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 3.0999992, y: 3.0999992, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2872432775205002170}
@@ -72,9 +73,9 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 146.41599, y: 164.32202}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 0.47780457, y: 0.4144287}
+  m_Pivot: {x: 0.41929686, y: 0.77382815}
 --- !u!222 &5730505046443892245
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -113,6 +114,27 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &828289304271686814
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1708639798252241461}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1ca2ad611b35b34eb326ab608e2b9c0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  imageRectTransform: {fileID: 204655917141326999}
+  frameRectTransform: {fileID: 796403487025579189}
+  markerUIPrefab: {fileID: 8598442967786466416, guid: 5444bb0f9a82ae04eb7be11bf137c20d, type: 3}
+  markersUIParent: {fileID: 863898638760301793}
+  playerSprite: {fileID: 2909774369673658653}
+  zoom: 1
+  zoomChangeRate: 0.3
+  zoomInScale: 1.5
+  zoomOutScale: 0.75
 --- !u!1 &2027658020739872453
 GameObject:
   m_ObjectHideFlags: 0
@@ -138,18 +160,18 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2027658020739872453}
-  m_LocalRotation: {x: -0, y: -0, z: 0.64726925, w: -0.76226145}
+  m_LocalRotation: {x: -0, y: -0, z: -0.96801645, w: -0.25088692}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.32258072, y: 0.32258072, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 204655917141326999}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 133.96942, y: 116.29627}
-  m_SizeDelta: {x: 34.6248, y: 34.6249}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 172.9, y: 185.5}
+  m_SizeDelta: {x: 26.873001, y: 26.873001}
+  m_Pivot: {x: 0, y: 0}
 --- !u!222 &7047165136491696248
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -362,7 +384,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2037755598726895017}
-  - component: {fileID: 1517048709213835186}
   m_Layer: 5
   m_Name: Map UI
   m_TagString: Untagged
@@ -391,58 +412,6 @@ RectTransform:
   m_AnchoredPosition: {x: 730.57495, y: 39.16992}
   m_SizeDelta: {x: 1000, y: 1000.8301}
   m_Pivot: {x: 0, y: 0}
---- !u!114 &1517048709213835186
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7962637175109120906}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f1ca2ad611b35b34eb326ab608e2b9c0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  heightGradient:
-    serializedVersion: 2
-    key0: {r: 0, g: 0.03649179, b: 0.0754717, a: 1}
-    key1: {r: 0.5188679, g: 0.4408957, b: 0.14964655, a: 1}
-    key2: {r: 0.8235295, g: 0.81568635, b: 0.48627454, a: 0.6039216}
-    key3: {r: 0.33333334, g: 0.5921569, b: 0.08627451, a: 0.6039216}
-    key4: {r: 0.25490198, g: 0.41960788, b: 0.08627451, a: 0.6039216}
-    key5: {r: 0.35686275, g: 0.27058825, b: 0.2392157, a: 0.6039216}
-    key6: {r: 0.29411766, g: 0.23529413, b: 0.21176472, a: 0.6039216}
-    key7: {r: 1, g: 1, b: 1, a: 0.6039216}
-    ctime0: 0
-    ctime1: 11069
-    ctime2: 16246
-    ctime3: 17237
-    ctime4: 21092
-    ctime5: 23405
-    ctime6: 28802
-    ctime7: 65535
-    atime0: 0
-    atime1: 65535
-    atime2: 0
-    atime3: 0
-    atime4: 0
-    atime5: 0
-    atime6: 0
-    atime7: 0
-    m_Mode: 1
-    m_ColorSpace: 0
-    m_NumColorKeys: 8
-    m_NumAlphaKeys: 2
-  playerSprite: {fileID: 2909774369673658653}
-  markersUIParent: {fileID: 863898638760301793}
-  markerUIPrefab: {fileID: 8598442967786466416, guid: 5444bb0f9a82ae04eb7be11bf137c20d, type: 3}
-  image: {fileID: 2432459439981759789}
-  frameRectTransform: {fileID: 6777160292416064084}
-  imageRectTransform: {fileID: 204655917141326999}
-  zoom: 1
-  zoomChangeRate: 2
-  zoomInScale: 1.5
-  zoomOutScale: 0.75
 --- !u!1001 &9075378310326834992
 PrefabInstance:
   m_ObjectHideFlags: 0

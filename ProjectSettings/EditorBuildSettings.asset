@@ -6,18 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Testing/Sandbox.unity
-    guid: 9c4f0ac168da5d042b6b79f2e71a58c0
-  - enabled: 1
-    path: Assets/Scenes/Aplicando Procrain.unity
-    guid: ac1206c92b4ebca49a4a139d7fb266b7
-  - enabled: 1
-    path: Assets/Scenes/Procrain.unity
-    guid: 02bdeca7dcf54304298eb91619759c0d
-  - enabled: 1
-    path: Assets/Scenes/Terreno Complejo a Mano.unity
-    guid: 9fc0d4010bbf28b4594072e72b8655ab
-  - enabled: 1
-    path: Assets/Scenes/Algorithm Test.unity
-    guid: 726fd062556158a42a542c1ff1dde48f
+    path: Assets/Scenes/Algorithm Proc Test.unity
+    guid: f4a02cbf12e8e4b4cbb2ad15693478e9
   m_configObjects: {}

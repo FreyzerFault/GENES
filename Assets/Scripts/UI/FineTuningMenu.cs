@@ -1,6 +1,7 @@
 using System.Collections.Generic;
-using Map.PathFinding;
-using Map.PathFinding.A_Star;
+using PathFinding;
+using PathFinding.Settings;
+using PathFinding.Settings.Astar;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,24 +10,24 @@ namespace UI
 {
     public class FineTuningMenu : MonoBehaviour
     {
-        [SerializeField] private PathFindingConfigSo pathFindingConfig;
-
+        private static PathFindingSettings PathFindingConfig =>
+            PathFindingManager.Instance.mainPathFindingGenerator.pathFindingSettings;
+        
         [SerializeField] private Button updateButton;
-
         [SerializeField] private GameObject[] parameterControllerObjects;
 
         private TMP_Text[] _labelTexts;
-        private Dictionary<AstarParam, ParameterController> _parameterControllers;
+        private Dictionary<ParamType, ParameterController> _parameterControllers;
         private Slider[] _sliders;
         private TMP_Text[] _valueTexts;
 
-        private AstarConfig Config => pathFindingConfig.Config;
+        private AlgorithmParams Parameters => PathFindingConfig.Parameters;
 
 
         private void Awake()
         {
-            _parameterControllers = new Dictionary<AstarParam, ParameterController>();
-            foreach (var pair in Config.parameters.pairElements)
+            _parameterControllers = new Dictionary<ParamType, ParameterController>();
+            foreach (var pair in Parameters.parameters.pairElements)
                 _parameterControllers.Add(
                     pair.key,
                     new ParameterController
@@ -42,8 +43,8 @@ namespace UI
         {
             foreach (var controller in _parameterControllers)
             {
-                var value = Config.parameters.GetValue(controller.Key).value;
-                var displayName = Config.parameters.GetValue(controller.Key).displayName;
+                float value = Parameters.parameters.GetValue(controller.Key).value;
+                string displayName = Parameters.parameters.GetValue(controller.Key).displayName;
 
                 controller.Value.labelText.text = displayName;
                 controller.Value.valueText.text = value.ToString("F2");
@@ -55,12 +56,10 @@ namespace UI
             }
         }
 
-        private void OnValueChange(float value, string displayName, AstarParam parameter)
+        private void OnValueChange(float value, string displayName, ParamType parameter)
         {
-            Config.parameters.SetValue(
-                parameter,
-                new ParamValue { value = value, displayName = displayName }
-            );
+            Parameters.parameters.SetValue(parameter, new ParamValue { value = value, displayName = displayName });
+            
             updateButton.gameObject.SetActive(true);
 
             _parameterControllers[parameter].valueText.text = value.ToString("F2");
@@ -68,7 +67,7 @@ namespace UI
 
         public void OnUpdateConfirmed()
         {
-            pathFindingConfig.OnFineTuneTriggerEvent();
+            PathFindingConfig.OnFineTuneTriggerEvent();
             updateButton.gameObject.SetActive(false);
         }
 
