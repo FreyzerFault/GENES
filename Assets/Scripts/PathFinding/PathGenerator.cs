@@ -1,309 +1,310 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Core;
+using DavidUtils;
 using DavidUtils.ExtensionMethods;
 using Markers;
 using Procrain.Core;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace PathFinding
 {
-    public class PathGenerator : MonoBehaviour
-    {
-        [SerializeField] public Terrain terrain;
-        
-        protected List<Path> paths = new();
-        public bool generatePlayerPath = true;
-        public bool mergeOnSinglePath;
+	public class PathGenerator : MonoBehaviour
+	{
+		[SerializeField] public Terrain terrain;
 
-        public Path Path => paths[0];
-        public Path[] Paths => paths.ToArray();
-        public Path[] PathsBetweenMarkers => paths.Skip(0).ToArray();
+		protected List<Path> paths = new();
+		public bool generatePlayerPath = true;
+		public bool mergeOnSinglePath;
 
-        // PLAYER
-        private static Vector3 PlayerPosition => MapManager.Instance.PlayerPosition;
-        private static Vector3 PlayerDirection => MapManager.Instance.PlayerForward;
-        private static Vector3 PlayerDirection2D => new Vector2(PlayerDirection.x, PlayerDirection.z);
-        private Vector3 PlayerPositionOnTerrain => terrain.Project(MapManager.Instance.PlayerPosition);
-        
-        // MARKERS
-        private int MarkerCount => MarkerManager.Instance.MarkerCount;
-        private List<Marker> Markers => MarkerManager.Instance.Markers;
-        private Marker NextMarker => MarkerManager.Instance.NextMarker;
+		public Path Path => paths[0];
+		public Path[] Paths => paths.ToArray();
+		public Path[] PathsBetweenMarkers => paths.Skip(0).ToArray();
 
-        protected void Start()
-        {
-            terrain = MapManager.Terrain;
-            bounds = terrain.GetBounds();
-            
-            // EVENTS
-            MarkerManager.Instance.OnMarkerAdded += HandleOnMarkerAdded;
-            MarkerManager.Instance.OnMarkerRemoved += HandleOnMarkerRemoved;
-            MarkerManager.Instance.OnMarkerMoved += HandleOnMarkerMoved;
-            MarkerManager.Instance.OnMarkersClear += ClearPaths;
+		// PLAYER
+		private static Vector3 PlayerPosition => MapManager.Instance.PlayerPosition;
+		private static Vector3 PlayerDirection => MapManager.Instance.PlayerForward;
+		private static Vector3 PlayerDirection2D => new Vector2(PlayerDirection.x, PlayerDirection.z);
+		private Vector3 PlayerPositionOnTerrain => terrain.Project(MapManager.Instance.PlayerPosition);
 
-            GameManager.Instance.player.OnPlayerMove += _ => RedoPlayerPath();
+		// MARKERS
+		private int MarkerCount => MarkerManager.Instance.MarkerCount;
+		private List<Marker> Markers => MarkerManager.Instance.Markers;
+		private Marker NextMarker => MarkerManager.Instance.NextMarker;
 
-            RedoPath();
-        }
+		protected void Start()
+		{
+			terrain = MapManager.Terrain;
+			bounds = terrain.GetBounds();
 
-        protected virtual void OnDestroy()
-        {
-            MarkerManager.Instance.OnMarkerAdded -= HandleOnMarkerAdded;
-            MarkerManager.Instance.OnMarkerRemoved -= HandleOnMarkerRemoved;
-            MarkerManager.Instance.OnMarkerMoved -= HandleOnMarkerMoved;
-            MarkerManager.Instance.OnMarkersClear -= ClearPaths;
-        }
-        
-        #region CRUD
+			// EVENTS
+			MarkerManager.Instance.OnMarkerAdded += HandleOnMarkerAdded;
+			MarkerManager.Instance.OnMarkerRemoved += HandleOnMarkerRemoved;
+			MarkerManager.Instance.OnMarkerMoved += HandleOnMarkerMoved;
+			MarkerManager.Instance.OnMarkersClear += ClearPaths;
 
-        public event Action<Path, int> OnPathAdded;
-        public event Action<int> OnPathDeleted;
-        public event Action<Path, int> OnPathUpdated;
-        public event Action<Path[]> OnAllPathsUpdated;
-        public event Action OnPathsCleared;
+			GameManager.Instance.player.OnPlayerMove += _ => RedoPlayerPath();
 
-        private void AddPath(Path path, int index = -1)
-        {
-            if (index == -1) index = paths.Count;
-            paths.Insert(index, path);
-            OnPathAdded?.Invoke(path, index);
-        }
+			RedoPath();
+		}
 
-        public Path GetPath(int index) => index >= paths.Count || index < 0 ? null : paths[index];
+		protected virtual void OnDestroy()
+		{
+			MarkerManager.Instance.OnMarkerAdded -= HandleOnMarkerAdded;
+			MarkerManager.Instance.OnMarkerRemoved -= HandleOnMarkerRemoved;
+			MarkerManager.Instance.OnMarkerMoved -= HandleOnMarkerMoved;
+			MarkerManager.Instance.OnMarkersClear -= ClearPaths;
+		}
 
-        private void SetPath(int index, Path path)
-        {
-            paths[index] = path;
-            OnPathUpdated?.Invoke(path, index);
-        }
+		#region CRUD
 
-        private void DeletePath(int index)
-        {
-            paths.RemoveAt(index);
-            OnPathDeleted?.Invoke(index);
-        }
+		public event Action<Path, int> OnPathAdded;
+		public event Action<int> OnPathDeleted;
+		public event Action<Path, int> OnPathUpdated;
+		public event Action<Path[]> OnAllPathsUpdated;
+		public event Action OnPathsCleared;
 
-        private void ClearPaths()
-        {
-            paths.Clear();
-            OnPathsCleared?.Invoke();
-        }
+		private void AddPath(Path path, int index = -1)
+		{
+			if (index == -1) index = paths.Count;
+			paths.Insert(index, path);
+			OnPathAdded?.Invoke(path, index);
+		}
 
-        #endregion
+		public Path GetPath(int index) => index >= paths.Count || index < 0 ? null : paths[index];
 
-        #region MARKER EVENTS
+		private void SetPath(int index, Path path)
+		{
+			paths[index] = path;
+			OnPathUpdated?.Invoke(path, index);
+		}
 
-        private void HandleOnMarkerAdded(Marker marker, int index = -1)
-        {
-            if (mergeOnSinglePath)
-            {
-                RedoPath();
-                return;
-            }
+		private void DeletePath(int index)
+		{
+			paths.RemoveAt(index);
+			OnPathDeleted?.Invoke(index);
+		}
 
-            index = index < 0 || index >= MarkerCount ? MarkerCount - 1 : index;
-            PathPos pathPos = GetMarkerRelativePos(index);
+		private void ClearPaths()
+		{
+			paths.Clear();
+			OnPathsCleared?.Invoke();
+		}
 
-            Vector3 mid = default,
-                start = default,
-                end = default;
+		#endregion
 
-            switch (pathPos)
-            {
-                // Es el 1º Marker añadido => [New Marker]
-                case PathPos.Alone:
-                    RedoPlayerPath();
-                    return;
+		#region MARKER EVENTS
 
-                // Se coloca el último => [... -> Nº Marker ===> New Marker]
-                case PathPos.Back:
-                    start = Markers[index - 1].WorldPosition;
-                    mid = marker.WorldPosition;
-                    AddPath(BuildPath(start, mid));
-                    break;
+		private void HandleOnMarkerAdded(Marker marker, int index = -1)
+		{
+			if (mergeOnSinglePath)
+			{
+				RedoPath();
+				return;
+			}
 
-                // Se coloca el primero => [Player ===> New Marker ===> 2º Marker -> ...]
-                case PathPos.Front:
-                    RedoPlayerPath();
-                    mid = marker.WorldPosition;
-                    end = Markers[1].WorldPosition;
-                    AddPath(BuildPath(mid, end), 1);
-                    break;
+			index = index < 0 || index >= MarkerCount ? MarkerCount - 1 : index;
+			PathPos pathPos = GetMarkerRelativePos(index);
 
-                // El Marker se ha insertado en medio del camino
-                // [... -> i-1º Marker ===> New Marker ===> i+1º Marker -> ...]
-                case PathPos.Mid:
-                    start = Markers[index - 1].WorldPosition;
-                    mid = marker.WorldPosition;
-                    end = Markers[index + 1].WorldPosition;
-                    SetPath(index, BuildPath(start, mid));
-                    AddPath(BuildPath(mid, end), index + 1);
-                    break;
-            }
-        }
+			Vector3 mid = default,
+				start = default,
+				end = default;
 
-        private void HandleOnMarkerRemoved(Marker marker, int index)
-        {
-            if (mergeOnSinglePath)
-            {
-                RedoPath();
-                return;
-            }
+			switch (pathPos)
+			{
+				// Es el 1º Marker añadido => [New Marker]
+				case PathPos.Alone:
+					RedoPlayerPath();
+					return;
 
-            // Si es el 1º marcador se actualiza el camino del jugador
-            if (index == 0)
-            {
-                DeletePath(0);
-                if (generatePlayerPath) RedoPlayerPath();
-                return;
-            }
+				// Se coloca el último => [... -> Nº Marker ===> New Marker]
+				case PathPos.Back:
+					start = Markers[index - 1].WorldPosition;
+					mid = marker.WorldPosition;
+					AddPath(BuildPath(start, mid));
+					break;
 
-            // Ultimo marker eliminado, solo tiene el último path conectado
-            if (index == MarkerCount)
-            {
-                DeletePath(index);
-                return;
-            }
+				// Se coloca el primero => [Player ===> New Marker ===> 2º Marker -> ...]
+				case PathPos.Front:
+					RedoPlayerPath();
+					mid = marker.WorldPosition;
+					end = Markers[1].WorldPosition;
+					AddPath(BuildPath(mid, end), 1);
+					break;
 
-            // Si el Marker es intermedio hay que fusionar sus dos paths adyacentes en uno
-            // (start) Marker[i-1] =Path[i]=> deleted =Path[i+1]=> Marker[i] (end)
-            // (start) Marker[i-1]          =Path[i]=>         Marker[i] (end)
-            SetPath(index, Path.FromPathList(new[] { paths[index], paths[index + 1] }));
-            DeletePath(index + 1);
-        }
+				// El Marker se ha insertado en medio del camino
+				// [... -> i-1º Marker ===> New Marker ===> i+1º Marker -> ...]
+				case PathPos.Mid:
+					start = Markers[index - 1].WorldPosition;
+					mid = marker.WorldPosition;
+					end = Markers[index + 1].WorldPosition;
+					SetPath(index, BuildPath(start, mid));
+					AddPath(BuildPath(mid, end), index + 1);
+					break;
+			}
+		}
 
-        private void HandleOnMarkerMoved(Marker marker, int index)
-        {
-            if (mergeOnSinglePath)
-            {
-                RedoPath();
-                return;
-            }
+		private void HandleOnMarkerRemoved(Marker marker, int index)
+		{
+			if (mergeOnSinglePath)
+			{
+				RedoPath();
+				return;
+			}
 
-            // Actualizamos sus paths conectados
-            // [Marker[i-1] =Path[i]=> Marker[i] =Path[i+1]=> Marker[i+1]]
+			// Si es el 1º marcador se actualiza el camino del jugador
+			if (index == 0)
+			{
+				DeletePath(0);
+				if (generatePlayerPath) RedoPlayerPath();
+				return;
+			}
 
-            // PREVIOUS PATH:
+			// Ultimo marker eliminado, solo tiene el último path conectado
+			if (index == MarkerCount)
+			{
+				DeletePath(index);
+				return;
+			}
 
-            // Si es el 1º marcador se actualiza el camino del jugador
-            if (index == 0 && generatePlayerPath)
-                RedoPlayerPath();
-            else
-                SetPath(index, BuildPath(Markers[index - 1].WorldPosition, marker.WorldPosition));
+			// Si el Marker es intermedio hay que fusionar sus dos paths adyacentes en uno
+			// (start) Marker[i-1] =Path[i]=> deleted =Path[i+1]=> Marker[i] (end)
+			// (start) Marker[i-1]          =Path[i]=>         Marker[i] (end)
+			SetPath(index, Path.FromPathList(new[] { paths[index], paths[index + 1] }));
+			DeletePath(index + 1);
+		}
 
-            if (index == paths.Count - 1) return;
+		private void HandleOnMarkerMoved(Marker marker, int index)
+		{
+			if (mergeOnSinglePath)
+			{
+				RedoPath();
+				return;
+			}
 
-            // NEXT PATH:
-            Path path = BuildPath(marker.WorldPosition, Markers[index + 1].WorldPosition);
-            SetPath(index + 1, path);
-        }
+			// Actualizamos sus paths conectados
+			// [Marker[i-1] =Path[i]=> Marker[i] =Path[i+1]=> Marker[i+1]]
 
-        #endregion
+			// PREVIOUS PATH:
 
-        #region PATH POSITION CLASSIFIER
+			// Si es el 1º marcador se actualiza el camino del jugador
+			if (index == 0 && generatePlayerPath)
+				RedoPlayerPath();
+			else
+				SetPath(index, BuildPath(Markers[index - 1].WorldPosition, marker.WorldPosition));
 
-        private enum PathPos
-        {
-            Back,
-            Front,
-            Mid,
-            Alone
-        }
+			if (index == paths.Count - 1) return;
 
-        private PathPos GetMarkerRelativePos(int index) =>
-            paths.Count == 0 ? PathPos.Alone 
-            : index == 0 ? PathPos.Front
-            : index == paths.Count ? PathPos.Back 
-            : PathPos.Mid;
+			// NEXT PATH:
+			Path path = BuildPath(marker.WorldPosition, Markers[index + 1].WorldPosition);
+			SetPath(index + 1, path);
+		}
 
-        #endregion
+		#endregion
 
-        #region BUILD PATH
+		#region PATH POSITION CLASSIFIER
 
-        protected virtual Path BuildPath(Vector3 start, Vector3 end, Vector2? startDir = null, Vector2? endDir = null)
-        {
-            if (start == end) return Path.EmptyPath;
-            var startNode = new Node(start, direction: startDir);
-            var endNode = new Node(end, direction: endDir);
-            endNode.Parent = startNode;
-            return new Path(startNode, endNode);
-        }
+		private enum PathPos
+		{
+			Back,
+			Front,
+			Mid,
+			Alone
+		}
 
-        protected virtual List<Path> BuildPath(Vector3[] checkPoints, Vector2[] checkPointsDirs = null)
-        {
-            var pathsBuilt = new List<Path>();
+		private PathPos GetMarkerRelativePos(int index) =>
+			paths.Count == 0 ? PathPos.Alone
+			: index == 0 ? PathPos.Front
+			: index == paths.Count ? PathPos.Back
+			: PathPos.Mid;
 
-            for (var i = 1; i < checkPoints.Length; i++)
-            {
-                Vector3 start = checkPoints[i - 1];
-                Vector3 end = checkPoints[i];
+		#endregion
 
-                Vector2 startDirection = default, endDirection = default;
-                if (checkPointsDirs != null)
-                {
-                    if (checkPointsDirs.Length > i - 1) startDirection = checkPointsDirs[i - 1];
-                    if (checkPointsDirs.Length > i) endDirection = Vector2.zero;
-                }
+		#region BUILD PATH
 
-                pathsBuilt.Add(BuildPath(start, end, startDirection, endDirection));
-            }
+		protected virtual Path BuildPath(Vector3 start, Vector3 end, Vector2? startDir = null, Vector2? endDir = null)
+		{
+			if (start == end) return Path.EmptyPath;
+			var startNode = new Node(start, direction: startDir);
+			var endNode = new Node(end, direction: endDir);
+			endNode.Parent = startNode;
+			return new Path(startNode, endNode);
+		}
 
-            return pathsBuilt;
-        }
+		protected virtual List<Path> BuildPath(Vector3[] checkPoints, Vector2[] checkPointsDirs = null)
+		{
+			var pathsBuilt = new List<Path>();
 
-        protected void RedoPath()
-        {
-            // Player -> Marker 1 -> Marker 2 -> ... -> Marker N
-            var checkpoints = Markers.Where(marker => !marker.IsChecked)
-                .Select(marker => marker.WorldPosition)
-                .ToArray();
+			for (var i = 1; i < checkPoints.Length; i++)
+			{
+				Vector3 start = checkPoints[i - 1];
+				Vector3 end = checkPoints[i];
 
-            // Add Player as 1st Checkpoint if in Legal Position
-            if (generatePlayerPath && IsLegal(PlayerPositionOnTerrain))
-                checkpoints = checkpoints.Prepend(PlayerPositionOnTerrain).ToArray();
+				Vector2 startDirection = default, endDirection = default;
+				if (checkPointsDirs != null)
+				{
+					if (checkPointsDirs.Length > i - 1) startDirection = checkPointsDirs[i - 1];
+					if (checkPointsDirs.Length > i) endDirection = Vector2.zero;
+				}
 
-            // Filter Illegal Checkpoints
-            checkpoints = checkpoints.Where(IsLegal).ToArray();
+				pathsBuilt.Add(BuildPath(start, end, startDirection, endDirection));
+			}
 
-            ClearPaths();
+			return pathsBuilt;
+		}
 
-            paths = BuildPath(checkpoints, new[] { new Vector2(PlayerDirection.x, PlayerDirection.z) });
+		protected void RedoPath()
+		{
+			// Player -> Marker 1 -> Marker 2 -> ... -> Marker N
+			Vector3[] checkpoints = Markers.Where(marker => !marker.IsChecked)
+				.Select(marker => marker.WorldPosition)
+				.ToArray();
 
-            if (mergeOnSinglePath) paths = new List<Path> { Path.FromPathList(paths) };
+			// Add Player as 1st Checkpoint if in Legal Position
+			if (generatePlayerPath && IsLegal(PlayerPositionOnTerrain))
+				checkpoints = checkpoints.Prepend(PlayerPositionOnTerrain).ToArray();
 
-            OnAllPathsUpdated?.Invoke(paths.ToArray());
-        }
+			// Filter Illegal Checkpoints
+			checkpoints = checkpoints.Where(IsLegal).ToArray();
 
-        private void RedoPlayerPath()
-        {
-            if (!generatePlayerPath || MarkerCount == 0 || !IsLegal(PlayerPositionOnTerrain)) return;
+			ClearPaths();
 
-            if (mergeOnSinglePath)
-            {
-                RedoPath();
-                return;
-            }
+			paths = BuildPath(checkpoints, new[] { new Vector2(PlayerDirection.x, PlayerDirection.z) });
 
-            Path playerPath = BuildPath(PlayerPosition, NextMarker.WorldPosition, PlayerDirection2D);
+			if (mergeOnSinglePath) paths = new List<Path> { Path.FromPathList(paths) };
 
-            if (paths.Count == 0) AddPath(playerPath);
-            else SetPath(0, playerPath);
-        }
+			OnAllPathsUpdated?.Invoke(paths.ToArray());
+		}
 
-        #endregion
+		private void RedoPlayerPath()
+		{
+			if (!generatePlayerPath || MarkerCount == 0 || !IsLegal(PlayerPositionOnTerrain)) return;
 
-        #region RESTRICTIONS
-        
-        [SerializeField] public Bounds bounds;
+			if (mergeOnSinglePath)
+			{
+				RedoPath();
+				return;
+			}
 
-        public bool IsInBounds(Vector3 pos) => bounds.Contains(pos);
+			if (MarkerManager.Instance.AllChecked) return;
 
-        public virtual bool IsLegal(Vector3 pos) => IsInBounds(pos);
-        public bool IsLegal(Vector2 normPos) => IsLegal(terrain.GetWorldPosition(normPos));
+			Path playerPath = BuildPath(PlayerPosition, NextMarker.WorldPosition, PlayerDirection2D);
 
-        #endregion
-    }
+			if (paths.Count == 0) AddPath(playerPath);
+			else SetPath(0, playerPath);
+		}
+
+		#endregion
+
+		#region RESTRICTIONS
+
+		[SerializeField] public Bounds bounds;
+
+		public bool IsInBounds(Vector3 pos) => bounds.Contains(pos);
+
+		public virtual bool IsLegal(Vector3 pos) => IsInBounds(pos);
+		public bool IsLegal(Vector2 normPos) => IsLegal(terrain.GetWorldPosition(normPos));
+
+		#endregion
+	}
 }

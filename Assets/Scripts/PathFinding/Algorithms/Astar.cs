@@ -6,134 +6,139 @@ using UnityEngine;
 
 namespace PathFinding.Algorithms
 {
-    // ALGORTIMO A*
-    public class Astar : Dijkstra
-    {
-        private static Astar _instance;
-        public new static Astar Instance => _instance ??= new Astar();
-        
-        public override Path FindPath(Node start, Node end, Terrain terrain, Bounds bounds, PathFindingSettings settings)
-        {
-            if (start.Collision(end)) return Path.EmptyPath;
+	// ALGORTIMO A*
+	public class Astar : Dijkstra
+	{
+		private static Astar _instance;
+		public new static Astar Instance => _instance ??= new Astar();
 
-            // Si el Path de Cache tiene mismo inicio y fin => Devolverlo
-            if (settings.useCache && IsCached(start, end)) return GetCached(start, end);
+		public override Path FindPath(
+			Node start, Node end, Terrain terrain, Bounds bounds, PathFindingSettings settings
+		)
+		{
+			if (start.Collision(end)) return Path.EmptyPath;
 
-            if (!IsLegal(start, settings, bounds) || !IsLegal(end, settings, bounds)) return new Path(start, end);
+			// Si el Path de Cache tiene mismo inicio y fin => Devolverlo
+			if (settings.useCache && IsCached(start, end, out Path pathCached)) return pathCached;
 
-            var iterations = 0;
+			if (!IsLegal(start, settings, bounds) || !IsLegal(end, settings, bounds)) return new Path(start, end);
 
-            // Nodes checked && Nodes to check
-            var allNodes = new HashSet<Node> { start };
-            var openNodes = new List<Node> { start };
-            var exploredNodes = new List<Node>();
+			var iterations = 0;
 
-            // Main loop
-            while (openNodes.Count > 0)
-            {
-                iterations++;
+			// Nodes checked && Nodes to check
+			var allNodes = new HashSet<Node> { start };
+			var openNodes = new List<Node> { start };
+			var exploredNodes = new List<Node>();
 
-                // Select BEST Node
-                var currentNode = GetBetterNode(openNodes);
+			// Main loop
+			while (openNodes.Count > 0)
+			{
+				iterations++;
 
-                // Marcar como explorado
-                openNodes.Remove(currentNode);
-                exploredNodes.Add(currentNode);
+				// Select BEST Node
+				Node currentNode = GetBetterNode(openNodes);
 
-                // Si cumple la condición objetivo => terminar algoritmo
-                // End no tiene por qué ser un nodo que cuadre en la malla
-                // Por lo que el último Nodo será el que se acerque a End colisionando con él
-                bool endReached = currentNode.Collision(end);
-                if (iterations >= settings.maxIterations || endReached)
-                {
-                    // Como el Nodo actual esta demasiado cerca, lo ignoramos y conectamos el anterior a END
-                    var lastNode = currentNode.Parent;
-                    end.G = currentNode.G + CalculateCost(lastNode, end, settings);
-                    end.H = 0;
-                    end.Parent = lastNode;
+				// Marcar como explorado
+				openNodes.Remove(currentNode);
+				exploredNodes.Add(currentNode);
 
-                    var path = new Path(start, end);
-                    
-                    path.ExploredNodes = exploredNodes.ToArray();
-                    path.OpenNodes = openNodes.ToArray();
+				// Si cumple la condición objetivo => terminar algoritmo
+				// End no tiene por qué ser un nodo que cuadre en la malla
+				// Por lo que el último Nodo será el que se acerque a End colisionando con él
+				bool endReached = currentNode.Collision(end);
+				if (iterations >= settings.maxIterations || endReached)
+				{
+					// Como el Nodo actual esta demasiado cerca, lo ignoramos y conectamos el anterior a END
+					Node lastNode = currentNode.Parent;
+					end.G = currentNode.G + CalculateCost(lastNode, end, settings);
+					end.H = 0;
+					end.Parent = lastNode;
 
-                    // STORE in CACHE
-                    if (settings.useCache) StoreInCache(start, end, path);
-                    
-                    return path;
-                }
+					var path = new Path(start, end);
 
-                // Crear vecinos si es la 1º vez que se exploran
-                if (currentNode.neighbours == null || currentNode.neighbours.Length == 0)
-                    currentNode.neighbours = CreateNeighbours(currentNode, settings, terrain, bounds, allNodes, false);
+					path.ExploredNodes = exploredNodes.ToArray();
+					path.OpenNodes = openNodes.ToArray();
 
-                // Explorar vecinos
-                foreach (var neighbour in currentNode.neighbours)
-                {
-                    if (!neighbour.Legal) continue;
+					// STORE in CACHE
+					if (settings.useCache) StoreInCache(start, end, path);
 
-                    bool explored = exploredNodes.Contains(neighbour);
-                    bool opened = openNodes.Contains(neighbour);
+					return path;
+				}
 
-                    // Ya explorado
-                    if (explored) continue;
+				// Crear vecinos si es la 1º vez que se exploran
+				if (currentNode.neighbours == null || currentNode.neighbours.Length == 0)
+					currentNode.neighbours = CreateNeighbours(currentNode, settings, terrain, bounds, allNodes, false);
 
-                    // Calcular coste
-                    float newCost = currentNode.G + CalculateHeuristic(currentNode, neighbour, settings);
+				// Explorar vecinos
+				foreach (Node neighbour in currentNode.neighbours)
+				{
+					if (!neighbour.Legal) continue;
 
-                    if (newCost >= neighbour.G && opened) continue;
-                    
-                    // Si no está en la lista de exploración o su coste MEJORA, actualizar
-                    
-                    // Actualizar coste y Heurística
-                    neighbour.G = newCost;
-                    neighbour.H = CalculateHeuristic(neighbour, end, settings);
+					bool explored = exploredNodes.Contains(neighbour);
+					bool opened = openNodes.Contains(neighbour);
 
-                    // Conectar nodos
-                    neighbour.Parent = currentNode;
+					// Ya explorado
+					if (explored) continue;
 
-                    if (!opened) openNodes.Add(neighbour);
-                }
-            }
+					// Calcular coste
+					float newCost = currentNode.G + CalculateCost(currentNode, neighbour, settings);
 
-            return Path.EmptyPath;
-        }
+					if (newCost >= neighbour.G && opened) continue;
 
-        // ==================== COSTE Y HEURÍSTICA ====================
-        protected override float CalculateCost(Node a, Node b, PathFindingSettings pathFindingSettings)
-        {
-            float distanceCost = a.Distance2D(b) * pathFindingSettings.Parameters.GetValue(ParamType.DistanceCost);
-            float heightCost = Math.Abs(a.position.y - b.position.y) * pathFindingSettings.Parameters.GetValue(ParamType.HeightCost);
+					// Si no está en la lista de exploración o su coste MEJORA, actualizar
 
-            return distanceCost + heightCost;
-        }
+					// Actualizar coste y Heurística
+					neighbour.G = newCost;
+					neighbour.H = CalculateHeuristic(neighbour, end, settings);
 
-        protected virtual float CalculateHeuristic(Node a, Node b, PathFindingSettings pathFindingSettings)
-        {
-            float distHeuristic = a.Distance2D(b) * pathFindingSettings.Parameters.GetValue(ParamType.DistanceHeuristic);
-            float heightHeuristic =
-                Mathf.Abs(a.position.y - b.position.y) * pathFindingSettings.Parameters.GetValue(ParamType.HeightHeuristic);
+					// Conectar nodos
+					neighbour.Parent = currentNode;
 
-            float slopeHeuristic = a.slopeAngle * pathFindingSettings.Parameters.GetValue(ParamType.SlopeHeuristic);
+					if (!opened) openNodes.Add(neighbour);
+				}
+			}
 
-            return distHeuristic + heightHeuristic + slopeHeuristic;
-        }
+			return Path.EmptyPath;
+		}
 
-        // Minimiza la Funcion objetivo
-        // Si hay + de 1 Nodo con mismma F => Devuelve el que tenga menor H
-        private static Node GetBetterNode(List<Node> nodes)
-        {
-            // Get Min F Nodes
-            float minF = nodes.Min(node => node.F);
-            var minFunctionNodes = nodes.Where(node => node.F - minF < float.Epsilon).ToList();
+		// ==================== COSTE Y HEURÍSTICA ====================
+		protected override float CalculateCost(Node a, Node b, PathFindingSettings pathFindingSettings)
+		{
+			float distanceCost = a.Distance2D(b) * pathFindingSettings.Parameters.GetValue(ParamType.DistanceCost);
+			float heightCost = Math.Abs(a.position.y - b.position.y)
+			                   * pathFindingSettings.Parameters.GetValue(ParamType.HeightCost);
 
-            if (minFunctionNodes.Count == 1) return minFunctionNodes[0];
+			return distanceCost + heightCost;
+		}
 
-            // Get Min H Nodes
-            float minH = minFunctionNodes.Min(node => node.H);
-            minFunctionNodes = minFunctionNodes.Where(node => node.H - minH < float.Epsilon).ToList();
+		protected virtual float CalculateHeuristic(Node a, Node b, PathFindingSettings pathFindingSettings)
+		{
+			float distHeuristic =
+				a.Distance2D(b) * pathFindingSettings.Parameters.GetValue(ParamType.DistanceHeuristic);
+			float heightHeuristic =
+				Mathf.Abs(a.position.y - b.position.y)
+				* pathFindingSettings.Parameters.GetValue(ParamType.HeightHeuristic);
 
-            return minFunctionNodes[0];
-        }
-    }
+			float slopeHeuristic = a.slopeAngle * pathFindingSettings.Parameters.GetValue(ParamType.SlopeHeuristic);
+
+			return distHeuristic + heightHeuristic + slopeHeuristic;
+		}
+
+		// Minimiza la Funcion objetivo
+		// Si hay + de 1 Nodo con mismma F => Devuelve el que tenga menor H
+		private static Node GetBetterNode(List<Node> nodes)
+		{
+			// Get Min F Nodes
+			float minF = nodes.Min(node => node.F);
+			List<Node> minFunctionNodes = nodes.Where(node => node.F - minF < float.Epsilon).ToList();
+
+			if (minFunctionNodes.Count == 1) return minFunctionNodes[0];
+
+			// Get Min H Nodes
+			float minH = minFunctionNodes.Min(node => node.H);
+			minFunctionNodes = minFunctionNodes.Where(node => node.H - minH < float.Epsilon).ToList();
+
+			return minFunctionNodes[0];
+		}
+	}
 }
