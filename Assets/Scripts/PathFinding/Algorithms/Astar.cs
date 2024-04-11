@@ -7,7 +7,7 @@ using UnityEngine;
 namespace PathFinding.Algorithms
 {
 	// ALGORTIMO A*
-	public class Astar : Dijkstra
+	public class Astar : DijkstraAlg
 	{
 		private static Astar _instance;
 		public new static Astar Instance => _instance ??= new Astar();

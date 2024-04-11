@@ -1,37 +1,34 @@
 using DavidUtils.ExtensionMethods;
 using UnityEngine;
 
-namespace Map
+namespace Utils
 {
-    public class ProjectedMeshOnTerrain : MonoBehaviour
-    {
-        public Vector2 size = Vector2.one * 10;
-        public float resolution = 1;
-        public float offset = 0.2f;
+	public class ProjectedMeshOnTerrain : MonoBehaviour
+	{
+		public Vector2 size = Vector2.one * 10;
+		public float resolution = 1;
+		public float offset = 0.2f;
 
-        public bool realTimeUpdate;
-        private Mesh _mesh;
-        private UnityEngine.Terrain _terrain;
+		public bool realTimeUpdate;
+		private Mesh _mesh;
+		private Terrain _terrain;
 
-        private void Awake()
-        {
-            _terrain = UnityEngine.Terrain.activeTerrain;
-            _mesh = GetComponent<MeshFilter>().mesh;
+		private void Awake()
+		{
+			_terrain = Terrain.activeTerrain;
+			_mesh = GetComponent<MeshFilter>().mesh;
 
-            _mesh.GenerateMeshPlane(resolution, size);
-            ProjectOnTerrain();
-        }
+			_mesh.GenerateMeshPlane(resolution, size);
+			ProjectOnTerrain();
+		}
 
-        private void Update()
-        {
-            if (realTimeUpdate) ProjectOnTerrain();
+		private void Update()
+		{
+			if (realTimeUpdate) ProjectOnTerrain();
 
-            transform.LockRotationVertical();
-        }
+			transform.LockRotationVertical();
+		}
 
-        private void ProjectOnTerrain()
-        {
-            _terrain.ProjectMeshInTerrain(_mesh, transform, offset);
-        }
-    }
+		private void ProjectOnTerrain() => _terrain.ProjectMeshInTerrain(_mesh, transform, offset);
+	}
 }

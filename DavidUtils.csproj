@@ -53,6 +53,7 @@
     <Compile Include="Packages\David-Unity-Utils\Runtime\ExtensionMethods\VectorExtensions.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\UI\Debug\FPSCounter.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\AnimationCurveUtils.cs" />
+    <Compile Include="Packages\David-Unity-Utils\Runtime\BillboardObj_DynamicRes.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\Audio\AudioManager.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\TextureUtils.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\ThreadingUtils\AnimationCurveThreadSafe.cs" />

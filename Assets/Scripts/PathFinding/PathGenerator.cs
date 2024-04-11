@@ -22,10 +22,10 @@ namespace PathFinding
 		public Path[] PathsBetweenMarkers => paths.Skip(0).ToArray();
 
 		// PLAYER
-		private static Vector3 PlayerPosition => MapManager.Instance.PlayerPosition;
-		private static Vector3 PlayerDirection => MapManager.Instance.PlayerForward;
-		private static Vector3 PlayerDirection2D => new Vector2(PlayerDirection.x, PlayerDirection.z);
-		private Vector3 PlayerPositionOnTerrain => terrain.Project(MapManager.Instance.PlayerPosition);
+		private static Vector3 PlayerPosition => MapManager.Instance.player.Position;
+		private static Vector3 PlayerForward => MapManager.Instance.player.Forward;
+		private static Vector3 PlayerDirection2D => new Vector2(PlayerForward.x, PlayerForward.z);
+		private Vector3 PlayerPositionOnTerrain => terrain.Project(MapManager.Instance.player.Position);
 
 		// MARKERS
 		private int MarkerCount => MarkerManager.Instance.MarkerCount;
@@ -269,7 +269,7 @@ namespace PathFinding
 
 			ClearPaths();
 
-			paths = BuildPath(checkpoints, new[] { new Vector2(PlayerDirection.x, PlayerDirection.z) });
+			paths = BuildPath(checkpoints, new[] { new Vector2(PlayerForward.x, PlayerForward.z) });
 
 			if (mergeOnSinglePath) paths = new List<Path> { Path.FromPathList(paths) };
 

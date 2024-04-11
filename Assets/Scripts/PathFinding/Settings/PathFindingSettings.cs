@@ -1,85 +1,84 @@
 using System;
-using DavidUtils.ExtensionMethods;
 using MyBox;
 using PathFinding.Algorithms;
 using PathFinding.Settings.Astar;
 using PathFinding.Settings.Astar_Directional;
+using PathFinding.Settings.Dijkstra;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace PathFinding.Settings
 {
-    [CreateAssetMenu(fileName = "PathFinding Config", menuName = "PathFinding/PathFinding Configuration", order = 1)]
-    public class PathFindingSettings : ScriptableObject
-    {
-        #region CACHE
-        
-        // Cache para evitar recalcular el camino
-        public bool useCache = true;
+	[CreateAssetMenu(fileName = "PathFinding Config", menuName = "PathFinding/PathFinding Configuration", order = 1)]
+	public class PathFindingSettings : ScriptableObject
+	{
+		#region CACHE
 
-        #endregion
-        
-        public event Action OnFineTune;
-        public void OnFineTuneTriggerEvent() => OnFineTune?.Invoke();
+		// Cache para evitar recalcular el camino
+		public bool useCache = true;
 
-        #region RESTRICTIONS
-        
-        public float maxSlopeAngle = 30f;
-        public float minHeight = 20f;
-        public bool LegalHeight(float height) => height >= minHeight;
-        public bool LegalSlope(float slopeAngle) => slopeAngle <= maxSlopeAngle;
+		#endregion
 
-        #endregion
-        
-        #region GENERAL PARAMETERS
+		public event Action OnFineTune;
+		public void OnFineTuneTriggerEvent() => OnFineTune?.Invoke();
 
-        // Distancia entre Nodos
-        // A + grandes = + rápido pero + impreciso
-        public float cellSize = 1f;
+		#region RESTRICTIONS
 
-        // Maximas iteraciones del algoritmo
-        public int maxIterations = 1000;
+		public float maxSlopeAngle = 30f;
+		public float minHeight = 20f;
+		public bool LegalHeight(float height) => height >= minHeight;
+		public bool LegalSlope(float slopeAngle) => slopeAngle <= maxSlopeAngle;
 
-        #endregion
-        
-        #region ALGORITHM
+		#endregion
 
-        // DEPENDENCY INJECTION del Algoritmo usado
-        [SerializeField] public PathFindingAlgorithmType algorithm;
+		#region GENERAL PARAMETERS
 
-#if UNITY_EDITOR
-        [ConditionalField("algorithm", false, PathFindingAlgorithmType.Astar)]
-#endif
-        public AstarParameters aStarParameters;
+		// Distancia entre Nodos
+		// A + grandes = + rápido pero + impreciso
+		public float cellSize = 1f;
+
+		// Maximas iteraciones del algoritmo
+		public int maxIterations = 1000;
+
+		#endregion
+
+		#region ALGORITHM
+
+		// DEPENDENCY INJECTION del Algoritmo usado
+		[SerializeField] public PathFindingAlgorithmType algorithm;
 
 #if UNITY_EDITOR
-        [ConditionalField("algorithm", false, PathFindingAlgorithmType.AstarDirectional)]
+		[ConditionalField("algorithm", false, PathFindingAlgorithmType.Astar)]
 #endif
-        public AstarDirectionalParameters aStarDirectionalParameters;
+		public AstarParameters aStarParameters;
 
 #if UNITY_EDITOR
-        [ConditionalField("algorithm", false, PathFindingAlgorithmType.Dijkstra)]
+		[ConditionalField("algorithm", false, PathFindingAlgorithmType.AstarDirectional)]
 #endif
-        public DijkstraParameters dijkstraParameters;
+		public AstarDirectionalParameters aStarDirectionalParameters;
 
-        public PathFindingAlgorithm Algorithm =>
-            algorithm switch
-            {
-                PathFindingAlgorithmType.Astar => Algorithms.Astar.Instance,
-                PathFindingAlgorithmType.AstarDirectional => AstarDirectional.Instance,
-                PathFindingAlgorithmType.Dijkstra => Dijkstra.Instance,
-                _ => throw new ArgumentOutOfRangeException()
-            };
+#if UNITY_EDITOR
+		[ConditionalField("algorithm", false, PathFindingAlgorithmType.Dijkstra)]
+#endif
+		public DijkstraParameters dijkstraParameters;
 
-        public AlgorithmParams Parameters =>
-            algorithm switch
-            {
-                PathFindingAlgorithmType.Astar => aStarParameters,
-                PathFindingAlgorithmType.AstarDirectional => aStarDirectionalParameters,
-                PathFindingAlgorithmType.Dijkstra => dijkstraParameters,
-                _ => throw new ArgumentOutOfRangeException()
-            };
+		public PathFindingAlgorithm Algorithm =>
+			algorithm switch
+			{
+				PathFindingAlgorithmType.Astar => Algorithms.Astar.Instance,
+				PathFindingAlgorithmType.AstarDirectional => AstarDirectional.Instance,
+				PathFindingAlgorithmType.Dijkstra => DijkstraAlg.Instance,
+				_ => throw new ArgumentOutOfRangeException()
+			};
 
-        #endregion
-    }
+		public AlgorithmParams Parameters =>
+			algorithm switch
+			{
+				PathFindingAlgorithmType.Astar => aStarParameters,
+				PathFindingAlgorithmType.AstarDirectional => aStarDirectionalParameters,
+				PathFindingAlgorithmType.Dijkstra => dijkstraParameters,
+				_ => throw new ArgumentOutOfRangeException()
+			};
+
+		#endregion
+	}
 }
