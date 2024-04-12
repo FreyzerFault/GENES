@@ -62,7 +62,6 @@
     <Compile Include="Packages\David-Unity-Utils\Runtime\CameraUtils\CameraManager.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\ThreadingUtils\MainThreadDispatcher.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\Spawning\Spawner.cs" />
-    <Compile Include="Packages\David-Unity-Utils\Runtime\CameraUtils\SwitchCamera.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\ScriptableObjectsUtils\AutoUpdatableSo.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\Settings\SettingsData.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\BillboardObject.cs" />
@@ -755,6 +754,9 @@
     </Reference>
     <Reference Include="Unity.InputSystem">
       <HintPath>C:\Users\dalcanta\Unity Projects\GENES\Library\ScriptAssemblies\Unity.InputSystem.dll</HintPath>
+    </Reference>
+    <Reference Include="Cinemachine">
+      <HintPath>C:\Users\dalcanta\Unity Projects\GENES\Library\ScriptAssemblies\Cinemachine.dll</HintPath>
     </Reference>
     <Reference Include="UnityEditor.UI">
       <HintPath>C:\Users\dalcanta\Unity Projects\GENES\Library\ScriptAssemblies\UnityEditor.UI.dll</HintPath>

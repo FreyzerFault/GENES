@@ -46,10 +46,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Packages\Procrain\Runtime\MapDisplay\InfiniteTerrain\TerrainChunkGenerator.cs" />
+    <Compile Include="Packages\Procrain\Runtime\MapDisplay\MapHeightRegions.cs" />
     <Compile Include="Packages\Procrain\Runtime\MapDisplay\MapDisplayInMesh_LoDByPlayer.cs" />
     <Compile Include="Packages\Procrain\Runtime\MapDisplay\InfiniteTerrain\TerrainChunk.cs" />
     <Compile Include="Packages\Procrain\Runtime\MapDisplay\MapDisplayInTerrain.cs" />
-    <Compile Include="Packages\Procrain\Runtime\MapDisplay\MapShaderHandler.cs" />
     <Compile Include="Packages\Procrain\Runtime\MapDisplay\MapDisplayInMesh.cs" />
     <Compile Include="Packages\Procrain\Runtime\MapDisplay\TinDisplayInMesh.cs" />
     <Compile Include="Packages\Procrain\Runtime\MapDisplay\MapDisplayInTextureRealTime.cs" />

@@ -47,7 +47,6 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\Core\MapInputController.cs" />
     <Compile Include="Assets\Scripts\Core\Player3rdP_TerrainSticked.cs" />
-    <Compile Include="Assets\Scripts\Core\CameraManager.cs" />
     <None Include="Assets\Scripts\Core\Core.asmdef" />
     <Reference Include="UnityEngine">
       <HintPath>C:\Program Files\Unity\Hub\Editor\2022.3.16f1\Editor\Data\Managed\UnityEngine\UnityEngine.dll</HintPath>
