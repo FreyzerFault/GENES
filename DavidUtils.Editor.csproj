@@ -49,6 +49,7 @@
     <Compile Include="Packages\David-Unity-Utils\Editor\PowerOfTwoDrawer.cs" />
     <Compile Include="Packages\David-Unity-Utils\Editor\AutoUpdatableSoEditor.cs" />
     <Compile Include="Packages\David-Unity-Utils\Editor\SingletonExecuteAlways.cs" />
+    <Compile Include="Packages\David-Unity-Utils\Editor\SpawnerBoxEditor.cs" />
     <None Include="Packages\David-Unity-Utils\Editor\DavidUtils.Editor.asmdef" />
     <Reference Include="UnityEngine">
       <HintPath>C:\Program Files\Unity\Hub\Editor\2022.3.16f1\Editor\Data\Managed\UnityEngine\UnityEngine.dll</HintPath>

@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\External Packages\PrettyHierarchy-main\Runtime\PrettyObject.cs" />
+    <Compile Include="Assets\Scripts\TreesGeneration\SpawnerTrees.cs" />
     <None Include="Assets\External Packages\TextMesh Pro\Shaders\TMPro.cginc" />
     <None Include="Assets\External Packages\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
     <None Include="Packages\Procrain\Shaders\Water\Libraries\WaterFoam.hlsl" />

@@ -10,14 +10,16 @@ namespace Core
 			base.Awake();
 			_terrain = FindObjectOfType<Terrain>();
 
+			if (_terrain == null) return;
 			StickToTerrainHeight();
 		}
 
 
-		protected override void Update()
+		protected override void FixedUpdate()
 		{
-			base.Update();
+			base.FixedUpdate();
 
+			if (_terrain == null) return;
 			StickToTerrainHeight();
 		}
 
@@ -34,5 +36,10 @@ namespace Core
 		}
 
 		#endregion
+
+		private void OnCollisionEnter(Collision other)
+		{
+			Debug.Log("Collision with " + other.gameObject.name, this);
+		}
 	}
 }
