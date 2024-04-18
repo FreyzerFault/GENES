@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnityUIExtensions", "UnityUIExtensions.csproj", "{0f0a25e8-0d41-9351-403f-671eb8e7a331}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DavidUtils", "DavidUtils.csproj", "{6ef4c5d9-9eba-7675-cd16-eed5900260f3}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnityUIExtensions.examples", "UnityUIExtensions.examples.csproj", "{6463b29a-a29a-e066-646f-aed9f14c232b}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PathFinding", "PathFinding.csproj", "{9acaacf8-e0ef-0633-b3b4-dc24da87b609}"
@@ -16,8 +18,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Procrain.MapDisplay", "Procrain.MapDisplay.csproj", "{056a805b-2a80-e34c-827d-766eb95eaa72}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Procrain.UI", "Procrain.UI.csproj", "{24f13432-bb61-d6a0-d2b5-c07db4b2fb1b}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DavidUtils", "DavidUtils.csproj", "{6ef4c5d9-9eba-7675-cd16-eed5900260f3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp", "Assembly-CSharp.csproj", "{af92edb9-e79a-694f-be7e-43c4d8fc4b16}"
 EndProject
@@ -55,6 +55,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assets.ExternalPackages.Sim
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assets.External_Packages.AutoSave", "Assets.External_Packages.AutoSave.csproj", "{ead60a96-858b-65d9-7cc2-6c8b5a25aba3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TreesGeneration", "TreesGeneration.csproj", "{808aeaf4-3f62-f1f8-7194-3e9609f09cc0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -62,6 +64,8 @@ Global
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{0f0a25e8-0d41-9351-403f-671eb8e7a331}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0f0a25e8-0d41-9351-403f-671eb8e7a331}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6ef4c5d9-9eba-7675-cd16-eed5900260f3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6ef4c5d9-9eba-7675-cd16-eed5900260f3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6463b29a-a29a-e066-646f-aed9f14c232b}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6463b29a-a29a-e066-646f-aed9f14c232b}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9acaacf8-e0ef-0633-b3b4-dc24da87b609}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -76,8 +80,6 @@ Global
 		{056a805b-2a80-e34c-827d-766eb95eaa72}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{24f13432-bb61-d6a0-d2b5-c07db4b2fb1b}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{24f13432-bb61-d6a0-d2b5-c07db4b2fb1b}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6ef4c5d9-9eba-7675-cd16-eed5900260f3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6ef4c5d9-9eba-7675-cd16-eed5900260f3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{af92edb9-e79a-694f-be7e-43c4d8fc4b16}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{af92edb9-e79a-694f-be7e-43c4d8fc4b16}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7108290b-d2d8-8cf3-e8ff-5071ab44320f}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -114,6 +116,8 @@ Global
 		{3f9a6875-961d-fe8b-dc78-e4ff9b8f62af}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ead60a96-858b-65d9-7cc2-6c8b5a25aba3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{ead60a96-858b-65d9-7cc2-6c8b5a25aba3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{808aeaf4-3f62-f1f8-7194-3e9609f09cc0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{808aeaf4-3f62-f1f8-7194-3e9609f09cc0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
