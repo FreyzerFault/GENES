@@ -57,6 +57,7 @@
     <Compile Include="Packages\David-Unity-Utils\Runtime\BillboardObj_DynamicRes.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\Audio\AudioManager.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\TextureUtils.cs" />
+    <Compile Include="Packages\David-Unity-Utils\Runtime\Geometry\Vertex.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\ThreadingUtils\AnimationCurveThreadSafe.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\Geometry\Polygon.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\DebugUtils\DebugTimer.cs" />
@@ -64,6 +65,7 @@
     <Compile Include="Packages\David-Unity-Utils\Runtime\CameraUtils\CameraManager.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\ThreadingUtils\MainThreadDispatcher.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\Spawning\Spawner.cs" />
+    <Compile Include="Packages\David-Unity-Utils\Runtime\Geometry\Triangle.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\ScriptableObjectsUtils\AutoUpdatableSo.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\Settings\SettingsData.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\BillboardObject.cs" />
@@ -76,6 +78,9 @@
     <Compile Include="Packages\David-Unity-Utils\Runtime\UI\Text\DialogueBox.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\Settings\SettingsManager.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\UI\Sliders\DynamicBar.cs" />
+    <Compile Include="Packages\David-Unity-Utils\Runtime\Geometry\GeometryUtils.cs" />
+    <Compile Include="Packages\David-Unity-Utils\Runtime\Geometry\AABB2D.cs" />
+    <Compile Include="Packages\David-Unity-Utils\Runtime\Geometry\Quad.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\ExtensionMethods\TransformExtensionMethods.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\Spawning\SpawnerBox.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\ScriptableObjectsUtils\AutoUpdatableSoWithBackup.cs" />
@@ -88,8 +93,10 @@
     <Compile Include="Packages\David-Unity-Utils\Runtime\Scenes\SceneController.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\PlayerControl\Player3rdP.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\UI\Text\TextBlock.cs" />
+    <Compile Include="Packages\David-Unity-Utils\Runtime\Geometry\Delaunay.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\ValidationUtility.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\ExtensionMethods\ArrayExtensions.cs" />
+    <Compile Include="Packages\David-Unity-Utils\Runtime\Geometry\Edge.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\CameraUtils\CameraIdleRotation.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\GradientUtils.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\ExtensionMethods\RectTransformExtensionMethods.cs" />

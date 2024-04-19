@@ -19,7 +19,9 @@ namespace TreesGeneration
 		private void Start()
 		{
 			Bounds bounds = Terrain.activeTerrain.GetBounds();
-			voronoi = new Voronoi(numFincas, bounds.min, bounds.max);
+			var min = new Vector2(bounds.min.x, bounds.min.z);
+			var max = new Vector2(bounds.max.x, bounds.max.z);
+			voronoi = new Voronoi(numFincas, min, max);
 		}
 
 		// private void InstantiateOlivo(Vector3 position, Quaternion rotation)
@@ -30,7 +32,7 @@ namespace TreesGeneration
 
 		#region DEBUG
 
-		private void OnDrawGizmos() => voronoi.OnDrawGizmos(Color.black);
+		private void OnDrawGizmos() => voronoi?.OnDrawGizmos(Color.black);
 
 		#endregion
 	}
