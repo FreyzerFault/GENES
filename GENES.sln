@@ -31,8 +31,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Procrain.MapGeneration", "P
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Markers", "Markers.csproj", "{b8c727cc-c3a0-10c8-40d1-38f71a5bcccb}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DavidUtils.Editor", "DavidUtils.Editor.csproj", "{c8cfa900-c82f-76bd-8968-205a321cc42a}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BezierCurves.Editor", "BezierCurves.Editor.csproj", "{7c331c10-1890-d1f6-9da1-8d9eca9f5bb0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Procrain.Noise", "Procrain.Noise.csproj", "{d5a5fa5a-4b04-4653-2cd5-44f0fc1a6994}"
@@ -40,6 +38,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StylizedWaterForURP", "StylizedWaterForURP.csproj", "{db236e53-a3c8-d523-9135-606fc5324a38}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Procrain.Core", "Procrain.Core.csproj", "{994aadef-6fdc-1388-61c3-50f618debae1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DavidUtils.Editor", "DavidUtils.Editor.csproj", "{c8cfa900-c82f-76bd-8968-205a321cc42a}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Procrain.Utils", "Procrain.Utils.csproj", "{d96f593b-8440-e1b4-8c85-dc703e38ae57}"
 EndProject
@@ -92,8 +92,6 @@ Global
 		{725ee3bd-97c6-f759-626f-6dccda1f06ea}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{b8c727cc-c3a0-10c8-40d1-38f71a5bcccb}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{b8c727cc-c3a0-10c8-40d1-38f71a5bcccb}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{c8cfa900-c82f-76bd-8968-205a321cc42a}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{c8cfa900-c82f-76bd-8968-205a321cc42a}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7c331c10-1890-d1f6-9da1-8d9eca9f5bb0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7c331c10-1890-d1f6-9da1-8d9eca9f5bb0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{d5a5fa5a-4b04-4653-2cd5-44f0fc1a6994}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -102,6 +100,8 @@ Global
 		{db236e53-a3c8-d523-9135-606fc5324a38}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{994aadef-6fdc-1388-61c3-50f618debae1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{994aadef-6fdc-1388-61c3-50f618debae1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{c8cfa900-c82f-76bd-8968-205a321cc42a}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{c8cfa900-c82f-76bd-8968-205a321cc42a}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{d96f593b-8440-e1b4-8c85-dc703e38ae57}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{d96f593b-8440-e1b4-8c85-dc703e38ae57}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{59adaf3a-3466-963f-1a56-41ed22cc04ef}.Debug|Any CPU.ActiveCfg = Debug|Any CPU

@@ -1,5 +1,6 @@
 using System;
 using System.Globalization;
+using DavidUtils.DebugExtensions;
 using DavidUtils.ExtensionMethods;
 using UnityEditor;
 using UnityEngine;
@@ -115,18 +116,18 @@ namespace PathFinding
             {
                 // Normal
                 Gizmos.color = Color.Lerp(Color.magenta, Color.red, slopeAngle / 30);
-                GizmosUtils.DrawArrow(pos, normal, Vector3.up, size / 2);
+                GizmosExtensions.DrawArrow(pos, normal, Vector3.up, size / 2);
 
                 // Tagente
                 Gizmos.color = Color.blue;
-                GizmosUtils.DrawArrow(pos, tangentGradient, Vector3.right);
+                GizmosExtensions.DrawArrow(pos, tangentGradient, Vector3.right);
             }
 
             // DIRECTION
             if (direction != Vector2.zero)
             {
                 Gizmos.color = Color.yellow;
-                GizmosUtils.DrawArrow(pos, new Vector3(direction.x, 0, direction.y),  Vector3.right, size / 2);
+                GizmosExtensions.DrawArrow(pos, new Vector3(direction.x, 0, direction.y),  Vector3.right, size / 2);
             }
 
             // Line to Parent

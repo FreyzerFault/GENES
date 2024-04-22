@@ -1,3 +1,4 @@
+using System;
 using DavidUtils.ExtensionMethods;
 using DavidUtils.Geometry;
 using UnityEngine;
@@ -11,6 +12,7 @@ namespace TreesGeneration
 		[SerializeField] private int numFincas = 10;
 
 		private Voronoi voronoi;
+		private Bounds bounds;
 
 		[SerializeField] private float minSeparation = 5;
 		[SerializeField] private float minDistToBoundary = 5;
@@ -18,11 +20,14 @@ namespace TreesGeneration
 
 		private void Start()
 		{
-			Bounds bounds = Terrain.activeTerrain.GetBounds();
-			var min = new Vector2(bounds.min.x, bounds.min.z);
-			var max = new Vector2(bounds.max.x, bounds.max.z);
-			voronoi = new Voronoi(numFincas, min, max);
+			bounds = Terrain.activeTerrain.GetBounds();
+			voronoi = new Voronoi(numFincas);
 		}
+
+		// private void Update()
+		// {
+		// 	if (Input.anyKeyDown)  voronoi.GenerateVoronoi_OneIteration();
+		// }
 
 		// private void InstantiateOlivo(Vector3 position, Quaternion rotation)
 		// {
@@ -32,7 +37,11 @@ namespace TreesGeneration
 
 		#region DEBUG
 
-		private void OnDrawGizmos() => voronoi?.OnDrawGizmos(Color.black);
+		private void OnDrawGizmos()
+		{
+			Vector3 pos = new Vector3(bounds.min.x, bounds.max.y, bounds.min.z);
+			voronoi?.OnDrawGizmos(pos, bounds.size.ToVector2xz(), Color.black);
+		}
 
 		#endregion
 	}
