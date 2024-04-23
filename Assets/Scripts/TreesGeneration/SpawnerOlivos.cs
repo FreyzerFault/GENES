@@ -1,4 +1,3 @@
-using System;
 using DavidUtils.ExtensionMethods;
 using DavidUtils.Geometry;
 using UnityEngine;
@@ -22,19 +21,20 @@ namespace TreesGeneration
 		private void Start()
 		{
 			bounds = Terrain.activeTerrain.GetBounds();
-			voronoi = new Voronoi(numFincas);
+			Initialize();
 		}
 
 		public void Initialize()
 		{
-			voronoi = new Voronoi(numFincas);
+			voronoi ??= new Voronoi(numFincas);
+			voronoi.Reset();
 		}
-		
+
 		public void GenerateSeeds()
 		{
 			Initialize();
 			// voronoi.GenerateSeeds(numFincas);
-			voronoi.seeds = GeometryUtils.GenerateRandomSeeds_WaveDistribution(numFincas);
+			voronoi.seeds = GeometryUtils.GenerateSeeds_RegularDistribution(numFincas);
 		}
 
 		public void GenerateVoronoiRegions()
@@ -42,10 +42,10 @@ namespace TreesGeneration
 			voronoi.GenerateDelaunay();
 			voronoi.GenerateVoronoi();
 		}
-		
-		public void SpawnAll() {
-			if (voronoi.regions.Length == 0) GenerateVoronoiRegions();
-			
+
+		public void SpawnAll()
+		{
+			if (voronoi.regions.Count == 0) GenerateVoronoiRegions();
 		}
 
 		// private void Update()
@@ -53,17 +53,17 @@ namespace TreesGeneration
 		// 	if (Input.anyKeyDown)  voronoi.GenerateVoronoi_OneIteration();
 		// }
 
-		private void InstantiateOlivo(Vector3 position, Quaternion rotation)
-		{
-			Instantiate(olivoPrefabs[Random.Range(0, olivoPrefabs.Length)], position, rotation, transform);
-		}
+		private void InstantiateOlivo(Vector3 position, Quaternion rotation) => Instantiate(
+			olivoPrefabs[Random.Range(0, olivoPrefabs.Length)],
+			position,
+			rotation,
+			transform
+		);
 
 		#region DEBUG
 
-		public bool showDelaunayTriangulation = true;
-		public bool projectOnTerrain = true;
-		
-		Coroutine delaunayCoroutine;
+		private Coroutine delaunayCoroutine;
+
 		public void RunAnimation()
 		{
 			GenerateSeeds();
@@ -76,14 +76,10 @@ namespace TreesGeneration
 		{
 			if (bounds == default)
 				bounds = Terrain.activeTerrain.GetBounds();
-			Vector3 pos = new Vector3(bounds.min.x, bounds.max.y, bounds.min.z);
+			var pos = new Vector3(bounds.min.x, bounds.max.y, bounds.min.z);
 			Vector2 size = bounds.size.ToVector2xz();
-			
-			voronoi?.OnDrawGizmos(pos, size, Color.black);
-			
-			// DELAUNAY
-			if (showDelaunayTriangulation)
-				voronoi?.delaunay.OnDrawGizmos(pos, size, projectOnTerrain);
+
+			voronoi?.OnDrawGizmos(pos, size);
 		}
 
 		#endregion
