@@ -45,13 +45,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 740628c5f35be9e4c9448683b39a342a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pathFindingConfig: {fileID: 11400000, guid: a4a6f39d53a58bc4b8ebc353b04cc136, type: 2}
-  paths: []
-  directPath:
-    nodes: []
-    ExploredNodes: []
-    OpenNodes: []
-  buildDirectPath: 1
+  terrain: {fileID: 0}
+  generatePlayerPath: 1
+  mergeOnSinglePath: 0
+  bounds:
+    m_Center: {x: 0, y: 0, z: 0}
+    m_Extent: {x: 0, y: 0, z: 0}
+  pathFindingSettings: {fileID: 11400000, guid: 092d2f774592dd64e87c3249116a5a7b, type: 2}
+  minHeightIsWaterHeight: 0
 --- !u!114 &5987637490818280633
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -64,7 +65,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba4492ac9169afb42b89b7df2cd39d80, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pathFindingGenerator: {fileID: 0}
   pathObjPrefab: {fileID: 3814266642017431954, guid: fcde28d035aa48747893a9071f6f9688, type: 3}
   pathObjects: []
   heightOffset: 0.5
+  color: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   lineThickness: 0.5

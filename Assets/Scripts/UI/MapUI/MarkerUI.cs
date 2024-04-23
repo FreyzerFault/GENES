@@ -84,18 +84,24 @@ namespace UI.MapUI
         public Color hoverColor = Color.blue;
         public Color selectedColor = Color.yellow;
 
+        private void UpdateColor()
+        {
+            if (marker.Hovered)
+                _image.color = MarkerManager.Instance.EditMarkerMode == EditMarkerMode.Delete
+                    ? deleteColor
+                    : marker.Selected ? selectedColor : hoverColor;
+            else if (marker.Selected) _image.color = selectedColor;
+            else if (marker.IsChecked) _image.color = checkedColor;
+            else _image.color = defaultColor;
+        }
+
         private void UpdateAspect()
         {
             // LABEL
             _text.text = marker.LabelText;
 
             // COLOR
-            if (marker.Selected)
-                _image.color = selectedColor;
-            else if (marker.IsChecked)
-                _image.color = checkedColor;
-            else
-                _image.color = defaultColor;
+            UpdateColor();
         }
 
         public void UpdateScaleByZoom(float zoom) => 
@@ -108,15 +114,12 @@ namespace UI.MapUI
         
         private void OnHovered(bool hover)
         {
+            UpdateColor();
+            
             if (marker.Selected) return;
             
             if (hover) _rectTransform.localScale *= hoveredScale;
             else _rectTransform.localScale /= hoveredScale;
-                
-            if (hover)
-                _image.color = MarkerManager.Instance.EditMarkerMode == EditMarkerMode.Delete
-                    ? deleteColor 
-                    : hoverColor;
         }
 
         #endregion

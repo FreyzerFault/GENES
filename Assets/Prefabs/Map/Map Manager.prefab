@@ -47,12 +47,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24099acf01dabc241b5344b946258f67, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
+  debugTimer: 1
   water: {fileID: 0}
-  mainPathFindingGenerator: {fileID: 0}
-  mapState: 0
-  zoomMap: 1
-  zoomMinimap: 2
+  player: {fileID: 0}
+  noiseParams: {fileID: 0}
+  terrainSettings: {fileID: 0}
+  autoUpdate: 1
+  buildTexture: 1
+  buildMesh: 1
   heightGradient:
     serializedVersion: 2
     key0: {r: 0, g: 0.21367073, b: 1, a: 1}
@@ -83,7 +85,8 @@ MonoBehaviour:
     m_ColorSpace: 0
     m_NumColorKeys: 7
     m_NumAlphaKeys: 2
-  mapTexture: {fileID: 0}
+  texture: {fileID: 0}
+  paralelized: 0
 --- !u!114 &5818824877658622719
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -96,15 +99,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e2573b25ce09fa49a8c181534a01790, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultColor: {r: 1, g: 1, b: 1, a: 1}
-  selectedColor: {r: 1, g: 1, b: 0.25490198, a: 1}
-  checkedColor: {r: 0.2783019, g: 1, b: 0.2783019, a: 1}
-  hoverColor: {r: 0.7783019, g: 0.7783019, b: 1, a: 1}
-  deleteColor: {r: 0.9137255, g: 0.26666668, b: 0.26666668, a: 1}
-  collisionRadius: 0.05
-  markerUIPrefab: {fileID: 7675491264772692944, guid: 5444bb0f9a82ae04eb7be11bf137c20d, type: 3}
   markersStorage: {fileID: 11400000, guid: 368439237e2820848b84150e12ac422d, type: 2}
+  collisionRadius: 0.05
   editMarkerMode: 3
+  prevMarkerMode: 3
 --- !u!114 &6831864670231653195
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -117,8 +115,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3bb327b3a0e14514cbcb8b5fcb02b516, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minimapParent: {fileID: 0}
-  fullScreenMapParent: {fileID: 0}
+  renderMode: 0
+  minimapHUD: {fileID: 0}
+  fullScreenMapHUD: {fileID: 0}
 --- !u!114 &5968815755217571161
 MonoBehaviour:
   m_ObjectHideFlags: 0

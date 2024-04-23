@@ -111,7 +111,7 @@ namespace PathFinding.Rendering
         // Assign Colors progressively like a rainbow :D
         private void UpdateColors()
         {
-            var rainbowColors = color.GetRainBowColors(PathCount, 0.2f);
+            var rainbowColors = color.Darken(0.1f).GetRainBowColors(PathCount, 0.1f);
             for (var i = 0; i < rainbowColors.Length; i++) pathObjects[i].Color = rainbowColors[i];
         }
     }

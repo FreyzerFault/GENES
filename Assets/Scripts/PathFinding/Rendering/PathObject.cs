@@ -68,9 +68,10 @@ namespace PathFinding.Rendering
         #if UNITY_EDITOR
         private void OnDrawGizmosSelected()
         {
-            Color openedColor = Color.Lerp(Color, Color.white, 0.9f);
+            Color exploredColor = Color.blue;
+            Color openedColor = Color.white;
             if (showExplored && ExploredNodes.Length > 0)
-                ExploredNodes.ToList().ForEach(node => node.OnGizmos(Color, heightOffset, true, showValues));
+                ExploredNodes.ToList().ForEach(node => node.OnGizmos(exploredColor, heightOffset, true, showValues));
             if (showOpened && OpenNodes.Length > 0)
                 OpenNodes.ToList().ForEach(node => node.OnGizmos(openedColor, heightOffset, true, showValues));
         }

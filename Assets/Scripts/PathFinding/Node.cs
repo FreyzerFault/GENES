@@ -100,34 +100,28 @@ namespace PathFinding
             pos.y += heightOffset;
             Vector2 normPos = terrain.GetNormalizedPosition(pos);
             Vector3 normal = terrain.terrainData.GetInterpolatedNormal(normPos.x, normPos.y);
-            Vector3 tangentMid = Vector3.Cross(normal, Vector3.up);
-            Vector3 tangentGradient = Vector3.Cross(normal, tangentMid);
+            Vector3 tangentMid = Vector3.Cross(normal, Vector3.up).normalized;
+            Vector3 tangentGradient = Vector3.Cross(normal, tangentMid).normalized;
 
             // Diferencia de Funcion
-            Gizmos.color = color.Darken(0.5f);
+            Color nodeColor = color.Darken(0.5f);
 
-            // Cubo
+            // Quad del nodo
             var cubeSize = new Vector3(size / 3, 0.1f, size / 3);
-            if (wire) Gizmos.DrawWireCube(pos, cubeSize);
-            else Gizmos.DrawCube(pos, cubeSize);
+            if (wire) GizmosExtensions.DrawQuadWire(pos - cubeSize / 2, cubeSize, 5, nodeColor);
+            else GizmosExtensions.DrawQuad(pos, cubeSize, nodeColor);
 
             // PENDIENTE
-            if (slopeAngle > 0)
+            if (slopeAngle > 0.1f)
             {
-                // Normal
-                Gizmos.color = Color.Lerp(Color.magenta, Color.red, slopeAngle / 30);
-                GizmosExtensions.DrawArrow(pos, normal, Vector3.up, size / 2);
-
-                // Tagente
-                Gizmos.color = Color.blue;
-                GizmosExtensions.DrawArrow(pos, tangentGradient, Vector3.right);
+                Color tangentColor = Color.Lerp(Color.gray, Color.red, slopeAngle / 30 - 0.2f);
+                GizmosExtensions.DrawArrowWire(pos, tangentGradient, Vector3.right, 1, 0.4f, 5, tangentColor);
             }
 
             // DIRECTION
             if (direction != Vector2.zero)
             {
-                Gizmos.color = Color.yellow;
-                GizmosExtensions.DrawArrow(pos, new Vector3(direction.x, 0, direction.y),  Vector3.right, size / 2);
+                GizmosExtensions.DrawArrow(pos, new Vector3(direction.x, 0, direction.y),  Vector3.right, size / 2, 0.4f, Color.yellow);
             }
 
             // Line to Parent
@@ -143,16 +137,6 @@ namespace PathFinding
         
         private void DrawLabel(Vector3 positionOffset = default)
         {
-            var style = new GUIStyle
-            {
-                fontSize = 12,
-                fontStyle = FontStyle.Bold,
-                normal = { textColor = Color.white }
-            };
-            var styleF = new GUIStyle(style) { normal = { textColor = Color.white } };
-            var styleG = new GUIStyle(style) { normal = { textColor = Color.red } };
-            var styleH = new GUIStyle(style) { normal = { textColor = Color.yellow } };
-
             // TEXT
             var labelTextF = Math.Round(F, 2).ToString(CultureInfo.InvariantCulture);
             var labelTextG = Math.Round(G, 2).ToString(CultureInfo.InvariantCulture);
@@ -162,10 +146,16 @@ namespace PathFinding
             Vector3 posF = position + Vector3.forward * 0.2f + positionOffset;
             Vector3 posG = position + positionOffset;
             Vector3 posH = position - Vector3.forward * 0.2f + positionOffset;
+            
+            // COLOR
+            Color colorF = Color.white;
+            Color colorG = Color.red;
+            Color colorH = Color.yellow;
 
-            Handles.Label(posF, labelTextF, styleF);
-            Handles.Label(posG, labelTextG, styleG);
-            Handles.Label(posH, labelTextH, styleH);
+
+            HandlesExtensions.DrawLabel(posF, labelTextF, colorF);
+            HandlesExtensions.DrawLabel(posG, labelTextG, colorG);
+            HandlesExtensions.DrawLabel(posH, labelTextH, colorH);
         }
         #endif
 

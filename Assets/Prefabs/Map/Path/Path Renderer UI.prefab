@@ -48,7 +48,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1ed57db6704d5841806dca31f3ff24f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  linePrefab: {fileID: 329689356012660721, guid: 2a4e3d35a64c92347a0d29c01eb8818f, type: 3}
-  illegalLinePrefab: {fileID: 329689356012660721, guid: 77afaf363218d7340ac0453f7f3ee834, type: 3}
+  pathFindingGenerator: {fileID: 0}
   lineRenderers: []
+  linePrefab: {fileID: 329689356012660721, guid: 2a4e3d35a64c92347a0d29c01eb8818f, type: 3}
   lineThickness: 1

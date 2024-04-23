@@ -167,10 +167,12 @@ namespace PathFinding
 				return;
 			}
 
-			// Si el Marker es intermedio hay que fusionar sus dos paths adyacentes en uno
+			// Si el Marker es intermedio, generamos un nuevo path entre los marcadores adyacentes
 			// (start) Marker[i-1] =Path[i]=> deleted =Path[i+1]=> Marker[i] (end)
 			// (start) Marker[i-1]          =Path[i]=>         Marker[i] (end)
-			SetPath(index, Path.FromPathList(new[] { paths[index], paths[index + 1] }));
+			// TODO: Cuando añade direccion a cada Marker, pasarla como parametros
+			Marker a = Markers[index - 1], b = Markers[index];
+			SetPath(index, BuildPath(a.WorldPosition, b.WorldPosition));
 			DeletePath(index + 1);
 		}
 
