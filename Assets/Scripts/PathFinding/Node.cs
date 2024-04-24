@@ -108,8 +108,9 @@ namespace PathFinding
 
             // Quad del nodo
             var cubeSize = new Vector3(size / 3, 0.1f, size / 3);
-            if (wire) GizmosExtensions.DrawQuadWire(pos - cubeSize / 2, cubeSize, 5, nodeColor);
-            else GizmosExtensions.DrawQuad(pos, cubeSize, nodeColor);
+            Quaternion rotation = Quaternion.FromToRotation(Vector3.up, normal);
+            if (wire) GizmosExtensions.DrawQuadWire(pos - cubeSize / 2, cubeSize, rotation, 5, nodeColor);
+            else GizmosExtensions.DrawQuad(pos, cubeSize, rotation, nodeColor);
 
             // PENDIENTE
             if (slopeAngle > 0.1f)

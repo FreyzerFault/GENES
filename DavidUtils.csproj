@@ -67,6 +67,7 @@
     <Compile Include="Packages\David-Unity-Utils\Runtime\CameraUtils\CameraManager.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\ThreadingUtils\MainThreadDispatcher.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\Spawning\Spawner.cs" />
+    <Compile Include="Packages\David-Unity-Utils\Runtime\Geometry\Bounds2D.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\Geometry\Triangle.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\ScriptableObjectsUtils\AutoUpdatableSo.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\Settings\SettingsData.cs" />

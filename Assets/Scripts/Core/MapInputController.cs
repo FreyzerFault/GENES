@@ -59,8 +59,12 @@ namespace Core
         
         private void HandleRenderModeChanged()
         {
-            minimapHUD.SetActive(renderMode == MapRenderMode.Minimap);
-            fullScreenMapHUD.SetActive(renderMode == MapRenderMode.Fullscreen);
+            if ( fullScreenMapHUD == null && minimapHUD == null) return;
+            if (minimapHUD != null)
+                minimapHUD.SetActive(renderMode == MapRenderMode.Minimap);
+            if ( fullScreenMapHUD != null)
+                fullScreenMapHUD.SetActive(renderMode == MapRenderMode.Fullscreen);
+            
             OnRenderModeChanged?.Invoke(renderMode);
         }
         

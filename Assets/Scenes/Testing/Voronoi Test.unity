@@ -291,6 +291,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   numSeeds: 64
   voronoi:
+    seed: 760
     seedDistribution: 1
     delaunay:
       vertices: []
@@ -301,7 +302,9 @@ MonoBehaviour:
     drawSeeds: 1
     drawGrid: 1
     drawRegions: 1
-    drawDelaunayTriangulation: 0
+    wireRegions: 1
+    drawDelaunayTriangulation: 1
+    wireTriangulation: 1
     projectOnTerrain: 0
   animated: 0
   delay: 0.1
