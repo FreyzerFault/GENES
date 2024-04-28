@@ -291,7 +291,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   numSeeds: 64
   voronoi:
-    seed: 760
+    seed: 1574
     seedDistribution: 1
     delaunay:
       vertices: []
@@ -299,15 +299,16 @@ MonoBehaviour:
       ended: 0
     seeds: []
     iteration: 0
+    regionMargin: 0.174
     drawSeeds: 1
     drawGrid: 1
     drawRegions: 1
-    wireRegions: 1
+    wireRegions: 0
     drawDelaunayTriangulation: 1
     wireTriangulation: 1
     projectOnTerrain: 0
-  animated: 0
-  delay: 0.1
+  animated: 1
+  delay: 0
 --- !u!4 &1271459535
 Transform:
   m_ObjectHideFlags: 0

@@ -79,7 +79,7 @@ namespace TreesGeneration
 			var pos = new Vector3(bounds.min.x, bounds.max.y, bounds.min.z);
 			Vector2 size = bounds.size.ToVector2xz();
 
-			voronoi?.OnDrawGizmos(pos, size);
+			voronoi?.OnDrawGizmos(transform.localToWorldMatrix);
 		}
 
 		#endregion

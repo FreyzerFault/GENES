@@ -1,6 +1,6 @@
 using System;
 using System.Globalization;
-using DavidUtils.DebugExtensions;
+using DavidUtils.DebugUtils;
 using DavidUtils.ExtensionMethods;
 using UnityEditor;
 using UnityEngine;
@@ -109,8 +109,8 @@ namespace PathFinding
             // Quad del nodo
             var cubeSize = new Vector3(size / 3, 0.1f, size / 3);
             Quaternion rotation = Quaternion.FromToRotation(Vector3.up, normal);
-            if (wire) GizmosExtensions.DrawQuadWire(pos - cubeSize / 2, cubeSize, rotation, 5, nodeColor);
-            else GizmosExtensions.DrawQuad(pos, cubeSize, rotation, nodeColor);
+            if (wire) GizmosExtensions.DrawQuadWire(Matrix4x4.TRS(pos, rotation, cubeSize), 5, nodeColor);
+            else GizmosExtensions.DrawQuad(Matrix4x4.TRS(pos, rotation, cubeSize), nodeColor);
 
             // PENDIENTE
             if (slopeAngle > 0.1f)
@@ -154,9 +154,9 @@ namespace PathFinding
             Color colorH = Color.yellow;
 
 
-            HandlesExtensions.DrawLabel(posF, labelTextF, colorF);
-            HandlesExtensions.DrawLabel(posG, labelTextG, colorG);
-            HandlesExtensions.DrawLabel(posH, labelTextH, colorH);
+            GizmosExtensions.DrawLabel(posF, labelTextF, colorF);
+            GizmosExtensions.DrawLabel(posG, labelTextG, colorG);
+            GizmosExtensions.DrawLabel(posH, labelTextH, colorH);
         }
         #endif
 
