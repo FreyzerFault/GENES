@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bcfeeaff4ed61944f9e0f24417334a96, type: 3}
   m_Name: Simple Olivar
   m_EditorClassIdentifier: 
-  dirty: 1
+  dirty: 0
   heightCurve:
     serializedVersion: 2
     m_Curve:

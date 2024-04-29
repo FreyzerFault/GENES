@@ -60,6 +60,8 @@ namespace TreesGeneration
 			transform
 		);
 
+#if UNITY_EDITOR
+
 		#region DEBUG
 
 		private Coroutine delaunayCoroutine;
@@ -83,5 +85,7 @@ namespace TreesGeneration
 		}
 
 		#endregion
+
+#endif
 	}
 }

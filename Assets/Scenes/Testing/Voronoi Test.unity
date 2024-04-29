@@ -289,17 +289,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e96e97164f9491c8939e46ce64480c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  numSeeds: 64
+  numSeeds: 324
   voronoi:
     seed: 1574
-    seedDistribution: 1
+    seedDistribution: 2
     delaunay:
       vertices: []
       iterations: 0
       ended: 0
     seeds: []
     iteration: 0
-    regionMargin: 0.174
+    regionMargin: 0.097
     drawSeeds: 1
     drawGrid: 1
     drawRegions: 1
