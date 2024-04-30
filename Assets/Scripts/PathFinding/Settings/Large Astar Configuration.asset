@@ -15,8 +15,8 @@ MonoBehaviour:
   useCache: 1
   maxSlopeAngle: 30
   minHeight: 24
-  cellSize: 3
-  maxIterations: 2000
+  cellSize: 4
+  maxIterations: 3453
   algorithm: 1
   aStarParameters: {fileID: 11400000, guid: eddb42762f612124fa4b866ae2192d79, type: 2}
   aStarDirectionalParameters: {fileID: 11400000, guid: 31ee0ce7850f5ec479f4cfb8931333d0, type: 2}

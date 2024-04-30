@@ -49,6 +49,7 @@
     <Compile Include="Packages\David-Unity-Utils\Runtime\Singleton.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\UI\Text\TutorialMsg.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\PlayerControl\Player.cs" />
+    <Compile Include="Packages\David-Unity-Utils\Runtime\Geometry\Generators\DelaunayGenerator.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\UI\Text\NumberCounter.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\UI\Text\DialogueBoxTutorial.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\ExtensionMethods\VectorExtensions.cs" />
@@ -79,7 +80,7 @@
     <Compile Include="Packages\David-Unity-Utils\Runtime\ExtensionMethods\MeshExtensions.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\UI\Text\DialogueBox.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\Settings\SettingsManager.cs" />
-    <Compile Include="Packages\David-Unity-Utils\Runtime\Geometry\TestObjects\VoronoiTest.cs" />
+    <Compile Include="Packages\David-Unity-Utils\Runtime\Geometry\Generators\VoronoiGenerator.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\DebugUtils\GizmosExtensions.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\UI\Sliders\DynamicBar.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\PlayerControl\SimplePlayer3P.cs" />
@@ -102,7 +103,6 @@
     <Compile Include="Packages\David-Unity-Utils\Runtime\ExtensionMethods\ArrayExtensions.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\Geometry\Edge.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\CameraUtils\CameraIdleRotation.cs" />
-    <Compile Include="Packages\David-Unity-Utils\Runtime\Geometry\TestObjects\DelaunayTest.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\GradientUtils.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\ExtensionMethods\RectTransformExtensionMethods.cs" />
     <None Include="Packages\David-Unity-Utils\Runtime\DavidUtils.asmdef" />

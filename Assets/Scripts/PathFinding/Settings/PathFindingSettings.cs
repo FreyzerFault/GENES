@@ -1,5 +1,4 @@
 using System;
-using MyBox;
 using PathFinding.Algorithms;
 using PathFinding.Settings.Astar;
 using PathFinding.Settings.Astar_Directional;
@@ -46,19 +45,8 @@ namespace PathFinding.Settings
 		// DEPENDENCY INJECTION del Algoritmo usado
 		[SerializeField] public PathFindingAlgorithmType algorithm;
 
-#if UNITY_EDITOR
-		[ConditionalField("algorithm", false, PathFindingAlgorithmType.Astar)]
-#endif
 		public AstarParameters aStarParameters;
-
-#if UNITY_EDITOR
-		[ConditionalField("algorithm", false, PathFindingAlgorithmType.AstarDirectional)]
-#endif
 		public AstarDirectionalParameters aStarDirectionalParameters;
-
-#if UNITY_EDITOR
-		[ConditionalField("algorithm", false, PathFindingAlgorithmType.Dijkstra)]
-#endif
 		public DijkstraParameters dijkstraParameters;
 
 		public PathFindingAlgorithm Algorithm =>

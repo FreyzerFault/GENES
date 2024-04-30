@@ -289,10 +289,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e96e97164f9491c8939e46ce64480c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  numSeeds: 324
+  numSeeds: 144
   voronoi:
-    seed: 1574
-    seedDistribution: 2
+    seed: 722643626
+    seedDistribution: 1
     delaunay:
       vertices: []
       iterations: 0
