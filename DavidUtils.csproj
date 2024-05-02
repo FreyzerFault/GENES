@@ -85,7 +85,6 @@
     <Compile Include="Packages\David-Unity-Utils\Runtime\UI\Sliders\DynamicBar.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\PlayerControl\SimplePlayer3P.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\Geometry\GeometryUtils.cs" />
-    <Compile Include="Packages\David-Unity-Utils\Runtime\Geometry\AABB2D.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\Geometry\Quad.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\ExtensionMethods\TransformExtensionMethods.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\Spawning\SpawnerBox.cs" />

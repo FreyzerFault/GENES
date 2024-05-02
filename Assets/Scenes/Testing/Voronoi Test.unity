@@ -307,7 +307,7 @@ MonoBehaviour:
     drawDelaunayTriangulation: 1
     wireTriangulation: 1
     projectOnTerrain: 0
-  animated: 1
+  animated: 0
   delay: 0
 --- !u!4 &1271459535
 Transform:
