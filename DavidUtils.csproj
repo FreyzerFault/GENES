@@ -88,6 +88,7 @@
     <Compile Include="Packages\David-Unity-Utils\Runtime\Geometry\Quad.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\ExtensionMethods\TransformExtensionMethods.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\Spawning\SpawnerBox.cs" />
+    <Compile Include="Packages\David-Unity-Utils\Runtime\Geometry\Generators\SeedsGenerator.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\ScriptableObjectsUtils\AutoUpdatableSoWithBackup.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\ExtensionMethods\ColorExtensions.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\ThreadingUtils\GradientThreadSafe.cs" />

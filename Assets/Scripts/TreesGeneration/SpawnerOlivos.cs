@@ -1,47 +1,70 @@
+using System.Collections;
+using System.Collections.Generic;
 using DavidUtils.ExtensionMethods;
 using DavidUtils.Geometry;
+using DavidUtils.Geometry.Generators;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
 namespace TreesGeneration
 {
-	public class SpawnerOlivos : MonoBehaviour
+	public class SpawnerOlivos : VoronoiGenerator
 	{
 		[SerializeField] private GameObject[] olivoPrefabs;
 
 		[SerializeField] private int numFincas = 10;
 
-		public Voronoi voronoi;
-		private Bounds bounds;
-
 		[SerializeField] private float minSeparation = 5;
 		[SerializeField] private float minDistToBoundary = 5;
 		[SerializeField] private float boundaryOffset = 10;
 
-		private void Start()
+		public Dictionary<Polygon, Vector2[]> olivePositions = new();
+
+		protected override IEnumerator RunCoroutine()
 		{
-			bounds = Terrain.activeTerrain.GetBounds();
-			Initialize();
+			yield return base.RunCoroutine();
+			if (animated)
+			{
+				// TODO
+				yield return Run_OneIteration(delay);
+				drawGrid = false;
+			}
+			// TODO
 		}
 
-		public void Initialize()
+		#region PROGRESSIVE GENERATION
+
+		public bool Ended => olivePositions.Count == voronoi.regions.Count;
+		public int iterations;
+
+		protected override void Run_OneIteration()
 		{
-			voronoi ??= new Voronoi(numFincas);
-			voronoi.Reset();
+			if (!delaunay.ended)
+			{
+				delaunay.Run_OnePoint();
+			}
+			else if (!voronoi.Ended)
+			{
+				voronoi.Run_OneIteration();
+			}
+			else if (!Ended)
+			{
+				PopulateRegion(iterations);
+				iterations++;
+			}
 		}
 
-		public void GenerateSeeds()
+		private void PopulateRegion(int regionIndex)
 		{
-			Initialize();
-			// voronoi.GenerateSeeds(numFincas);
-			voronoi.seeds = GeometryUtils.GenerateSeeds_RegularDistribution(numFincas);
+			List<Vector2> olives = new();
+
+			// TODO
+
+			olivePositions.Add(voronoi.regions[regionIndex], olives.ToArray());
 		}
 
-		public void GenerateVoronoiRegions()
-		{
-			voronoi.GenerateDelaunay();
-			voronoi.GenerateVoronoi();
-		}
+		#endregion
+
 
 		public void SpawnAll()
 		{
