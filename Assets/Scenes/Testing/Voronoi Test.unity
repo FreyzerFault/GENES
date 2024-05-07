@@ -289,27 +289,35 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e96e97164f9491c8939e46ce64480c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  randSeed: 10
   numSeeds: 64
+  seedsDistribution: 1
+  seeds: []
+  projectOnTerrain: 0
+  drawSeeds: 1
+  drawGrid: 1
+  colors: []
+  delaunay:
+    vertices: []
+    iterations: 0
+    ended: 0
+    drawGizmos: 0
+    drawWire: 1
+  runOnStart: 1
+  animated: 0
+  delay: 0
   voronoi:
-    seed: 722643626
-    seedDistribution: 1
     delaunay:
-      seeds: []
       vertices: []
       iterations: 0
       ended: 0
-    seeds: []
+      drawGizmos: 0
+      drawWire: 0
     iteration: 0
-    regionScale: 1
-    drawSeeds: 1
-    drawGrid: 1
-    drawRegions: 1
-    wireRegions: 0
-    drawDelaunayTriangulation: 1
-    wireTriangulation: 1
-    projectOnTerrain: 0
-  animated: 0
-  delay: 0
+    regionScale: 0.773
+    drawGizmos: 1
+    drawWire: 0
+  canSelectRegion: 1
 --- !u!4 &1271459535
 Transform:
   m_ObjectHideFlags: 0
@@ -369,7 +377,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de5f334f7b0d4f6fbee14c571f53e597, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  randSeed: 10
   numSeeds: 1024
+  seedsDistribution: 0
+  seeds: []
+  projectOnTerrain: 1
+  drawSeeds: 1
+  drawGrid: 1
+  colors: []
+  delaunay:
+    vertices: []
+    iterations: 0
+    ended: 0
+    drawGizmos: 0
+    drawWire: 1
+  runOnStart: 1
   animated: 1
   delay: 0
 --- !u!1660057539 &9223372036854775807

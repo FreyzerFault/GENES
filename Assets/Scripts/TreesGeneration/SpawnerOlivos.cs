@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using DavidUtils.ExtensionMethods;
 using DavidUtils.Geometry;
 using DavidUtils.Geometry.Generators;
@@ -25,11 +26,16 @@ namespace TreesGeneration
 			yield return base.RunCoroutine();
 			if (animated)
 			{
-				// TODO
-				yield return Run_OneIteration(delay);
-				drawGrid = false;
+				Run_OneIteration();
+				yield return new WaitForSeconds(delay);
 			}
-			// TODO
+			else
+			{
+				while (olivePositions.Count != voronoi.regions.Count) Run_OneIteration();
+			}
+
+			// Spawn in Positions generated
+			SpawnAll();
 		}
 
 		#region PROGRESSIVE GENERATION
@@ -40,18 +46,11 @@ namespace TreesGeneration
 		protected override void Run_OneIteration()
 		{
 			if (!delaunay.ended)
-			{
 				delaunay.Run_OnePoint();
-			}
 			else if (!voronoi.Ended)
-			{
 				voronoi.Run_OneIteration();
-			}
 			else if (!Ended)
-			{
-				PopulateRegion(iterations);
-				iterations++;
-			}
+				PopulateRegion(iterations++);
 		}
 
 		private void PopulateRegion(int regionIndex)
@@ -68,43 +67,41 @@ namespace TreesGeneration
 
 		public void SpawnAll()
 		{
-			if (voronoi.regions.Count == 0) GenerateVoronoiRegions();
+			if (olivePositions == null || olivePositions.Count == 0) return;
+
+			foreach (KeyValuePair<Polygon, Vector2[]> valuePair in olivePositions)
+			{
+				Vector2[] localPositions = valuePair.Value;
+				foreach (Vector2 localPosition in localPositions)
+				{
+					Vector3 position = transform.localToWorldMatrix.MultiplyPoint3x4(localPosition.ToVector3xz());
+					Instantiate(RandomOlivePrefab, position, Quaternion.identity, transform);
+				}
+			}
 		}
 
-		// private void Update()
-		// {
-		// 	if (Input.anyKeyDown)  voronoi.GenerateVoronoi_OneIteration();
-		// }
+		private GameObject RandomOlivePrefab => olivoPrefabs[Random.Range(0, olivoPrefabs.Length)];
 
-		private void InstantiateOlivo(Vector3 position, Quaternion rotation) => Instantiate(
-			olivoPrefabs[Random.Range(0, olivoPrefabs.Length)],
-			position,
-			rotation,
-			transform
-		);
 
 #if UNITY_EDITOR
 
 		#region DEBUG
 
-		private Coroutine delaunayCoroutine;
+		private readonly bool drawOlivosPositions = true;
 
-		public void RunAnimation()
+		protected override void OnDrawGizmos()
 		{
-			GenerateSeeds();
-			delaunayCoroutine = StartCoroutine(voronoi.delaunay.AnimationCoroutine(0));
-		}
+			base.OnDrawGizmos();
+			if (!drawOlivosPositions) return;
 
-		public void StopAnimation() => StopCoroutine(delaunayCoroutine);
-
-		private void OnDrawGizmos()
-		{
-			if (bounds == default)
-				bounds = Terrain.activeTerrain.GetBounds();
-			var pos = new Vector3(bounds.min.x, bounds.max.y, bounds.min.z);
-			Vector2 size = bounds.size.ToVector2xz();
-
-			voronoi?.OnDrawGizmos(transform.localToWorldMatrix);
+			ColorUtility.TryParseHtmlString("#808000ff", out Color color);
+			Gizmos.color = color;
+			foreach (Vector2[] regionPositions in olivePositions.Select(pair => pair.Value))
+			foreach (Vector2 localPos in regionPositions)
+			{
+				Vector3 pos = transform.localToWorldMatrix.MultiplyPoint3x4(localPos.ToVector3xz());
+				Gizmos.DrawSphere(pos, 1f);
+			}
 		}
 
 		#endregion
