@@ -24,7 +24,7 @@ namespace TreesGeneration
 		protected override IEnumerator RunCoroutine()
 		{
 			yield return base.RunCoroutine();
-			if (animated)
+			if (animatedDelaunay)
 			{
 				Run_OneIteration();
 				yield return new WaitForSeconds(delay);

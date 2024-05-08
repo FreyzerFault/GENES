@@ -301,10 +301,10 @@ MonoBehaviour:
     vertices: []
     iterations: 0
     ended: 0
-    drawGizmos: 0
+    drawGizmos: 1
     drawWire: 1
   runOnStart: 1
-  animated: 0
+  animatedDelaunay: 1
   delay: 0
   voronoi:
     delaunay:
@@ -314,10 +314,14 @@ MonoBehaviour:
       drawGizmos: 0
       drawWire: 0
     iteration: 0
-    regionScale: 0.773
+    regionScale: 0.891
     drawGizmos: 1
     drawWire: 0
+  animatedVoronoi: 1
+  hoveredRegionIndex: -1
+  selectedRegionIndex: -1
   canSelectRegion: 1
+  drawSelectedTriangles: 1
 --- !u!4 &1271459535
 Transform:
   m_ObjectHideFlags: 0
@@ -392,7 +396,7 @@ MonoBehaviour:
     drawGizmos: 0
     drawWire: 1
   runOnStart: 1
-  animated: 1
+  animatedDelaunay: 1
   delay: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
