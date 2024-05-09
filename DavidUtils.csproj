@@ -53,6 +53,7 @@
     <Compile Include="Packages\David-Unity-Utils\Runtime\UI\Text\NumberCounter.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\UI\Text\DialogueBoxTutorial.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\ExtensionMethods\VectorExtensions.cs" />
+    <Compile Include="Packages\David-Unity-Utils\Runtime\Geometry\ShapeDrawing.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\UI\Debug\FPSCounter.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\MouseInput\MouseInputUtils.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\AnimationCurveUtils.cs" />

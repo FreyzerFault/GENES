@@ -27,7 +27,7 @@ namespace TreesGeneration
 			if (animatedDelaunay)
 			{
 				Run_OneIteration();
-				yield return new WaitForSeconds(delay);
+				yield return new WaitForSeconds(delayMilliseconds);
 			}
 			else
 			{
@@ -74,7 +74,7 @@ namespace TreesGeneration
 				Vector2[] localPositions = valuePair.Value;
 				foreach (Vector2 localPosition in localPositions)
 				{
-					Vector3 position = transform.localToWorldMatrix.MultiplyPoint3x4(localPosition.ToVector3xz());
+					Vector3 position = transform.localToWorldMatrix.MultiplyPoint3x4(localPosition.ToV3xz());
 					Instantiate(RandomOlivePrefab, position, Quaternion.identity, transform);
 				}
 			}
@@ -99,7 +99,7 @@ namespace TreesGeneration
 			foreach (Vector2[] regionPositions in olivePositions.Select(pair => pair.Value))
 			foreach (Vector2 localPos in regionPositions)
 			{
-				Vector3 pos = transform.localToWorldMatrix.MultiplyPoint3x4(localPos.ToVector3xz());
+				Vector3 pos = transform.localToWorldMatrix.MultiplyPoint3x4(localPos.ToV3xz());
 				Gizmos.DrawSphere(pos, 1f);
 			}
 		}
