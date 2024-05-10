@@ -47,6 +47,7 @@
   <ItemGroup>
     <Compile Include="Packages\David-Unity-Utils\Editor\Geometry Generators\VoronoiGeneratorEditor.cs" />
     <Compile Include="Packages\David-Unity-Utils\Editor\PowerOfTwoDrawer.cs" />
+    <Compile Include="Packages\David-Unity-Utils\Editor\StandardShaderVCGUI.cs" />
     <Compile Include="Packages\David-Unity-Utils\Editor\AutoUpdatableSoEditor.cs" />
     <Compile Include="Packages\David-Unity-Utils\Editor\SingletonExecuteAlways.cs" />
     <Compile Include="Packages\David-Unity-Utils\Editor\SpawnerBoxEditor.cs" />

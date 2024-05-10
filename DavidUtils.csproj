@@ -70,6 +70,7 @@
     <Compile Include="Packages\David-Unity-Utils\Runtime\Spawning\Spawner.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\Geometry\Bounds2D.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\Geometry\Triangle.cs" />
+    <Compile Include="Packages\David-Unity-Utils\Runtime\ExtensionMethods\LineRendererExtensions.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\ScriptableObjectsUtils\AutoUpdatableSo.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\Settings\SettingsData.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\BillboardObject.cs" />
