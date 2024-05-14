@@ -533,19 +533,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1271459534}
-        m_TargetAssemblyTypeName: DavidUtils.Geometry.Generators.DelaunayGenerator,
-          DavidUtils
-        m_MethodName: Run
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
   m_OnSubmit:
     m_PersistentCalls:
       m_Calls: []
@@ -907,7 +894,7 @@ MonoBehaviour:
       - m_Target: {fileID: 1271459534}
         m_TargetAssemblyTypeName: DavidUtils.Geometry.Generators.SeedsGenerator,
           DavidUtils
-        m_MethodName: RandomizeSeeds
+        m_MethodName: GenerateSeeds
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -920,7 +907,7 @@ MonoBehaviour:
       - m_Target: {fileID: 1271459534}
         m_TargetAssemblyTypeName: DavidUtils.Geometry.Generators.DelaunayGenerator,
           DavidUtils
-        m_MethodName: Run
+        m_MethodName: OnSeedsUpdated
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3693,7 +3680,7 @@ MonoBehaviour:
     vertices: []
     iterations: 0
     ended: 0
-    drawGizmos: 1
+    draw: 1
     drawWire: 1
   runOnStart: 1
   animatedDelaunay: 1
@@ -3703,13 +3690,13 @@ MonoBehaviour:
       vertices: []
       iterations: 0
       ended: 0
-      drawGizmos: 0
+      draw: 0
       drawWire: 0
     iteration: 0
     drawGizmos: 1
     drawWire: 0
   animatedVoronoi: 1
-  regionScale: 1
+  regionScale: 0.901
   hoveredRegionIndex: -1
   selectedRegionIndex: -1
   canSelectRegion: 1
@@ -4278,7 +4265,7 @@ MonoBehaviour:
     vertices: []
     iterations: 0
     ended: 0
-    drawGizmos: 0
+    draw: 0
     drawWire: 1
   runOnStart: 1
   animatedDelaunay: 1
@@ -4929,9 +4916,9 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1271459534}
-        m_TargetAssemblyTypeName: DavidUtils.Geometry.Generators.VoronoiGenerator,
+        m_TargetAssemblyTypeName: DavidUtils.Geometry.Generators.DelaunayGenerator,
           DavidUtils
-        m_MethodName: set_WireDelaunay
+        m_MethodName: set_DrawDelaunay
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
