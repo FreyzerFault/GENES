@@ -28,7 +28,7 @@ namespace Editor
 			}
 
 			if (GUILayout.Button("Reset"))
-				spawnerOlivos.Initialize();
+				spawnerOlivos.Reset();
 
 			EditorGUILayout.EndHorizontal();
 		}
