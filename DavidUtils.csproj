@@ -105,6 +105,7 @@
     <Compile Include="Packages\David-Unity-Utils\Runtime\ExtensionMethods\ArrayExtensions.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\Geometry\Edge.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\CameraUtils\CameraIdleRotation.cs" />
+    <Compile Include="Packages\David-Unity-Utils\Runtime\Geometry\Showcase\VoronoiShowcase.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\GradientUtils.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\ExtensionMethods\RectTransformExtensionMethods.cs" />
     <None Include="Packages\David-Unity-Utils\Runtime\DavidUtils.asmdef" />
