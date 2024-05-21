@@ -2,7 +2,10 @@
     "name": "Utils",
     "rootNamespace": "",
     "references": [
-        "GUID:d95f62dca18902045bd3f2c6a5898a9d"
+        "GUID:d95f62dca18902045bd3f2c6a5898a9d",
+        "GUID:a7adaf89cbc238348aa7047394acc30d",
+        "GUID:7f7b2cf5ee3a5414cbb09596b1fee914",
+        "GUID:90f9047169ce5e54e9d2c43f8de319a8"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

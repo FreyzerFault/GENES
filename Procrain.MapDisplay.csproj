@@ -735,6 +735,14 @@
       <Project>{6ef4c5d9-9eba-7675-cd16-eed5900260f3}</Project>
       <Name>DavidUtils</Name>
     </ProjectReference>
+    <ProjectReference Include="DavidUtils.PlayerControl.csproj">
+      <Project>{0fa5f061-f9a4-06fc-a2d5-99e9b4192c4f}</Project>
+      <Name>DavidUtils.PlayerControl</Name>
+    </ProjectReference>
+    <ProjectReference Include="DavidUtils.ScriptableObjects.csproj">
+      <Project>{5d9cea16-7642-b92a-7c07-1384982d27c4}</Project>
+      <Name>DavidUtils.ScriptableObjects</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

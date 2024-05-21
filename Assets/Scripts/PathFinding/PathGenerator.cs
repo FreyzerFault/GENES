@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using DavidUtils;
-using DavidUtils.ExtensionMethods;
+using DavidUtils.PlayerControl;
+using DavidUtils.TerrainExtensions;
 using Markers;
 using Procrain.Core;
 using UnityEngine;
@@ -22,10 +22,10 @@ namespace PathFinding
 		public Path[] PathsBetweenMarkers => paths.Skip(0).ToArray();
 
 		// PLAYER
-		private static Vector3 PlayerPosition => MapManager.Instance.player.Position;
-		private static Vector3 PlayerForward => MapManager.Instance.player.Forward;
+		private static Vector3 PlayerPosition => MapManager.Player.Position;
+		private static Vector3 PlayerForward => MapManager.Player.Forward;
 		private static Vector3 PlayerDirection2D => new Vector2(PlayerForward.x, PlayerForward.z);
-		private Vector3 PlayerPositionOnTerrain => terrain.Project(MapManager.Instance.player.Position);
+		private Vector3 PlayerPositionOnTerrain => terrain.Project(MapManager.Player.Position);
 
 		// MARKERS
 		private int MarkerCount => MarkerManager.Instance.MarkerCount;
@@ -43,7 +43,7 @@ namespace PathFinding
 			MarkerManager.Instance.OnMarkerMoved += HandleOnMarkerMoved;
 			MarkerManager.Instance.OnMarkersClear += ClearPaths;
 
-			GameManager.Instance.player.OnPlayerMove += _ => RedoPlayerPath();
+			Player.Instance.OnPlayerMove += _ => RedoPlayerPath();
 
 			RedoPath();
 		}

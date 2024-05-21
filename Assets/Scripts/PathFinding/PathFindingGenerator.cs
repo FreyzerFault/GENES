@@ -1,4 +1,4 @@
-using DavidUtils.ExtensionMethods;
+using DavidUtils.TerrainExtensions;
 using MyBox;
 using PathFinding.Algorithms;
 using PathFinding.Settings;
@@ -7,68 +7,68 @@ using UnityEngine;
 
 namespace PathFinding
 {
-    public class PathFindingGenerator : PathGenerator
-    {
-        public PathFindingSettings pathFindingSettings;
-        public PathFindingAlgorithm PathFindingAlgorithm => pathFindingSettings.Algorithm; 
-        
-        [SerializeField] private bool minHeightIsWaterHeight;
+	public class PathFindingGenerator : PathGenerator
+	{
+		public PathFindingSettings pathFindingSettings;
+		public PathFindingAlgorithm PathFindingAlgorithm => pathFindingSettings.Algorithm;
 
-        private new void Start()
-        {
-            if (minHeightIsWaterHeight)
-                pathFindingSettings.minHeight = MapManager.Instance.WaterHeight;
+		[SerializeField] private bool minHeightIsWaterHeight;
 
-            // Redo PathFinding from zero
-            PathFindingAlgorithm.CleanCache();
+		private new void Start()
+		{
+			if (minHeightIsWaterHeight)
+				pathFindingSettings.minHeight = MapManager.Instance.WaterHeight;
 
-            // Subscribe to PathFindingConfig changes
-            pathFindingSettings.OnFineTune += RedoPathFinding;
+			// Redo PathFinding from zero
+			PathFindingAlgorithm.CleanCache();
 
-            base.Start();
-        }
+			// Subscribe to PathFindingConfig changes
+			pathFindingSettings.OnFineTune += RedoPathFinding;
 
-        protected override void OnDestroy()
-        {
-            base.OnDestroy();
-            pathFindingSettings.OnFineTune -= RedoPathFinding;
-        }
+			base.Start();
+		}
 
-        #region BUILD PATH
+		protected override void OnDestroy()
+		{
+			base.OnDestroy();
+			pathFindingSettings.OnFineTune -= RedoPathFinding;
+		}
 
-        protected override Path BuildPath(Vector3 start, Vector3 end, Vector2? startDir = null, Vector2? endDir = null)
-        {
-            if (start == end) return Path.EmptyPath;
-            
-            var startNode = new Node(start, size: pathFindingSettings.cellSize, direction: startDir);
-            var endNode = new Node(end, size: pathFindingSettings.cellSize, direction: endDir);
-            
-            return PathFindingAlgorithm.FindPath(startNode, endNode, terrain, bounds, pathFindingSettings);
-        }
+		#region BUILD PATH
 
-        #endregion
-        
-        #region RESTRICTIONS
+		protected override Path BuildPath(Vector3 start, Vector3 end, Vector2? startDir = null, Vector2? endDir = null)
+		{
+			if (start == end) return Path.EmptyPath;
 
-        public override bool IsLegal(Vector3 pos)
-        {
-            bool legalHeight = pathFindingSettings.LegalHeight(pos.y),
-                legalSlope = pathFindingSettings.LegalSlope(terrain.GetSlopeAngle(pos)),
-                legalPosition = IsInBounds(pos);
-            
-            return legalHeight && legalSlope && legalPosition;
-        }
-        
-        #endregion
-        
+			var startNode = new Node(start, size: pathFindingSettings.cellSize, direction: startDir);
+			var endNode = new Node(end, size: pathFindingSettings.cellSize, direction: endDir);
+
+			return PathFindingAlgorithm.FindPath(startNode, endNode, terrain, bounds, pathFindingSettings);
+		}
+
+		#endregion
+
+		#region RESTRICTIONS
+
+		public override bool IsLegal(Vector3 pos)
+		{
+			bool legalHeight = pathFindingSettings.LegalHeight(pos.y),
+				legalSlope = pathFindingSettings.LegalSlope(terrain.GetSlopeAngle(pos)),
+				legalPosition = IsInBounds(pos);
+
+			return legalHeight && legalSlope && legalPosition;
+		}
+
+		#endregion
+
 #if UNITY_EDITOR
-        [ButtonMethod]
+		[ButtonMethod]
 #endif
-        private void RedoPathFinding()
-        {
-            PathFindingAlgorithm.CleanCache();
+		private void RedoPathFinding()
+		{
+			PathFindingAlgorithm.CleanCache();
 
-            RedoPath();
-        }
-    }
+			RedoPath();
+		}
+	}
 }

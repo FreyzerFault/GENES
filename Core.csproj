@@ -721,6 +721,10 @@
       <Project>{994aadef-6fdc-1388-61c3-50f618debae1}</Project>
       <Name>Procrain.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="DavidUtils.PlayerControl.csproj">
+      <Project>{0fa5f061-f9a4-06fc-a2d5-99e9b4192c4f}</Project>
+      <Name>DavidUtils.PlayerControl</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

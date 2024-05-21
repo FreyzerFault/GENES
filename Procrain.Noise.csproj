@@ -720,6 +720,18 @@
       <Project>{c8cfa900-c82f-76bd-8968-205a321cc42a}</Project>
       <Name>DavidUtils.Editor</Name>
     </ProjectReference>
+    <ProjectReference Include="DavidUtils.Geometry.csproj">
+      <Project>{aad8c7a4-d1bf-703a-0362-b1117c18d027}</Project>
+      <Name>DavidUtils.Geometry</Name>
+    </ProjectReference>
+    <ProjectReference Include="DavidUtils.ExtensionMethods.csproj">
+      <Project>{5f7aa8d4-210d-fddf-27f1-75bbcbd202c3}</Project>
+      <Name>DavidUtils.ExtensionMethods</Name>
+    </ProjectReference>
+    <ProjectReference Include="DavidUtils.ScriptableObjects.csproj">
+      <Project>{5d9cea16-7642-b92a-7c07-1384982d27c4}</Project>
+      <Name>DavidUtils.ScriptableObjects</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

@@ -49,13 +49,9 @@
     <Compile Include="Packages\Procrain\Editor\Utils\TextureArrayBuilder.cs" />
     <Compile Include="Packages\Procrain\Editor\MapManagerEditor.cs" />
     <Compile Include="Packages\Procrain\Editor\Water\GradientTextureMaker.cs" />
-    <Compile Include="Packages\Procrain\Editor\MapGeneration\TerrainChunkGeneratorEditor.cs" />
-    <Compile Include="Packages\Procrain\Editor\MapGeneration\TerrainSettingsSoEditor.cs" />
     <Compile Include="Packages\Procrain\Editor\Water\Reflections\PlanarReflectionsEditor.cs" />
     <Compile Include="Packages\Procrain\Editor\MapDisplayEditor.cs" />
-    <Compile Include="Packages\Procrain\Editor\MapGeneration\TINVisualizerEditor.cs" />
     <Compile Include="Packages\Procrain\Editor\Water\StylizedWaterURPEditor.cs" />
-    <Compile Include="Packages\Procrain\Editor\MapGeneration\PerlinNoiseParamsEditor.cs" />
     <None Include="Packages\Procrain\Editor\Procrain.Editor.asmdef" />
     <Reference Include="UnityEngine">
       <HintPath>C:\Program Files\Unity\Hub\Editor\2022.3.16f1\Editor\Data\Managed\UnityEngine\UnityEngine.dll</HintPath>

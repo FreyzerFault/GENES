@@ -1,4 +1,6 @@
 using DavidUtils.ExtensionMethods;
+using DavidUtils.Geometry.MeshExtensions;
+using DavidUtils.TerrainExtensions;
 using UnityEngine;
 
 namespace Utils
@@ -18,7 +20,7 @@ namespace Utils
 			_terrain = Terrain.activeTerrain;
 			_mesh = GetComponent<MeshFilter>().mesh;
 
-			_mesh = MeshExtensions.GenerateMeshPlane(resolution, size);
+			_mesh = MeshGeneration.GenerateMeshPlane(resolution, size);
 			ProjectOnTerrain();
 		}
 

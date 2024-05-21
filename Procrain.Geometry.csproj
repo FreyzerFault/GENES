@@ -710,6 +710,14 @@
       <Project>{6ef4c5d9-9eba-7675-cd16-eed5900260f3}</Project>
       <Name>DavidUtils</Name>
     </ProjectReference>
+    <ProjectReference Include="DavidUtils.Geometry.csproj">
+      <Project>{aad8c7a4-d1bf-703a-0362-b1117c18d027}</Project>
+      <Name>DavidUtils.Geometry</Name>
+    </ProjectReference>
+    <ProjectReference Include="DavidUtils.ExtensionMethods.csproj">
+      <Project>{5f7aa8d4-210d-fddf-27f1-75bbcbd202c3}</Project>
+      <Name>DavidUtils.ExtensionMethods</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

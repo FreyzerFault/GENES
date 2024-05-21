@@ -45,12 +45,10 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\2022.3.16f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.Properties.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Packages\David-Unity-Utils\Editor\Geometry Generators\VoronoiGeneratorEditor.cs" />
     <Compile Include="Packages\David-Unity-Utils\Editor\PowerOfTwoDrawer.cs" />
     <Compile Include="Packages\David-Unity-Utils\Editor\StandardShaderVCGUI.cs" />
     <Compile Include="Packages\David-Unity-Utils\Editor\AutoUpdatableSoEditor.cs" />
     <Compile Include="Packages\David-Unity-Utils\Editor\SingletonExecuteAlways.cs" />
-    <Compile Include="Packages\David-Unity-Utils\Editor\SpawnerBoxEditor.cs" />
     <None Include="Packages\David-Unity-Utils\Editor\DavidUtils.Editor.asmdef" />
     <Reference Include="UnityEngine">
       <HintPath>C:\Program Files\Unity\Hub\Editor\2022.3.16f1\Editor\Data\Managed\UnityEngine\UnityEngine.dll</HintPath>
@@ -732,6 +730,10 @@
     <ProjectReference Include="DavidUtils.csproj">
       <Project>{6ef4c5d9-9eba-7675-cd16-eed5900260f3}</Project>
       <Name>DavidUtils</Name>
+    </ProjectReference>
+    <ProjectReference Include="DavidUtils.ScriptableObjects.csproj">
+      <Project>{5d9cea16-7642-b92a-7c07-1384982d27c4}</Project>
+      <Name>DavidUtils.ScriptableObjects</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
