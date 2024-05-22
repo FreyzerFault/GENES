@@ -49,6 +49,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DavidUtils.Audio", "DavidUt
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DavidUtils.Threading", "DavidUtils.Threading.csproj", "{b647af4b-ef80-451c-7ac5-ca3ff87e99c0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DavidUtils.Rendering", "DavidUtils.Rendering.csproj", "{a4c8fd10-0ffc-3cc9-c215-118797b69509}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DavidUtils.DebugUtils", "DavidUtils.DebugUtils.csproj", "{f7660872-6986-5311-42fc-49380a4c7bfd}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DavidUtils.CameraUtils", "DavidUtils.CameraUtils.csproj", "{0865b04d-8881-3659-b028-7fcd6e0030bf}"
@@ -150,6 +152,8 @@ Global
 		{2a04e2b7-3610-b9fb-2395-f9457bd188a1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{b647af4b-ef80-451c-7ac5-ca3ff87e99c0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{b647af4b-ef80-451c-7ac5-ca3ff87e99c0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{a4c8fd10-0ffc-3cc9-c215-118797b69509}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{a4c8fd10-0ffc-3cc9-c215-118797b69509}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{f7660872-6986-5311-42fc-49380a4c7bfd}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{f7660872-6986-5311-42fc-49380a4c7bfd}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0865b04d-8881-3659-b028-7fcd6e0030bf}.Debug|Any CPU.ActiveCfg = Debug|Any CPU

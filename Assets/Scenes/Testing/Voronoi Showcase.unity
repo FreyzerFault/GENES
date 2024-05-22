@@ -4191,12 +4191,12 @@ MonoBehaviour:
   numSeeds: 64
   seedsDistribution: 1
   seeds: []
-  seedsRenderer:
-    seedsParent: {fileID: 0}
-    spheres: []
-    sphereScale: 0.3
+  seeds2DRenderer:
+    renderObj: {fileID: 0}
     active: 1
-    seedColors: []
+    colors: []
+    spheresMr: []
+    sphereScale: 0.3
   projectOnTerrain: 0
   drawGrid: 0
   delaunay:
@@ -4207,14 +4207,15 @@ MonoBehaviour:
   animatedDelaunay: 0
   delayMilliseconds: 0.1
   delaunayRenderer:
+    renderObj: {fileID: 0}
+    active: 1
+    colors: []
     meshRenderer: {fileID: 0}
     meshFilter: {fileID: 0}
     lineParent: {fileID: 0}
     lineRenderers: []
     borderLine: {fileID: 0}
-    active: 1
     wire: 1
-    colors: []
   voronoi:
     delaunay:
       vertices: []
@@ -4223,19 +4224,20 @@ MonoBehaviour:
     iteration: 0
   animatedVoronoi: 0
   voronoiRenderer:
+    renderObj: {fileID: 0}
+    active: 1
+    colors: []
     lineParent: {fileID: 0}
     meshParent: {fileID: 0}
     regionScale: 0.95
-    active: 1
     wire: 0
-    colors: []
     hightlightedRegionLineRenderer: {fileID: 0}
     selectedRegionLineRenderer: {fileID: 0}
   hoveredRegionIndex: -1
   selectedRegionIndex: -1
   canSelectRegion: 0
   drawSelectedTriangles: 1
-  speed: 0.2
+  speed: 0.1
   turnSpeed: 0.2
 --- !u!1 &1277018064
 GameObject:
