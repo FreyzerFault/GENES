@@ -49,7 +49,7 @@
     <Compile Include="Packages\David-Unity-Utils\Runtime\ExtensionMethods\TransformExtensionMethods.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\ExtensionMethods\ColorExtensions.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\ExtensionMethods\BoundsExtensions.cs" />
-    <Compile Include="Packages\David-Unity-Utils\Runtime\ExtensionMethods\ArrayExtensions.cs" />
+    <Compile Include="Packages\David-Unity-Utils\Runtime\ExtensionMethods\MiscExtensions.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\ExtensionMethods\RectTransformExtensionMethods.cs" />
     <None Include="Packages\David-Unity-Utils\Runtime\ExtensionMethods\DavidUtils.ExtensionMethods.asmdef" />
     <Reference Include="UnityEngine">

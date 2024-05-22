@@ -708,9 +708,6 @@
     <Reference Include="Unity.Mathematics">
       <HintPath>C:\Users\dalcanta\Unity Projects\GENES\Library\ScriptAssemblies\Unity.Mathematics.dll</HintPath>
     </Reference>
-    <Reference Include="MyBox">
-      <HintPath>C:\Users\dalcanta\Unity Projects\GENES\Library\ScriptAssemblies\MyBox.dll</HintPath>
-    </Reference>
     <Reference Include="Unity.TextMeshPro">
       <HintPath>C:\Users\dalcanta\Unity Projects\GENES\Library\ScriptAssemblies\Unity.TextMeshPro.dll</HintPath>
     </Reference>

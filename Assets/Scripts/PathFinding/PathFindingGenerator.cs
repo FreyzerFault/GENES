@@ -1,5 +1,4 @@
 using DavidUtils.TerrainExtensions;
-using MyBox;
 using PathFinding.Algorithms;
 using PathFinding.Settings;
 using Procrain.Core;
@@ -23,7 +22,7 @@ namespace PathFinding
 			PathFindingAlgorithm.CleanCache();
 
 			// Subscribe to PathFindingConfig changes
-			pathFindingSettings.OnFineTune += RedoPathFinding;
+			pathFindingSettings.OnFineTune += RedoPath_UnvalidateCache;
 
 			base.Start();
 		}
@@ -31,7 +30,7 @@ namespace PathFinding
 		protected override void OnDestroy()
 		{
 			base.OnDestroy();
-			pathFindingSettings.OnFineTune -= RedoPathFinding;
+			pathFindingSettings.OnFineTune -= RedoPath_UnvalidateCache;
 		}
 
 		#region BUILD PATH
@@ -61,13 +60,9 @@ namespace PathFinding
 
 		#endregion
 
-#if UNITY_EDITOR
-		[ButtonMethod]
-#endif
-		private void RedoPathFinding()
+		public void RedoPath_UnvalidateCache()
 		{
 			PathFindingAlgorithm.CleanCache();
-
 			RedoPath();
 		}
 	}

@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using DavidUtils;
-using MyBox;
 using UnityEngine;
 
 namespace Markers
@@ -16,7 +15,7 @@ namespace Markers
 		None
 	}
 
-	public class MarkerManager : DavidUtils.Singleton<MarkerManager>
+	public class MarkerManager : Singleton<MarkerManager>
 	{
 		private static bool ShiftDown => Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.LeftShift);
 		private static bool ShiftUp => Input.GetKeyUp(KeyCode.LeftShift) || Input.GetKeyUp(KeyCode.LeftShift);
@@ -345,15 +344,6 @@ namespace Markers
 		public void CheckMarker(Marker marker) => CheckMarker(FindIndex(marker));
 
 		#endregion
-
-
-#if UNITY_EDITOR
-		[ButtonMethod]
-#endif
-		public void ClearMarkers()
-		{
-			ClearAll();
-		}
 
 		private static void Log(string msg) =>
 			Debug.Log("<color=green>Map Marker Generator: </color>" + msg);

@@ -702,9 +702,6 @@
     <Reference Include="Unity.InputSystem">
       <HintPath>C:\Users\dalcanta\Unity Projects\GENES\Library\ScriptAssemblies\Unity.InputSystem.dll</HintPath>
     </Reference>
-    <Reference Include="MyBox">
-      <HintPath>C:\Users\dalcanta\Unity Projects\GENES\Library\ScriptAssemblies\MyBox.dll</HintPath>
-    </Reference>
     <Reference Include="UnityEditor.UI">
       <HintPath>C:\Users\dalcanta\Unity Projects\GENES\Library\ScriptAssemblies\UnityEditor.UI.dll</HintPath>
     </Reference>

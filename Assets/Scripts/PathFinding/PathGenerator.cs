@@ -255,7 +255,7 @@ namespace PathFinding
 			return pathsBuilt;
 		}
 
-		protected void RedoPath()
+		public void RedoPath()
 		{
 			// Player -> Marker 1 -> Marker 2 -> ... -> Marker N
 			Vector3[] checkpoints = Markers.Where(marker => !marker.IsChecked)
