@@ -47,6 +47,7 @@
   <ItemGroup>
     <Compile Include="Packages\David-Unity-Utils\Runtime\Singleton.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\AnimationCurveUtils.cs" />
+    <Compile Include="Packages\David-Unity-Utils\Runtime\UnityUtils.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\TextureUtils.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\GameManager.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\DictionarySerializable.cs" />
