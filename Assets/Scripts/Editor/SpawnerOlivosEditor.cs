@@ -4,14 +4,14 @@ using UnityEngine;
 
 namespace Editor
 {
-	[CustomEditor(typeof(SpawnerOlivos))]
+	[CustomEditor(typeof(OliveGroveGenerator))]
 	public class SpawnerOlivosEditor : UnityEditor.Editor
 	{
 		public override void OnInspectorGUI()
 		{
 			base.OnInspectorGUI();
 
-			var spawnerOlivos = (SpawnerOlivos)target;
+			var spawnerOlivos = (OliveGroveGenerator)target;
 
 			EditorGUILayout.Space();
 

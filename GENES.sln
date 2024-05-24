@@ -77,6 +77,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "Core.csproj", "{ad9
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DavidUtils.ScriptableObjects", "DavidUtils.ScriptableObjects.csproj", "{5d9cea16-7642-b92a-7c07-1384982d27c4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TreesGeneration", "TreesGeneration.csproj", "{808aeaf4-3f62-f1f8-7194-3e9609f09cc0}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DavidUtils.Settings", "DavidUtils.Settings.csproj", "{e13cc001-f48f-ee23-78f0-18e78a645fd2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DavidUtils.Editor", "DavidUtils.Editor.csproj", "{c8cfa900-c82f-76bd-8968-205a321cc42a}"
@@ -96,8 +98,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assets.ExternalPackages.SimpleWater", "Assets.ExternalPackages.SimpleWater.csproj", "{3f9a6875-961d-fe8b-dc78-e4ff9b8f62af}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assets.External_Packages.AutoSave", "Assets.External_Packages.AutoSave.csproj", "{ead60a96-858b-65d9-7cc2-6c8b5a25aba3}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TreesGeneration", "TreesGeneration.csproj", "{808aeaf4-3f62-f1f8-7194-3e9609f09cc0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp", "Assembly-CSharp.csproj", "{af92edb9-e79a-694f-be7e-43c4d8fc4b16}"
 EndProject
@@ -182,6 +182,8 @@ Global
 		{ad92af71-0ba9-1f9d-c4a2-8857b4878f5d}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5d9cea16-7642-b92a-7c07-1384982d27c4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5d9cea16-7642-b92a-7c07-1384982d27c4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{808aeaf4-3f62-f1f8-7194-3e9609f09cc0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{808aeaf4-3f62-f1f8-7194-3e9609f09cc0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{e13cc001-f48f-ee23-78f0-18e78a645fd2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{e13cc001-f48f-ee23-78f0-18e78a645fd2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{c8cfa900-c82f-76bd-8968-205a321cc42a}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -202,8 +204,6 @@ Global
 		{3f9a6875-961d-fe8b-dc78-e4ff9b8f62af}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ead60a96-858b-65d9-7cc2-6c8b5a25aba3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{ead60a96-858b-65d9-7cc2-6c8b5a25aba3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{808aeaf4-3f62-f1f8-7194-3e9609f09cc0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{808aeaf4-3f62-f1f8-7194-3e9609f09cc0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{af92edb9-e79a-694f-be7e-43c4d8fc4b16}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{af92edb9-e79a-694f-be7e-43c4d8fc4b16}.Debug|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
