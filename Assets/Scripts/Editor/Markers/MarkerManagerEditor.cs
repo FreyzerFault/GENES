@@ -2,7 +2,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace Editor.Markers
+namespace GENES.Editor.Markers
 {
 	[CustomEditor(typeof(MarkerManager))]
 	public class MarkerManagerEditor : UnityEditor.Editor

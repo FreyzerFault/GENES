@@ -2,7 +2,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace Editor.PathFinding
+namespace GENES.Editor.PathFinding
 {
 	[CustomEditor(typeof(PathFindingGenerator))]
 	public class PathFindingGeneratorEditor : UnityEditor.Editor

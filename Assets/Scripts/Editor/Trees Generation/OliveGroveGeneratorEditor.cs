@@ -2,10 +2,10 @@ using TreesGeneration;
 using UnityEditor;
 using UnityEngine;
 
-namespace Editor
+namespace GENES.Editor.Trees_Generation
 {
 	[CustomEditor(typeof(OliveGroveGenerator))]
-	public class SpawnerOlivosEditor : UnityEditor.Editor
+	public class OliveGroveGeneratorEditor : UnityEditor.Editor
 	{
 		public override void OnInspectorGUI()
 		{

@@ -5,24 +5,33 @@ using System.Linq;
 using DavidUtils.ExtensionMethods;
 using DavidUtils.Geometry;
 using DavidUtils.Geometry.Generators;
+using DavidUtils.Rendering;
+using DavidUtils.TerrainExtensions;
 using UnityEngine;
 
 namespace TreesGeneration
 {
 	public class OliveGroveGenerator : VoronoiGenerator
 	{
-		[SerializeField] private int NumFincas => numSeeds;
+		private int NumFincas => numSeeds;
 
+		[Space]
+		[Header("OLIVAS")]
+		
 		// Parametros para el layout de una finca
+		[Range(0.1f, 10)]
 		[SerializeField] private float minSeparation = 5;
+		
+		[Range(0.1f, 10)]
 		[SerializeField] private float minDistToBoundary = 5;
+		
+		[Range(0.1f, 30)]
 		[SerializeField] private float boundaryOffset = 10;
 
 		public Dictionary<Polygon, Vector2[]> fincasDictionary = new();
 		public Vector2[] OlivePositions => fincasDictionary.SelectMany(pair => pair.Value).ToArray();
 		public Vector2[] OlivePositionsByRegion(Polygon region) => fincasDictionary[region];
 
-		public bool animatedOlives = true;
 
 		public Action<Vector2[]> OnEndedGeneration;
 		public Action<Vector2[]> OnRegionPopulated;
@@ -32,6 +41,7 @@ namespace TreesGeneration
 		{
 			base.Reset();
 			fincasDictionary.Clear();
+			iterations = 0;
 			OnClear?.Invoke();
 		}
 
@@ -53,8 +63,12 @@ namespace TreesGeneration
 			}
 		}
 
-		public bool Ended => fincasDictionary.Count == voronoi.regions.Count;
+		#region ANIMATION
+
+		public bool animatedOlives = true;
 		public int iterations;
+		
+		public bool Ended => fincasDictionary.Count >= voronoi.regions.Count;
 
 		protected override IEnumerator RunCoroutine()
 		{
@@ -87,15 +101,17 @@ namespace TreesGeneration
 				PopulateRegion(iterations++);
 		}
 
+		#endregion
+		
+
 		#region POPULATION
 
 		private Vector2[] PopulateRegion(Polygon region)
 		{
-			Vector2[] olives = Array.Empty<Vector2>();
-
-			// TODO
-
-			fincasDictionary.Add(region, olives.ToArray());
+			// TODO Implementar la generacion de olivos en una finca
+			Vector2[] olives = { region.centroid };
+			
+			fincasDictionary.Add(region, olives);
 
 			OnRegionPopulated?.Invoke(olives.ToArray());
 
@@ -108,33 +124,63 @@ namespace TreesGeneration
 
 		#endregion
 
+		
 		#region RENDERING
 
 		private readonly bool _drawOlivos = true;
+		
+		private PointSpriteRenderer spritesRenderer = new();
+
+		protected override void InitializeRenderer()
+		{
+			base.InitializeRenderer();
+			spritesRenderer.Initialize(transform, "Olive Sprites Renderer");
+			
+			spritesRenderer.RenderParent.transform.localPosition = Bounds.min.ToV3xz();
+			spritesRenderer.RenderParent.transform.localScale = Bounds.Size.ToV3xz().WithY(1);
+			spritesRenderer.RenderParent.Translate(Vector3.up * 1);
+		}
+		
+		protected override void InstantiateRenderer()
+		{
+			base.InstantiateRenderer();
+			spritesRenderer.Instantiate(OlivePositions, "Olivo");
+			if (CanProjectOnTerrain && Terrain != null)
+				spritesRenderer.ProjectOnTerrain(Terrain);
+		}
+
+		protected override void UpdateRenderer()
+		{
+			base.UpdateRenderer();
+			spritesRenderer.Update(OlivePositions);
+		}
 
 		#endregion
 
-
-#if UNITY_EDITOR
-
+		
 		#region DEBUG
+		
+#if UNITY_EDITOR
 
 		protected override void OnDrawGizmos()
 		{
 			base.OnDrawGizmos();
-			if (!_drawOlivos) return;
+			
+			if (!drawGizmos || !_drawOlivos) return;
 
 			Gizmos.color = "#808000ff".ToUnityColor();
 
 			foreach (Vector2 localPos in OlivePositions)
 			{
-				Vector3 pos = transform.localToWorldMatrix.MultiplyPoint3x4(localPos.ToV3xz());
-				Gizmos.DrawSphere(pos + Vector3.up * 3, 1f);
+				Vector3 pos = ToWorld(localPos);
+				if (CanProjectOnTerrain)
+					pos = Terrain.Project(pos);
+				Gizmos.DrawSphere(pos + Vector3.up * 3, .1f);
 			}
 		}
+#endif
 
 		#endregion
 
-#endif
 	}
 }

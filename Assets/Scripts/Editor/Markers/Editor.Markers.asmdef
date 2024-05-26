@@ -1,0 +1,19 @@
+{
+    "name": "Editor.Markers",
+    "rootNamespace": "GENES",
+    "references": [
+        "GUID:35ec6c46b43ff104194ed46f8d9cbeff",
+        "GUID:d95f62dca18902045bd3f2c6a5898a9d"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
