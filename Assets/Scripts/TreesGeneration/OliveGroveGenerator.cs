@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using DavidUtils;
 using DavidUtils.ExtensionMethods;
 using DavidUtils.Geometry;
 using DavidUtils.Geometry.Generators;
@@ -17,14 +18,14 @@ namespace TreesGeneration
 
 		[Space]
 		[Header("OLIVAS")]
-		
+
 		// Parametros para el layout de una finca
 		[Range(0.1f, 10)]
 		[SerializeField] private float minSeparation = 5;
-		
+
 		[Range(0.1f, 10)]
 		[SerializeField] private float minDistToBoundary = 5;
-		
+
 		[Range(0.1f, 30)]
 		[SerializeField] private float boundaryOffset = 10;
 
@@ -37,17 +38,36 @@ namespace TreesGeneration
 		public Action<Vector2[]> OnRegionPopulated;
 		public Action OnClear;
 
+		#region UNITY
+
+		protected override void Start()
+		{
+			base.Start();
+			OnEndedGeneration += positions => UpdateRenderer();
+		}
+
+		#endregion
+
 		public override void Reset()
 		{
 			base.Reset();
+			ResetOlives();
+		}
+
+		public void ResetOlives()
+		{
 			fincasDictionary.Clear();
 			iterations = 0;
 			OnClear?.Invoke();
+
+			Renderer.Clear();
 		}
 
 		public override void Run()
 		{
-			Reset();
+			ResetDelaunay();
+			ResetVoronoi();
+			ResetOlives();
 			if (animatedOlives)
 			{
 				animationCoroutine = StartCoroutine(RunCoroutine());
@@ -67,7 +87,7 @@ namespace TreesGeneration
 
 		public bool animatedOlives = true;
 		public int iterations;
-		
+
 		public bool Ended => fincasDictionary.Count >= voronoi.regions.Count;
 
 		protected override IEnumerator RunCoroutine()
@@ -102,7 +122,7 @@ namespace TreesGeneration
 		}
 
 		#endregion
-		
+
 
 		#region POPULATION
 
@@ -110,7 +130,7 @@ namespace TreesGeneration
 		{
 			// TODO Implementar la generacion de olivos en una finca
 			Vector2[] olives = { region.centroid };
-			
+
 			fincasDictionary.Add(region, olives);
 
 			OnRegionPopulated?.Invoke(olives.ToArray());
@@ -124,48 +144,54 @@ namespace TreesGeneration
 
 		#endregion
 
-		
+
 		#region RENDERING
 
 		private readonly bool _drawOlivos = true;
-		
-		private PointSpriteRenderer spritesRenderer = new();
+
+		private PointSpriteRenderer _spritesRenderer;
+		private PointSpriteRenderer Renderer => _spritesRenderer ??= GetComponentInChildren<PointSpriteRenderer>(true);
 
 		protected override void InitializeRenderer()
 		{
 			base.InitializeRenderer();
-			spritesRenderer.Initialize(transform, "Olive Sprites Renderer");
-			
-			spritesRenderer.RenderParent.transform.localPosition = Bounds.min.ToV3xz();
-			spritesRenderer.RenderParent.transform.localScale = Bounds.Size.ToV3xz().WithY(1);
-			spritesRenderer.RenderParent.Translate(Vector3.up * 1);
+			_spritesRenderer ??= Renderer
+			                     ?? UnityUtils.InstantiateEmptyObject(transform, "Olive Sprites Renderer")
+				                     .AddComponent<PointSpriteRenderer>();
+
+			Renderer.transform.ApplyMatrix(Bounds.LocalToBoundsMatrix());
+			Renderer.transform.Translate(Vector3.up * 1);
 		}
-		
+
 		protected override void InstantiateRenderer()
 		{
 			base.InstantiateRenderer();
-			spritesRenderer.Instantiate(OlivePositions, "Olivo");
+			Renderer.Instantiate(OlivePositions, "Olivo");
 			if (CanProjectOnTerrain && Terrain != null)
-				spritesRenderer.ProjectOnTerrain(Terrain);
+				Renderer.ProjectOnTerrain(Terrain);
+
+			Renderer.ToggleShadows(false);
 		}
 
 		protected override void UpdateRenderer()
 		{
 			base.UpdateRenderer();
-			spritesRenderer.Update(OlivePositions);
+			Renderer.UpdateGeometry(OlivePositions);
+
+			Renderer.ToggleShadows(false);
 		}
 
 		#endregion
 
-		
+
 		#region DEBUG
-		
+
 #if UNITY_EDITOR
 
 		protected override void OnDrawGizmos()
 		{
 			base.OnDrawGizmos();
-			
+
 			if (!drawGizmos || !_drawOlivos) return;
 
 			Gizmos.color = "#808000ff".ToUnityColor();
@@ -181,6 +207,5 @@ namespace TreesGeneration
 #endif
 
 		#endregion
-
 	}
 }

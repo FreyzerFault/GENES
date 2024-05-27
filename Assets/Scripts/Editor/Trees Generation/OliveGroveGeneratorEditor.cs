@@ -9,11 +9,7 @@ namespace GENES.Editor.Trees_Generation
 	{
 		public override void OnInspectorGUI()
 		{
-			base.OnInspectorGUI();
-
 			var spawnerOlivos = (OliveGroveGenerator)target;
-
-			EditorGUILayout.Space();
 
 			EditorGUILayout.BeginHorizontal();
 
@@ -31,6 +27,10 @@ namespace GENES.Editor.Trees_Generation
 				spawnerOlivos.Reset();
 
 			EditorGUILayout.EndHorizontal();
+
+			EditorGUILayout.Space();
+
+			base.OnInspectorGUI();
 		}
 	}
 }

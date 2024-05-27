@@ -26,7 +26,6 @@ namespace TreesGeneration
 		{
 			// Intenta spawnear en una posición que no esté cerca de otros objetos
 			// Hasta que cumpla con la ditancia mínima o se supere el máximo de intentos
-			Spawneable spawnedItem = null;
 			Vector3 position = GetRandomPointInBounds();
 			var tries = 0;
 			while (tries < maxTries && Collision(position))
