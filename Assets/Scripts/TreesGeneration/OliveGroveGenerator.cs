@@ -5,6 +5,7 @@ using System.Linq;
 using DavidUtils;
 using DavidUtils.ExtensionMethods;
 using DavidUtils.Geometry;
+using DavidUtils.Geometry.Bounding_Box;
 using DavidUtils.Geometry.Generators;
 using DavidUtils.Rendering;
 using DavidUtils.TerrainExtensions;
@@ -30,7 +31,7 @@ namespace TreesGeneration
 		[SerializeField] private float boundaryOffset = 10;
 
 		public Dictionary<Polygon, Vector2[]> fincasDictionary = new();
-		public Vector2[] OlivePositions => fincasDictionary.SelectMany(pair => pair.Value).ToArray();
+		public Vector2[] OlivePositions => fincasDictionary?.SelectMany(pair => pair.Value).ToArray();
 		public Vector2[] OlivePositionsByRegion(Polygon region) => fincasDictionary[region];
 
 
@@ -40,10 +41,10 @@ namespace TreesGeneration
 
 		#region UNITY
 
-		protected override void Start()
+		protected override void Awake()
 		{
-			base.Start();
-			OnEndedGeneration += positions => UpdateRenderer();
+			base.Awake();
+			OnRegionPopulated += InstantiateRenderer;
 		}
 
 		#endregion
@@ -128,14 +129,27 @@ namespace TreesGeneration
 
 		private Vector2[] PopulateRegion(Polygon region)
 		{
-			// TODO Implementar la generacion de olivos en una finca
-			Vector2[] olives = { region.centroid };
+			// Bounds de la region
+			var regionBounds = new Bounds2D(region.TransformVertices(Bounds.LocalToBoundsMatrix()));
 
-			fincasDictionary.Add(region, olives);
+			List<Vector2> olivos = new();
 
-			OnRegionPopulated?.Invoke(olives.ToArray());
+			for (float x = regionBounds.min.x; x < regionBounds.max.x; x += minSeparation)
+			for (float y = regionBounds.min.y; y < regionBounds.max.y; y += minSeparation)
+			{
+				Vector2 pos = regionBounds.BoundsToLocalMatrix().MultiplyPoint3x4(new Vector2(x, y).ToV3xz()).ToV2xz();
 
-			return olives;
+				if (region.Contains_RayCast(pos))
+					olivos.Add(pos);
+			}
+
+			Vector2[] olivosGenerated = olivos.ToArray();
+
+			fincasDictionary.Add(region, olivosGenerated);
+
+			OnRegionPopulated?.Invoke(olivosGenerated);
+
+			return olivosGenerated;
 		}
 
 		private Vector2[] PopulateRegion(int index) => PopulateRegion(Regions[index]);
@@ -152,6 +166,8 @@ namespace TreesGeneration
 		private PointSpriteRenderer _spritesRenderer;
 		private PointSpriteRenderer Renderer => _spritesRenderer ??= GetComponentInChildren<PointSpriteRenderer>(true);
 
+		private Dictionary<Polygon, PointSpriteRenderer> spritesRendererDictionary = new();
+
 		protected override void InitializeRenderer()
 		{
 			base.InitializeRenderer();
@@ -166,19 +182,20 @@ namespace TreesGeneration
 		protected override void InstantiateRenderer()
 		{
 			base.InstantiateRenderer();
-			Renderer.Instantiate(OlivePositions, "Olivo");
-			if (CanProjectOnTerrain && Terrain != null)
-				Renderer.ProjectOnTerrain(Terrain);
-
-			Renderer.ToggleShadows(false);
+			InstantiateRenderer(OlivePositions);
 		}
 
 		protected override void UpdateRenderer()
 		{
 			base.UpdateRenderer();
 			Renderer.UpdateGeometry(OlivePositions);
+		}
 
-			Renderer.ToggleShadows(false);
+		private void InstantiateRenderer(Vector2[] olivos)
+		{
+			Renderer.Instantiate(olivos, "Olivo");
+			if (CanProjectOnTerrain && Terrain != null)
+				Renderer.ProjectOnTerrain(Terrain);
 		}
 
 		#endregion

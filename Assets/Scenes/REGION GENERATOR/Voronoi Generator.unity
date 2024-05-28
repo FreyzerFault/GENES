@@ -3733,9 +3733,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e96e97164f9491c8939e46ce64480c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  randSeed: 10
-  numSeeds: 25
-  seedsDistribution: 1
+  randSeed: 1941721251
+  numSeeds: 10
+  seedsDistribution: 0
   seeds: []
   drawGrid: 1
   delaunay:
@@ -3744,7 +3744,7 @@ MonoBehaviour:
     ended: 0
   runOnStart: 1
   animatedDelaunay: 1
-  delayMilliseconds: 0
+  delayMilliseconds: 1
   voronoi:
     delaunay:
       vertices: []

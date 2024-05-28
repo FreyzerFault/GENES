@@ -211,22 +211,6 @@ MonoBehaviour:
   - {r: 1, g: 0.60000014, b: 0, a: 1}
   - {r: 0.8000001, g: 1, b: 0, a: 1}
   - {r: 0.19999993, g: 1, b: 0, a: 1}
-  - {r: 0, g: 1, b: 0.4000001, a: 1}
-  - {r: 0, g: 1, b: 1, a: 1}
-  - {r: 0, g: 0.39999986, b: 1, a: 1}
-  - {r: 0.20000029, g: 0, b: 1, a: 1}
-  - {r: 0.8000002, g: 0, b: 1, a: 1}
-  - {r: 1, g: 0, b: 0.6000004, a: 1}
-  - {r: 1, g: 0, b: 0, a: 1}
-  - {r: 1, g: 0.60000014, b: 0, a: 1}
-  - {r: 0.7999997, g: 1, b: 0, a: 1}
-  - {r: 0.19999957, g: 1, b: 0, a: 1}
-  - {r: 0, g: 1, b: 0.39999986, a: 1}
-  - {r: 0, g: 1, b: 1, a: 1}
-  - {r: 0, g: 0.39999986, b: 1, a: 1}
-  - {r: 0.19999981, g: 0, b: 1, a: 1}
-  - {r: 0.8000002, g: 0, b: 1, a: 1}
-  - {r: 1, g: 0, b: 0.6000004, a: 1}
   initColorPalette: {r: 0, g: 1, b: 1, a: 1}
   colorPaletteStep: 0.1
   colorPaletteRange: 20
@@ -261,13 +245,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45895e61558d1314a8bcb35f45d2a88e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  randSeed: 407304946
-  numSeeds: 25
-  seedsDistribution: 0
-  seeds: []
+  randSeed: 159502056
+  numSeeds: 9
+  seedsDistribution: 1
+  seeds:
+  - {x: 0.37762374, y: 0.39728063}
+  - {x: 0.71547073, y: 0.9960643}
+  - {x: 0.41794628, y: 0.1281643}
+  - {x: 0.9669368, y: 0.17573132}
+  - {x: 0.4280333, y: 0.21148232}
+  - {x: 0.10694505, y: 0.3069394}
+  - {x: 0.96588767, y: 0.28857425}
+  - {x: 0.22465947, y: 0.70876557}
+  - {x: 0.7254841, y: 0.28202847}
   drawGrid: 1
   delaunay:
-    vertices: []
+    vertices:
+    - {x: 0.3655261, y: 0.123878494}
+    - {x: 0.8856158, y: 0.28332713}
+    - {x: 0.89507043, y: 0.52048486}
+    - {x: 0.7709904, y: 0.8784876}
+    - {x: 0.21349171, y: 0.6368095}
+    - {x: 0.397304, y: 0.374939}
+    - {x: 0.21265462, y: 0.56743103}
+    - {x: 0.72511536, y: 0.7927439}
+    - {x: 0.6151411, y: 0.8862989}
     iterations: 0
     ended: 1
   runOnStart: 1
@@ -275,10 +277,28 @@ MonoBehaviour:
   delayMilliseconds: 0.01
   voronoi:
     delaunay:
-      vertices: []
+      vertices:
+      - {x: 0.3655261, y: 0.123878494}
+      - {x: 0.8856158, y: 0.28332713}
+      - {x: 0.89507043, y: 0.52048486}
+      - {x: 0.7709904, y: 0.8784876}
+      - {x: 0.21349171, y: 0.6368095}
+      - {x: 0.397304, y: 0.374939}
+      - {x: 0.21265462, y: 0.56743103}
+      - {x: 0.72511536, y: 0.7927439}
+      - {x: 0.6151411, y: 0.8862989}
       iterations: 0
       ended: 1
-    seeds: []
+    seeds:
+    - {x: 0.3655261, y: 0.123878494}
+    - {x: 0.8856158, y: 0.28332713}
+    - {x: 0.89507043, y: 0.52048486}
+    - {x: 0.7709904, y: 0.8784876}
+    - {x: 0.21349171, y: 0.6368095}
+    - {x: 0.397304, y: 0.374939}
+    - {x: 0.21265462, y: 0.56743103}
+    - {x: 0.72511536, y: 0.7927439}
+    - {x: 0.6151411, y: 0.8862989}
   animatedVoronoi: 0
   canSelectRegion: 1
   drawSelectedTriangles: 1
@@ -287,7 +307,7 @@ MonoBehaviour:
   minSeparation: 5
   minDistToBoundary: 5
   boundaryOffset: 10
-  animatedOlives: 0
+  animatedOlives: 1
   iterations: 0
 --- !u!4 &302836436
 Transform:
@@ -425,7 +445,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &962001977
 Transform:
   m_ObjectHideFlags: 0
@@ -453,7 +473,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3ed8d9eb32644b3bd71d1f1c7757b3a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  colors: []
+  colors:
+  - {r: 0, g: 1, b: 1, a: 1}
+  - {r: 0, g: 0.39999986, b: 1, a: 1}
+  - {r: 0.19999981, g: 0, b: 1, a: 1}
+  - {r: 0.8000002, g: 0, b: 1, a: 1}
+  - {r: 1, g: 0, b: 0.6000004, a: 1}
+  - {r: 1, g: 0, b: 0, a: 1}
+  - {r: 1, g: 0.60000014, b: 0, a: 1}
+  - {r: 0.8000001, g: 1, b: 0, a: 1}
+  - {r: 0.19999993, g: 1, b: 0, a: 1}
   initColorPalette: {r: 0, g: 1, b: 1, a: 1}
   colorPaletteStep: 0.1
   colorPaletteRange: 20
@@ -569,7 +598,7 @@ MonoBehaviour:
   colorPaletteStep: 0.1
   colorPaletteRange: 20
   wire: 0
-  centeredScale: 0.905
+  centeredScale: 0.991
 --- !u!4 &1194812373 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7601147848375684038, guid: 5c20188c4dba74a48a55f394be04a456, type: 3}
@@ -610,11 +639,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 765269159385599924, guid: 7c7702694cf2e614eb82ab6cf55c8fbe, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.000000008513882
+      value: 0.000000008697406
       objectReference: {fileID: 0}
     - target: {fileID: 765269159385599924, guid: 7c7702694cf2e614eb82ab6cf55c8fbe, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.0000000012364113
+      value: 0.0000000012630631
       objectReference: {fileID: 0}
     - target: {fileID: 1850655719611779023, guid: 7c7702694cf2e614eb82ab6cf55c8fbe, type: 3}
       propertyPath: m_Name
@@ -642,7 +671,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3744765528906028528, guid: 7c7702694cf2e614eb82ab6cf55c8fbe, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -1e-45
+      value: 1e-45
       objectReference: {fileID: 0}
     - target: {fileID: 3744765528906028528, guid: 7c7702694cf2e614eb82ab6cf55c8fbe, type: 3}
       propertyPath: m_LocalRotation.z
@@ -1122,9 +1151,9 @@ MonoBehaviour:
   initColorPalette: {r: 0, g: 1, b: 1, a: 1}
   colorPaletteStep: 0.1
   colorPaletteRange: 20
-  spriteTexture: {fileID: 0}
+  spriteTexture: {fileID: 2800000, guid: a765816d48ec49f44b470fdbab022686, type: 3}
   spriteRenderers: []
-  spriteScale: 0.3
+  spriteScale: 1
 --- !u!1001 &1825177752
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1159,11 +1188,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7947901710385552996, guid: b11e01192d61bee4fbcc1a49fce7afa6, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.000000028927376
+      value: 0.000000028927376
       objectReference: {fileID: 0}
     - target: {fileID: 7947901710385552996, guid: b11e01192d61bee4fbcc1a49fce7afa6, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.0000000071683757
+      value: 0.0000000071683757
       objectReference: {fileID: 0}
     - target: {fileID: 7947901710385552996, guid: b11e01192d61bee4fbcc1a49fce7afa6, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x

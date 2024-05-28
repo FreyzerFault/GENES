@@ -33,9 +33,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UI", "UI.csproj", "{7108290
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Procrain.Editor", "Procrain.Editor.csproj", "{1c890a46-d737-b61d-8a49-8e7a68c3eb57}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utils", "Utils.csproj", "{a47c4ef6-8da7-f594-464c-72b5fda1c310}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DavidUtils.ExtensionMethods", "DavidUtils.ExtensionMethods.csproj", "{5f7aa8d4-210d-fddf-27f1-75bbcbd202c3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utils", "Utils.csproj", "{a47c4ef6-8da7-f594-464c-72b5fda1c310}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Procrain.MapGeneration", "Procrain.MapGeneration.csproj", "{725ee3bd-97c6-f759-626f-6dccda1f06ea}"
 EndProject
@@ -154,10 +154,10 @@ Global
 		{7108290b-d2d8-8cf3-e8ff-5071ab44320f}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1c890a46-d737-b61d-8a49-8e7a68c3eb57}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1c890a46-d737-b61d-8a49-8e7a68c3eb57}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{a47c4ef6-8da7-f594-464c-72b5fda1c310}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{a47c4ef6-8da7-f594-464c-72b5fda1c310}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5f7aa8d4-210d-fddf-27f1-75bbcbd202c3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5f7aa8d4-210d-fddf-27f1-75bbcbd202c3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{a47c4ef6-8da7-f594-464c-72b5fda1c310}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{a47c4ef6-8da7-f594-464c-72b5fda1c310}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{725ee3bd-97c6-f759-626f-6dccda1f06ea}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{725ee3bd-97c6-f759-626f-6dccda1f06ea}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0e016170-5c72-7ade-2a8b-e3203cb4ffb1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
