@@ -3733,9 +3733,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e96e97164f9491c8939e46ce64480c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  randSeed: 1941721251
-  numSeeds: 10
-  seedsDistribution: 0
+  randSeed: 34253
+  numSeeds: 64
+  seedsDistribution: 1
   seeds: []
   drawGrid: 1
   delaunay:
@@ -3744,7 +3744,7 @@ MonoBehaviour:
     ended: 0
   runOnStart: 1
   animatedDelaunay: 1
-  delayMilliseconds: 1
+  delayMilliseconds: 10
   voronoi:
     delaunay:
       vertices: []
@@ -4202,6 +4202,7 @@ MonoBehaviour:
   initColorPalette: {r: 0, g: 1, b: 1, a: 1}
   colorPaletteStep: 0.1
   colorPaletteRange: 20
+  thickness: 0.05
   wire: 1
 --- !u!1 &1446734126
 GameObject:
@@ -4484,10 +4485,10 @@ MonoBehaviour:
   - {r: 0.19999981, g: 0, b: 1, a: 1}
   - {r: 0.8000002, g: 0, b: 1, a: 1}
   - {r: 1, g: 0, b: 0.6000004, a: 1}
-  initColorPalette: {r: 0, g: 1, b: 1, a: 1}
+  initColorPalette: {r: 1, g: 0.053893536, b: 0, a: 1}
   colorPaletteStep: 0.1
   colorPaletteRange: 20
-  sphereScale: 0.5
+  sphereScale: 0.2
 --- !u!1 &1615142472
 GameObject:
   m_ObjectHideFlags: 0

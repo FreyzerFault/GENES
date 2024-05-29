@@ -100,7 +100,7 @@ namespace TreesGeneration
 				while (!Ended)
 				{
 					Run_OneIteration();
-					yield return new WaitForSecondsRealtime(delayMilliseconds);
+					yield return new WaitForSecondsRealtime(DelaySeconds);
 				}
 
 				OnEndedGeneration?.Invoke(OlivePositions);
