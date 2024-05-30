@@ -119,7 +119,7 @@ namespace TreesGeneration
 			else if (!voronoi.Ended)
 				voronoi.Run_OneIteration();
 			else if (!Ended)
-				PopulateRegion(iterations++);
+				PopulateRegion(Regions[iterations++]);
 		}
 
 		#endregion
@@ -129,32 +129,37 @@ namespace TreesGeneration
 
 		private Vector2[] PopulateRegion(Polygon region)
 		{
-			// Bounds de la region
-			var regionBounds = new Bounds2D(region.TransformVertices(Bounds.LocalToBoundsMatrix()));
+			Vector2[] olivosGenerated = PopulateRegion(AABB, region, minSeparation, Vector2.right);
+			fincasDictionary.Add(region, olivosGenerated);
+			OnRegionPopulated?.Invoke(olivosGenerated);
+			return olivosGenerated;
+		}
+
+		private Vector2[] PopulateAllRegions() => Regions.SelectMany(PopulateRegion).ToArray();
+
+		private static Vector2[] PopulateRegion(
+			AABB_2D terrainAABB, Polygon region, float minSeparation, Vector2 orientation
+		)
+		{
+			// OBB del polígono con la orientación de la hilera
+			OBB_2D obb = new(region, orientation);
+			AABB_2D aabb = obb.AABB_Rotated;
 
 			List<Vector2> olivos = new();
 
-			for (float x = regionBounds.min.x; x < regionBounds.max.x; x += minSeparation)
-			for (float y = regionBounds.min.y; y < regionBounds.max.y; y += minSeparation)
-			{
-				Vector2 pos = regionBounds.BoundsToLocalMatrix().MultiplyPoint3x4(new Vector2(x, y).ToV3xz()).ToV2xz();
+			Vector2 minSeparationLocal =
+				new Vector2(minSeparation, minSeparation).ScaleBy(terrainAABB.BoundsToLocalMatrix(false).lossyScale);
 
+			for (float x = aabb.min.x; x < aabb.max.x; x += minSeparationLocal.x)
+			for (float y = aabb.min.y; y < aabb.max.y; y += minSeparationLocal.y)
+			{
+				Vector2 pos = new Vector2(x, y).Rotate(obb.Angle, obb.min);
 				if (region.Contains_RayCast(pos))
 					olivos.Add(pos);
 			}
 
-			Vector2[] olivosGenerated = olivos.ToArray();
-
-			fincasDictionary.Add(region, olivosGenerated);
-
-			OnRegionPopulated?.Invoke(olivosGenerated);
-
-			return olivosGenerated;
+			return olivos.ToArray();
 		}
-
-		private Vector2[] PopulateRegion(int index) => PopulateRegion(Regions[index]);
-
-		private Vector2[] PopulateAllRegions() => Regions.SelectMany(PopulateRegion).ToArray();
 
 		#endregion
 
@@ -175,7 +180,7 @@ namespace TreesGeneration
 			                     ?? UnityUtils.InstantiateEmptyObject(transform, "Olive Sprites Renderer")
 				                     .AddComponent<PointSpriteRenderer>();
 
-			Renderer.transform.ApplyMatrix(Bounds.LocalToBoundsMatrix());
+			Renderer.transform.ApplyMatrix(AABB.LocalToBoundsMatrix());
 			Renderer.transform.Translate(Vector3.up * 1);
 		}
 
@@ -219,6 +224,17 @@ namespace TreesGeneration
 				if (CanProjectOnTerrain)
 					pos = Terrain.Project(pos);
 				Gizmos.DrawSphere(pos + Vector3.up * 3, .1f);
+			}
+
+			foreach (Polygon region in Regions)
+			{
+				OBB_2D obb = new(region, Vector2.up);
+				obb.DrawGizmos(LocalToWorldMatrix, Color.white, 5);
+				obb.AABB_Rotated.DrawGizmos(
+					LocalToWorldMatrix * Matrix4x4.Rotate(Quaternion.AngleAxis(-90, Vector3.right)),
+					color: Color.red,
+					thickness: 5
+				);
 			}
 		}
 #endif
