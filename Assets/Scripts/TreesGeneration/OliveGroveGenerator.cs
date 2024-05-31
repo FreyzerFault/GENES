@@ -180,7 +180,7 @@ namespace TreesGeneration
 			                     ?? UnityUtils.InstantiateEmptyObject(transform, "Olive Sprites Renderer")
 				                     .AddComponent<PointSpriteRenderer>();
 
-			Renderer.transform.ApplyMatrix(AABB.LocalToBoundsMatrix());
+			BoundsComp.AdjustTransformToBounds(Renderer);
 			Renderer.transform.Translate(Vector3.up * 1);
 		}
 
@@ -218,24 +218,29 @@ namespace TreesGeneration
 
 			Gizmos.color = "#808000ff".ToUnityColor();
 
-			foreach (Vector2 localPos in OlivePositions)
-			{
-				Vector3 pos = ToWorld(localPos);
-				if (CanProjectOnTerrain)
-					pos = Terrain.Project(pos);
-				Gizmos.DrawSphere(pos + Vector3.up * 3, .1f);
-			}
+			foreach (Vector2 localPos in OlivePositions) GizmosOlivePoint(localPos);
 
-			foreach (Polygon region in Regions)
-			{
-				OBB_2D obb = new(region, Vector2.up);
-				obb.DrawGizmos(LocalToWorldMatrix, Color.white, 5);
-				obb.AABB_Rotated.DrawGizmos(
-					LocalToWorldMatrix * Matrix4x4.Rotate(Quaternion.AngleAxis(-90, Vector3.right)),
-					color: Color.red,
-					thickness: 5
-				);
-			}
+			if (Regions.NotNullOrEmpty())
+				foreach (Polygon region in Regions)
+					GizmosOBB(region, 3, Color.red);
+
+			if (Regions.NotNullOrEmpty())
+				GizmosOBB(Regions[0], 8, Color.magenta);
+		}
+
+		private void GizmosOlivePoint(Vector2 localPos)
+		{
+			Vector3 pos = ToWorld(localPos);
+			if (CanProjectOnTerrain)
+				pos = Terrain.Project(pos);
+			Gizmos.DrawSphere(pos + Vector3.up * 3, .1f);
+		}
+
+		private void GizmosOBB(Polygon polygon, float thickness, Color color, bool drawAABB = true)
+		{
+			OBB_2D obb = new(polygon, Vector2.one.normalized);
+			obb.DrawGizmos(LocalToWorldMatrix, color, thickness);
+			if (drawAABB) obb.AABB_Rotated.DrawGizmos(LocalToWorldMatrix, color: Color.white, thickness: thickness);
 		}
 #endif
 
