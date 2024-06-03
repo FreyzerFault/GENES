@@ -89,6 +89,12 @@ namespace TreesGeneration
 		public bool animatedOlives = true;
 		public int iterations;
 
+		public bool AnimatedOlives
+		{
+			get => animatedOlives;
+			set => animatedOlives = value;
+		}
+
 		public bool Ended => fincasDictionary.Count >= voronoi.regions.Count;
 
 		protected override IEnumerator RunCoroutine()

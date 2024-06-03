@@ -3651,7 +3651,7 @@ MonoBehaviour:
       - m_Target: {fileID: 1271459534}
         m_TargetAssemblyTypeName: DavidUtils.Geometry.Generators.VoronoiGenerator,
           DavidUtils
-        m_MethodName: set_Animated
+        m_MethodName: set_AnimatedDelaunay
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

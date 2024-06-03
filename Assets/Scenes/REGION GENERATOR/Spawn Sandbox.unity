@@ -259,8 +259,8 @@ MonoBehaviour:
   - {x: 0.96588767, y: 0.28857425}
   - {x: 0.22465947, y: 0.70876557}
   - {x: 0.7254841, y: 0.28202847}
-  drawGizmos: 1
-  drawGrid: 1
+  drawGizmos: 0
+  drawGrid: 0
   delaunay:
     vertices:
     - {x: 0.3655261, y: 0.123878494}
@@ -639,15 +639,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 765269159385599924, guid: 7c7702694cf2e614eb82ab6cf55c8fbe, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.14371543
+      value: -0.14371541
       objectReference: {fileID: 0}
     - target: {fileID: 765269159385599924, guid: 7c7702694cf2e614eb82ab6cf55c8fbe, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.000000008789382
+      value: 0.000000008513882
       objectReference: {fileID: 0}
     - target: {fileID: 765269159385599924, guid: 7c7702694cf2e614eb82ab6cf55c8fbe, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.0000000012764201
+      value: 0.0000000012364112
       objectReference: {fileID: 0}
     - target: {fileID: 1850655719611779023, guid: 7c7702694cf2e614eb82ab6cf55c8fbe, type: 3}
       propertyPath: m_Name
@@ -675,7 +675,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3744765528906028528, guid: 7c7702694cf2e614eb82ab6cf55c8fbe, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0
+      value: 1e-45
       objectReference: {fileID: 0}
     - target: {fileID: 3744765528906028528, guid: 7c7702694cf2e614eb82ab6cf55c8fbe, type: 3}
       propertyPath: m_LocalRotation.z
@@ -759,11 +759,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9128269564308287759, guid: 7c7702694cf2e614eb82ab6cf55c8fbe, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.000000008441723
+      value: -0.000000008441721
       objectReference: {fileID: 0}
     - target: {fileID: 9128269564308287759, guid: 7c7702694cf2e614eb82ab6cf55c8fbe, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.0000000016589844
+      value: -0.0000000016589841
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1192,11 +1192,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7947901710385552996, guid: b11e01192d61bee4fbcc1a49fce7afa6, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.000000028927376
+      value: 0.000000028927376
       objectReference: {fileID: 0}
     - target: {fileID: 7947901710385552996, guid: b11e01192d61bee4fbcc1a49fce7afa6, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.0000000071683757
+      value: 0.0000000071683757
       objectReference: {fileID: 0}
     - target: {fileID: 7947901710385552996, guid: b11e01192d61bee4fbcc1a49fce7afa6, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
