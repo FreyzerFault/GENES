@@ -8,8 +8,8 @@ using DavidUtils.Geometry;
 using DavidUtils.Geometry.Bounding_Box;
 using DavidUtils.Geometry.Generators;
 using DavidUtils.Rendering;
-using DavidUtils.TerrainExtensions;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace TreesGeneration
 {
@@ -127,15 +127,27 @@ namespace TreesGeneration
 
 		#region POPULATION
 
+		private struct PopulationInfo
+		{
+			public Vector2 orientation;
+		}
+
+		private readonly Dictionary<Polygon, PopulationInfo> populationInfo = new();
+
+		private Vector2[] PopulateAllRegions() => Regions.SelectMany(PopulateRegion).ToArray();
+
 		private Vector2[] PopulateRegion(Polygon region)
 		{
-			Vector2[] olivosGenerated = PopulateRegion(AABB, region, minSeparation, Vector2.right);
+			Vector2 orientation = Random.insideUnitCircle;
+
+			// DEBUG INFO
+			populationInfo.Add(region, new PopulationInfo { orientation = orientation });
+
+			Vector2[] olivosGenerated = PopulateRegion(AABB, region, minSeparation, orientation);
 			fincasDictionary.Add(region, olivosGenerated);
 			OnRegionPopulated?.Invoke(olivosGenerated);
 			return olivosGenerated;
 		}
-
-		private Vector2[] PopulateAllRegions() => Regions.SelectMany(PopulateRegion).ToArray();
 
 		private static Vector2[] PopulateRegion(
 			AABB_2D terrainAABB, Polygon region, float minSeparation, Vector2 orientation
@@ -143,19 +155,25 @@ namespace TreesGeneration
 		{
 			// OBB del polígono con la orientación de la hilera
 			OBB_2D obb = new(region, orientation);
+
+			// AABB rotado del OBB para posicionar los olivos de forma simple en una grid y luego rotarlos de vuelta
+			// como si los hubieramos colocado en el OBB
 			AABB_2D aabb = obb.AABB_Rotated;
 
 			List<Vector2> olivos = new();
 
+			// World measure to Local measure in Terrain AABB
 			Vector2 minSeparationLocal =
 				new Vector2(minSeparation, minSeparation).ScaleBy(terrainAABB.BoundsToLocalMatrix(false).lossyScale);
 
+			// Iteramos en X e Y con la separacion dada en ambos ejes.
+			// Solo se populan los puntos dentro del poligono
 			for (float x = aabb.min.x; x < aabb.max.x; x += minSeparationLocal.x)
 			for (float y = aabb.min.y; y < aabb.max.y; y += minSeparationLocal.y)
 			{
+				// Rotamos la posicion de vuelta al OBB y comprobamos si esta dentro del poligono
 				Vector2 pos = new Vector2(x, y).Rotate(obb.Angle, obb.min);
-				if (region.Contains_RayCast(pos))
-					olivos.Add(pos);
+				if (region.Contains_RayCast(pos)) olivos.Add(pos);
 			}
 
 			return olivos.ToArray();
@@ -181,7 +199,7 @@ namespace TreesGeneration
 				                     .AddComponent<PointSpriteRenderer>();
 
 			BoundsComp.AdjustTransformToBounds(Renderer);
-			Renderer.transform.Translate(Vector3.up * 1);
+			Renderer.transform.localPosition += Vector3.up * .1f;
 		}
 
 		protected override void InstantiateRenderer()
@@ -210,37 +228,23 @@ namespace TreesGeneration
 
 #if UNITY_EDITOR
 
+		public bool drawOBBs = true;
+
 		protected override void OnDrawGizmos()
 		{
 			base.OnDrawGizmos();
 
-			if (!drawGizmos || !_drawOlivos) return;
+			if (!drawGizmos || !_drawOlivos || Regions.IsNullOrEmpty()) return;
 
-			Gizmos.color = "#808000ff".ToUnityColor();
+			if (drawOBBs)
+				foreach (KeyValuePair<Polygon, PopulationInfo> pair in populationInfo)
+				{
+					Polygon region = pair.Key;
+					PopulationInfo info = pair.Value;
 
-			foreach (Vector2 localPos in OlivePositions) GizmosOlivePoint(localPos);
-
-			if (Regions.NotNullOrEmpty())
-				foreach (Polygon region in Regions)
-					GizmosOBB(region, 3, Color.red);
-
-			if (Regions.NotNullOrEmpty())
-				GizmosOBB(Regions[0], 8, Color.magenta);
-		}
-
-		private void GizmosOlivePoint(Vector2 localPos)
-		{
-			Vector3 pos = ToWorld(localPos);
-			if (CanProjectOnTerrain)
-				pos = Terrain.Project(pos);
-			Gizmos.DrawSphere(pos + Vector3.up * 3, .1f);
-		}
-
-		private void GizmosOBB(Polygon polygon, float thickness, Color color, bool drawAABB = true)
-		{
-			OBB_2D obb = new(polygon, Vector2.one.normalized);
-			obb.DrawGizmos(LocalToWorldMatrix, color, thickness);
-			if (drawAABB) obb.AABB_Rotated.DrawGizmos(LocalToWorldMatrix, color: Color.white, thickness: thickness);
+					OBB_2D obb = new(region, info.orientation);
+					obb.DrawGizmos(LocalToWorldMatrix, Color.white, 3);
+				}
 		}
 #endif
 
