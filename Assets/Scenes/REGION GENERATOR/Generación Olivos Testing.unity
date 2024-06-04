@@ -362,7 +362,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   colors: []
   initColorPalette: {r: 0, g: 1, b: 1, a: 1}
-  colorPaletteStep: 0.1
+  colorPaletteStep: 0.08
   colorPaletteRange: 20
   wire: 0
   centeredScale: 1
@@ -952,7 +952,7 @@ Transform:
   m_GameObject: {fileID: 412599549}
   serializedVersion: 2
   m_LocalRotation: {x: 0.70710665, y: -0.000000007450581, z: 0.000000003259629, w: 0.7071069}
-  m_LocalPosition: {x: 1.8, y: 23.9, z: 74.5}
+  m_LocalPosition: {x: 0, y: 23.9, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1126,10 +1126,10 @@ MonoBehaviour:
   is2D: 1
   bounds3D:
     m_Center: {x: 0, y: 0, z: 0}
-    m_Extent: {x: 100.943924, y: 68.4636, z: 68.4636}
+    m_Extent: {x: 72.92887, y: 68.4636, z: 72.92887}
   aabb2D:
-    min: {x: -100.943924, y: -68.4636}
-    max: {x: 100.943924, y: 68.4636}
+    min: {x: -72.92887, y: -72.92887}
+    max: {x: 72.92887, y: 72.92887}
   XZplane: 1
 --- !u!114 &474813286
 MonoBehaviour:
@@ -1156,7 +1156,7 @@ MonoBehaviour:
   - {x: 0.96588767, y: 0.28857425}
   - {x: 0.22465947, y: 0.70876557}
   - {x: 0.7254841, y: 0.28202847}
-  drawGizmos: 0
+  drawGizmos: 1
   drawGrid: 0
   delaunay:
     vertices:
@@ -1203,9 +1203,10 @@ MonoBehaviour:
   drawSelectedTriangles: 1
   hoveredRegionIndex: -1
   selectedRegionIndex: -1
-  minSeparation: 7.66
-  minDistToBoundary: 5
-  boundaryOffset: 10
+  fincaParams:
+    minSeparation: 5
+    minDistToLinde: 5
+    lindeWidth: 10
   animatedOlives: 1
   iterations: 0
   drawOBBs: 1
@@ -1218,7 +1219,7 @@ Transform:
   m_GameObject: {fileID: 474813284}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.7, y: 7.5, z: 75.7}
+  m_LocalPosition: {x: 0, y: 7.5, z: 0}
   m_LocalScale: {x: 0.89394, y: 0.89394, z: 0.89394}
   m_ConstrainProportionsScale: 0
   m_Children:
