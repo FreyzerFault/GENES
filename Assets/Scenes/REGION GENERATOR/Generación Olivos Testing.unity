@@ -1198,7 +1198,7 @@ MonoBehaviour:
     - {x: 0.21265462, y: 0.56743103}
     - {x: 0.72511536, y: 0.7927439}
     - {x: 0.6151411, y: 0.8862989}
-  animatedVoronoi: 0
+  animatedVoronoi: 1
   canSelectRegion: 1
   drawSelectedTriangles: 1
   hoveredRegionIndex: -1
@@ -1206,7 +1206,7 @@ MonoBehaviour:
   fincaParams:
     minSeparation: 5
     minDistToLinde: 5
-    lindeWidth: 10
+    lindeWidth: 6
   animatedOlives: 1
   iterations: 0
   drawOBBs: 1

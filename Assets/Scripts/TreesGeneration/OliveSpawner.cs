@@ -32,7 +32,7 @@ namespace TreesGeneration
 			_generator.OnClear -= Clear;
 		}
 
-		private void HandleOnRegionPopulated(OliveGroveGenerator.RegionData data) => Spawn2D(data.olivosPoints);
+		private void HandleOnRegionPopulated(OliveGroveGenerator.RegionData data) => Spawn2D(data.olivosInterior);
 
 		// TODO Ya veremos que hago cuando se completa
 		private void HandleOnEndedGeneration(OliveGroveGenerator.RegionData[] data) => Debug.Log("Ended Generation");

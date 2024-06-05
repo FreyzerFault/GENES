@@ -34,8 +34,8 @@ namespace TreesGeneration
 		public FincaGenerationParams fincaParams = new() { minSeparation = 5, minDistToLinde = 5, lindeWidth = 10 };
 
 
-		public Vector2[] OlivePositions => _regionsData?.SelectMany(pair => pair.Value.olivosPoints).ToArray();
-		public Vector2[] OlivePositionsByRegion(Polygon region) => _regionsData[region].olivosPoints;
+		public Vector2[] OlivePositions => _regionsData?.SelectMany(pair => pair.Value.Olivos).ToArray();
+		public Vector2[] OlivePositionsByRegion(Polygon region) => _regionsData[region].Olivos;
 
 		public Action<RegionData[]> OnEndedGeneration;
 		public Action<RegionData> OnRegionPopulated;
@@ -133,13 +133,17 @@ namespace TreesGeneration
 
 		public struct RegionData
 		{
-			public Vector2[] olivosPoints;
+			public Vector2[] olivosInterior;
+			public Vector2[] olivosLinde;
 
 			public Polygon polygon;
 			public Polygon interiorPolygon;
+			public Polygon[] lindeSections;
 
 			public Vector2 orientation;
 			public Vector2 Centroid => polygon.centroid;
+
+			public Vector2[] Olivos => olivosInterior.Concat(olivosLinde).ToArray();
 		}
 
 		private readonly Dictionary<Polygon, RegionData> _regionsData = new();
@@ -157,26 +161,65 @@ namespace TreesGeneration
 			Vector2 lindeWidthLocal = WorldToLocalMatrix.MultiplyVector(Vector3.one * fincaParams.lindeWidth);
 			Vector2 minSeparationLocal = WorldToLocalMatrix.MultiplyVector(Vector3.one * fincaParams.minSeparation);
 
-			// minSeparationLocal.Rotate(Vector2.SignedAngle(orientation, Vector2.right));
-
 			minSeparationLocal = new Vector2(
 				Mathf.Max(0.001f, Mathf.Abs(minSeparationLocal.x)),
 				Mathf.Max(0.001f, Mathf.Abs(minSeparationLocal.y))
 			);
 
-			var interiorPolygon = new Polygon(
-				region.vertices.Select(v => v + (region.centroid - v).normalized * lindeWidthLocal),
-				region.centroid
+			lindeWidthLocal = new Vector2(
+				Mathf.Max(0.001f, Mathf.Abs(lindeWidthLocal.x)),
+				Mathf.Max(0.001f, Mathf.Abs(lindeWidthLocal.y))
 			);
 
-			Vector2[] olivosGenerated = PopulatePolygon(interiorPolygon, minSeparationLocal, orientation);
+			Polygon interiorPolygon = region.InteriorPolygon(lindeWidthLocal);
+
+			Vector2[] olivosInterior = PopulatePolygon(interiorPolygon, minSeparationLocal, orientation);
+
+
+			// LINDE
+
+			// Polígono cuyas aristas son el centro de la Linde
+			Polygon lindeCenter = region.InteriorPolygon(lindeWidthLocal / 2);
+
+			// Recortamos la linde en secciones, una por arista.
+			// Los vertices son [interior0, interior1, exterior1, exterior0]
+			var lindeSections = new Polygon[region.VextexCount];
+			for (var i = 0; i < region.VextexCount; i++)
+			{
+				Vector2 inVertex0 = interiorPolygon.vertices[i];
+				Vector2 inVertex1 = interiorPolygon.vertices[(i + 1) % interiorPolygon.VextexCount];
+				Vector2 exterior0 = region.vertices[i];
+				Vector2 exterior1 = region.vertices[(i + 1) % region.VextexCount];
+
+				// CCW Vertices
+				Vector2[] sectionVertices = { inVertex0, inVertex1, exterior1, exterior0 };
+				lindeSections[i] = new Polygon(sectionVertices);
+			}
+
+			Vector2[] olivosLinde = lindeSections
+				.SelectMany(
+					section =>
+					{
+						Vector2 lindeOrientation = section.Edges.ElementAt(1).Dir;
+						lindeOrientation = WorldToLocalMatrix.MultiplyVector(lindeOrientation.ToV3xz());
+
+						lindeOrientation = new Vector2(
+							Mathf.Max(0.001f, Mathf.Abs(lindeOrientation.x)),
+							Mathf.Max(0.001f, Mathf.Abs(lindeOrientation.y))
+						);
+						return PopulatePolygon(section, minSeparationLocal, lindeOrientation);
+					}
+				)
+				.ToArray();
 
 			var data = new RegionData
 			{
-				olivosPoints = olivosGenerated,
+				olivosInterior = olivosInterior,
+				olivosLinde = olivosLinde,
 				polygon = region,
 				interiorPolygon = interiorPolygon,
-				orientation = orientation
+				orientation = orientation,
+				lindeSections = lindeSections
 			};
 			_regionsData.Add(region, data);
 
@@ -248,7 +291,7 @@ namespace TreesGeneration
 
 		private void InstantiateRenderer(RegionData regionData)
 		{
-			Renderer.Instantiate(regionData.olivosPoints, "Olivo");
+			Renderer.Instantiate(regionData.Olivos, "Olivo");
 			if (CanProjectOnTerrain && Terrain != null)
 				Renderer.ProjectOnTerrain(Terrain);
 		}
@@ -258,7 +301,7 @@ namespace TreesGeneration
 			for (var i = 0; i < regionsData.Length; i++)
 			{
 				RegionData data = regionsData[i];
-				Renderer.Instantiate(data.olivosPoints, $"Olivo {i}");
+				Renderer.Instantiate(data.Olivos, $"Olivo {i}");
 			}
 
 			// Project ALL on Terrain
@@ -287,23 +330,36 @@ namespace TreesGeneration
 					Polygon region = pair.Key;
 					RegionData data = pair.Value;
 
+
 					OBB_2D obb = new(region, data.orientation);
 					obb.DrawGizmos(LocalToWorldMatrix, Color.white, 3);
 
-					foreach (Vector2 olivePosition in OlivePositions)
-					{
-						Gizmos.color = Color.green;
-						Gizmos.DrawSphere(LocalToWorldMatrix.MultiplyPoint3x4(olivePosition), 2);
-					}
+					var spheresRadius = .5f;
 
-					data.interiorPolygon.OnDrawGizmos(LocalToWorldMatrix, Color.grey);
+					// POLIGONO INTERIOR
+					Gizmos.color = Color.green;
+					data.interiorPolygon.OnDrawGizmos(LocalToWorldMatrix, Color.green.Darken(.5f));
+					data.olivosInterior.ForEach(
+						olivo => Gizmos.DrawSphere(LocalToWorldMatrix.MultiplyPoint3x4(olivo), spheresRadius)
+					);
 
+					// LINDE
+					Gizmos.color = Color.magenta;
+					data.lindeSections.ForEach(
+						lindeSection => lindeSection.OnDrawGizmos(LocalToWorldMatrix, Color.red.Darken(.5f), Color.red)
+					);
+					data.olivosLinde.ForEach(
+						olivo => Gizmos.DrawSphere(LocalToWorldMatrix.MultiplyPoint3x4(olivo), spheresRadius)
+					);
+
+
+					// ORIENTACION (flechas)
 					GizmosExtensions.DrawArrowWire(
 						LocalToWorldMatrix.MultiplyPoint3x4(data.Centroid),
-						data.orientation.ToV3xz(),
+						data.orientation.normalized.ToV3xz(),
 						Vector3.right,
 						10,
-						thickness: 10,
+						thickness: 2,
 						color: Color.white
 					);
 				}
