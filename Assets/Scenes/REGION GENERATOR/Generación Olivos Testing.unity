@@ -927,7 +927,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 67.57456
+  orthographic size: 94.247635
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -1126,10 +1126,10 @@ MonoBehaviour:
   is2D: 1
   bounds3D:
     m_Center: {x: 0, y: 0, z: 0}
-    m_Extent: {x: 72.92887, y: 68.4636, z: 72.92887}
+    m_Extent: {x: 100, y: 68.4636, z: 100}
   aabb2D:
-    min: {x: -72.92887, y: -72.92887}
-    max: {x: 72.92887, y: 72.92887}
+    min: {x: -100, y: -100}
+    max: {x: 100, y: 100}
   XZplane: 1
 --- !u!114 &474813286
 MonoBehaviour:
@@ -2006,6 +2006,8 @@ MonoBehaviour:
   initColorPalette: {r: 0, g: 1, b: 1, a: 1}
   colorPaletteStep: 0.1
   colorPaletteRange: 20
+  sphereScale: 0.5
+  drawGizmos: 0
   spriteTexture: {fileID: 2800000, guid: a765816d48ec49f44b470fdbab022686, type: 3}
   spriteRenderers: []
   spriteScale: 1
