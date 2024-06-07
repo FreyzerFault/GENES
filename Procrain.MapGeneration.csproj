@@ -735,10 +735,6 @@
       <Project>{6ef4c5d9-9eba-7675-cd16-eed5900260f3}</Project>
       <Name>DavidUtils</Name>
     </ProjectReference>
-    <ProjectReference Include="DavidUtils.Editor.csproj">
-      <Project>{c8cfa900-c82f-76bd-8968-205a321cc42a}</Project>
-      <Name>DavidUtils.Editor</Name>
-    </ProjectReference>
     <ProjectReference Include="DavidUtils.Threading.csproj">
       <Project>{b647af4b-ef80-451c-7ac5-ca3ff87e99c0}</Project>
       <Name>DavidUtils.Threading</Name>
@@ -747,13 +743,17 @@
       <Project>{aad8c7a4-d1bf-703a-0362-b1117c18d027}</Project>
       <Name>DavidUtils.Geometry</Name>
     </ProjectReference>
-    <ProjectReference Include="DavidUtils.ScriptableObjects.csproj">
-      <Project>{5d9cea16-7642-b92a-7c07-1384982d27c4}</Project>
-      <Name>DavidUtils.ScriptableObjects</Name>
-    </ProjectReference>
     <ProjectReference Include="DavidUtils.Geometry.BoundingBox.csproj">
       <Project>{0e016170-5c72-7ade-2a8b-e3203cb4ffb1}</Project>
       <Name>DavidUtils.Geometry.BoundingBox</Name>
+    </ProjectReference>
+    <ProjectReference Include="DavidUtils.DevTools.csproj">
+      <Project>{aae85034-7521-80a8-f537-662a51e4b858}</Project>
+      <Name>DavidUtils.DevTools</Name>
+    </ProjectReference>
+    <ProjectReference Include="DavidUtils.Editor.DevTools.csproj">
+      <Project>{49764650-4dd3-8034-9e40-bd17b45004a9}</Project>
+      <Name>DavidUtils.Editor.DevTools</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

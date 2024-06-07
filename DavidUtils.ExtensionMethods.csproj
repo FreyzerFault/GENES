@@ -47,6 +47,7 @@
   <ItemGroup>
     <Compile Include="Packages\David-Unity-Utils\Runtime\ExtensionMethods\RectExtensions.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\ExtensionMethods\VectorExtensions.cs" />
+    <Compile Include="Packages\David-Unity-Utils\Runtime\ExtensionMethods\TerrainExtensionMethods.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\ExtensionMethods\TransformExtensionMethods.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\ExtensionMethods\ColorExtensions.cs" />
     <Compile Include="Packages\David-Unity-Utils\Runtime\ExtensionMethods\MiscExtensions.cs" />

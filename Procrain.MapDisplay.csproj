@@ -739,9 +739,9 @@
       <Project>{0fa5f061-f9a4-06fc-a2d5-99e9b4192c4f}</Project>
       <Name>DavidUtils.PlayerControl</Name>
     </ProjectReference>
-    <ProjectReference Include="DavidUtils.ScriptableObjects.csproj">
-      <Project>{5d9cea16-7642-b92a-7c07-1384982d27c4}</Project>
-      <Name>DavidUtils.ScriptableObjects</Name>
+    <ProjectReference Include="DavidUtils.DevTools.csproj">
+      <Project>{aae85034-7521-80a8-f537-662a51e4b858}</Project>
+      <Name>DavidUtils.DevTools</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

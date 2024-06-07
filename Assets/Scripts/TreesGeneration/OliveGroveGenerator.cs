@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using DavidUtils;
-using DavidUtils.DebugUtils;
+using DavidUtils.DevTools.GizmosAndHandles;
 using DavidUtils.ExtensionMethods;
 using DavidUtils.Geometry;
 using DavidUtils.Geometry.Bounding_Box;
@@ -128,13 +128,16 @@ namespace TreesGeneration
 
 		#endregion
 
+
+		#region GENERATION PIPELINE
+
 		public override void Reset()
 		{
 			base.Reset();
 			ResetOlives();
 		}
 
-		public void ResetOlives()
+		private void ResetOlives()
 		{
 			_regionsData.Clear();
 			iterations = 0;
@@ -160,6 +163,9 @@ namespace TreesGeneration
 			}
 		}
 
+		#endregion
+
+
 		#region ANIMATION
 
 		public bool animatedOlives = true;
@@ -173,7 +179,7 @@ namespace TreesGeneration
 
 		public bool Ended => _regionsData.Count >= voronoi.regions.Count;
 
-		protected override IEnumerator RunCoroutine()
+		public override IEnumerator RunCoroutine()
 		{
 			yield return base.RunCoroutine();
 
@@ -279,6 +285,8 @@ namespace TreesGeneration
 		}
 
 
+		#region LINDE
+
 		/// <summary>
 		///     Aristas del centro de la Linde
 		///     Se calculan reduciendo el polígono de la region por la mitad del ancho de la linde
@@ -312,6 +320,9 @@ namespace TreesGeneration
 					float t = i * minSeparation / edge.Vector.magnitude;
 					olivos.Add(Vector2.Lerp(edge.begin, edge.end, t));
 				}
+
+				if (olivos.Count == 0)
+					continue;
 
 				lastOlivo = olivos.Last();
 
@@ -347,6 +358,11 @@ namespace TreesGeneration
 			return lindeSections;
 		}
 
+		#endregion
+
+
+		#region POSTPROCESSING
+
 		/// <summary>
 		///     Postprocesado.
 		///     Principalmente, elimino los olivos del interior que estén demasiado cerca de cualquiera de su linde
@@ -359,6 +375,8 @@ namespace TreesGeneration
 			);
 			return data;
 		}
+
+		#endregion
 
 		#endregion
 

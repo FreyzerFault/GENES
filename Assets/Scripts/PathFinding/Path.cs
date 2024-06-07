@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using DavidUtils.TerrainExtensions;
+using DavidUtils.ExtensionMethods;
 using UnityEngine;
 
 namespace PathFinding

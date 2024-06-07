@@ -1,5 +1,5 @@
 using System;
-using DavidUtils.TerrainExtensions;
+using DavidUtils.ExtensionMethods;
 using Procrain.Core;
 using UnityEngine;
 

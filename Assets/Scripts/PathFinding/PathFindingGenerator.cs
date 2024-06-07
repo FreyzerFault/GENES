@@ -1,4 +1,4 @@
-using DavidUtils.TerrainExtensions;
+using DavidUtils.ExtensionMethods;
 using PathFinding.Algorithms;
 using PathFinding.Settings;
 using Procrain.Core;

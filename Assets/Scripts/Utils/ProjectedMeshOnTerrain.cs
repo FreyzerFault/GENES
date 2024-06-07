@@ -1,6 +1,5 @@
 using DavidUtils.ExtensionMethods;
 using DavidUtils.Geometry.MeshExtensions;
-using DavidUtils.TerrainExtensions;
 using UnityEngine;
 
 namespace Utils

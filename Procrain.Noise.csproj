@@ -716,10 +716,6 @@
       <Project>{6ef4c5d9-9eba-7675-cd16-eed5900260f3}</Project>
       <Name>DavidUtils</Name>
     </ProjectReference>
-    <ProjectReference Include="DavidUtils.Editor.csproj">
-      <Project>{c8cfa900-c82f-76bd-8968-205a321cc42a}</Project>
-      <Name>DavidUtils.Editor</Name>
-    </ProjectReference>
     <ProjectReference Include="DavidUtils.Geometry.csproj">
       <Project>{aad8c7a4-d1bf-703a-0362-b1117c18d027}</Project>
       <Name>DavidUtils.Geometry</Name>
@@ -728,13 +724,13 @@
       <Project>{5f7aa8d4-210d-fddf-27f1-75bbcbd202c3}</Project>
       <Name>DavidUtils.ExtensionMethods</Name>
     </ProjectReference>
-    <ProjectReference Include="DavidUtils.ScriptableObjects.csproj">
-      <Project>{5d9cea16-7642-b92a-7c07-1384982d27c4}</Project>
-      <Name>DavidUtils.ScriptableObjects</Name>
-    </ProjectReference>
     <ProjectReference Include="DavidUtils.Geometry.BoundingBox.csproj">
       <Project>{0e016170-5c72-7ade-2a8b-e3203cb4ffb1}</Project>
       <Name>DavidUtils.Geometry.BoundingBox</Name>
+    </ProjectReference>
+    <ProjectReference Include="DavidUtils.DevTools.csproj">
+      <Project>{aae85034-7521-80a8-f537-662a51e4b858}</Project>
+      <Name>DavidUtils.DevTools</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
