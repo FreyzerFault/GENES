@@ -115,10 +115,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Editor.Markers", "Editor.Ma
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp", "Assembly-CSharp.csproj", "{af92edb9-e79a-694f-be7e-43c4d8fc4b16}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Editor", "Editor.csproj", "{6ce5417c-d3ff-c796-d122-7c50b82fe3ad}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DavidUtils.Editor", "DavidUtils.Editor.csproj", "{c8cfa900-c82f-76bd-8968-205a321cc42a}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -238,10 +234,6 @@ Global
 		{7c33a49c-2c92-b045-ab8c-0847b6eb8284}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{af92edb9-e79a-694f-be7e-43c4d8fc4b16}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{af92edb9-e79a-694f-be7e-43c4d8fc4b16}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6ce5417c-d3ff-c796-d122-7c50b82fe3ad}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6ce5417c-d3ff-c796-d122-7c50b82fe3ad}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{c8cfa900-c82f-76bd-8968-205a321cc42a}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{c8cfa900-c82f-76bd-8968-205a321cc42a}.Debug|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
