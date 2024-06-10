@@ -11,19 +11,27 @@ namespace GENES.TreesGeneration.Tests
 		private OliveGroveGenerator _generator;
 		private Coroutine _testingCoroutine;
 
-		[ExposedField]
 		public bool playing;
 
-		[ExposedField]
-		public int seed;
+		public int initialSeed;
+		private int iterations;
 
 		private void Awake()
 		{
 			_generator = GetComponent<OliveGroveGenerator>();
 			_generator.runOnStart = true;
+			_generator.randSeed = initialSeed;
+
+			iterations = 0;
 		}
 
-		private void Start() => _testingCoroutine = StartCoroutine(TestCoroutine());
+		private void Start()
+		{
+			_generator.Reset();
+			_generator.GenerateSeeds();
+
+			_testingCoroutine = StartCoroutine(TestCoroutine());
+		}
 
 		private void Update()
 		{
@@ -41,17 +49,26 @@ namespace GENES.TreesGeneration.Tests
 			playing = true;
 			while (playing)
 			{
-				_generator.Reset();
-				_generator.RandomizeSeeds(seed);
+				if (iterations > 0)
+				{
+					_generator.Reset();
+					_generator.RandomizeSeeds();
+				}
+
 				yield return _generator.RunCoroutine();
 				yield return new WaitForSeconds(1);
+				yield return new WaitUntil(() => playing);
+				iterations++;
 			}
 		}
+
+		public void TogglePlaying(bool playing) => this.playing = playing;
 
 
 		#region DEBUGGING
 
-		public string ToggleLabel => playing ? "PLAY" : "STOP";
+		[ExposedField]
+		public string ToggleLabel => playing ? "PLAYING" : "STOP";
 
 		#endregion
 	}
