@@ -43,6 +43,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DavidUtils.Geometry.Boundin
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Markers", "Markers.csproj", "{b8c727cc-c3a0-10c8-40d1-38f71a5bcccb}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TreesGeneration", "TreesGeneration.csproj", "{808aeaf4-3f62-f1f8-7194-3e9609f09cc0}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DavidUtils.Geometry", "DavidUtils.Geometry.csproj", "{aad8c7a4-d1bf-703a-0362-b1117c18d027}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DavidUtils.MouseInputs", "DavidUtils.MouseInputs.csproj", "{729ec86c-6e90-8e90-3c93-ed68bcd4bdc7}"
@@ -79,8 +81,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Editor.TreesGeneration", "E
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "Core.csproj", "{ad92af71-0ba9-1f9d-c4a2-8857b4878f5d}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TreesGeneration", "TreesGeneration.csproj", "{808aeaf4-3f62-f1f8-7194-3e9609f09cc0}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DavidUtils.Settings", "DavidUtils.Settings.csproj", "{e13cc001-f48f-ee23-78f0-18e78a645fd2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Procrain.Utils", "Procrain.Utils.csproj", "{d96f593b-8440-e1b4-8c85-dc703e38ae57}"
@@ -112,8 +112,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Editor.Markers", "Editor.Markers.csproj", "{7c33a49c-2c92-b045-ab8c-0847b6eb8284}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp", "Assembly-CSharp.csproj", "{af92edb9-e79a-694f-be7e-43c4d8fc4b16}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DavidUtils.Editor.UI", "DavidUtils.Editor.UI.csproj", "{8d83bfdd-e1c0-206a-48e7-d041a18fedbf}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -162,6 +160,8 @@ Global
 		{0e016170-5c72-7ade-2a8b-e3203cb4ffb1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{b8c727cc-c3a0-10c8-40d1-38f71a5bcccb}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{b8c727cc-c3a0-10c8-40d1-38f71a5bcccb}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{808aeaf4-3f62-f1f8-7194-3e9609f09cc0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{808aeaf4-3f62-f1f8-7194-3e9609f09cc0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{aad8c7a4-d1bf-703a-0362-b1117c18d027}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{aad8c7a4-d1bf-703a-0362-b1117c18d027}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{729ec86c-6e90-8e90-3c93-ed68bcd4bdc7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -198,8 +198,6 @@ Global
 		{d44d3dda-fe7d-bd12-772b-19286bd83ea8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ad92af71-0ba9-1f9d-c4a2-8857b4878f5d}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{ad92af71-0ba9-1f9d-c4a2-8857b4878f5d}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{808aeaf4-3f62-f1f8-7194-3e9609f09cc0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{808aeaf4-3f62-f1f8-7194-3e9609f09cc0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{e13cc001-f48f-ee23-78f0-18e78a645fd2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{e13cc001-f48f-ee23-78f0-18e78a645fd2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{d96f593b-8440-e1b4-8c85-dc703e38ae57}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -232,8 +230,6 @@ Global
 		{7c33a49c-2c92-b045-ab8c-0847b6eb8284}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{af92edb9-e79a-694f-be7e-43c4d8fc4b16}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{af92edb9-e79a-694f-be7e-43c4d8fc4b16}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8d83bfdd-e1c0-206a-48e7-d041a18fedbf}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8d83bfdd-e1c0-206a-48e7-d041a18fedbf}.Debug|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

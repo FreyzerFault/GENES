@@ -10,86 +10,19 @@ using DavidUtils.Geometry.Bounding_Box;
 using DavidUtils.Geometry.Generators;
 using DavidUtils.Rendering;
 using UnityEngine;
-using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 namespace TreesGeneration
 {
-	public enum CropType
-	{
-		Traditional,
-		Intesive,
-		SuperIntesive
-	}
-
 	public class OliveGroveGenerator : VoronoiGenerator
 	{
-		// Parametros para el layout de una finca
-		[Serializable]
-		public struct OlivoPopulationParams
-		{
-			[Range(0.1f, 10)] public float minSeparation;
-			[Range(0.1f, 30)] public float lindeWidth;
-
-			public CropType defaultCropType;
-			public CropType[] Types => new[] { CropType.Traditional, CropType.Intesive, CropType.SuperIntesive };
-
-			// % de cada tipo
-			[Range(0, 1)] public float probTraditionalCrop;
-			[Range(0, 1)] public float probIntensiveCrop;
-			[Range(0, 1)] public float probSuperIntensiveCrop;
-
-			private float[] Probabilities => new[] { probTraditionalCrop, probIntensiveCrop, probSuperIntensiveCrop };
-
-			public CropType RandomizedType => Types.PickByProbability(Probabilities);
-		}
-
-		[Serializable]
-		public struct RegionData
-		{
-			public CropType cropType;
-
-			public List<Vector2> olivosInterior;
-			public List<Vector2> olivosLinde;
-
-			public Polygon polygon;
-			public Polygon interiorPolygon;
-			public Polygon[] lindeSections;
-
-			public Vector2 orientation;
-			public Vector2 Centroid => polygon.centroid;
-
-			public IEnumerable<Vector2> Olivos => (olivosInterior ?? new List<Vector2>()).Concat(olivosLinde);
-
-			private RegionData(
-				CropType cropType, List<Vector2> olivosInterior, Polygon polygon, Vector2 orientation,
-				List<Vector2> olivosLinde = null, Polygon? interiorPolygon = null, Polygon[] lindeSections = null
-			)
-			{
-				this.cropType = cropType;
-				this.olivosInterior = olivosInterior;
-				this.polygon = polygon;
-				this.orientation = orientation;
-				this.olivosLinde = olivosLinde ?? new List<Vector2>();
-				this.interiorPolygon = interiorPolygon ?? polygon;
-				this.lindeSections = lindeSections ?? Array.Empty<Polygon>();
-			}
-		}
-
 		private readonly Dictionary<Polygon, RegionData> _regionsData = new();
 
 		private int NumFincas => numSeeds;
 
-		[FormerlySerializedAs("fincaParams")]
 		[Space]
-		[Header("OLIVAS")]
-		public OlivoPopulationParams populationParams = new()
-		{
-			probTraditionalCrop = 50,
-			probIntensiveCrop = 50,
-			probSuperIntensiveCrop = 0,
-			minSeparation = 5, lindeWidth = 10
-		};
+		[Header("PARÁMETROS OLIVAR")]
+		public GenerationSettingsSO genSettings;
 
 
 		public IEnumerable<Vector2> OlivePositions => _regionsData?.SelectMany(pair => pair.Value.Olivos);
@@ -101,29 +34,13 @@ namespace TreesGeneration
 
 		#region UNITY
 
-		protected override void Awake()
+		private void OnEnable() => OnRegionPopulated += HandleOnRegionPopulated;
+		private void OnDisable() => OnRegionPopulated -= HandleOnRegionPopulated;
+
+		private void HandleOnRegionPopulated(RegionData regionData)
 		{
-			base.Awake();
-			OnRegionPopulated += InstantiateRenderer;
-		}
-
-		private void OnValidate()
-		{
-			float[] ratios =
-			{
-				populationParams.probTraditionalCrop,
-				populationParams.probIntensiveCrop,
-				populationParams.probSuperIntensiveCrop
-			};
-
-			float suma = ratios.Sum();
-			if (suma <= 1) return;
-
-			float reduccion = (suma - 1) / 3;
-
-			populationParams.probTraditionalCrop -= reduccion;
-			populationParams.probIntensiveCrop -= reduccion;
-			populationParams.probSuperIntensiveCrop -= reduccion;
+			InstantiateRenderer(regionData);
+			if (CanProjectOnTerrain) ProjectOnTerrain();
 		}
 
 		#endregion
@@ -220,35 +137,64 @@ namespace TreesGeneration
 			OnEndedGeneration?.Invoke(_regionsData.Values.ToArray());
 		}
 
+		/// <summary>
+		///     Popula una región con olivos, según su forma (Polígono) y el tipo de cultivo.
+		///     Si no se pasa un Tipo de Cultivo se elige uno aleatorio según las probabilidades de globalParams
+		/// </summary>
 		private RegionData PopulateRegion(Polygon region, CropType? cropType = null)
 		{
 			// CROP TYPE
-			cropType ??= populationParams.RandomizedType;
+			cropType ??= genSettings.globalParams.RandomizedType;
+			CropTypeParams cropParams = genSettings.GetCropTypeParams(cropType.Value);
 
+			// Separacion (Random [min - max])
+			Vector2 separation = Vector2.Lerp(cropParams.separationMin, cropParams.separationMax, Random.value);
+			Vector2 separationLocal = VectorToLocalPositive(separation);
+
+			// TODO Coger la Pendiente del Terreno como Perpendicular de la orientacion
 			Vector2 orientation = Random.insideUnitCircle;
 
-			Vector2 lindeWidthLocal = MeasureToLocalPositive(populationParams.lindeWidth);
-			Vector2 minSeparationLocal = MeasureToLocalPositive(populationParams.minSeparation);
-
-			float separation = Mathf.Max(minSeparationLocal.x, minSeparationLocal.y);
-
-			Polygon interiorPolygon = region.InteriorPolygon(lindeWidthLocal);
-
-			List<Vector2> olivosInterior = PopulatePolygon(interiorPolygon, minSeparationLocal, orientation).ToList();
-			List<Vector2> olivosLinde = PopulateLinde(GetLinde(region, lindeWidthLocal), separation).ToList();
-
-			var data = new RegionData
+			RegionData data = new();
+			switch (cropType)
 			{
-				olivosInterior = olivosInterior,
-				olivosLinde = olivosLinde,
-				polygon = region,
-				interiorPolygon = interiorPolygon,
-				orientation = orientation,
-				lindeSections = BuildLindePolygonSections(region, interiorPolygon),
-				cropType = cropType.Value
-			};
+				case CropType.Traditional:
+					// OLIVO EN TRADICIONAL => Añadimos la Linde
+					Vector2 lindeWidthLocal = MeasureToLocalPositive(genSettings.globalParams.lindeWidth);
 
-			data = PostprocessRegionData(data, separation);
+					Polygon interiorPolygon = region.InteriorPolygon(lindeWidthLocal);
+
+					List<Vector2> olivosInterior =
+						PopulatePolygon(interiorPolygon, separationLocal, orientation).ToList();
+					List<Vector2> olivosLinde =
+						PopulateLinde(GetLinde(region, lindeWidthLocal), separationLocal.x).ToList();
+
+					data = new RegionData
+					{
+						olivosInterior = olivosInterior,
+						olivosLinde = olivosLinde,
+						polygon = region,
+						interiorPolygon = interiorPolygon,
+						orientation = orientation,
+						lindeSections = BuildLindePolygonSections(region, interiorPolygon),
+						cropType = cropType.Value
+					};
+
+					data = PostprocessRegionData(data, Mathf.Min(separationLocal.x, separationLocal.y));
+					break;
+				case CropType.Intesive:
+				case CropType.SuperIntesive:
+					// OLIVO EN INTENSIVO => NO hay Linde
+					List<Vector2> olivos = PopulatePolygon(region, separationLocal, orientation).ToList();
+
+					data = new RegionData
+					{
+						olivosInterior = olivos,
+						polygon = region,
+						orientation = orientation,
+						cropType = cropType.Value
+					};
+					break;
+			}
 
 			_regionsData.Add(region, data);
 
@@ -277,7 +223,7 @@ namespace TreesGeneration
 			for (float y = aabb.min.y; y < aabb.max.y; y += minSeparation.y)
 			{
 				// Rotamos la posicion de vuelta al OBB y comprobamos si esta dentro del poligono
-				Vector2 pos = new Vector2(x, y).Rotate(obb.Angle, obb.min);
+				Vector2 pos = new Vector2(x, y).Rotate(obb.Angle, aabb.min);
 				if (region.Contains_RayCast(pos)) olivos.Add(pos);
 			}
 
@@ -429,18 +375,21 @@ namespace TreesGeneration
 
 		private void InstantiateRenderer(RegionData regionData)
 		{
+			Renderer.scale = genSettings.GetCropTypeParams(regionData.cropType).scale;
 			Renderer.Instantiate(regionData.Olivos, "Olivo");
-			if (CanProjectOnTerrain && Terrain != null)
-				Renderer.ProjectOnTerrain(Terrain);
 		}
 
 		private void InstantiateRenderer(IEnumerable<RegionData> regionsData)
 		{
-			regionsData.ForEach((r, i) => Renderer.Instantiate(r.Olivos, $"Olivo {i}"));
+			regionsData.ForEach(InstantiateRenderer);
+			if (CanProjectOnTerrain) ProjectOnTerrain();
+		}
 
-			// Project ALL on Terrain
-			if (CanProjectOnTerrain && Terrain != null)
-				Renderer.ProjectOnTerrain(Terrain);
+		// Project ALL on Terrain		
+		private void ProjectOnTerrain()
+		{
+			if (Terrain == null) return;
+			Renderer.ProjectOnTerrain(Terrain);
 		}
 
 		#endregion

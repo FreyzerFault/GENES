@@ -32,10 +32,10 @@ namespace TreesGeneration
 			_generator.OnClear -= Clear;
 		}
 
-		private void HandleOnRegionPopulated(OliveGroveGenerator.RegionData data) => Spawn2D(data.olivosInterior);
+		private void HandleOnRegionPopulated(RegionData data) => Spawn2D(data.olivosInterior);
 
 		// TODO Ya veremos que hago cuando se completa
-		private void HandleOnEndedGeneration(OliveGroveGenerator.RegionData[] data) => Debug.Log("Ended Generation");
+		private void HandleOnEndedGeneration(RegionData[] data) => Debug.Log("Ended Generation");
 
 		protected override Spawneable InstantiateItem(Spawneable prefab = null) =>
 			base.InstantiateItem(prefab ?? GetRandomModel());

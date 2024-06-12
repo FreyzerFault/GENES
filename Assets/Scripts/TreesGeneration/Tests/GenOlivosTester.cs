@@ -3,6 +3,9 @@ using DavidUtils.DevTools.Reflection;
 using TreesGeneration;
 using UnityEngine;
 
+// Testea semillas aleatorias automaticamente, con una especie de reproductor
+// Paralo cuando veas una anomalia
+
 namespace GENES.TreesGeneration.Tests
 {
 	[RequireComponent(typeof(OliveGroveGenerator))]
@@ -14,7 +17,7 @@ namespace GENES.TreesGeneration.Tests
 		public bool playing;
 
 		public int initialSeed;
-		private int iterations;
+		private int _iterations;
 
 		private void Awake()
 		{
@@ -22,7 +25,7 @@ namespace GENES.TreesGeneration.Tests
 			_generator.runOnStart = true;
 			_generator.randSeed = initialSeed;
 
-			iterations = 0;
+			_iterations = 0;
 		}
 
 		private void Start()
@@ -49,7 +52,7 @@ namespace GENES.TreesGeneration.Tests
 			playing = true;
 			while (playing)
 			{
-				if (iterations > 0)
+				if (_iterations > 0)
 				{
 					_generator.Reset();
 					_generator.RandomizeSeeds();
@@ -58,7 +61,7 @@ namespace GENES.TreesGeneration.Tests
 				yield return _generator.RunCoroutine();
 				yield return new WaitForSeconds(1);
 				yield return new WaitUntil(() => playing);
-				iterations++;
+				_iterations++;
 			}
 		}
 

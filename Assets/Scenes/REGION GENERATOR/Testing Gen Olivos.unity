@@ -1186,17 +1186,11 @@ MonoBehaviour:
     - {x: 0.72511536, y: 0.7927439}
     - {x: 0.6151411, y: 0.8862989}
   animatedVoronoi: 1
-  canSelectRegion: 1
-  drawSelectedTriangles: 1
+  canSelectRegion: 0
+  drawSelectedTriangles: 0
   hoveredRegionIndex: -1
   selectedRegionIndex: -1
-  populationParams:
-    minSeparation: 5
-    lindeWidth: 6
-    defaultCropType: 0
-    probTraditionalCrop: 17
-    probIntensiveCrop: 17
-    probSuperIntensiveCrop: -33
+  genSettings: {fileID: 11400000, guid: 3045c29b6b9eefe4cbc3ea900ddbdd62, type: 2}
   animatedOlives: 1
   iterations: 0
   drawOBBs: 1
@@ -1852,14 +1846,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   colors: []
-  initColorPalette: {r: 0, g: 1, b: 1, a: 1}
+  initColorPalette: {r: 0.05281782, g: 1, b: 0, a: 1}
   colorPaletteStep: 0.1
   colorPaletteRange: 20
-  sphereScale: 0.5
+  scale: 0.5
   drawGizmos: 0
-  spriteTexture: {fileID: 2800000, guid: a765816d48ec49f44b470fdbab022686, type: 3}
+  spriteTexture: {fileID: 2800000, guid: 93c2f60daff28ea40aa4e8494f3148fc, type: 3}
   spriteRenderers: []
-  spriteScale: 1
 --- !u!1 &774201905
 GameObject:
   m_ObjectHideFlags: 0
@@ -3627,7 +3620,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: null
+  m_text: STOP
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2100000, guid: e73a58f6e2794ae7b1b7e50b7fb811b0, type: 2}
@@ -3718,7 +3711,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   textExposer:
     targetObj: {fileID: 474813289}
-    fieldIndex: 2
+    fieldIndex: 0
     onlyExposed: 1
     inherited: 1
     label: Text
@@ -5828,7 +5821,7 @@ MonoBehaviour:
   initColorPalette: {r: 1, g: 0.10838394, b: 0, a: 1}
   colorPaletteStep: 0.08
   colorPaletteRange: 20
-  sphereScale: 1
+  scale: 1
   drawGizmos: 0
 --- !u!1 &2021135025
 GameObject:
