@@ -674,3 +674,7 @@ C:\Users\dalcanta\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts.Ph
 C:\Users\dalcanta\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts.Physics\Assets.Scripts.ExtensionMethods.pdb
 C:\Users\dalcanta\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts.Physics\Assets.Scripts.Utils.dll
 C:\Users\dalcanta\Unity Projects\Proyecto Campo\Temp\Bin\Debug\Assets.Scripts.Physics\Assets.Scripts.Utils.pdb
+C:\Users\dalcanta\Unity Projects\GENES\obj\Debug\Assets.Scripts.Physics.csproj.AssemblyReference.cache
+C:\Users\dalcanta\Unity Projects\GENES\obj\Debug\Assets.Scripts.Physics.csproj.CoreCompileInputs.cache
+C:\Users\dalcanta\Unity Projects\GENES\obj\Debug\Assets.Scripts.Physics.dll
+C:\Users\dalcanta\Unity Projects\GENES\obj\Debug\Assets.Scripts.Physics.pdb

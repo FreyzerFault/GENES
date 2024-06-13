@@ -67,7 +67,6 @@ namespace TreesGeneration
 
 		public Polygon polygon;
 		public Polygon interiorPolygon;
-		public Polygon[] lindeSections;
 
 		public Vector2 orientation;
 		public Vector2 Centroid => polygon.centroid;
@@ -77,7 +76,7 @@ namespace TreesGeneration
 
 		private RegionData(
 			CropType cropType, List<Vector2> olivosInterior, Polygon polygon, Vector2 orientation,
-			List<Vector2> olivosLinde = null, Polygon? interiorPolygon = null, Polygon[] lindeSections = null
+			List<Vector2> olivosLinde = null, Polygon? interiorPolygon = null
 		)
 		{
 			this.cropType = cropType;
@@ -86,7 +85,6 @@ namespace TreesGeneration
 			this.orientation = orientation;
 			this.olivosLinde = olivosLinde ?? new List<Vector2>();
 			this.interiorPolygon = interiorPolygon ?? polygon;
-			this.lindeSections = lindeSections ?? Array.Empty<Polygon>();
 		}
 	}
 }

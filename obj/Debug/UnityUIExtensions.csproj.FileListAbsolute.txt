@@ -640,3 +640,7 @@ D:\Unity Projects\Proyecto Campo\obj\Debug\UnityUIExtensions.csproj.CoreCompileI
 D:\Unity Projects\Proyecto Campo\obj\Debug\UnityUIExtensions.csproj.CopyComplete
 D:\Unity Projects\Proyecto Campo\obj\Debug\UnityUIExtensions.dll
 D:\Unity Projects\Proyecto Campo\obj\Debug\UnityUIExtensions.pdb
+C:\Users\dalcanta\Unity Projects\GENES\obj\Debug\UnityUIExtensions.csproj.AssemblyReference.cache
+C:\Users\dalcanta\Unity Projects\GENES\obj\Debug\UnityUIExtensions.csproj.CoreCompileInputs.cache
+C:\Users\dalcanta\Unity Projects\GENES\obj\Debug\UnityUIExtensions.dll
+C:\Users\dalcanta\Unity Projects\GENES\obj\Debug\UnityUIExtensions.pdb

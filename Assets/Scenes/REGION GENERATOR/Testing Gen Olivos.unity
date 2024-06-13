@@ -1186,14 +1186,14 @@ MonoBehaviour:
     - {x: 0.72511536, y: 0.7927439}
     - {x: 0.6151411, y: 0.8862989}
   animatedVoronoi: 1
-  canSelectRegion: 0
-  drawSelectedTriangles: 0
-  hoveredRegionIndex: -1
+  _hoverRegion: 1
+  _selectRegion: 1
   selectedRegionIndex: -1
+  drawSelectedTriangles: 1
   genSettings: {fileID: 11400000, guid: 3045c29b6b9eefe4cbc3ea900ddbdd62, type: 2}
   animatedOlives: 1
   iterations: 0
-  drawOBBs: 1
+  drawOBBs: 0
 --- !u!4 &474813287
 Transform:
   m_ObjectHideFlags: 0
@@ -1849,7 +1849,7 @@ MonoBehaviour:
   initColorPalette: {r: 0.05281782, g: 1, b: 0, a: 1}
   colorPaletteStep: 0.1
   colorPaletteRange: 20
-  scale: 0.5
+  scale: 1
   drawGizmos: 0
   spriteTexture: {fileID: 2800000, guid: 93c2f60daff28ea40aa4e8494f3148fc, type: 3}
   spriteRenderers: []

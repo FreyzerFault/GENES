@@ -175,7 +175,6 @@ namespace TreesGeneration
 						polygon = region,
 						interiorPolygon = interiorPolygon,
 						orientation = orientation,
-						lindeSections = BuildLindePolygonSections(region, interiorPolygon),
 						cropType = cropType.Value
 					};
 
@@ -183,8 +182,10 @@ namespace TreesGeneration
 					break;
 				case CropType.Intesive:
 				case CropType.SuperIntesive:
-					// OLIVO EN INTENSIVO => NO hay Linde
-					List<Vector2> olivos = PopulatePolygon(region, separationLocal, orientation).ToList();
+					// OLIVO EN INTENSIVO => NO hay Linde, pero procuramos una separacion con sus vecinos
+					float margin = separationLocal.y / 2;
+					Polygon marginPolygon = region.InteriorPolygon(margin);
+					List<Vector2> olivos = PopulatePolygon(marginPolygon, separationLocal, orientation).ToList();
 
 					data = new RegionData
 					{
@@ -282,28 +283,6 @@ namespace TreesGeneration
 			return olivosLinde;
 		}
 
-		/// <summary>
-		///     Secciones poligonales de la linde, 1 por arista. Para visualizar y debuggear
-		///     Recortamos la linde en secciones, una por arista.
-		/// </summary>
-		private static Polygon[] BuildLindePolygonSections(Polygon exterior, Polygon interior)
-		{
-			var lindeSections = new Polygon[exterior.VextexCount];
-			for (var i = 0; i < exterior.VextexCount; i++)
-			{
-				Vector2 in0 = interior.vertices[i];
-				Vector2 in1 = interior.vertices[(i + 1) % interior.VextexCount];
-				Vector2 ex0 = exterior.vertices[i];
-				Vector2 ex1 = exterior.vertices[(i + 1) % exterior.VextexCount];
-
-				// CCW Vertices
-				Vector2[] sectionVertices = { in0, in1, ex1, ex0 };
-				lindeSections[i] = new Polygon(sectionVertices);
-			}
-
-			return lindeSections;
-		}
-
 		#endregion
 
 
@@ -358,7 +337,7 @@ namespace TreesGeneration
 				                     .AddComponent<PointSpriteRenderer>();
 
 			BoundsComp.AdjustTransformToBounds(Renderer);
-			Renderer.transform.localPosition += Vector3.up * .1f;
+			Renderer.transform.localPosition += Vector3.back * .1f;
 		}
 
 		protected override void InstantiateRenderer()
@@ -418,34 +397,33 @@ namespace TreesGeneration
 					obb.DrawGizmos(LocalToWorldMatrix, Color.white, 3);
 				}
 
-				var spheresRadius = 1f;
+				float spheresRadius = genSettings.GetCropTypeParams(data.cropType).scale / 2;
 
 				Color oliveColor = "#4E8000".ToUnityColor();
 				Color intensiveColor = "#028000".ToUnityColor();
+				Color floorColor = "#948159".ToUnityColor();
 
-				// POLIGONO INTERIOR
+				// OLIVOS
 				Gizmos.color = data.cropType == CropType.Traditional ? oliveColor : intensiveColor;
-				data.interiorPolygon.OnDrawGizmos(LocalToWorldMatrix, Color.green.Darken(.5f));
-				data.olivosInterior.ForEach(
+				data.Olivos.ForEach(
 					olivo => Gizmos.DrawSphere(LocalToWorldMatrix.MultiplyPoint3x4(olivo), spheresRadius)
+				);
+
+
+				// POLIGONO
+				data.polygon.DrawGizmos(
+					LocalToWorldMatrix,
+					floorColor,
+					floorColor.Lighten(.2f)
 				);
 
 				// LINDE
 				if (data.cropType == CropType.Traditional)
-				{
-					Gizmos.color = Color.magenta;
-					data.lindeSections.ForEach(
-						lindeSection => lindeSection.OnDrawGizmos(
-							LocalToWorldMatrix,
-							Color.red.Darken(.5f),
-							Color.red
-						)
+					data.interiorPolygon.DrawGizmos(
+						LocalToWorldMatrix,
+						floorColor.RotateHue(.1f),
+						floorColor.Lighten(.2f)
 					);
-					data.olivosLinde.ForEach(
-						olivo => Gizmos.DrawSphere(LocalToWorldMatrix.MultiplyPoint3x4(olivo), spheresRadius)
-					);
-				}
-
 
 				// ORIENTACION (flechas)
 				GizmosExtensions.DrawArrowWire(

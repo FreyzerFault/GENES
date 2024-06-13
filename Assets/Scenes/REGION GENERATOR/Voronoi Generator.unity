@@ -3737,7 +3737,8 @@ MonoBehaviour:
   numSeeds: 64
   seedsDistribution: 1
   seeds: []
-  drawGrid: 1
+  drawGizmos: 0
+  drawGrid: 0
   delaunay:
     vertices: []
     iterations: 0
@@ -3752,10 +3753,10 @@ MonoBehaviour:
       ended: 0
     seeds: []
   animatedVoronoi: 1
-  canSelectRegion: 1
-  drawSelectedTriangles: 1
-  hoveredRegionIndex: -1
+  _hoverRegion: 1
+  _selectRegion: 1
   selectedRegionIndex: -1
+  drawSelectedTriangles: 1
 --- !u!4 &1271459535
 Transform:
   m_ObjectHideFlags: 0
@@ -3865,7 +3866,7 @@ MonoBehaviour:
   bounds3D:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 6.718177, y: 17.220837, z: 6.718177}
-  bounds2D:
+  aabb2D:
     min: {x: -6.718177, y: -6.718177}
     max: {x: 6.718177, y: 6.718177}
   XZplane: 1
@@ -4387,6 +4388,7 @@ MonoBehaviour:
   numSeeds: 1024
   seedsDistribution: 0
   seeds: []
+  drawGizmos: 0
   drawGrid: 1
   delaunay:
     vertices: []
@@ -4411,7 +4413,7 @@ MonoBehaviour:
   bounds3D:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0, y: 0, z: 0}
-  bounds2D:
+  aabb2D:
     min: {x: 0, y: 0}
     max: {x: 0, y: 0}
   XZplane: 1
@@ -4488,7 +4490,8 @@ MonoBehaviour:
   initColorPalette: {r: 1, g: 0.053893536, b: 0, a: 1}
   colorPaletteStep: 0.1
   colorPaletteRange: 20
-  sphereScale: 0.2
+  scale: 0.2
+  drawGizmos: 0
 --- !u!1 &1615142472
 GameObject:
   m_ObjectHideFlags: 0
