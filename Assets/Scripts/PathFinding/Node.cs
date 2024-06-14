@@ -112,17 +112,16 @@ namespace PathFinding
 			if (slopeAngle > 0.1f)
 			{
 				Color tangentColor = Color.Lerp(Color.gray, Color.red, slopeAngle / 30 - 0.2f);
-				GizmosExtensions.DrawArrowWire(pos, tangentGradient, Vector3.right, 1, 0.4f, 5, tangentColor);
+				GizmosExtensions.DrawArrowWire(pos, tangentGradient, Vector3.right, 0.4f, 5, tangentColor);
 			}
 
 			// DIRECTION
 			if (direction != Vector2.zero)
 				GizmosExtensions.DrawArrow(
 					pos,
-					new Vector3(direction.x, 0, direction.y),
-					Vector3.right,
-					size / 2,
+					new Vector3(direction.x, 0, direction.y) * size / 2,
 					0.4f,
+					10,
 					Color.yellow
 				);
 
