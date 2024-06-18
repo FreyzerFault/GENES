@@ -426,7 +426,8 @@ namespace TreesGeneration
 					);
 
 				// ORIENTACION (flechas)
-				GizmosExtensions.DrawArrowWire(
+				GizmosExtensions.DrawArrow(
+					GizmosExtensions.ArrowCap.Triangle,
 					LocalToWorldMatrix.MultiplyPoint3x4(data.Centroid),
 					data.orientation.normalized.ToV3xz(),
 					Vector3.right,

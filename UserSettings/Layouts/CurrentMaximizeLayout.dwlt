@@ -63,7 +63,7 @@ MonoBehaviour:
   m_SerializedViewNames: []
   m_SerializedViewValues: []
   m_PlayModeViewName: GameView
-  m_ShowGizmos: 0
+  m_ShowGizmos: 1
   m_TargetDisplay: 0
   m_ClearColor: {r: 0, g: 0, b: 0, a: 0}
   m_TargetSize: {x: 938, y: 337}
@@ -73,7 +73,7 @@ MonoBehaviour:
   m_EnterPlayModeBehavior: 0
   m_UseMipMap: 0
   m_VSyncEnabled: 0
-  m_Gizmos: 0
+  m_Gizmos: 1
   m_Stats: 0
   m_SelectedSizes: 00000000000000000000000000000000000000000000000000000000000000000000000000000000
   m_ZoomArea:
@@ -260,9 +260,9 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 
-      m_LastClickedID: 0
-      m_ExpandedIDs: 780cdcff7c0ddcff800edcffc04bffffa2f8ffffdcfaffff96880000e6880000788c0000fc8c000040ad0000c6ad0000ecad0000
+      m_SelectedIDs: f47a0000
+      m_LastClickedID: 31476
+      m_ExpandedIDs: f2faffff
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -382,7 +382,7 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Packages/com.david.utils/Editor/Geometry/Bounding Box
+    - Assets/Resources/UI/Icons
     m_Globs: []
     m_OriginalText: 
     m_ImportLogFlags: 0
@@ -390,16 +390,16 @@ MonoBehaviour:
   m_ViewMode: 1
   m_StartGridSize: 96
   m_LastFolders:
-  - Packages/com.david.utils/Editor/Geometry/Bounding Box
+  - Assets/Resources/UI/Icons
   m_LastFoldersGridSize: 96
   m_LastProjectPath: C:\Users\dalcanta\Unity Projects\GENES
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 431}
-    m_SelectedIDs: 5cd40000
-    m_LastClickedID: 54364
-    m_ExpandedIDs: 000000001e87000020870000228700002487000026870000288700002a8700002e8700003087000032870000848700009887000000ca9a3bffffff7f
+    scrollPos: {x: 0, y: 16}
+    m_SelectedIDs: 78850000
+    m_LastClickedID: 34168
+    m_ExpandedIDs: 000000003e85000040850000428500004485000046850000488500004a8500004c8500004e85000050850000528500005485000000ca9a3bffffff7f
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -427,7 +427,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 000000001e87000020870000228700002487000026870000288700002a8700002c8700002e8700003087000032870000
+    m_ExpandedIDs: 000000003e85000040850000428500004485000046850000488500004a8500004c8500004e850000508500005285000054850000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -452,9 +452,9 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
   m_ListAreaState:
-    m_SelectedInstanceIDs: 
-    m_LastClickedInstanceID: 0
-    m_HadKeyboardFocusLastEvent: 1
+    m_SelectedInstanceIDs: f47a0000
+    m_LastClickedInstanceID: 31476
+    m_HadKeyboardFocusLastEvent: 0
     m_ExpandedInstanceIDs: 3e6e0100287c0000467f0000189c0000dc9c0000d2c10000108f00005288000078880000b6880000e8880000408d0000969900009688000000000000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
