@@ -2530,18 +2530,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05a9aa2ac7f3cec499dbf5e94af4cdae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  runOnStart: 0
-  autoRun: 0
+  runOnStart: 1
+  autoRun: 1
   waitSeconds: 0.4
   polygon:
-    vertices: []
     centroid: {x: 0, y: 0}
   interiorPolygon:
-    vertices: []
     centroid: {x: 0, y: 0}
   splitPolygons: []
   mergedPolygon:
-    vertices: []
     centroid: {x: 0, y: 0}
   interiorPolygonMargin: {x: 1, y: 1}
   numVertices: 15
