@@ -22,12 +22,12 @@ MonoBehaviour:
   - type: 0
     separationMin: {x: 10, y: 10}
     separationMax: {x: 10, y: 10}
-    scale: 2
+    scale: 6
   - type: 1
     separationMin: {x: 6, y: 6}
     separationMax: {x: 6, y: 6}
-    scale: 1
+    scale: 3
   - type: 2
     separationMin: {x: 1, y: 4}
     separationMax: {x: 2, y: 4}
-    scale: 0.3
+    scale: 1

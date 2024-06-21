@@ -3150,7 +3150,7 @@ GameObject:
   - component: {fileID: 1247152679}
   - component: {fileID: 1247152678}
   m_Layer: 0
-  m_Name: VORONOI TEST
+  m_Name: VORONOI DYNAMIC
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3471,12 +3471,13 @@ MonoBehaviour:
       - {x: 0.8919629, y: 0.0072028073}
       iterations: 0
       ended: 1
+    regions: []
     seeds: []
   animatedVoronoi: 0
-  canSelectRegion: 1
-  drawSelectedTriangles: 1
-  hoveredRegionIndex: -1
+  _hoverRegion: 1
+  _selectRegion: 1
   selectedRegionIndex: -1
+  drawSelectedTriangles: 1
   speed: 0.1
   turnSpeed: 0.2
 --- !u!114 &1247152683

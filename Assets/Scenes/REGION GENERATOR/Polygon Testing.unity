@@ -647,7 +647,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 994880160
+  m_text: 15
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -2530,22 +2530,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05a9aa2ac7f3cec499dbf5e94af4cdae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  runOnStart: 0
-  autoRun: 0
+  runOnStart: 1
+  autoRun: 1
   waitSeconds: 0.4
-  polygon:
-    vertices: []
-    centroid: {x: 0, y: 0}
-  interiorPolygon:
-    vertices: []
-    centroid: {x: 0, y: 0}
-  splitPolygons: []
-  mergedPolygon:
-    vertices: []
-    centroid: {x: 0, y: 0}
-  interiorPolygonMargin: {x: 1, y: 1}
-  numVertices: 15
   seed: 994880160
+  numVertices: 15
+  interiorPolygonMargin: {x: 1, y: 1}
+  stepByStep: 1
 --- !u!4 &1473327785
 Transform:
   m_ObjectHideFlags: 0

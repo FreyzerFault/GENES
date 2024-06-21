@@ -3715,7 +3715,7 @@ GameObject:
   - component: {fileID: 1271459538}
   - component: {fileID: 1271459537}
   m_Layer: 0
-  m_Name: VORONOI TEST
+  m_Name: VORONOI GENERATOR
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3751,6 +3751,7 @@ MonoBehaviour:
       vertices: []
       iterations: 0
       ended: 0
+    regions: []
     seeds: []
   animatedVoronoi: 1
   _hoverRegion: 1
