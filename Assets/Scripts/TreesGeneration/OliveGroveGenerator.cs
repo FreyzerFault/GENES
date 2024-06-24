@@ -342,9 +342,6 @@ namespace TreesGeneration
 			_spritesRenderer ??= Renderer
 			                     ?? UnityUtils.InstantiateEmptyObject(transform, "Olive Sprites Renderer")
 				                     .AddComponent<PointSpriteRenderer>();
-
-			BoundsComp.AdjustTransformToBounds(Renderer);
-			Renderer.transform.localPosition += Vector3.back * .1f;
 		}
 
 		protected override void InstantiateRenderer()
@@ -376,6 +373,15 @@ namespace TreesGeneration
 		{
 			if (Terrain == null) return;
 			Renderer.ProjectOnTerrain(Terrain);
+		}
+
+		protected override void PositionRenderer()
+		{
+			base.PositionRenderer();
+			Renderer.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
+			Renderer.transform.localScale = Vector3.one;
+			BoundsComp.AdjustTransformToBounds(Renderer);
+			Renderer.transform.localPosition += Vector3.back * .1f;
 		}
 
 		#endregion
