@@ -83,6 +83,7 @@ namespace TreesGeneration
 			{
 				delaunay.RunTriangulation();
 				voronoi.GenerateVoronoi();
+				OnAllRegionsCreated();
 				PopulateAllRegions();
 			}
 		}
@@ -107,6 +108,7 @@ namespace TreesGeneration
 		{
 			yield return base.RunCoroutine();
 
+			ResetOlives();
 			if (animatedOlives)
 			{
 				while (!Ended)
@@ -378,6 +380,7 @@ namespace TreesGeneration
 		protected override void PositionRenderer()
 		{
 			base.PositionRenderer();
+			if (Renderer == null) return;
 			Renderer.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
 			Renderer.transform.localScale = Vector3.one;
 			BoundsComp.AdjustTransformToBounds(Renderer);

@@ -357,15 +357,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 71658143}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5ae0d45f19c3400dabf60c25ae2ea8f0, type: 3}
+  m_Script: {fileID: 11500000, guid: d30df3faab7d440cb5be7d7cdf143880, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   colors: []
   initColorPalette: {r: 0, g: 1, b: 1, a: 1}
-  colorPaletteStep: 0.08
+  colorPaletteStep: 0.05
   colorPaletteRange: 20
-  wire: 0
-  centeredScale: 1
+  voronoi:
+    delaunay:
+      vertices: []
+      iterations: 0
+      ended: 0
+    regions: []
+    seeds: []
+  regionScale: 1
 --- !u!1 &111101503
 GameObject:
   m_ObjectHideFlags: 0
@@ -1203,6 +1209,8 @@ MonoBehaviour:
   _hoverRegion: 0
   _selectRegion: 0
   selectedRegionIndex: -1
+  selectedRenderer: {fileID: 0}
+  hoverRenderer: {fileID: 0}
   drawSelectedTriangles: 0
   genSettings: {fileID: 11400000, guid: 3045c29b6b9eefe4cbc3ea900ddbdd62, type: 2}
   animatedOlives: 1

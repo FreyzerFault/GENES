@@ -2544,15 +2544,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 865075009}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5ae0d45f19c3400dabf60c25ae2ea8f0, type: 3}
+  m_Script: {fileID: 11500000, guid: d30df3faab7d440cb5be7d7cdf143880, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   colors: []
   initColorPalette: {r: 0, g: 1, b: 1, a: 1}
-  colorPaletteStep: 0.1
+  colorPaletteStep: 0.05
   colorPaletteRange: 20
-  wire: 0
-  centeredScale: 0.905
+  voronoi:
+    delaunay:
+      vertices: []
+      iterations: 0
+      ended: 0
+    regions: []
+    seeds: []
+  regionScale: 1
 --- !u!1 &868609556
 GameObject:
   m_ObjectHideFlags: 0
@@ -3737,7 +3743,7 @@ MonoBehaviour:
   numSeeds: 64
   seedsDistribution: 1
   seeds: []
-  drawGizmos: 0
+  drawGizmos: 1
   drawGrid: 0
   delaunay:
     vertices: []
@@ -3757,6 +3763,8 @@ MonoBehaviour:
   _hoverRegion: 1
   _selectRegion: 1
   selectedRegionIndex: -1
+  selectedRenderer: {fileID: 0}
+  hoverRenderer: {fileID: 0}
   drawSelectedTriangles: 1
 --- !u!4 &1271459535
 Transform:
