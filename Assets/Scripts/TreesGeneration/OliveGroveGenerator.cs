@@ -361,7 +361,7 @@ namespace TreesGeneration
 		private void InstantiateRenderer(RegionData regionData)
 		{
 			Renderer.scale = genSettings.GetCropTypeParams(regionData.cropType).scale;
-			Renderer.Instantiate(regionData.Olivos, "Olivo");
+			Renderer.SetGeometry(regionData.Olivos, "Olivo");
 		}
 
 		private void InstantiateRenderer(IEnumerable<RegionData> regionsData)
@@ -381,9 +381,7 @@ namespace TreesGeneration
 		{
 			base.PositionRenderer();
 			if (Renderer == null) return;
-			Renderer.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
-			Renderer.transform.localScale = Vector3.one;
-			BoundsComp.AdjustTransformToBounds(Renderer);
+			BoundsComp.TransformToBounds_Local(Renderer);
 			Renderer.transform.localPosition += Vector3.back * .1f;
 		}
 
