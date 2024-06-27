@@ -47,7 +47,7 @@ namespace TreesGeneration
 		private void HandleOnRegionPopulated(RegionData regionData)
 		{
 			InstantiateRenderer(regionData);
-			if (CanProjectOnTerrain) ProjectOnTerrain();
+			ProjectOnTerrain();
 		}
 
 		#endregion
@@ -331,50 +331,48 @@ namespace TreesGeneration
 
 		#region RENDERING
 
-		private readonly bool _drawOlivos = true;
+		[SerializeField] private bool _drawOlivos = true;
 
-		private PointSpriteRenderer _spritesRenderer;
-		private PointSpriteRenderer Renderer => _spritesRenderer ??= GetComponentInChildren<PointSpriteRenderer>(true);
-
-		private Dictionary<Polygon, PointSpriteRenderer> spritesRendererDictionary = new();
+		private SpritesRenderer _spritesRenderer;
+		private SpritesRenderer Renderer => _spritesRenderer ??= GetComponentInChildren<SpritesRenderer>(true);
 
 		protected override void InitializeRenderer()
 		{
 			base.InitializeRenderer();
-			_spritesRenderer ??= Renderer
-			                     ?? UnityUtils.InstantiateEmptyObject(transform, "Olive Sprites Renderer")
-				                     .AddComponent<PointSpriteRenderer>();
+			_spritesRenderer ??= Renderer ?? UnityUtils.InstantiateObject<SpritesRenderer>(transform, "Olive Sprites Renderer");
 		}
 
 		protected override void InstantiateRenderer()
 		{
 			base.InstantiateRenderer();
-			InstantiateRenderer(_regionsData.Values.ToArray());
+			_regionsData.Values.ForEach(InstantiateRenderer);
 		}
 
 		protected override void UpdateRenderer()
 		{
 			base.UpdateRenderer();
-			Renderer.UpdateGeometry(OlivePositions);
+			Renderer.UpdateAllObj(OlivePositions);
 		}
 
 		private void InstantiateRenderer(RegionData regionData)
 		{
-			Renderer.scale = genSettings.GetCropTypeParams(regionData.cropType).scale;
-			Renderer.SetGeometry(regionData.Olivos, "Olivo");
-		}
-
-		private void InstantiateRenderer(IEnumerable<RegionData> regionsData)
-		{
-			regionsData.ForEach(InstantiateRenderer);
-			if (CanProjectOnTerrain) ProjectOnTerrain();
+			Renderer.AddObjs(regionData.Olivos);
+			
+			// Set scale of new Olivos
+			float scale = genSettings.GetCropTypeParams(regionData.cropType).scale;
+			int renderObjsCount = Renderer.renderObjs.Count;
+			int olivosCount = regionData.Olivos.Count();
+			for (int i = renderObjsCount - olivosCount; i < renderObjsCount; i++)
+			{
+				Renderer.SetSize(i, scale);
+			}
 		}
 
 		// Project ALL on Terrain		
 		private void ProjectOnTerrain()
 		{
-			if (Terrain == null) return;
-			Renderer.ProjectOnTerrain(Terrain);
+			if (Terrain.activeTerrain != null) 
+				Renderer.ProjectOnTerrain(Terrain.activeTerrain);
 		}
 
 		protected override void PositionRenderer()

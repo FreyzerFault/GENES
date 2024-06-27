@@ -527,18 +527,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d30df3faab7d440cb5be7d7cdf143880, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  renderObjs: []
+  useColor: 1
+  colorPallette:
+    initialColor: {r: 0, g: 0.85983825, b: 0.69124264, a: 1}
+    palletteStep: 0.05
+    palletteRange: 20
   colors: []
-  initColorPalette: {r: 0, g: 1, b: 1, a: 1}
-  colorPaletteStep: 0.05
-  colorPaletteRange: 20
-  voronoi:
-    delaunay:
-      vertices: []
-      iterations: 0
-      ended: 0
-    regions: []
-    seeds: []
-  regionScale: 1
+  renderMode: 2
+  thickness: 0.5
+  regionScale: 0.946
+  projectOnTerrain: 0
+  terrainHeightOffset: 0.1
 --- !u!1001 &296536088
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2204,14 +2204,15 @@ MonoBehaviour:
   runOnStart: 0
   animatedDelaunay: 0
   delayMilliseconds: 10
+  delaunayRenderer: {fileID: 0}
   voronoi:
     delaunay:
       vertices: []
       iterations: 0
       ended: 0
     regions: []
-    seeds: []
   animatedVoronoi: 0
+  voronoiVoronoiRenderMode: 2
   _hoverRegion: 0
   _selectRegion: 0
   selectedRegionIndex: -1
@@ -2934,39 +2935,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 1451598909}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5c99fed9c25c49beadebc6dcc3802504, type: 3}
+  m_Script: {fileID: 11500000, guid: 1d90d4808960473bbfe0d09dbe113ec7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  colors:
-  - {r: 0, g: 1, b: 1, a: 1}
-  - {r: 0, g: 0.39999986, b: 1, a: 1}
-  - {r: 0.19999981, g: 0, b: 1, a: 1}
-  - {r: 0.8000002, g: 0, b: 1, a: 1}
-  - {r: 1, g: 0, b: 0.6000004, a: 1}
-  - {r: 1, g: 0, b: 0, a: 1}
-  - {r: 1, g: 0.60000014, b: 0, a: 1}
-  - {r: 0.8000001, g: 1, b: 0, a: 1}
-  - {r: 0.19999993, g: 1, b: 0, a: 1}
-  - {r: 0, g: 1, b: 0.4000001, a: 1}
-  - {r: 0, g: 1, b: 1, a: 1}
-  - {r: 0, g: 0.39999986, b: 1, a: 1}
-  - {r: 0.20000029, g: 0, b: 1, a: 1}
-  - {r: 0.8000002, g: 0, b: 1, a: 1}
-  - {r: 1, g: 0, b: 0.6000004, a: 1}
-  - {r: 1, g: 0, b: 0, a: 1}
-  - {r: 1, g: 0.60000014, b: 0, a: 1}
-  - {r: 0.7999997, g: 1, b: 0, a: 1}
-  - {r: 0.19999957, g: 1, b: 0, a: 1}
-  - {r: 0, g: 1, b: 0.39999986, a: 1}
-  - {r: 0, g: 1, b: 1, a: 1}
-  - {r: 0, g: 0.39999986, b: 1, a: 1}
-  - {r: 0.19999981, g: 0, b: 1, a: 1}
-  - {r: 0.8000002, g: 0, b: 1, a: 1}
-  - {r: 1, g: 0, b: 0.6000004, a: 1}
-  initColorPalette: {r: 1, g: 0.053893536, b: 0, a: 1}
-  colorPaletteStep: 0.1
-  colorPaletteRange: 20
-  scale: 0.2
+  renderObjs: []
+  useColor: 1
+  colorPallette:
+    initialColor: {r: 0.8638418, g: 1, b: 0, a: 1}
+    palletteStep: 0.05
+    palletteRange: 20
+  colors: []
+  radius: 0.466
+  thickness: 0
+  textureSize: 20
   drawGizmos: 0
 --- !u!1 &1458807926
 GameObject:
@@ -3849,6 +3830,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1619092548}
+  - component: {fileID: 1619092551}
+  - component: {fileID: 1619092550}
   - component: {fileID: 1619092549}
   m_Layer: 0
   m_Name: DELAUNAY Renderer
@@ -3872,7 +3855,57 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1147639882}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1619092549
+--- !u!33 &1619092549
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1619092547}
+  m_Mesh: {fileID: 0}
+--- !u!23 &1619092550
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1619092547}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &1619092551
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3881,15 +3914,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 1619092547}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d3ed8d9eb32644b3bd71d1f1c7757b3a, type: 3}
+  m_Script: {fileID: 11500000, guid: bea7a8123771436b8a981f4607656f11, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  colors: []
-  initColorPalette: {r: 0, g: 1, b: 1, a: 1}
-  colorPaletteStep: 0.1
-  colorPaletteRange: 20
-  thickness: 1
-  wire: 1
+  color: {r: 0.9892183, g: 0.952479, b: 0.7665775, a: 1}
+  thickness: 0.1
+  renderMode: 1
 --- !u!1 &1673019168
 GameObject:
   m_ObjectHideFlags: 0
