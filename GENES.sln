@@ -23,6 +23,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Procrain.UI", "Procrain.UI.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DavidUtils", "DavidUtils.csproj", "{6ef4c5d9-9eba-7675-cd16-eed5900260f3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DavidUtils.Rendering", "DavidUtils.Rendering.csproj", "{a4c8fd10-0ffc-3cc9-c215-118797b69509}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrettyHierarchy", "PrettyHierarchy.csproj", "{9dbdb890-3679-8f30-df20-e4973f44c329}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DavidUtils.UI", "DavidUtils.UI.csproj", "{a221b198-4170-d168-20a2-aca7a24065b1}"
@@ -36,6 +38,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DavidUtils.ExtensionMethods", "DavidUtils.ExtensionMethods.csproj", "{5f7aa8d4-210d-fddf-27f1-75bbcbd202c3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utils", "Utils.csproj", "{a47c4ef6-8da7-f594-464c-72b5fda1c310}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TreesGeneration.Tests", "TreesGeneration.Tests.csproj", "{0c2b9809-0b71-195f-e371-4bd49ec95239}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Procrain.MapGeneration", "Procrain.MapGeneration.csproj", "{725ee3bd-97c6-f759-626f-6dccda1f06ea}"
 EndProject
@@ -53,8 +57,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DavidUtils.Geometry.Algorit
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DavidUtils.Threading", "DavidUtils.Threading.csproj", "{b647af4b-ef80-451c-7ac5-ca3ff87e99c0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TreesGeneration.Tests", "TreesGeneration.Tests.csproj", "{0c2b9809-0b71-195f-e371-4bd49ec95239}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp-Editor", "Assembly-CSharp-Editor.csproj", "{7da08089-9fd3-c3d6-4028-c4b4aef2e3c4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DavidUtils.CameraUtils", "DavidUtils.CameraUtils.csproj", "{0865b04d-8881-3659-b028-7fcd6e0030bf}"
@@ -62,8 +64,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BezierCurves.Editor", "BezierCurves.Editor.csproj", "{7c331c10-1890-d1f6-9da1-8d9eca9f5bb0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DavidUtils.Spawning", "DavidUtils.Spawning.csproj", "{13d4e1d0-0b5e-01ba-6e9a-aa8a60e3dc5a}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DavidUtils.Rendering", "DavidUtils.Rendering.csproj", "{a4c8fd10-0ffc-3cc9-c215-118797b69509}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Procrain.Noise", "Procrain.Noise.csproj", "{d5a5fa5a-4b04-4653-2cd5-44f0fc1a6994}"
 EndProject
@@ -140,6 +140,8 @@ Global
 		{24f13432-bb61-d6a0-d2b5-c07db4b2fb1b}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6ef4c5d9-9eba-7675-cd16-eed5900260f3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6ef4c5d9-9eba-7675-cd16-eed5900260f3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{a4c8fd10-0ffc-3cc9-c215-118797b69509}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{a4c8fd10-0ffc-3cc9-c215-118797b69509}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9dbdb890-3679-8f30-df20-e4973f44c329}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{9dbdb890-3679-8f30-df20-e4973f44c329}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{a221b198-4170-d168-20a2-aca7a24065b1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -154,6 +156,8 @@ Global
 		{5f7aa8d4-210d-fddf-27f1-75bbcbd202c3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{a47c4ef6-8da7-f594-464c-72b5fda1c310}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{a47c4ef6-8da7-f594-464c-72b5fda1c310}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0c2b9809-0b71-195f-e371-4bd49ec95239}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0c2b9809-0b71-195f-e371-4bd49ec95239}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{725ee3bd-97c6-f759-626f-6dccda1f06ea}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{725ee3bd-97c6-f759-626f-6dccda1f06ea}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{aad8c7a4-d1bf-703a-0362-b1117c18d027}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -170,8 +174,6 @@ Global
 		{9b43e8f1-1b63-f280-8803-3155a3f4a29a}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{b647af4b-ef80-451c-7ac5-ca3ff87e99c0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{b647af4b-ef80-451c-7ac5-ca3ff87e99c0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0c2b9809-0b71-195f-e371-4bd49ec95239}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0c2b9809-0b71-195f-e371-4bd49ec95239}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7da08089-9fd3-c3d6-4028-c4b4aef2e3c4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7da08089-9fd3-c3d6-4028-c4b4aef2e3c4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0865b04d-8881-3659-b028-7fcd6e0030bf}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -180,8 +182,6 @@ Global
 		{7c331c10-1890-d1f6-9da1-8d9eca9f5bb0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{13d4e1d0-0b5e-01ba-6e9a-aa8a60e3dc5a}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{13d4e1d0-0b5e-01ba-6e9a-aa8a60e3dc5a}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{a4c8fd10-0ffc-3cc9-c215-118797b69509}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{a4c8fd10-0ffc-3cc9-c215-118797b69509}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{d5a5fa5a-4b04-4653-2cd5-44f0fc1a6994}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{d5a5fa5a-4b04-4653-2cd5-44f0fc1a6994}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{db236e53-a3c8-d523-9135-606fc5324a38}.Debug|Any CPU.ActiveCfg = Debug|Any CPU

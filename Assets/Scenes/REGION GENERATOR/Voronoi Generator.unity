@@ -2544,15 +2544,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 865075009}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5ae0d45f19c3400dabf60c25ae2ea8f0, type: 3}
+  m_Script: {fileID: 11500000, guid: d30df3faab7d440cb5be7d7cdf143880, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   colors: []
   initColorPalette: {r: 0, g: 1, b: 1, a: 1}
-  colorPaletteStep: 0.1
+  colorPaletteStep: 0.05
   colorPaletteRange: 20
-  wire: 0
-  centeredScale: 0.972
+  voronoi:
+    delaunay:
+      vertices: []
+      iterations: 0
+      ended: 0
+    regions: []
+    seeds: []
+  regionScale: 1
 --- !u!1 &868609556
 GameObject:
   m_ObjectHideFlags: 0
@@ -3709,14 +3715,13 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1271459535}
-  - component: {fileID: 1271459540}
   - component: {fileID: 1271459534}
   - component: {fileID: 1271459539}
   - component: {fileID: 1271459536}
   - component: {fileID: 1271459538}
   - component: {fileID: 1271459537}
   m_Layer: 0
-  m_Name: VORONOI TEST
+  m_Name: VORONOI GENERATOR
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3734,18 +3739,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e96e97164f9491c8939e46ce64480c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  randSeed: 1214954147
-  numSeeds: 25
+  randSeed: 34253
+  numSeeds: 64
   seedsDistribution: 1
   seeds: []
-  drawGizmos: 0
+  drawGizmos: 1
   drawGrid: 0
   delaunay:
     vertices: []
     iterations: 0
     ended: 0
   runOnStart: 1
-  animatedDelaunay: 0
+  animatedDelaunay: 1
   delayMilliseconds: 10
   voronoi:
     delaunay:
@@ -3754,10 +3759,12 @@ MonoBehaviour:
       ended: 0
     regions: []
     seeds: []
-  animatedVoronoi: 0
+  animatedVoronoi: 1
   _hoverRegion: 1
   _selectRegion: 1
   selectedRegionIndex: -1
+  selectedRenderer: {fileID: 0}
+  hoverRenderer: {fileID: 0}
   drawSelectedTriangles: 1
 --- !u!4 &1271459535
 Transform:
@@ -3872,22 +3879,6 @@ MonoBehaviour:
     min: {x: -6.718177, y: -6.718177}
     max: {x: 6.718177, y: 6.718177}
   XZplane: 1
---- !u!114 &1271459540
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1271459533}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 15786f9eb281413b9e5c3898e1056e5c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  runOnStart: 0
-  autoRun: 0
-  waitSeconds: 0.2
-  seed: 34225235
 --- !u!1 &1355467403
 GameObject:
   m_ObjectHideFlags: 0
@@ -5800,7 +5791,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8282911286696415171, guid: 6e532e4f26503db49b55d1c12edd2198, type: 3}
       propertyPath: m_Value
-      value: 0.961
+      value: 0.894
       objectReference: {fileID: 0}
     - target: {fileID: 8282911286696415171, guid: 6e532e4f26503db49b55d1c12edd2198, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target

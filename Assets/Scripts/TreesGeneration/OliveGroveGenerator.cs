@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using DavidUtils;
 using DavidUtils.DevTools.GizmosAndHandles;
+using DavidUtils.DevTools.Reflection;
 using DavidUtils.ExtensionMethods;
 using DavidUtils.Geometry;
 using DavidUtils.Geometry.Bounding_Box;
@@ -17,8 +18,14 @@ namespace TreesGeneration
 	public class OliveGroveGenerator : VoronoiGenerator
 	{
 		private readonly Dictionary<Polygon, RegionData> _regionsData = new();
+		public RegionData[] Data => _regionsData.Values.ToArray();
 
-		private int NumFincas => numSeeds;
+		[ExposedField]
+		public int NumFincas
+		{
+			get => numSeeds;
+			set => numSeeds = value;
+		}
 
 		[Space]
 		[Header("PARÁMETROS OLIVAR")]
@@ -76,6 +83,7 @@ namespace TreesGeneration
 			{
 				delaunay.RunTriangulation();
 				voronoi.GenerateVoronoi();
+				OnAllRegionsCreated();
 				PopulateAllRegions();
 			}
 		}
@@ -100,6 +108,7 @@ namespace TreesGeneration
 		{
 			yield return base.RunCoroutine();
 
+			ResetOlives();
 			if (animatedOlives)
 			{
 				while (!Ended)
@@ -335,9 +344,6 @@ namespace TreesGeneration
 			_spritesRenderer ??= Renderer
 			                     ?? UnityUtils.InstantiateEmptyObject(transform, "Olive Sprites Renderer")
 				                     .AddComponent<PointSpriteRenderer>();
-
-			BoundsComp.AdjustTransformToBounds(Renderer);
-			Renderer.transform.localPosition += Vector3.back * .1f;
 		}
 
 		protected override void InstantiateRenderer()
@@ -355,7 +361,7 @@ namespace TreesGeneration
 		private void InstantiateRenderer(RegionData regionData)
 		{
 			Renderer.scale = genSettings.GetCropTypeParams(regionData.cropType).scale;
-			Renderer.Instantiate(regionData.Olivos, "Olivo");
+			Renderer.SetGeometry(regionData.Olivos, "Olivo");
 		}
 
 		private void InstantiateRenderer(IEnumerable<RegionData> regionsData)
@@ -369,6 +375,14 @@ namespace TreesGeneration
 		{
 			if (Terrain == null) return;
 			Renderer.ProjectOnTerrain(Terrain);
+		}
+
+		protected override void PositionRenderer()
+		{
+			base.PositionRenderer();
+			if (Renderer == null) return;
+			BoundsComp.TransformToBounds_Local(Renderer);
+			Renderer.transform.localPosition += Vector3.back * .1f;
 		}
 
 		#endregion
@@ -426,12 +440,13 @@ namespace TreesGeneration
 					);
 
 				// ORIENTACION (flechas)
+				float arrowSize = AABB.Width / 20;
 				GizmosExtensions.DrawArrow(
 					GizmosExtensions.ArrowCap.Triangle,
 					LocalToWorldMatrix.MultiplyPoint3x4(data.Centroid),
-					data.orientation.normalized.ToV3xz(),
-					Vector3.right,
-					10,
+					data.orientation.normalized.ToV3xz() * arrowSize,
+					Vector3.up,
+					arrowSize / 3,
 					thickness: 2,
 					color: Color.white
 				);
