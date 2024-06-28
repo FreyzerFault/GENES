@@ -23,8 +23,8 @@ namespace TreesGeneration
 		[ExposedField]
 		public int NumFincas
 		{
-			get => numSeeds;
-			set => numSeeds = value;
+			get => NumSeeds;
+			set => NumSeeds = value;
 		}
 
 		[Space]

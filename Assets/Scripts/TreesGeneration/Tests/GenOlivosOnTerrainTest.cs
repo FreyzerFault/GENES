@@ -48,7 +48,7 @@ namespace GENES.TreesGeneration.Tests
 			FocusCamera();
 
 			Generator.randSeed = initialSeed;
-			Generator.numSeeds = numFincas;
+			Generator.NumSeeds = numFincas;
 			base.Start();
 		}
 

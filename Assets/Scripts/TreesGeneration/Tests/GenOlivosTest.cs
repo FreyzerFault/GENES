@@ -34,7 +34,7 @@ namespace GENES.TreesGeneration.Tests
 		protected override void Awake()
 		{
 			Generator.randSeed = initialSeed;
-			Generator.numSeeds = numFincas;
+			Generator.NumSeeds = numFincas;
 			UpdateMapSize();
 			FocusCamera();
 
