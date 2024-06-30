@@ -270,10 +270,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3adfb045f328ef4fa1a235e775ba001, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  is2D: 1
+  is2D: 0
   bounds3D:
     m_Center: {x: 25, y: 0, z: 25}
-    m_Extent: {x: 25, y: 0, z: 25}
+    m_Extent: {x: 25, y: 25, z: 25}
   aabb2D:
     min: {x: 0, y: 0}
     max: {x: 50, y: 50}
