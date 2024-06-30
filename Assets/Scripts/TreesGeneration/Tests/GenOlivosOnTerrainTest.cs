@@ -45,6 +45,7 @@ namespace GENES.TreesGeneration.Tests
 		protected override void Start()
 		{
 			Bounds.AdjustToTerrain(_terrain);
+			
 			FocusCamera();
 
 			Generator.randSeed = initialSeed;
