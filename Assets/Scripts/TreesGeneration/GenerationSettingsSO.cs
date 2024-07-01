@@ -12,7 +12,8 @@ namespace TreesGeneration
 			probTraditionalCrop = .5f,
 			probIntensiveCrop = .3f,
 			probSuperIntensiveCrop = .2f,
-			lindeWidth = 12
+			lindeWidth = 12,
+			maxSlopeAngle = 30
 		};
 
 		#region CROP TYPE

@@ -734,6 +734,8 @@ MonoBehaviour:
     onlyExposed: 1
     inherited: 1
     label: Text
+  prefix: 
+  suffix: 
 --- !u!222 &283748980
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2584,7 +2586,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 0}
+  - {fileID: 2100000, guid: 283443dfbd4ff274ab64806dab6f5ab0, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2707,7 +2709,7 @@ LineRenderer:
     shadowBias: 0.5
     generateLightingData: 0
   m_MaskInteraction: 0
-  m_UseWorldSpace: 1
+  m_UseWorldSpace: 0
   m_Loop: 0
   m_ApplyActiveColorSpace: 1
 --- !u!114 &1473327789
@@ -2722,12 +2724,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ae0d45f19c3400dabf60c25ae2ea8f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  renderMode: 1
+  renderMode: 2
   polygon:
+    _vertices: []
     centroid: {x: 0, y: 0}
   color: {r: 0, g: 1, b: 0.12013221, a: 1}
-  thickness: 1
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  thickness: 2.2
   centeredScale: 1
+  projectOnTerrain: 0
+  terrainHeightOffset: 0.1
 --- !u!1 &1483291461
 GameObject:
   m_ObjectHideFlags: 0

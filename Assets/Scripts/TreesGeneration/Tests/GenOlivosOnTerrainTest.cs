@@ -54,10 +54,13 @@ namespace GENES.TreesGeneration.Tests
 		}
 
 
-		protected override void InitializeTests() => AddTest(
-			RunGenerator,
-			new TestInfo("TestCoroutine", GeneratorSuccessCondition)
-		);
+		protected override void InitializeTests()
+		{
+			AddTest(
+				RunGenerator,
+				new TestInfo("TestCoroutine", GeneratorSuccessCondition)
+			);
+		}
 
 		private IEnumerator RunGenerator()
 		{

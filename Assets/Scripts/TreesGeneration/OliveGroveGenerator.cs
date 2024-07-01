@@ -42,6 +42,7 @@ namespace TreesGeneration
 		#region UNITY
 
 		private void OnEnable() => OnRegionPopulated += HandleOnRegionPopulated;
+
 		private void OnDisable() => OnRegionPopulated -= HandleOnRegionPopulated;
 
 		private void HandleOnRegionPopulated(RegionData regionData)
@@ -95,6 +96,7 @@ namespace TreesGeneration
 
 		public bool animatedOlives = true;
 		public int iterations;
+		private const int MaxIterations = 1000;
 
 		public bool AnimatedOlives
 		{
@@ -102,7 +104,7 @@ namespace TreesGeneration
 			set => animatedOlives = value;
 		}
 
-		public bool Ended => _regionsData.Count >= voronoi.regions.Count;
+		public bool Ended => _regionsData.Count >= voronoi.regions.Count || iterations > MaxIterations;
 
 		public override IEnumerator RunCoroutine()
 		{
@@ -160,8 +162,7 @@ namespace TreesGeneration
 			Vector2 separation = Vector2.Lerp(cropParams.separationMin, cropParams.separationMax, Random.value);
 			Vector2 separationLocal = VectorToLocalPositive(separation);
 
-			// TODO Coger la Pendiente del Terreno como Perpendicular de la orientacion
-			Vector2 orientation = Random.insideUnitCircle;
+			Vector2 orientation = GetRegionOrientation_ByAverage(region);
 
 			RegionData data = new();
 			switch (cropType)
@@ -206,6 +207,9 @@ namespace TreesGeneration
 					break;
 			}
 
+			data.olivosInterior.RemoveAll(InvalidPosition);
+			data.olivosLinde?.RemoveAll(InvalidPosition);
+
 			_regionsData.Add(region, data);
 
 			OnRegionPopulated?.Invoke(data);
@@ -227,6 +231,8 @@ namespace TreesGeneration
 			Vector2Int gridSize = Vector2Int.FloorToInt(aabb.Size / minSeparation);
 			List<Vector2> olivos = new(gridSize.x * gridSize.y);
 
+			const int maxPolygons = 10000;
+
 			// Iteramos en X e Y con la separacion dada en ambos ejes.
 			// Solo se populan los puntos dentro del poligono
 			for (float x = aabb.min.x; x < aabb.max.x; x += minSeparation.x)
@@ -234,10 +240,78 @@ namespace TreesGeneration
 			{
 				// Rotamos la posicion de vuelta al OBB y comprobamos si esta dentro del poligono
 				Vector2 pos = new Vector2(x, y).Rotate(obb.Angle, aabb.min);
-				if (region.Contains_RayCast(pos)) olivos.Add(pos);
+				bool insidePolygon = region.Contains_RayCast(pos);
+				
+				if (insidePolygon) olivos.Add(pos);
+
+				if (olivos.Count <= maxPolygons) continue;
+				Debug.LogWarning($"Max Polygons reached ({maxPolygons})");
+				return olivos;
 			}
 
 			return olivos;
+		}
+
+		public bool InvalidPosition(Vector2 normPos)
+		{
+			// Outside [0,1] Bounds
+			if (!normPos.IsIn01()) return true;
+			
+			// Check Slope is too high
+			Terrain terrain = Terrain.activeTerrain;
+			if (terrain == null) return false;
+			
+			float maxSlope = genSettings.globalParams.maxSlopeAngle;
+			float angle = Vector3.Angle(terrain.GetNormal(normPos), Vector3.up);
+			return angle > maxSlope;
+		}
+		
+		
+		public Vector2 GetRegionOrientation_ByCentroid(Polygon region)
+		{
+			Terrain terrain = Terrain.activeTerrain;
+			
+			// Si no hay terreno, se coge una orientacion random para testear
+			if (terrain == null) return Random.insideUnitCircle;
+			
+			// Cogemos la orientacion del olivar
+			// Como la pendiente del terreno en la posicion del centroide
+			Vector3 terrainNormal = terrain.GetNormal(region.centroid);
+			Vector2 slope =  terrainNormal.ToV2xz().normalized;
+			return Vector2.Perpendicular(slope);
+		}
+		
+		public Vector2 GetRegionOrientation_ByAverage(Polygon region)
+		{
+			Terrain terrain = Terrain.activeTerrain;
+			
+			// Si no hay terreno, se coge una orientacion random para testear
+			if (terrain == null) return Random.insideUnitCircle;
+			
+			// Cogemos la orientacion del olivar
+			// Como la media de pendientes en toda la region
+			
+			// Para ello hacemos un sampleo del AABB de la region ignorando posiciones fuera del polígono
+			const float sampleIncrement = 0.01f;
+			var aabb = new AABB_2D(region);
+			
+			Vector2 slope;
+			Vector2 sampleSum = Vector2.zero;
+			List<Vector2> samples = new();
+			
+			for (float x = aabb.min.x; x < aabb.max.x; x += sampleIncrement)
+			for (float y = aabb.min.y; y < aabb.max.y; y += sampleIncrement)
+			{
+				var pos = new Vector2(x, y);
+				if (!region.Contains_RayCast(pos)) continue;
+				slope = terrain.GetNormal(BoundsComp.ToWorld(pos)).ToV2xz().normalized;
+				sampleSum += slope;
+				samples.Add(slope);
+			}
+			
+			// AVERAGE slope
+			slope = sampleSum / (aabb.Size.x * aabb.Size.y);
+			return Vector2.Perpendicular(slope);
 		}
 
 
@@ -319,7 +393,7 @@ namespace TreesGeneration
 
 		private Vector2 VectorToLocalPositive(Vector3 vector)
 		{
-			Vector2 vectorlocal = WorldToLocalMatrix.MultiplyVector(vector);
+			Vector2 vectorlocal = BoundsComp.WorldToLocalMatrix_WithXZrotation.MultiplyVector(vector);
 			return Vector2.Max(vectorlocal.Abs(), Vector2.one * 0.001f);
 		}
 
@@ -333,13 +407,14 @@ namespace TreesGeneration
 
 		[SerializeField] private bool _drawOlivos = true;
 
-		private SpritesRenderer _spritesRenderer;
-		private SpritesRenderer Renderer => _spritesRenderer ??= GetComponentInChildren<SpritesRenderer>(true);
+		[SerializeField]
+		private PointsRenderer _spritesRenderer;
+		private PointsRenderer Renderer => _spritesRenderer ??= GetComponentInChildren<PointsRenderer>(true);
 
 		protected override void InitializeRenderer()
 		{
 			base.InitializeRenderer();
-			_spritesRenderer ??= Renderer ?? UnityUtils.InstantiateObject<SpritesRenderer>(transform, "Olive Sprites Renderer");
+			_spritesRenderer ??= Renderer ?? UnityUtils.InstantiateObject<PointsRenderer>(transform, "Olive Sprites Renderer");
 		}
 
 		protected override void InstantiateRenderer()
@@ -364,7 +439,7 @@ namespace TreesGeneration
 			int olivosCount = regionData.Olivos.Count();
 			for (int i = renderObjsCount - olivosCount; i < renderObjsCount; i++)
 			{
-				Renderer.SetSize(i, scale);
+				Renderer.SetRadius(i, scale);
 			}
 		}
 
@@ -380,7 +455,7 @@ namespace TreesGeneration
 			base.PositionRenderer();
 			if (Renderer == null) return;
 			BoundsComp.TransformToBounds_Local(Renderer);
-			Renderer.transform.localPosition += Vector3.back * .1f;
+			Renderer.transform.localPosition += Vector3.up * 1f;
 		}
 
 		#endregion
@@ -406,7 +481,7 @@ namespace TreesGeneration
 				if (drawOBBs)
 				{
 					OBB_2D obb = new(region, data.orientation);
-					obb.DrawGizmos(LocalToWorldMatrix, Color.white, 3);
+					obb.DrawGizmos(BoundsComp.LocalToWorldMatrix_WithXZrotation, Color.white, 3);
 				}
 
 				float spheresRadius = genSettings.GetCropTypeParams(data.cropType).scale / 2;
@@ -418,13 +493,13 @@ namespace TreesGeneration
 				// OLIVOS
 				Gizmos.color = data.cropType == CropType.Traditional ? oliveColor : intensiveColor;
 				data.Olivos.ForEach(
-					olivo => Gizmos.DrawSphere(LocalToWorldMatrix.MultiplyPoint3x4(olivo), spheresRadius)
+					olivo => Gizmos.DrawSphere(BoundsComp.ToWorld(olivo), spheresRadius)
 				);
 
 
 				// POLIGONO
 				data.polygon.DrawGizmos(
-					LocalToWorldMatrix,
+					BoundsComp.LocalToWorldMatrix_WithXZrotation,
 					floorColor,
 					floorColor.Lighten(.2f)
 				);
@@ -432,7 +507,7 @@ namespace TreesGeneration
 				// LINDE
 				if (data.cropType == CropType.Traditional)
 					data.interiorPolygon.DrawGizmos(
-						LocalToWorldMatrix,
+						BoundsComp.LocalToWorldMatrix_WithXZrotation,
 						floorColor.RotateHue(.1f),
 						floorColor.Lighten(.2f)
 					);
@@ -441,7 +516,7 @@ namespace TreesGeneration
 				float arrowSize = AABB.Width / 20;
 				GizmosExtensions.DrawArrow(
 					GizmosExtensions.ArrowCap.Triangle,
-					LocalToWorldMatrix.MultiplyPoint3x4(data.Centroid),
+					BoundsComp.ToWorld(data.Centroid),
 					data.orientation.normalized.ToV3xz() * arrowSize,
 					Vector3.up,
 					arrowSize / 3,

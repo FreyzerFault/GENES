@@ -65,6 +65,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BezierCurves.Editor", "Bezi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DavidUtils.Spawning", "DavidUtils.Spawning.csproj", "{13d4e1d0-0b5e-01ba-6e9a-aa8a60e3dc5a}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DavidUtils.Editor.DevTools", "DavidUtils.Editor.DevTools.csproj", "{49764650-4dd3-8034-9e40-bd17b45004a9}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Procrain.Noise", "Procrain.Noise.csproj", "{d5a5fa5a-4b04-4653-2cd5-44f0fc1a6994}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StylizedWaterForURP", "StylizedWaterForURP.csproj", "{db236e53-a3c8-d523-9135-606fc5324a38}"
@@ -90,8 +92,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DavidUtils.Editor.Spawning", "DavidUtils.Editor.Spawning.csproj", "{be5bd109-856d-49a6-9810-2256d3756cf2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assets.ExternalPackages.BezierCurves", "Assets.ExternalPackages.BezierCurves.csproj", "{b85943ca-4484-51b5-85f4-cc1788eae86f}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DavidUtils.Editor.DevTools", "DavidUtils.Editor.DevTools.csproj", "{49764650-4dd3-8034-9e40-bd17b45004a9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UI.Editor", "UI.Editor.csproj", "{a3c5d71c-c12e-4fb6-42fa-ee29e2ceea0f}"
 EndProject
@@ -182,6 +182,8 @@ Global
 		{7c331c10-1890-d1f6-9da1-8d9eca9f5bb0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{13d4e1d0-0b5e-01ba-6e9a-aa8a60e3dc5a}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{13d4e1d0-0b5e-01ba-6e9a-aa8a60e3dc5a}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{49764650-4dd3-8034-9e40-bd17b45004a9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{49764650-4dd3-8034-9e40-bd17b45004a9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{d5a5fa5a-4b04-4653-2cd5-44f0fc1a6994}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{d5a5fa5a-4b04-4653-2cd5-44f0fc1a6994}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{db236e53-a3c8-d523-9135-606fc5324a38}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -208,8 +210,6 @@ Global
 		{be5bd109-856d-49a6-9810-2256d3756cf2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{b85943ca-4484-51b5-85f4-cc1788eae86f}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{b85943ca-4484-51b5-85f4-cc1788eae86f}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{49764650-4dd3-8034-9e40-bd17b45004a9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{49764650-4dd3-8034-9e40-bd17b45004a9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{a3c5d71c-c12e-4fb6-42fa-ee29e2ceea0f}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{a3c5d71c-c12e-4fb6-42fa-ee29e2ceea0f}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1f7f8200-479b-2bc5-a569-75dfd4ea0070}.Debug|Any CPU.ActiveCfg = Debug|Any CPU

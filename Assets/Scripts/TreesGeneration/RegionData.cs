@@ -20,6 +20,7 @@ namespace TreesGeneration
 	public struct OliveGlobalParams
 	{
 		[Range(0.1f, 30)] public float lindeWidth;
+		[Range(1, 90)] public float maxSlopeAngle;
 
 		public CropType defaultCropType;
 		public CropType[] Types => new[] { CropType.Traditional, CropType.Intesive, CropType.SuperIntesive };

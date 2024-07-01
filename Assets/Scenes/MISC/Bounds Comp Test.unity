@@ -272,11 +272,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   is2D: 0
   bounds3D:
-    m_Center: {x: 25, y: 0, z: 25}
-    m_Extent: {x: 25, y: 25, z: 25}
+    m_Center: {x: -0.5, y: 0, z: 25}
+    m_Extent: {x: 380.84198, y: -0.8274507, z: 46.57}
   aabb2D:
-    min: {x: 0, y: 0}
-    max: {x: 50, y: 50}
+    min: {x: -381.34198, y: -21.57}
+    max: {x: 380.34198, y: 71.57}
   XZplane: 1
 --- !u!4 &1201850628
 Transform:
