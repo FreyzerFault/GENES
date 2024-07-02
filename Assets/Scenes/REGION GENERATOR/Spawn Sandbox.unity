@@ -1130,6 +1130,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1052172377}
     m_Modifications:
+    - target: {fileID: 1158822260289306627, guid: 574aace4a8139eb4b9f9169a9198cf58, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1488384999814732906, guid: 574aace4a8139eb4b9f9169a9198cf58, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3609619302903352386, guid: 574aace4a8139eb4b9f9169a9198cf58, type: 3}
       propertyPath: m_LocalPosition.x
       value: 17.73
@@ -1170,9 +1178,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5397789327054113281, guid: 574aace4a8139eb4b9f9169a9198cf58, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5790480718705877691, guid: 574aace4a8139eb4b9f9169a9198cf58, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7572346352907776208, guid: 574aace4a8139eb4b9f9169a9198cf58, type: 3}
       propertyPath: m_Name
       value: OLIVO SILVESTRE optimizado
+      objectReference: {fileID: 0}
+    - target: {fileID: 8951353593438995045, guid: 574aace4a8139eb4b9f9169a9198cf58, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
