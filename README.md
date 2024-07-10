@@ -8,6 +8,12 @@
 
 [Repositorio del Generador de Terreno ⛰](https://github.com/FreyzerFault/Procedural-Terrain)
 
+## Dependencias
+
+- [DavidUtils](https://github.com/FreyzerFault/David-Unity-Utils)
+- [Procrain](https://github.com/FreyzerFault/Procrain)
+- [GTLfast](https://github.com/Unity-Technologies/com.unity.cloud.gltfast/tree/release/6.4.0)
+
 ## Introducción
 
 ### Entorno del problema

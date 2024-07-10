@@ -47,7 +47,7 @@
     <None Include="C:\Users\dalcanta\Unity Projects\com.unity.cloud.gltfast-release-6.4.0\Tests\Resources\ExportTargets\HDRP\LightsPoint.gltf.txt" />
     <None Include="Assets\External Packages\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
     <None Include="C:\Users\dalcanta\Unity Projects\com.unity.cloud.gltfast-release-6.4.0\Runtime\Shader\Includes\Emission.cginc" />
-    <None Include="Packages\Procrain\Shaders\Water\Libraries\WaterFoam.hlsl" />
+    <None Include="C:\Users\dalcanta\Unity Projects\Procrain\Shaders\Water\Libraries\WaterFoam.hlsl" />
     <None Include="C:\Users\dalcanta\Unity Projects\com.unity.cloud.gltfast-release-6.4.0\Tests\Resources\ExportTargets\HierarchyComponentsDisabled.gltf.txt" />
     <None Include="C:\Users\dalcanta\Unity Projects\com.unity.cloud.gltfast-release-6.4.0\Tests\Resources\ExportTargets\URP\LightDirectional.gltf.txt" />
     <None Include="C:\Users\dalcanta\Unity Projects\com.unity.cloud.gltfast-release-6.4.0\Tests\Resources\ExportTargets\ComponentMaskLight.gltf.txt" />
@@ -91,7 +91,7 @@
     <None Include="Assets\External Packages\TextMesh Pro\Shaders\TMP_SDF-Surface-Mobile.shader" />
     <None Include="C:\Users\dalcanta\Unity Projects\com.unity.cloud.gltfast-release-6.4.0\Tests\Resources\ExportTargets\URP\DoubleSided.gltf.txt" />
     <None Include="C:\Users\dalcanta\Unity Projects\com.unity.cloud.gltfast-release-6.4.0\Tests\Resources\ExportTargets\BaseColorTextureTransparent.gltf.txt" />
-    <None Include="Packages\David-Unity-Utils\package.json" />
+    <None Include="C:\Users\dalcanta\Unity Projects\David-Unity-Utils\package.json" />
     <None Include="C:\Users\dalcanta\Unity Projects\com.unity.cloud.gltfast-release-6.4.0\Runtime\Shader\Built-In\glTFIncludes\glTFUnityStandardCoreForwardSimple.cginc" />
     <None Include="C:\Users\dalcanta\Unity Projects\com.unity.cloud.gltfast-release-6.4.0\Tests\Resources\ExportTargets\EmissiveTextureFactor.gltf.txt" />
     <None Include="C:\Users\dalcanta\Unity Projects\com.unity.cloud.gltfast-release-6.4.0\Tests\Resources\ExportTargets\URP\MetallicSmoothnessOcclusionTexture.gltf.txt" />
@@ -101,8 +101,8 @@
     <None Include="C:\Users\dalcanta\Unity Projects\com.unity.cloud.gltfast-release-6.4.0\Tests\Resources\ExportTargets\HDRP\Dielectric.gltf.txt" />
     <None Include="C:\Users\dalcanta\Unity Projects\com.unity.cloud.gltfast-release-6.4.0\Tests\Resources\ExportTargets\HierarchyObjectsInactive.gltf.txt" />
     <None Include="C:\Users\dalcanta\Unity Projects\com.unity.cloud.gltfast-release-6.4.0\Tests\Resources\ExportTargets\URP\LightsSpot.gltf.txt" />
-    <None Include="Packages\Procrain\Shaders\Water\Libraries\WaterCaustics.hlsl" />
-    <None Include="Packages\Procrain\Shaders\Water\Libraries\WaterLighting.hlsl" />
+    <None Include="C:\Users\dalcanta\Unity Projects\Procrain\Shaders\Water\Libraries\WaterCaustics.hlsl" />
+    <None Include="C:\Users\dalcanta\Unity Projects\Procrain\Shaders\Water\Libraries\WaterLighting.hlsl" />
     <None Include="C:\Users\dalcanta\Unity Projects\com.unity.cloud.gltfast-release-6.4.0\Tests\Resources\ExportTargets\MetallicSmoothnessTexture.gltf.txt" />
     <None Include="C:\Users\dalcanta\Unity Projects\com.unity.cloud.gltfast-release-6.4.0\Tests\Resources\ExportTargets\Quads.gltf.txt" />
     <None Include="C:\Users\dalcanta\Unity Projects\com.unity.cloud.gltfast-release-6.4.0\Tests\Resources\ExportTargets\HDRP\BoxVertexColors.gltf.txt" />
@@ -121,12 +121,12 @@
     <None Include="C:\Users\dalcanta\Unity Projects\com.unity.cloud.gltfast-release-6.4.0\Tests\Resources\ExportTargets\URP\LightAreaDisc.gltf.txt" />
     <None Include="Assets\External Packages\TextMesh Pro\Shaders\TMP_SDF-Mobile SSD.shader" />
     <None Include="Assets\External Packages\TextMesh Pro\Resources\LineBreaking Leading Characters.txt" />
-    <None Include="Packages\Procrain\Shaders\Water\Libraries\Caustics\Caustics.shader" />
+    <None Include="C:\Users\dalcanta\Unity Projects\Procrain\Shaders\Water\Libraries\Caustics\Caustics.shader" />
     <None Include="C:\Users\dalcanta\Unity Projects\com.unity.cloud.gltfast-release-6.4.0\Runtime\Shader\Built-In\glTFPbrSpecularGlossiness.shader" />
     <None Include="Assets\External Packages\TextMesh Pro\Shaders\TMPro_Properties.cginc" />
     <None Include="C:\Users\dalcanta\Unity Projects\com.unity.cloud.gltfast-release-6.4.0\Tests\Resources\ExportTargets\LightAreaDisc.gltf.txt" />
     <None Include="C:\Users\dalcanta\Unity Projects\com.unity.cloud.gltfast-release-6.4.0\Tests\Resources\ExportTargets\Submesh.gltf.txt" />
-    <None Include="Packages\David-Unity-Utils\Resources\Textures\Input Icons\Icons\license.txt" />
+    <None Include="C:\Users\dalcanta\Unity Projects\David-Unity-Utils\Resources\Textures\Input Icons\Icons\license.txt" />
     <None Include="C:\Users\dalcanta\Unity Projects\com.unity.cloud.gltfast-release-6.4.0\Tests\Resources\ExportTargets\URP\Unlit.gltf.txt" />
     <None Include="C:\Users\dalcanta\Unity Projects\com.unity.cloud.gltfast-release-6.4.0\Tests\Resources\ExportTargets\URP\LightsPoint.gltf.txt" />
     <None Include="C:\Users\dalcanta\Unity Projects\com.unity.cloud.gltfast-release-6.4.0\Tests\Resources\ExportTargets\BaseColorTexture.gltf.txt" />
@@ -134,20 +134,20 @@
     <None Include="C:\Users\dalcanta\Unity Projects\com.unity.cloud.gltfast-release-6.4.0\Tests\Resources\ExportTargets\BoxVertexColors.gltf.txt" />
     <None Include="Assets\External Packages\TextMesh Pro\Shaders\TMPro_Surface.cginc" />
     <None Include="C:\Users\dalcanta\Unity Projects\com.unity.cloud.gltfast-release-6.4.0\Tests\Resources\ExportTargets\HDRP\BaseColorSmoothnessMetalTexture.gltf.txt" />
-    <None Include="Packages\Procrain\Shaders\Water\Libraries\WaterColor.hlsl" />
+    <None Include="C:\Users\dalcanta\Unity Projects\Procrain\Shaders\Water\Libraries\WaterColor.hlsl" />
     <None Include="C:\Users\dalcanta\Unity Projects\com.unity.cloud.gltfast-release-6.4.0\package.json" />
     <None Include="C:\Users\dalcanta\Unity Projects\com.unity.cloud.gltfast-release-6.4.0\Tests\Resources\ExportTargets\DoubleSided.gltf.txt" />
     <None Include="C:\Users\dalcanta\Unity Projects\com.unity.cloud.gltfast-release-6.4.0\Tests\Resources\ExportTargets\Unlit.gltf.txt" />
-    <None Include="Packages\Procrain\Shaders\Water\Libraries\StylizedWaterForURP.hlsl" />
+    <None Include="C:\Users\dalcanta\Unity Projects\Procrain\Shaders\Water\Libraries\StylizedWaterForURP.hlsl" />
     <None Include="C:\Users\dalcanta\Unity Projects\com.unity.cloud.gltfast-release-6.4.0\Tests\Resources\ExportTargets\BaseColorTextureCutout.gltf.txt" />
     <None Include="C:\Users\dalcanta\Unity Projects\com.unity.cloud.gltfast-release-6.4.0\Tests\Resources\ExportTargets\URP\MetallicSmoothnessTexture.gltf.txt" />
-    <None Include="Packages\David-Unity-Utils\Resources\Fonts\Jupiter\LICENSE.txt" />
+    <None Include="C:\Users\dalcanta\Unity Projects\David-Unity-Utils\Resources\Fonts\Jupiter\LICENSE.txt" />
     <None Include="Assets\External Packages\TextMesh Pro\Resources\LineBreaking Following Characters.txt" />
-    <None Include="Packages\Procrain\Shaders\Water\Libraries\WaterWaves.hlsl" />
+    <None Include="C:\Users\dalcanta\Unity Projects\Procrain\Shaders\Water\Libraries\WaterWaves.hlsl" />
     <None Include="C:\Users\dalcanta\Unity Projects\com.unity.cloud.gltfast-release-6.4.0\Tests\Resources\ExportTargets\HDRP\LightsSpot.gltf.txt" />
     <None Include="C:\Users\dalcanta\Unity Projects\com.unity.cloud.gltfast-release-6.4.0\Tests\Runtime\Export\Scenes\ExportSceneUniversal-ObjectList.txt" />
     <None Include="C:\Users\dalcanta\Unity Projects\com.unity.cloud.gltfast-release-6.4.0\Tests\Runtime\Export\Scenes\ExportSceneBuiltIn-ObjectList.txt" />
-    <None Include="Packages\Procrain\package.json" />
+    <None Include="C:\Users\dalcanta\Unity Projects\Procrain\package.json" />
     <None Include="C:\Users\dalcanta\Unity Projects\com.unity.cloud.gltfast-release-6.4.0\Runtime\Shader\Export\glTFExportColor.shader" />
     <None Include="C:\Users\dalcanta\Unity Projects\com.unity.cloud.gltfast-release-6.4.0\Tests\Resources\ExportTargets\HDRP\SmoothnessTexture.gltf.txt" />
     <None Include="C:\Users\dalcanta\Unity Projects\com.unity.cloud.gltfast-release-6.4.0\Tests\Resources\ExportTargets\NoMaterial.gltf.txt" />
@@ -193,13 +193,13 @@
     <None Include="C:\Users\dalcanta\Unity Projects\com.unity.cloud.gltfast-release-6.4.0\Tests\Resources\ExportTargets\HDRP\MetallicSmoothnessOcclusionTexture.gltf.txt" />
     <None Include="C:\Users\dalcanta\Unity Projects\com.unity.cloud.gltfast-release-6.4.0\Tests\Resources\ExportTargets\LayerMaskAll.gltf.txt" />
     <Reference Include="UnityEngine">
-      <HintPath>C:\Program Files\Unity\Hub\Editor\2022.3.16f1\Editor\Data\Managed\UnityEngine\UnityEngine.dll</HintPath>
+      <HintPath>C:\Program Files\Unity\Hub\Editor\2022.3.35f1\Editor\Data\Managed\UnityEngine\UnityEngine.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.CoreModule">
-      <HintPath>C:\Program Files\Unity\Hub\Editor\2022.3.16f1\Editor\Data\Managed\UnityEngine\UnityEngine.CoreModule.dll</HintPath>
+      <HintPath>C:\Program Files\Unity\Hub\Editor\2022.3.35f1\Editor\Data\Managed\UnityEngine\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEditor">
-      <HintPath>C:\Program Files\Unity\Hub\Editor\2022.3.16f1\Editor\Data\Managed\UnityEngine\UnityEditor.dll</HintPath>
+      <HintPath>C:\Program Files\Unity\Hub\Editor\2022.3.35f1\Editor\Data\Managed\UnityEngine\UnityEditor.dll</HintPath>
     </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
