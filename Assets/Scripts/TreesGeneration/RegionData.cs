@@ -8,7 +8,7 @@ using UnityEngine.Serialization;
 
 namespace TreesGeneration
 {
-	public enum CropType
+	public enum OliveType
 	{
 		Traditional,
 		Intesive,
@@ -17,13 +17,15 @@ namespace TreesGeneration
 
 	// Parametros para el layout de una finca
 	[Serializable]
-	public struct OliveGlobalParams
+	public struct OliveGenParams
 	{
+		// MAIN PARAMETERS
 		[Range(0.1f, 30)] public float lindeWidth;
 		[Range(1, 90)] public float maxSlopeAngle;
 
-		public CropType defaultCropType;
-		public CropType[] Types => new[] { CropType.Traditional, CropType.Intesive, CropType.SuperIntesive };
+		// TIPO de CULTIVO
+		public OliveType defaultOliveType;
+		public OliveType[] Types => new[] { OliveType.Traditional, OliveType.Intesive, OliveType.SuperIntesive };
 
 		// % de cada tipo
 		[Range(0, 1)] public float probTraditionalCrop;
@@ -42,15 +44,15 @@ namespace TreesGeneration
 			}
 		}
 
-		public CropType RandomizedType => Types.PickByProbability(Probabilities);
+		public OliveType RandomizedType => Types.PickByProbability(Probabilities);
 
 		public void NormalizeProbabilities() => Probabilities = Probabilities.NormalizeProbabilities().ToArray();
 	}
 
 	[Serializable]
-	public struct CropTypeParams
+	public struct OliveTypeParams
 	{
-		public CropType type;
+		public OliveType type;
 		[FormerlySerializedAs("separation")]
 		// X: Separacion entre olivos, Y: Separacion entre hileras
 		public Vector2 separationMin;
@@ -61,7 +63,7 @@ namespace TreesGeneration
 	[Serializable]
 	public struct RegionData
 	{
-		public CropType cropType;
+		[FormerlySerializedAs("cropType")] public OliveType oliveType;
 
 		public List<Vector2> olivosInterior;
 		public List<Vector2> olivosLinde;
@@ -76,11 +78,11 @@ namespace TreesGeneration
 			(olivosInterior ??= new List<Vector2>()).Concat(olivosLinde ??= new List<Vector2>());
 
 		private RegionData(
-			CropType cropType, List<Vector2> olivosInterior, Polygon polygon, Vector2 orientation,
+			OliveType oliveType, List<Vector2> olivosInterior, Polygon polygon, Vector2 orientation,
 			List<Vector2> olivosLinde = null, Polygon? interiorPolygon = null
 		)
 		{
-			this.cropType = cropType;
+			this.oliveType = oliveType;
 			this.olivosInterior = olivosInterior;
 			this.polygon = polygon;
 			this.orientation = orientation;
