@@ -17,8 +17,8 @@ namespace TreesGeneration
 {
 	public class OliveGroveGenerator : VoronoiGenerator
 	{
-		private readonly Dictionary<Polygon, RegionData> _regionsData = new();
-		public RegionData[] Data => _regionsData.Values.ToArray();
+		private readonly Dictionary<Polygon, OliveRegionData> _regionsData = new();
+		public OliveRegionData[] Data => _regionsData.Values.ToArray();
 
 		[ExposedField]
 		public int NumFincas
@@ -29,14 +29,14 @@ namespace TreesGeneration
 
 		[Space]
 		[Header("PARÁMETROS OLIVAR")]
-		public GenerationSettingsSO genSettings;
+		public OliveGenSettings genSettings;
 
 
 		public IEnumerable<Vector2> OlivePositions => _regionsData?.SelectMany(pair => pair.Value.Olivos);
 		public IEnumerable<Vector2> OlivePositionsByRegion(Polygon region) => _regionsData[region].Olivos;
 
-		public Action<RegionData[]> OnEndedGeneration;
-		public Action<RegionData> OnRegionPopulated;
+		public Action<OliveRegionData[]> OnEndedGeneration;
+		public Action<OliveRegionData> OnRegionPopulated;
 		public Action OnClear;
 
 		#region UNITY
@@ -45,9 +45,9 @@ namespace TreesGeneration
 
 		private void OnDisable() => OnRegionPopulated -= HandleOnRegionPopulated;
 
-		private void HandleOnRegionPopulated(RegionData regionData)
+		private void HandleOnRegionPopulated(OliveRegionData OliveRegionData)
 		{
-			InstantiateRenderer(regionData);
+			InstantiateRenderer(OliveRegionData);
 			ProjectOnTerrain();
 		}
 
@@ -152,10 +152,10 @@ namespace TreesGeneration
 		///     Popula una región con olivos, según su forma (Polígono) y el tipo de cultivo.
 		///     Si no se pasa un Tipo de Cultivo se elige uno aleatorio según las probabilidades de globalParams
 		/// </summary>
-		private RegionData PopulateRegion(Polygon region, OliveType? cropType = null)
+		private OliveRegionData PopulateRegion(Polygon region, OliveType? cropType = null)
 		{
 			// CROP TYPE
-			cropType ??= genSettings.genParams.RandomizedType;
+			cropType ??= genSettings.RandomizedType;
 			OliveTypeParams oliveParams = genSettings.GetCropTypeParams(cropType.Value);
 
 			// Separacion (Random [min - max])
@@ -164,51 +164,34 @@ namespace TreesGeneration
 
 			Vector2 orientation = GetRegionOrientation_ByAverage(region);
 
-			RegionData data = new();
+			OliveRegionData data = new(cropType.Value, region, orientation);
+			
 			switch (cropType)
 			{
 				case OliveType.Traditional:
 					// OLIVO EN TRADICIONAL => Añadimos la Linde
-					Vector2 lindeWidthLocal = MeasureToLocalPositive(genSettings.genParams.lindeWidth);
+					Vector2 lindeWidthLocal = MeasureToLocalPositive(genSettings.lindeWidth);
 
-					Polygon interiorPolygon = region.InteriorPolygon(lindeWidthLocal);
+					data.interiorPolygon = region.InteriorPolygon(lindeWidthLocal);
 
-					List<Vector2> olivosInterior =
-						PopulatePolygon(interiorPolygon, separationLocal, orientation).ToList();
-					List<Vector2> olivosLinde =
-						PopulateLinde(GetLinde(region, lindeWidthLocal), separationLocal.x).ToList();
+					data.olivosInterior = PopulatePolygon(data.interiorPolygon, separationLocal, orientation).ToList();
+					data.olivosLinde = PopulateLinde(GetLinde(region, lindeWidthLocal), separationLocal.x).ToList();
 
-					data = new RegionData
-					{
-						olivosInterior = olivosInterior,
-						olivosLinde = olivosLinde,
-						polygon = region,
-						interiorPolygon = interiorPolygon,
-						orientation = orientation,
-						oliveType = cropType.Value
-					};
-
-					data = PostprocessRegionData(data, Mathf.Min(separationLocal.x, separationLocal.y));
+					// Postprocesado
+					data = PostprocessOliveRegionData(data, Mathf.Min(separationLocal.x, separationLocal.y));
+					
 					break;
 				case OliveType.Intesive:
 				case OliveType.SuperIntesive:
 					// OLIVO EN INTENSIVO => NO hay Linde, pero procuramos una separacion con sus vecinos
 					float margin = separationLocal.y / 2;
 					Polygon marginPolygon = region.InteriorPolygon(margin);
-					List<Vector2> olivos = PopulatePolygon(marginPolygon, separationLocal, orientation).ToList();
-
-					data = new RegionData
-					{
-						olivosInterior = olivos,
-						polygon = region,
-						orientation = orientation,
-						oliveType = cropType.Value
-					};
+					data.olivosInterior = PopulatePolygon(marginPolygon, separationLocal, orientation).ToList();
 					break;
 			}
 
-			data.olivosInterior.RemoveAll(InvalidPosition);
-			data.olivosLinde?.RemoveAll(InvalidPosition);
+			data.olivosInterior.RemoveAll(IsInvalidPosition);
+			data.olivosLinde?.RemoveAll(IsInvalidPosition);
 
 			_regionsData.Add(region, data);
 
@@ -252,7 +235,7 @@ namespace TreesGeneration
 			return olivos;
 		}
 
-		public bool InvalidPosition(Vector2 normPos)
+		public bool IsInvalidPosition(Vector2 normPos)
 		{
 			// Outside [0,1] Bounds
 			if (!normPos.IsIn01()) return true;
@@ -261,7 +244,7 @@ namespace TreesGeneration
 			Terrain terrain = Terrain.activeTerrain;
 			if (terrain == null) return false;
 			
-			float maxSlope = genSettings.genParams.maxSlopeAngle;
+			float maxSlope = genSettings.maxSlopeAngle;
 			float angle = Vector3.Angle(terrain.GetNormal(normPos), Vector3.up);
 			return angle > maxSlope;
 		}
@@ -375,7 +358,7 @@ namespace TreesGeneration
 		///     Postprocesado.
 		///     Principalmente, elimino los olivos del interior que estén demasiado cerca de cualquiera de su linde
 		/// </summary>
-		private static RegionData PostprocessRegionData(RegionData data, float minSeparation)
+		private static OliveRegionData PostprocessOliveRegionData(OliveRegionData data, float minSeparation)
 		{
 			data.olivosInterior.RemoveAll(
 				olivo =>
@@ -429,14 +412,14 @@ namespace TreesGeneration
 			Renderer.UpdateAllObj(OlivePositions);
 		}
 
-		private void InstantiateRenderer(RegionData regionData)
+		private void InstantiateRenderer(OliveRegionData OliveRegionData)
 		{
-			Renderer.AddObjs(regionData.Olivos);
+			Renderer.AddObjs(OliveRegionData.Olivos);
 			
 			// Set scale of new Olivos
-			float scale = genSettings.GetCropTypeParams(regionData.oliveType).scale;
+			float scale = genSettings.GetCropTypeParams(OliveRegionData.oliveType).scale;
 			int renderObjsCount = Renderer.renderObjs.Count;
-			int olivosCount = regionData.Olivos.Count();
+			int olivosCount = OliveRegionData.Olivos.Count();
 			for (int i = renderObjsCount - olivosCount; i < renderObjsCount; i++)
 			{
 				Renderer.SetRadius(i, scale);
@@ -473,10 +456,10 @@ namespace TreesGeneration
 
 			if (!drawGizmos || !_drawOlivos || Regions.IsNullOrEmpty()) return;
 
-			foreach (KeyValuePair<Polygon, RegionData> pair in _regionsData)
+			foreach (KeyValuePair<Polygon, OliveRegionData> pair in _regionsData)
 			{
 				Polygon region = pair.Key;
-				RegionData data = pair.Value;
+				OliveRegionData data = pair.Value;
 
 				if (drawOBBs)
 				{
