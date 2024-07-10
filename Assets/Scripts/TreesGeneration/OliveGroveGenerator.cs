@@ -152,14 +152,14 @@ namespace TreesGeneration
 		///     Popula una región con olivos, según su forma (Polígono) y el tipo de cultivo.
 		///     Si no se pasa un Tipo de Cultivo se elige uno aleatorio según las probabilidades de globalParams
 		/// </summary>
-		private RegionData PopulateRegion(Polygon region, CropType? cropType = null)
+		private RegionData PopulateRegion(Polygon region, OliveType? cropType = null)
 		{
 			// CROP TYPE
-			cropType ??= genSettings.globalParams.RandomizedType;
-			CropTypeParams cropParams = genSettings.GetCropTypeParams(cropType.Value);
+			cropType ??= genSettings.genParams.RandomizedType;
+			OliveTypeParams oliveParams = genSettings.GetCropTypeParams(cropType.Value);
 
 			// Separacion (Random [min - max])
-			Vector2 separation = Vector2.Lerp(cropParams.separationMin, cropParams.separationMax, Random.value);
+			Vector2 separation = Vector2.Lerp(oliveParams.separationMin, oliveParams.separationMax, Random.value);
 			Vector2 separationLocal = VectorToLocalPositive(separation);
 
 			Vector2 orientation = GetRegionOrientation_ByAverage(region);
@@ -167,9 +167,9 @@ namespace TreesGeneration
 			RegionData data = new();
 			switch (cropType)
 			{
-				case CropType.Traditional:
+				case OliveType.Traditional:
 					// OLIVO EN TRADICIONAL => Añadimos la Linde
-					Vector2 lindeWidthLocal = MeasureToLocalPositive(genSettings.globalParams.lindeWidth);
+					Vector2 lindeWidthLocal = MeasureToLocalPositive(genSettings.genParams.lindeWidth);
 
 					Polygon interiorPolygon = region.InteriorPolygon(lindeWidthLocal);
 
@@ -185,13 +185,13 @@ namespace TreesGeneration
 						polygon = region,
 						interiorPolygon = interiorPolygon,
 						orientation = orientation,
-						cropType = cropType.Value
+						oliveType = cropType.Value
 					};
 
 					data = PostprocessRegionData(data, Mathf.Min(separationLocal.x, separationLocal.y));
 					break;
-				case CropType.Intesive:
-				case CropType.SuperIntesive:
+				case OliveType.Intesive:
+				case OliveType.SuperIntesive:
 					// OLIVO EN INTENSIVO => NO hay Linde, pero procuramos una separacion con sus vecinos
 					float margin = separationLocal.y / 2;
 					Polygon marginPolygon = region.InteriorPolygon(margin);
@@ -202,7 +202,7 @@ namespace TreesGeneration
 						olivosInterior = olivos,
 						polygon = region,
 						orientation = orientation,
-						cropType = cropType.Value
+						oliveType = cropType.Value
 					};
 					break;
 			}
@@ -261,7 +261,7 @@ namespace TreesGeneration
 			Terrain terrain = Terrain.activeTerrain;
 			if (terrain == null) return false;
 			
-			float maxSlope = genSettings.globalParams.maxSlopeAngle;
+			float maxSlope = genSettings.genParams.maxSlopeAngle;
 			float angle = Vector3.Angle(terrain.GetNormal(normPos), Vector3.up);
 			return angle > maxSlope;
 		}
@@ -434,7 +434,7 @@ namespace TreesGeneration
 			Renderer.AddObjs(regionData.Olivos);
 			
 			// Set scale of new Olivos
-			float scale = genSettings.GetCropTypeParams(regionData.cropType).scale;
+			float scale = genSettings.GetCropTypeParams(regionData.oliveType).scale;
 			int renderObjsCount = Renderer.renderObjs.Count;
 			int olivosCount = regionData.Olivos.Count();
 			for (int i = renderObjsCount - olivosCount; i < renderObjsCount; i++)
@@ -484,14 +484,14 @@ namespace TreesGeneration
 					obb.DrawGizmos(BoundsComp.LocalToWorldMatrix_WithXZrotation, Color.white, 3);
 				}
 
-				float spheresRadius = genSettings.GetCropTypeParams(data.cropType).scale / 2;
+				float spheresRadius = genSettings.GetCropTypeParams(data.oliveType).scale / 2;
 
 				Color oliveColor = "#4E8000".ToUnityColor();
 				Color intensiveColor = "#028000".ToUnityColor();
 				Color floorColor = "#948159".ToUnityColor();
 
 				// OLIVOS
-				Gizmos.color = data.cropType == CropType.Traditional ? oliveColor : intensiveColor;
+				Gizmos.color = data.oliveType == OliveType.Traditional ? oliveColor : intensiveColor;
 				data.Olivos.ForEach(
 					olivo => Gizmos.DrawSphere(BoundsComp.ToWorld(olivo), spheresRadius)
 				);
@@ -505,7 +505,7 @@ namespace TreesGeneration
 				);
 
 				// LINDE
-				if (data.cropType == CropType.Traditional)
+				if (data.oliveType == OliveType.Traditional)
 					data.interiorPolygon.DrawGizmos(
 						BoundsComp.LocalToWorldMatrix_WithXZrotation,
 						floorColor.RotateHue(.1f),

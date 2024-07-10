@@ -1,13 +1,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace TreesGeneration
 {
 	[CreateAssetMenu(fileName = "Generation Settings", menuName = "Generation/Generation Settings")]
 	public class GenerationSettingsSO : ScriptableObject
 	{
-		public OliveGlobalParams globalParams = new()
+		public OliveGenParams genParams = new()
 		{
 			probTraditionalCrop = .5f,
 			probIntensiveCrop = .3f,
@@ -18,11 +19,11 @@ namespace TreesGeneration
 
 		#region CROP TYPE
 
-		public CropTypeParams[] cropTypeParams =
+		public OliveTypeParams[] cropTypeParams =
 		{
 			new()
 			{
-				type = CropType.Traditional,
+				type = OliveType.Traditional,
 				// 10x10 - 12x12
 				separationMin = new Vector2(10, 10),
 				separationMax = new Vector2(12, 12),
@@ -30,7 +31,7 @@ namespace TreesGeneration
 			},
 			new()
 			{
-				type = CropType.Intesive,
+				type = OliveType.Intesive,
 				// 3x6 - 6x6
 				separationMin = new Vector2(3, 6),
 				separationMax = new Vector2(6, 6),
@@ -38,7 +39,7 @@ namespace TreesGeneration
 			},
 			new()
 			{
-				type = CropType.SuperIntesive,
+				type = OliveType.SuperIntesive,
 				// 1x4 - 2x4
 				separationMin = new Vector2(1, 4),
 				separationMax = new Vector2(2, 4),
@@ -46,18 +47,18 @@ namespace TreesGeneration
 			}
 		};
 
-		private Dictionary<CropType, CropTypeParams> _cropTypeParamsDictionary;
+		private Dictionary<OliveType, OliveTypeParams> _cropTypeParamsDictionary;
 
-		private Dictionary<CropType, CropTypeParams> InitializeCropTypeParamsDictionary() =>
+		private Dictionary<OliveType, OliveTypeParams> InitializeCropTypeParamsDictionary() =>
 			_cropTypeParamsDictionary =
-				new Dictionary<CropType, CropTypeParams>(
+				new Dictionary<OliveType, OliveTypeParams>(
 					cropTypeParams.Select(
 						p =>
-							new KeyValuePair<CropType, CropTypeParams>(p.type, p)
+							new KeyValuePair<OliveType, OliveTypeParams>(p.type, p)
 					)
 				);
 
-		public CropTypeParams GetCropTypeParams(CropType type) =>
+		public OliveTypeParams GetCropTypeParams(OliveType type) =>
 			(_cropTypeParamsDictionary ??= InitializeCropTypeParamsDictionary())[type];
 
 		#endregion
@@ -66,7 +67,7 @@ namespace TreesGeneration
 
 		private void OnValidate()
 		{
-			globalParams.NormalizeProbabilities();
+			genParams.NormalizeProbabilities();
 			InitializeCropTypeParamsDictionary();
 		}
 	}
