@@ -8,12 +8,12 @@ namespace TreesGeneration
 	{
 		[SerializeField] private Spawneable[] olivoPrefabs;
 
-		private OliveGroveGenerator _generator;
+		private RegionGenerator _generator;
 
 		protected override void Awake()
 		{
 			base.Awake();
-			_generator = GetComponent<OliveGroveGenerator>();
+			_generator = GetComponent<RegionGenerator>();
 		}
 
 		protected override void OnEnable()
@@ -32,10 +32,14 @@ namespace TreesGeneration
 			_generator.OnClear -= Clear;
 		}
 
-		private void HandleOnRegionPopulated(OliveRegionData data) => Spawn2D(data.olivosInterior);
+		private void HandleOnRegionPopulated(RegionData data)
+		{
+			if (data is OliveRegionData oliveData)
+				Spawn2D(oliveData.olivosInterior);
+		}
 
 		// TODO Ya veremos que hago cuando se completa
-		private void HandleOnEndedGeneration(OliveRegionData[] data) => Debug.Log("Ended Generation");
+		private void HandleOnEndedGeneration(RegionData[] data) => Debug.Log("Ended Generation");
 
 		protected override Spawneable InstantiateItem(Spawneable prefab = null) =>
 			base.InstantiateItem(prefab ?? GetRandomModel());

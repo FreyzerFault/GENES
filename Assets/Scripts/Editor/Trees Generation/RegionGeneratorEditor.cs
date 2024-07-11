@@ -4,12 +4,12 @@ using UnityEngine;
 
 namespace GENES.Editor.Trees_Generation
 {
-	[CustomEditor(typeof(OliveGroveGenerator))]
-	public class OliveGroveGeneratorEditor : UnityEditor.Editor
+	[CustomEditor(typeof(RegionGenerator))]
+	public class RegionGeneratorEditor : UnityEditor.Editor
 	{
 		public override void OnInspectorGUI()
 		{
-			var spawnerOlivos = (OliveGroveGenerator)target;
+			var spawnerOlivos = (RegionGenerator)target;
 
 			EditorGUILayout.BeginHorizontal();
 

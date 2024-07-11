@@ -362,7 +362,7 @@ PrefabInstance:
       propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: set_DrawVoronoi
       objectReference: {fileID: 0}
-    - target: {fileID: 2600334948656421604, guid: f8478791bbd2bc848833ccbf7c9a4248, type: 3}
+    - target: {fileIDPolygonScale8656421604, guid: f8478791bbd2bc848833ccbf7c9a4248, type: 3}
       propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
       value: SetActive
       objectReference: {fileID: 0}

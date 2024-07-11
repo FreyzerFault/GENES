@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Linq;
 using DavidUtils.DevTools.Testing;
+using DavidUtils.ExtensionMethods;
 using DavidUtils.Geometry.Bounding_Box;
 using TreesGeneration;
 using UnityEngine;
@@ -13,8 +14,8 @@ namespace GENES.TreesGeneration.Tests
 	[RequireComponent(typeof(OliveGroveGenerator))]
 	public class GenOlivosTest : TestRunner
 	{
-		private OliveGroveGenerator _generator;
-		private OliveGroveGenerator Generator => _generator ??= GetComponent<OliveGroveGenerator>();
+		private RegionGenerator _generator;
+		private RegionGenerator Generator => _generator ??= GetComponent<RegionGenerator>();
 		private BoundsComponent Bounds => Generator.BoundsComp;
 
 		public int initialSeed;
@@ -55,7 +56,16 @@ namespace GENES.TreesGeneration.Tests
 			yield return Generator.RunCoroutine();
 		}
 
-		private bool GeneratorSuccessCondition() => Generator.Data.All(d => d.Olivos.Any());
+		private bool GeneratorSuccessCondition() => 
+			Generator.Data.NotNullOrEmpty()
+			&& Generator.Data.All(data =>
+			{
+				if (data is OliveRegionData oliveData)
+					return oliveData.Olivos.Any();
+
+				// TODO otros tipos de datos
+				return true;
+			});
 
 
 		#region MAP SIZE

@@ -1,176 +1,41 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using DavidUtils;
 using DavidUtils.DevTools.GizmosAndHandles;
-using DavidUtils.DevTools.Reflection;
 using DavidUtils.ExtensionMethods;
 using DavidUtils.Geometry;
 using DavidUtils.Geometry.Bounding_Box;
-using DavidUtils.Geometry.Generators;
-using DavidUtils.Rendering;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
 namespace TreesGeneration
 {
-	public class OliveGroveGenerator : VoronoiGenerator
+	public static class OliveGroveGenerator
 	{
-		private readonly Dictionary<Polygon, OliveRegionData> _regionsData = new();
-		public OliveRegionData[] Data => _regionsData.Values.ToArray();
-
-		[ExposedField]
-		public int NumFincas
-		{
-			get => NumSeeds;
-			set => NumSeeds = value;
-		}
-
-		[Space]
-		[Header("PARÁMETROS OLIVAR")]
-		public OliveGenSettings genSettings;
-
-
-		public IEnumerable<Vector2> OlivePositions => _regionsData?.SelectMany(pair => pair.Value.Olivos);
-		public IEnumerable<Vector2> OlivePositionsByRegion(Polygon region) => _regionsData[region].Olivos;
-
-		public Action<OliveRegionData[]> OnEndedGeneration;
-		public Action<OliveRegionData> OnRegionPopulated;
-		public Action OnClear;
-
-		#region UNITY
-
-		private void OnEnable() => OnRegionPopulated += HandleOnRegionPopulated;
-
-		private void OnDisable() => OnRegionPopulated -= HandleOnRegionPopulated;
-
-		private void HandleOnRegionPopulated(OliveRegionData OliveRegionData)
-		{
-			InstantiateRenderer(OliveRegionData);
-			ProjectOnTerrain();
-		}
-
-		#endregion
-
-
-		#region GENERATION PIPELINE
-
-		public override void Reset()
-		{
-			base.Reset();
-			ResetOlives();
-		}
-
-		private void ResetOlives()
-		{
-			_regionsData.Clear();
-			iterations = 0;
-			OnClear?.Invoke();
-
-			Renderer.Clear();
-		}
-
-		public override void Run()
-		{
-			ResetDelaunay();
-			ResetVoronoi();
-			ResetOlives();
-			if (animatedOlives)
-			{
-				animationCoroutine = StartCoroutine(RunCoroutine());
-			}
-			else
-			{
-				delaunay.RunTriangulation();
-				voronoi.GenerateVoronoi();
-				OnAllRegionsCreated();
-				PopulateAllRegions();
-			}
-		}
-
-		#endregion
-
-
-		#region ANIMATION
-
-		public bool animatedOlives = true;
-		public int iterations;
-		private const int MaxIterations = 1000;
-
-		public bool AnimatedOlives
-		{
-			get => animatedOlives;
-			set => animatedOlives = value;
-		}
-
-		public bool Ended => _regionsData.Count >= voronoi.regions.Count || iterations > MaxIterations;
-
-		public override IEnumerator RunCoroutine()
-		{
-			yield return base.RunCoroutine();
-
-			ResetOlives();
-			if (animatedOlives)
-			{
-				while (!Ended)
-				{
-					Run_OneIteration();
-					yield return new WaitForSecondsRealtime(DelaySeconds);
-				}
-
-				OnEndedGeneration?.Invoke(_regionsData.Values.ToArray());
-			}
-			else
-			{
-				PopulateAllRegions();
-			}
-		}
-
-		protected override void Run_OneIteration()
-		{
-			if (!delaunay.ended)
-				delaunay.Run_OnePoint();
-			else if (!voronoi.Ended)
-				voronoi.Run_OneIteration();
-			else if (!Ended)
-				PopulateRegion(Regions[iterations++]);
-		}
-
-		#endregion
-
-
 		#region POPULATION
-
-		private void PopulateAllRegions()
-		{
-			Regions.ForEach(r => PopulateRegion(r));
-			OnEndedGeneration?.Invoke(_regionsData.Values.ToArray());
-		}
 
 		/// <summary>
 		///     Popula una región con olivos, según su forma (Polígono) y el tipo de cultivo.
 		///     Si no se pasa un Tipo de Cultivo se elige uno aleatorio según las probabilidades de globalParams
 		/// </summary>
-		private OliveRegionData PopulateRegion(Polygon region, OliveType? cropType = null)
+		public static OliveRegionData PopulateRegion(Polygon region, BoundsComponent boundsComp, OliveGenSettings settings)
 		{
 			// CROP TYPE
-			cropType ??= genSettings.RandomizedType;
-			OliveTypeParams oliveParams = genSettings.GetCropTypeParams(cropType.Value);
+			OliveType cropType = settings.RandomizedType;
+			OliveTypeParams oliveParams = settings.GetCropTypeParams(cropType);
 
 			// Separacion (Random [min - max])
 			Vector2 separation = Vector2.Lerp(oliveParams.separationMin, oliveParams.separationMax, Random.value);
-			Vector2 separationLocal = VectorToLocalPositive(separation);
+			Vector2 separationLocal = boundsComp.VectorToLocalPositive(separation);
 
 			Vector2 orientation = GetRegionOrientation_ByAverage(region);
 
-			OliveRegionData data = new(cropType.Value, region, orientation);
+			OliveRegionData data = new(region, cropType, orientation);
 			
 			switch (cropType)
 			{
 				case OliveType.Traditional:
 					// OLIVO EN TRADICIONAL => Añadimos la Linde
-					Vector2 lindeWidthLocal = MeasureToLocalPositive(genSettings.lindeWidth);
+					Vector2 lindeWidthLocal = boundsComp.MeasureToLocalPositive(settings.lindeWidth);
 
 					data.interiorPolygon = region.InteriorPolygon(lindeWidthLocal);
 
@@ -189,13 +54,10 @@ namespace TreesGeneration
 					data.olivosInterior = PopulatePolygon(marginPolygon, separationLocal, orientation).ToList();
 					break;
 			}
-
-			data.olivosInterior.RemoveAll(IsInvalidPosition);
-			data.olivosLinde?.RemoveAll(IsInvalidPosition);
-
-			_regionsData.Add(region, data);
-
-			OnRegionPopulated?.Invoke(data);
+			
+			data.olivosInterior.RemoveAll(p => IsInvalidPosition(p, settings));
+			data.olivosLinde?.RemoveAll(p => IsInvalidPosition(p, settings));
+			
 			return data;
 		}
 
@@ -230,27 +92,28 @@ namespace TreesGeneration
 				if (olivos.Count <= maxPolygons) continue;
 				Debug.LogWarning($"Max Polygons reached ({maxPolygons})");
 				return olivos;
-			}
+			} 
 
 			return olivos;
 		}
 
-		public bool IsInvalidPosition(Vector2 normPos)
+		
+		private static bool IsInvalidPosition(Vector2 normPos, OliveGenSettings settings)
 		{
 			// Outside [0,1] Bounds
 			if (!normPos.IsIn01()) return true;
-			
+            
 			// Check Slope is too high
 			Terrain terrain = Terrain.activeTerrain;
 			if (terrain == null) return false;
 			
-			float maxSlope = genSettings.maxSlopeAngle;
+			float maxSlope = settings.maxSlopeAngle;
 			float angle = Vector3.Angle(terrain.GetNormal(normPos), Vector3.up);
 			return angle > maxSlope;
 		}
 		
 		
-		public Vector2 GetRegionOrientation_ByCentroid(Polygon region)
+		public static Vector2 GetRegionOrientation_ByCentroid(Polygon region)
 		{
 			Terrain terrain = Terrain.activeTerrain;
 			
@@ -264,7 +127,7 @@ namespace TreesGeneration
 			return Vector2.Perpendicular(slope);
 		}
 		
-		public Vector2 GetRegionOrientation_ByAverage(Polygon region)
+		public static Vector2 GetRegionOrientation_ByAverage(Polygon region)
 		{
 			Terrain terrain = Terrain.activeTerrain;
 			
@@ -287,7 +150,7 @@ namespace TreesGeneration
 			{
 				var pos = new Vector2(x, y);
 				if (!region.Contains_RayCast(pos)) continue;
-				slope = terrain.GetNormal(BoundsComp.ToWorld(pos)).ToV2xz().normalized;
+				slope = terrain.GetNormal(pos).ToV2xz().normalized;
 				sampleSum += slope;
 				samples.Add(slope);
 			}
@@ -370,104 +233,22 @@ namespace TreesGeneration
 		#endregion
 
 		#endregion
-
-
-		#region SPACE CONVERSIONS
-
-		private Vector2 VectorToLocalPositive(Vector3 vector)
-		{
-			Vector2 vectorlocal = BoundsComp.WorldToLocalMatrix_WithXZrotation.MultiplyVector(vector);
-			return Vector2.Max(vectorlocal.Abs(), Vector2.one * 0.001f);
-		}
-
-		private Vector2 VectorToLocalPositive(Vector2 vector) => VectorToLocalPositive(vector.ToV3xz());
-		private Vector2 MeasureToLocalPositive(float value) => VectorToLocalPositive(Vector3.one * value);
-
-		#endregion
-
-
-		#region RENDERING
-
-		[SerializeField] private bool _drawOlivos = true;
-
-		[SerializeField]
-		private PointsRenderer _spritesRenderer;
-		private PointsRenderer Renderer => _spritesRenderer ??= GetComponentInChildren<PointsRenderer>(true);
-
-		protected override void InitializeRenderer()
-		{
-			base.InitializeRenderer();
-			_spritesRenderer ??= Renderer ?? UnityUtils.InstantiateObject<PointsRenderer>(transform, "Olive Sprites Renderer");
-		}
-
-		protected override void InstantiateRenderer()
-		{
-			base.InstantiateRenderer();
-			_regionsData.Values.ForEach(InstantiateRenderer);
-		}
-
-		protected override void UpdateRenderer()
-		{
-			base.UpdateRenderer();
-			Renderer.UpdateAllObj(OlivePositions);
-		}
-
-		private void InstantiateRenderer(OliveRegionData OliveRegionData)
-		{
-			Renderer.AddObjs(OliveRegionData.Olivos);
-			
-			// Set scale of new Olivos
-			float scale = genSettings.GetCropTypeParams(OliveRegionData.oliveType).scale;
-			int renderObjsCount = Renderer.renderObjs.Count;
-			int olivosCount = OliveRegionData.Olivos.Count();
-			for (int i = renderObjsCount - olivosCount; i < renderObjsCount; i++)
-			{
-				Renderer.SetRadius(i, scale);
-			}
-		}
-
-		// Project ALL on Terrain		
-		private void ProjectOnTerrain()
-		{
-			if (Terrain.activeTerrain != null) 
-				Renderer.ProjectOnTerrain(Terrain.activeTerrain);
-		}
-
-		protected override void PositionRenderer()
-		{
-			base.PositionRenderer();
-			if (Renderer == null) return;
-			BoundsComp.TransformToBounds_Local(Renderer);
-			Renderer.transform.localPosition += Vector3.up * 1f;
-		}
-
-		#endregion
-
+		
 
 		#region DEBUG
 
 #if UNITY_EDITOR
 
-		public bool drawOBBs = true;
+		public static void DrawGizmos(RegionData[] oliveData, Matrix4x4 localToWorldMatrix, bool drawOBBs = false)
+		{;
 
-		protected override void OnDrawGizmos()
-		{
-			base.OnDrawGizmos();
-
-			if (!drawGizmos || !_drawOlivos || Regions.IsNullOrEmpty()) return;
-
-			foreach (KeyValuePair<Polygon, OliveRegionData> pair in _regionsData)
+			foreach (OliveRegionData data in oliveData.OfType<OliveRegionData>())
 			{
-				Polygon region = pair.Key;
-				OliveRegionData data = pair.Value;
-
 				if (drawOBBs)
 				{
-					OBB_2D obb = new(region, data.orientation);
-					obb.DrawGizmos(BoundsComp.LocalToWorldMatrix_WithXZrotation, Color.white, 3);
+					OBB_2D obb = new(data.polygon, data.orientation);
+					obb.DrawGizmos(localToWorldMatrix, Color.white, 3);
 				}
-
-				float spheresRadius = genSettings.GetCropTypeParams(data.oliveType).scale / 2;
 
 				Color oliveColor = "#4E8000".ToUnityColor();
 				Color intensiveColor = "#028000".ToUnityColor();
@@ -476,13 +257,14 @@ namespace TreesGeneration
 				// OLIVOS
 				Gizmos.color = data.oliveType == OliveType.Traditional ? oliveColor : intensiveColor;
 				data.Olivos.ForEach(
-					olivo => Gizmos.DrawSphere(BoundsComp.ToWorld(olivo), spheresRadius)
+					(olivo, i) =>
+						Gizmos.DrawSphere(localToWorldMatrix.MultiplyPoint3x4(olivo), data.radiusByPoint[i])
 				);
 
 
 				// POLIGONO
 				data.polygon.DrawGizmos(
-					BoundsComp.LocalToWorldMatrix_WithXZrotation,
+					localToWorldMatrix,
 					floorColor,
 					floorColor.Lighten(.2f)
 				);
@@ -490,16 +272,16 @@ namespace TreesGeneration
 				// LINDE
 				if (data.oliveType == OliveType.Traditional)
 					data.interiorPolygon.DrawGizmos(
-						BoundsComp.LocalToWorldMatrix_WithXZrotation,
+						localToWorldMatrix,
 						floorColor.RotateHue(.1f),
 						floorColor.Lighten(.2f)
 					);
 
 				// ORIENTACION (flechas)
-				float arrowSize = AABB.Width / 20;
+				float arrowSize = localToWorldMatrix.lossyScale.x / 20;
 				GizmosExtensions.DrawArrow(
 					GizmosExtensions.ArrowCap.Triangle,
-					BoundsComp.ToWorld(data.Centroid),
+					localToWorldMatrix.MultiplyPoint3x4(data.Centroid),
 					data.orientation.normalized.ToV3xz() * arrowSize,
 					Vector3.up,
 					arrowSize / 3,

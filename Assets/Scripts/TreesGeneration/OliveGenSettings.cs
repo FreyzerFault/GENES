@@ -70,6 +70,19 @@ namespace TreesGeneration
 
 		private Dictionary<OliveType, OliveTypeParams> _cropTypeParamsDictionary;
 
+		public OliveGenSettings()
+		{
+		}
+
+		public OliveGenSettings(float probTraditionalCrop, float probIntensiveCrop, float probSuperIntensiveCrop, float lindeWidth, float maxSlopeAngle)
+		{
+			this.probTraditionalCrop = probTraditionalCrop;
+			this.probIntensiveCrop = probIntensiveCrop;
+			this.probSuperIntensiveCrop = probSuperIntensiveCrop;
+			this.lindeWidth = lindeWidth;
+			base.maxSlopeAngle = maxSlopeAngle;
+		}
+
 		public Dictionary<OliveType, OliveTypeParams> InitializeCropTypeParamsDictionary() =>
 			_cropTypeParamsDictionary =
 				new Dictionary<OliveType, OliveTypeParams>(

@@ -329,7 +329,7 @@ PrefabInstance:
       objectReference: {fileID: 474813286}
     - target: {fileID: 8282911286696415171, guid: 6e532e4f26503db49b55d1c12edd2198, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: set_RegionScale
+      value: set_PolygonScale
       objectReference: {fileID: 0}
     - target: {fileID: 8824416220647939039, guid: 6e532e4f26503db49b55d1c12edd2198, type: 3}
       propertyPath: m_AnchorMax.x
