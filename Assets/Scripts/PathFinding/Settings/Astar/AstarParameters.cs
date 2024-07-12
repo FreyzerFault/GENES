@@ -1,5 +1,6 @@
 using System.Linq;
 using DavidUtils;
+using DavidUtils.Collections;
 using UnityEngine;
 
 namespace PathFinding.Settings.Astar

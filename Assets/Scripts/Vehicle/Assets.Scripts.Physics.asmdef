@@ -1,6 +1,6 @@
 {
     "name": "Assets.Scripts.Physics",
-    "rootNamespace": "",
+    "rootNamespace": "GENES",
     "references": [
         "GUID:75469ad4d38634e559750d17036d5f7c"
     ],

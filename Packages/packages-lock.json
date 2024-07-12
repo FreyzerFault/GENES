@@ -13,17 +13,17 @@
       }
     },
     "com.david.procrain": {
-      "version": "file:C:/Users/dalcanta/Unity Projects/Procrain",
+      "version": "file:Procrain",
       "depth": 0,
-      "source": "local",
+      "source": "embedded",
       "dependencies": {
         "com.david.utils": "0.1.0"
       }
     },
     "com.david.utils": {
-      "version": "file:C:/Users/dalcanta/Unity Projects/David-Unity-Utils",
+      "version": "file:David-Unity-Utils",
       "depth": 0,
-      "source": "local",
+      "source": "embedded",
       "dependencies": {}
     },
     "com.unity.2d.sprite": {

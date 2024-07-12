@@ -1,8 +1,6 @@
 {
   "dependencies": {
     "com.atteneder.gltfast": "file:C:/Users/dalcanta/Unity Projects/com.unity.cloud.gltfast-release-6.4.0",
-    "com.david.procrain": "file:C:/Users/dalcanta/Unity Projects/Procrain",
-    "com.david.utils": "file:C:/Users/dalcanta/Unity Projects/David-Unity-Utils",
     "com.unity.2d.sprite": "1.0.0",
     "com.unity.cinemachine": "2.10.1",
     "com.unity.collab-proxy": "2.3.1",

@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using PathFinding;
 using PathFinding.Settings;
-using PathFinding.Settings.Astar;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using DavidUtils.Collections;
 using DavidUtils.ExtensionMethods;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace TreesGeneration
 {
@@ -10,16 +12,16 @@ namespace TreesGeneration
 	public class OliveGenSettings: TreesGenSettings
 	{
 		// MAIN PARAMETERS
-		[Range(0.1f, 30)] public float lindeWidth;
+		[Range(0.1f, 30)] public float lindeWidth = 12;
 
 		// TIPO de CULTIVO
 		public OliveType defaultOliveType;
 		public OliveType[] Types => new[] { OliveType.Traditional, OliveType.Intesive, OliveType.SuperIntesive };
 
 		// % de cada tipo
-		[Range(0, 1)] public float probTraditionalCrop;
-		[Range(0, 1)] public float probIntensiveCrop;
-		[Range(0, 1)] public float probSuperIntensiveCrop;
+		[Range(0, 1)] public float probTraditionalCrop = .5f;
+		[Range(0, 1)] public float probIntensiveCrop = .3f;
+		[Range(0, 1)] public float probSuperIntensiveCrop = .2f;
 
 		public float[] Probabilities
 		{
@@ -35,40 +37,14 @@ namespace TreesGeneration
 
 		public OliveType RandomizedType => Types.PickByProbability(Probabilities);
 
-		public void NormalizeProbabilities() => Probabilities = Probabilities.NormalizeProbabilities().ToArray();
+		public void NormalizeProbabilities() =>
+			Probabilities = Probabilities.NormalizeProbabilities().ToArray();
 		
 		
 		#region CROP TYPE
 
-		public OliveTypeParams[] cropTypeParams =
-		{
-			new()
-			{
-				type = OliveType.Traditional,
-				// 10x10 - 12x12
-				separationMin = new Vector2(10, 10),
-				separationMax = new Vector2(12, 12),
-				scale = 2
-			},
-			new()
-			{
-				type = OliveType.Intesive,
-				// 3x6 - 6x6
-				separationMin = new Vector2(3, 6),
-				separationMax = new Vector2(6, 6),
-				scale = 1
-			},
-			new()
-			{
-				type = OliveType.SuperIntesive,
-				// 1x4 - 2x4
-				separationMin = new Vector2(1, 4),
-				separationMax = new Vector2(2, 4),
-				scale = .5f
-			}
-		};
-
-		private Dictionary<OliveType, OliveTypeParams> _cropTypeParamsDictionary;
+		private DictionarySerializable<OliveType, OliveTypeParams> _cropTypeParamsDictionary = 
+			new (typeof(OliveType).GetEnumValues<OliveType>(), OliveTypeParams.GetDefaultParams());
 
 		public OliveGenSettings()
 		{
@@ -83,17 +59,8 @@ namespace TreesGeneration
 			base.maxSlopeAngle = maxSlopeAngle;
 		}
 
-		public Dictionary<OliveType, OliveTypeParams> InitializeCropTypeParamsDictionary() =>
-			_cropTypeParamsDictionary =
-				new Dictionary<OliveType, OliveTypeParams>(
-					cropTypeParams.Select(
-						p =>
-							new KeyValuePair<OliveType, OliveTypeParams>(p.type, p)
-					)
-				);
 
-		public OliveTypeParams GetCropTypeParams(OliveType type) =>
-			(_cropTypeParamsDictionary ??= InitializeCropTypeParamsDictionary())[type];
+		public OliveTypeParams GetCropTypeParams(OliveType type) => _cropTypeParamsDictionary.GetValue(type);
 
 		#endregion
 	}
@@ -113,5 +80,36 @@ namespace TreesGeneration
 		public Vector2 separationMin;
 		public Vector2 separationMax;
 		public float scale;
+		
+		
+		public static OliveTypeParams DefaultTraditionalParams => new()
+		{
+			type = OliveType.Traditional,
+			// 10x10 - 12x12
+			separationMin = new Vector2(10, 10),
+			separationMax = new Vector2(12, 12),
+			scale = 2
+		};
+		
+		public static OliveTypeParams DefaultIntensiveParams => new()
+		{
+			type = OliveType.Intesive,
+			// 3x6 - 6x6
+			separationMin = new Vector2(3, 6),
+			separationMax = new Vector2(6, 6),
+			scale = 1
+		};
+		
+		public static OliveTypeParams DefaultSuperIntensiveParams => new()
+		{
+			type = OliveType.SuperIntesive,
+			// 1x4 - 2x4
+			separationMin = new Vector2(1, 4),
+			separationMax = new Vector2(2, 4),
+			scale = .5f
+		};
+		
+		public static OliveTypeParams[] GetDefaultParams() =>
+			new[] { DefaultTraditionalParams, DefaultIntensiveParams, DefaultSuperIntensiveParams };
 	}
 }

@@ -13,19 +13,19 @@ namespace TreesGeneration
 {
     // Generación de una región a partir del Voronoi
     // De esto heredan todas los generadores más específicos con las reglas de cada tipo de "bioma"
-    public abstract class RegionGenerator : VoronoiGenerator
+    public class RegionGenerator : VoronoiGenerator
     {
         [Space]
         [Header("GENERACIÓN DE REGIONES")]
-        protected Polygon[] regions;
+        [SerializeField] protected Polygon[] regions;
         
         // SETTINGS
         [Space]
         [Header("SETTINGS")]
         public GenerationSettingsSO generationSettings;
 
-        public OliveGenSettings oliveSettings => generationSettings.oliveGenSettings;
-        public ForestGenSettings forestSettings => generationSettings.forestGenSettings;
+        public OliveGenSettings oliveSettings => generationSettings.OliveGenSettings;
+        public ForestGenSettings forestSettings => generationSettings.ForestGenSettings;
         
         protected readonly Dictionary<Polygon, RegionData> regionsData = new();
         
@@ -33,7 +33,7 @@ namespace TreesGeneration
         public OliveRegionData[] OliveData => regionsData.Values.OfType<OliveRegionData>().ToArray();
         public ForestRegionData[] ForestData => regionsData.Values.OfType<ForestRegionData>().ToArray();
 
-        public int numRegions;
+        [SerializeField] private int numRegions;
         public int NumRegions
         {
             get => numRegions;
@@ -71,7 +71,7 @@ namespace TreesGeneration
             Renderer.Clear();
         }
 
-        protected virtual void ResetRegions()
+        protected  void ResetRegions()
         {
             regions = Array.Empty<Polygon>();
             regionsData.Clear();
@@ -107,7 +107,16 @@ namespace TreesGeneration
             else if (!voronoi.Ended)
                 voronoi.Run_OneIteration();
             else if (!Ended)
-                PopulateRegion(Polygons[iterations++]);
+            {
+                // Select random polygon not generated
+                var notGeneratedRegions = Polygons.Where(p => !regions.Contains(p));
+                Polygon regionPolygon = notGeneratedRegions.PickRandom();
+                
+                // Select random biome
+                
+                PopulateRegion(regionPolygon, generationSettings.GetRandomType());
+                iterations++;
+            }
         }
         
 
@@ -157,11 +166,11 @@ namespace TreesGeneration
 
         private void PopulateAllRegions()
         {
-            Polygons.ForEach(r => PopulateRegion(r));
+            Polygons.ForEach(r => PopulateRegion(r, generationSettings.GetRandomType()));
             OnEndedGeneration?.Invoke(regionsData.Values.ToArray());
         }
 
-        protected RegionData PopulateRegion(Polygon region)
+        protected RegionData PopulateRegion(Polygon region, RegionType type)
         {
             // TODO Elegir un tipo de Region
             

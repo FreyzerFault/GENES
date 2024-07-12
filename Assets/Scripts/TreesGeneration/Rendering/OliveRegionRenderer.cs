@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using DavidUtils.Rendering;
+﻿using DavidUtils.Rendering;
 using UnityEngine;
 
 namespace TreesGeneration.Rendering

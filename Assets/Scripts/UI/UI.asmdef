@@ -1,18 +1,18 @@
 {
     "name": "UI",
-    "rootNamespace": "",
+    "rootNamespace": "GENES",
     "references": [
         "GUID:35ec6c46b43ff104194ed46f8d9cbeff",
         "GUID:db7170b8616df5545bbc6d1ee65ed07b",
         "GUID:d95f62dca18902045bd3f2c6a5898a9d",
         "GUID:6055be8ebefd69e48b49212b09b47b2f",
         "GUID:258c6dd1149c4524f826c1d6586a9e7d",
-        "GUID:48c9f6afdac61634db0e0f241c7d4d51",
         "GUID:7f9a9de32b1bf754cb15b0cced54475d",
         "GUID:b41b7865b149c7d4b9c749c4446a484a",
         "GUID:cf414061cae3a954baf92763590f3127",
         "GUID:62bb8079c7bec1b4695edd7c435ad5e1",
-        "GUID:a7adaf89cbc238348aa7047394acc30d"
+        "GUID:a7adaf89cbc238348aa7047394acc30d",
+        "GUID:1de54e2660c50e240a313b72af0f033d"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

@@ -1,4 +1,9 @@
+using DavidUtils.ExtensionMethods;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using DavidUtils;
+using DavidUtils.Collections;
 using UnityEngine;
 
 namespace TreesGeneration
@@ -7,36 +12,34 @@ namespace TreesGeneration
 	public class GenerationSettingsSO : ScriptableObject
 	{
 		// TODO Probabilidades de cada tipo
-		private Dictionary<RegionType, TreesGenSettings> regionSettings = new();
 		
-		public OliveGenSettings oliveGenSettings = new(
-			probTraditionalCrop: .5f,
-			probIntensiveCrop: .3f,
-			probSuperIntensiveCrop: .2f,
-			lindeWidth: 12,
-			maxSlopeAngle: 30
-		);
+		// RegionType Enum as keys
+		[SerializeField] private DictionarySerializable<RegionType, TreesGenSettings> regionSettings = 
+			new(typeof(RegionType).GetEnumValues<RegionType>());
 		
-		// TODO
-		public ForestGenSettings forestGenSettings = new(maxSlopeAngle: 40);
+		private DictionarySerializable<RegionType, float> regionTypeProbabilities = 
+			new(typeof(RegionType).GetEnumValues<RegionType>(), new []{1f});
 
-		private void Awake()
-		{
-			oliveGenSettings.InitializeCropTypeParamsDictionary();
-
-			regionSettings = new Dictionary<RegionType, TreesGenSettings>
-			{
-				{ RegionType.Olive, oliveGenSettings },
-				{ RegionType.Forest, forestGenSettings }
-			};
-		}
+		public TreesGenSettings GenSettings(RegionType type) => regionSettings.GetValue(type);
+		public OliveGenSettings OliveGenSettings => (OliveGenSettings) GenSettings(RegionType.Olive);
+		public ForestGenSettings ForestGenSettings => (ForestGenSettings) GenSettings(RegionType.Forest);
+		
 
 		private void OnValidate()
 		{
-			oliveGenSettings.NormalizeProbabilities();
-			oliveGenSettings.InitializeCropTypeParamsDictionary();
+			NormalizeProbabilities();
+			
+			// OLIVE SubType Probabilities
+			OliveGenSettings.NormalizeProbabilities();
 		}
 
-		public TreesGenSettings GetSettingsByType(RegionType type) => regionSettings[type];
+		public RegionType GetRandomType() => 
+            regionTypeProbabilities.Keys.PickByProbability(regionTypeProbabilities.Values);
+
+		private void NormalizeProbabilities()
+		{
+			if (regionTypeProbabilities.Values.Sum() > 1)
+				regionTypeProbabilities.Values = regionTypeProbabilities.Values.NormalizeProbabilities().ToArray();
+		}
 	}
 }

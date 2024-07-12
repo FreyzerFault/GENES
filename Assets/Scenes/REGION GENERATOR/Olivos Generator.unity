@@ -38,7 +38,6 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44742143, g: 0.4973678, b: 0.57526976, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -138,7 +137,7 @@ PrefabInstance:
     - target: {fileID: 2600334948656421604, guid: f8478791bbd2bc848833ccbf7c9a4248, type: 3}
       propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 474813286}
+      objectReference: {fileID: 0}
     - target: {fileID: 2600334948656421604, guid: f8478791bbd2bc848833ccbf7c9a4248, type: 3}
       propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
@@ -400,7 +399,7 @@ PrefabInstance:
     - target: {fileID: 8282911286696415171, guid: 6e532e4f26503db49b55d1c12edd2198, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 474813286}
+      objectReference: {fileID: 0}
     - target: {fileID: 8282911286696415171, guid: 6e532e4f26503db49b55d1c12edd2198, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: set_PolygonScale
@@ -530,7 +529,7 @@ PrefabInstance:
     - target: {fileID: 2600334948656421604, guid: f8478791bbd2bc848833ccbf7c9a4248, type: 3}
       propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 474813286}
+      objectReference: {fileID: 0}
     - target: {fileID: 2600334948656421604, guid: f8478791bbd2bc848833ccbf7c9a4248, type: 3}
       propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
@@ -877,12 +876,12 @@ MonoBehaviour:
   m_RequiresColorTexture: 0
   m_Version: 2
   m_TaaSettings:
-    quality: 3
-    frameInfluence: 0.1
-    jitterScale: 1
-    mipBias: 0
-    varianceClampScale: 0.9
-    contrastAdaptiveSharpening: 0
+    m_Quality: 3
+    m_FrameInfluence: 0.1
+    m_JitterScale: 1
+    m_MipBias: 0
+    m_VarianceClampScale: 0.9
+    m_ContrastAdaptiveSharpening: 0
 --- !u!81 &412599551
 AudioListener:
   m_ObjectHideFlags: 0
@@ -966,7 +965,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 474813287}
-  - component: {fileID: 474813286}
+  - component: {fileID: 474813289}
   - component: {fileID: 474813285}
   - component: {fileID: 474813288}
   m_Layer: 0
@@ -996,81 +995,6 @@ MonoBehaviour:
     min: {x: 0, y: 0}
     max: {x: 200, y: 200}
   XZplane: 1
---- !u!114 &474813286
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 474813284}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 45895e61558d1314a8bcb35f45d2a88e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  randSeed: 159502056
-  numSeeds: 9
-  seedsDistribution: 1
-  seeds:
-  - {x: 0.37762374, y: 0.39728063}
-  - {x: 0.71547073, y: 0.9960643}
-  - {x: 0.41794628, y: 0.1281643}
-  - {x: 0.9669368, y: 0.17573132}
-  - {x: 0.4280333, y: 0.21148232}
-  - {x: 0.10694505, y: 0.3069394}
-  - {x: 0.96588767, y: 0.28857425}
-  - {x: 0.22465947, y: 0.70876557}
-  - {x: 0.7254841, y: 0.28202847}
-  seedsRenderer: {fileID: 0}
-  drawGizmos: 0
-  drawGrid: 0
-  delaunay:
-    vertices:
-    - {x: 0.3655261, y: 0.123878494}
-    - {x: 0.8856158, y: 0.28332713}
-    - {x: 0.89507043, y: 0.52048486}
-    - {x: 0.7709904, y: 0.8784876}
-    - {x: 0.21349171, y: 0.6368095}
-    - {x: 0.397304, y: 0.374939}
-    - {x: 0.21265462, y: 0.56743103}
-    - {x: 0.72511536, y: 0.7927439}
-    - {x: 0.6151411, y: 0.8862989}
-    iterations: 0
-    ended: 1
-  runOnStart: 1
-  animatedDelaunay: 0
-  delayMilliseconds: 10
-  delaunayRenderer: {fileID: 1487185360}
-  voronoi:
-    delaunay:
-      vertices:
-      - {x: 0.3655261, y: 0.123878494}
-      - {x: 0.8856158, y: 0.28332713}
-      - {x: 0.89507043, y: 0.52048486}
-      - {x: 0.7709904, y: 0.8784876}
-      - {x: 0.21349171, y: 0.6368095}
-      - {x: 0.397304, y: 0.374939}
-      - {x: 0.21265462, y: 0.56743103}
-      - {x: 0.72511536, y: 0.7927439}
-      - {x: 0.6151411, y: 0.8862989}
-      iterations: 0
-      ended: 1
-    regions: []
-  animatedVoronoi: 0
-  _voronoiRenderer: {fileID: 1819664087}
-  voronoiVoronoiRenderMode: 2
-  _hoverRegion: 1
-  _selectRegion: 1
-  selectedRegionIndex: -1
-  selectedRenderer: {fileID: 0}
-  hoverRenderer: {fileID: 0}
-  drawSelectedTriangles: 0
-  genSettings: {fileID: 11400000, guid: 3045c29b6b9eefe4cbc3ea900ddbdd62, type: 2}
-  animatedOlives: 1
-  iterations: 0
-  _drawOlivos: 1
-  _spritesRenderer: {fileID: 2015504497}
-  drawOBBs: 0
 --- !u!4 &474813287
 Transform:
   m_ObjectHideFlags: 0
@@ -1087,8 +1011,7 @@ Transform:
   - {fileID: 833392609}
   - {fileID: 1487185356}
   - {fileID: 1819664086}
-  - {fileID: 911238018}
-  - {fileID: 2015504496}
+  - {fileID: 851716334}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &474813288
@@ -1116,6 +1039,55 @@ MonoBehaviour:
   fontStyle: 1
   alignment: 4
   textDropShadow: 0
+--- !u!114 &474813289
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 474813284}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7083c2d15a3b40cb9e6ce865a31ff3d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  randSeed: 10
+  numSeeds: 10
+  seedsDistribution: 0
+  seeds: []
+  seedsRenderer: {fileID: 833392610}
+  drawGizmos: 0
+  drawGrid: 1
+  delaunay:
+    vertices: []
+    iterations: 0
+    ended: 0
+  runOnStart: 1
+  animatedDelaunay: 1
+  delayMilliseconds: 10
+  delaunayRenderer: {fileID: 1487185360}
+  voronoi:
+    delaunay:
+      vertices: []
+      iterations: 0
+      ended: 0
+    polygons: []
+  animatedVoronoi: 1
+  _voronoiRenderer: {fileID: 1819664087}
+  voronoiVoronoiRenderMode: 2
+  _hoverPolygon: 1
+  _selectPolygon: 1
+  selectedPolygonIndex: -1
+  selectedRenderer: {fileID: 0}
+  hoverRenderer: {fileID: 0}
+  drawSelectedTriangles: 0
+  regions: []
+  generationSettings: {fileID: 11400000, guid: 3045c29b6b9eefe4cbc3ea900ddbdd62, type: 2}
+  numRegions: 5
+  iterations: 0
+  _drawRegions: 1
+  regionsRenderer: {fileID: 0}
+  drawOBBs: 0
 --- !u!1 &544560023
 GameObject:
   m_ObjectHideFlags: 0
@@ -1199,7 +1171,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 474813286}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: TreesGeneration.OliveGroveGenerator, TreesGeneration
         m_MethodName: Run
         m_Mode: 1
@@ -1596,11 +1568,12 @@ MonoBehaviour:
     palletteStep: 0.05
     palletteRange: 20
   colors: []
+  projectedOnTerrain: 0
   radius: 0.135
   thickness: 0
   textureSize: 20
   drawGizmos: 0
---- !u!1 &911238017
+--- !u!1 &851716333
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1608,52 +1581,51 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 911238018}
-  - component: {fileID: 911238019}
+  - component: {fileID: 851716334}
+  - component: {fileID: 851716335}
   m_Layer: 0
-  m_Name: Olive Sprites Renderer
+  m_Name: Region Renderer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &911238018
+--- !u!4 &851716334
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 911238017}
+  m_GameObject: {fileID: 851716333}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -107.4, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 474813287}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &911238019
+--- !u!114 &851716335
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 911238017}
+  m_GameObject: {fileID: 851716333}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6ad66bcfba7a4d36b335a5bf24d56bee, type: 3}
+  m_Script: {fileID: 11500000, guid: ab48af540daa483aac7d3badcafe5ade, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   renderObjs: []
-  useColor: 0
+  useColor: 1
   colorPallette:
-    initialColor: {r: 1, g: 1, b: 1, a: 1}
+    initialColor: {r: 0, g: 1, b: 0.6713879, a: 1}
     palletteStep: 0.05
     palletteRange: 20
   colors: []
-  sprite: {fileID: 21300000, guid: 93c2f60daff28ea40aa4e8494f3148fc, type: 3}
-  size: 1
-  drawGizmos: 0
+  projectedOnTerrain: 0
+  regionGenerator: {fileID: 474813289}
 --- !u!1 &948576070
 GameObject:
   m_ObjectHideFlags: 0
@@ -1930,7 +1902,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 474813286}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: TreesGeneration.OliveGroveGenerator, TreesGeneration
         m_MethodName: Reset
         m_Mode: 1
@@ -1942,7 +1914,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 474813286}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: DavidUtils.Geometry.Generators.SeedsGenerator,
           DavidUtils.Geometry.Generators
         m_MethodName: RandomizeSeeds
@@ -2232,7 +2204,7 @@ PrefabInstance:
     - target: {fileID: 2600334948656421604, guid: f8478791bbd2bc848833ccbf7c9a4248, type: 3}
       propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 474813286}
+      objectReference: {fileID: 0}
     - target: {fileID: 2600334948656421604, guid: f8478791bbd2bc848833ccbf7c9a4248, type: 3}
       propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
@@ -3035,7 +3007,7 @@ PrefabInstance:
     - target: {fileID: 2600334948656421604, guid: f8478791bbd2bc848833ccbf7c9a4248, type: 3}
       propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 474813286}
+      objectReference: {fileID: 0}
     - target: {fileID: 2600334948656421604, guid: f8478791bbd2bc848833ccbf7c9a4248, type: 3}
       propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
@@ -3246,9 +3218,10 @@ MonoBehaviour:
     palletteStep: 0.05
     palletteRange: 20
   colors: []
+  projectedOnTerrain: 0
   renderMode: 2
   thickness: 1
-  regionScale: 1
+  polygonScale: 1
   outlineColor: {r: 1, g: 1, b: 1, a: 1}
   projectOnTerrain: 1
   terrainHeightOffset: 0.1
@@ -3496,61 +3469,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!1 &2015504495
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2015504496}
-  - component: {fileID: 2015504497}
-  m_Layer: 0
-  m_Name: Olive Points Renderer
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
-  m_IsActive: 1
---- !u!4 &2015504496
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2015504495}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -107.4, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 474813287}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2015504497
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2015504495}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1d90d4808960473bbfe0d09dbe113ec7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  renderObjs: []
-  useColor: 1
-  colorPallette:
-    initialColor: {r: 0.39216843, g: 0.7520215, b: 0, a: 1}
-    palletteStep: 0
-    palletteRange: 20
-  colors: []
-  radius: 1
-  thickness: 0
-  textureSize: 20
-  drawGizmos: 0
 --- !u!1001 &2065819063
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3610,7 +3528,7 @@ PrefabInstance:
     - target: {fileID: 5654178482307267460, guid: a6afc0e8c87213244b48ae610735bd3b, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 474813286}
+      objectReference: {fileID: 0}
     - target: {fileID: 5654178482307267460, guid: a6afc0e8c87213244b48ae610735bd3b, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
@@ -3796,7 +3714,7 @@ PrefabInstance:
     - target: {fileID: 473653567930874758, guid: a6afc0e8c87213244b48ae610735bd3b, type: 3}
       propertyPath: textExposer.targetObj
       value: 
-      objectReference: {fileID: 474813286}
+      objectReference: {fileID: 0}
     - target: {fileID: 3523427117691551261, guid: a6afc0e8c87213244b48ae610735bd3b, type: 3}
       propertyPath: m_text
       value: 9
@@ -3836,7 +3754,7 @@ PrefabInstance:
     - target: {fileID: 5654178482307267460, guid: a6afc0e8c87213244b48ae610735bd3b, type: 3}
       propertyPath: m_OnEndEdit.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 474813286}
+      objectReference: {fileID: 0}
     - target: {fileID: 6652341206786987729, guid: a6afc0e8c87213244b48ae610735bd3b, type: 3}
       propertyPath: m_Name
       value: Num Seeds Input
@@ -3949,7 +3867,7 @@ PrefabInstance:
     - target: {fileID: 2600334948656421604, guid: f8478791bbd2bc848833ccbf7c9a4248, type: 3}
       propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 474813286}
+      objectReference: {fileID: 0}
     - target: {fileID: 2600334948656421604, guid: f8478791bbd2bc848833ccbf7c9a4248, type: 3}
       propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 

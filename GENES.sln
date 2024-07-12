@@ -67,6 +67,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DavidUtils.Geometry.Algorit
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DavidUtils.Threading", "DavidUtils.Threading.csproj", "{b647af4b-ef80-451c-7ac5-ca3ff87e99c0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DavidUtils.Collections", "DavidUtils.Collections.csproj", "{b0607898-33bc-36e8-fe1f-2890de9892f5}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp-Editor", "Assembly-CSharp-Editor.csproj", "{7da08089-9fd3-c3d6-4028-c4b4aef2e3c4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DavidUtils.CameraUtils", "DavidUtils.CameraUtils.csproj", "{0865b04d-8881-3659-b028-7fcd6e0030bf}"
@@ -200,6 +202,8 @@ Global
 		{9b43e8f1-1b63-f280-8803-3155a3f4a29a}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{b647af4b-ef80-451c-7ac5-ca3ff87e99c0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{b647af4b-ef80-451c-7ac5-ca3ff87e99c0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{b0607898-33bc-36e8-fe1f-2890de9892f5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{b0607898-33bc-36e8-fe1f-2890de9892f5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7da08089-9fd3-c3d6-4028-c4b4aef2e3c4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7da08089-9fd3-c3d6-4028-c4b4aef2e3c4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0865b04d-8881-3659-b028-7fcd6e0030bf}.Debug|Any CPU.ActiveCfg = Debug|Any CPU

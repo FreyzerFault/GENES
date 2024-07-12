@@ -1,8 +1,6 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using DavidUtils.ExtensionMethods;
 using DavidUtils.Rendering;
-using UnityEngine;
 
 namespace TreesGeneration.Rendering
 {
