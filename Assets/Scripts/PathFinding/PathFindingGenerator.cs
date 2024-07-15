@@ -1,10 +1,10 @@
 using DavidUtils.ExtensionMethods;
-using PathFinding.Algorithms;
-using PathFinding.Settings;
+using GENES.PathFinding.Algorithms;
+using GENES.PathFinding.Settings;
 using Procrain.Core;
 using UnityEngine;
 
-namespace PathFinding
+namespace GENES.PathFinding
 {
 	public class PathFindingGenerator : PathGenerator
 	{

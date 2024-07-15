@@ -1,5 +1,5 @@
 ﻿using DavidUtils.Editor.Spawning;
-using TreesGeneration;
+using GENES.TreesGeneration;
 using UnityEditor;
 
 namespace GENES.Editor.Trees_Generation

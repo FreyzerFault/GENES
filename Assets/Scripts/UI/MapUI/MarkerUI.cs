@@ -1,4 +1,3 @@
-using DavidUtils.ExtensionMethods;
 using Markers;
 using TMPro;
 using UnityEngine;
@@ -6,7 +5,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 
-namespace UI.MapUI
+namespace GENES.UI.MapUI
 {
     public class MarkerUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {

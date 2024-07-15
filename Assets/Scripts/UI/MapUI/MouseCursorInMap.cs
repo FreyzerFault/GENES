@@ -1,10 +1,10 @@
 using DavidUtils.ExtensionMethods;
+using GENES.PathFinding;
 using Markers;
-using PathFinding;
 using TMPro;
 using UnityEngine;
 
-namespace UI.MapUI
+namespace GENES.UI.MapUI
 {
     internal enum CursorDisplayMode
     {

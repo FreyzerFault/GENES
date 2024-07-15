@@ -1,4 +1,4 @@
-﻿using PathFinding;
+﻿using GENES.PathFinding;
 using UnityEditor;
 using UnityEngine;
 

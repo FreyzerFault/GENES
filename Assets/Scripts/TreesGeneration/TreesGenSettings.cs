@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace TreesGeneration
+namespace GENES.TreesGeneration
 {
     [Serializable]
     public abstract class TreesGenSettings

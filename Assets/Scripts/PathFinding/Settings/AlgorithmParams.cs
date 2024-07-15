@@ -2,7 +2,7 @@ using System;
 using DavidUtils.Collections;
 using UnityEngine;
 
-namespace PathFinding.Settings
+namespace GENES.PathFinding.Settings
 {
     [Serializable]
     public enum ParamType
@@ -29,10 +29,10 @@ namespace PathFinding.Settings
 
         public DictionarySerializable<ParamType, ParamValue> parameters;
 
-        public float GetValue(ParamType param) => parameters.GetValue(param).value;
-        public string GetDisplayName(ParamType param) => parameters.GetValue(param).displayName;
+        public float GetValue(ParamType param) => parameters[param].value;
+        public string GetDisplayName(ParamType param) => parameters[param].displayName;
 
         public void SetValue(ParamType param, float value) =>
-            parameters.SetValue(param, new ParamValue { value = value, displayName = GetDisplayName(param) });
+            parameters[param] = new ParamValue { value = value, displayName = GetDisplayName(param) };
     }
 }

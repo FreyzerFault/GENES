@@ -83,6 +83,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Procrain.Noise", "Procrain.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StylizedWaterForURP", "StylizedWaterForURP.csproj", "{db236e53-a3c8-d523-9135-606fc5324a38}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DavidUtils.Editor.Collections", "DavidUtils.Editor.Collections.csproj", "{9c162e70-bdb3-2962-44e0-0aeca88b5b8f}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Procrain.Geometry", "Procrain.Geometry.csproj", "{59adaf3a-3466-963f-1a56-41ed22cc04ef}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Procrain.Editor.MapGeneration", "Procrain.Editor.MapGeneration.csproj", "{5f3f1700-67db-7875-9c0d-83a1d81a0511}"
@@ -218,6 +220,8 @@ Global
 		{d5a5fa5a-4b04-4653-2cd5-44f0fc1a6994}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{db236e53-a3c8-d523-9135-606fc5324a38}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{db236e53-a3c8-d523-9135-606fc5324a38}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9c162e70-bdb3-2962-44e0-0aeca88b5b8f}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9c162e70-bdb3-2962-44e0-0aeca88b5b8f}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{59adaf3a-3466-963f-1a56-41ed22cc04ef}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{59adaf3a-3466-963f-1a56-41ed22cc04ef}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5f3f1700-67db-7875-9c0d-83a1d81a0511}.Debug|Any CPU.ActiveCfg = Debug|Any CPU

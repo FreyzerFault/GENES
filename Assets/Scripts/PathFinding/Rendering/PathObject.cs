@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using UnityEngine;
 
-namespace PathFinding.Rendering
+namespace GENES.PathFinding.Rendering
 {
     [RequireComponent(typeof(LineRenderer))]
     public class PathObject : MonoBehaviour

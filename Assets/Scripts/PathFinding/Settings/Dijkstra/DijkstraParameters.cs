@@ -1,9 +1,8 @@
 using System.Linq;
-using DavidUtils;
 using DavidUtils.Collections;
 using UnityEngine;
 
-namespace PathFinding.Settings.Dijkstra
+namespace GENES.PathFinding.Settings.Dijkstra
 {
 	[CreateAssetMenu(fileName = "Dijkstra Parameters", menuName = "PathFinding/Dijkstra Parameters")]
 	public class DijkstraParameters : AlgorithmParams

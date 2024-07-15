@@ -1,5 +1,5 @@
-﻿using PathFinding.Algorithms;
-using PathFinding.Settings;
+﻿using GENES.PathFinding.Algorithms;
+using GENES.PathFinding.Settings;
 using UnityEditor;
 
 namespace GENES.Editor.PathFinding

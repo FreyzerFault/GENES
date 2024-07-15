@@ -1,7 +1,7 @@
-using PathFinding.Settings;
+using GENES.PathFinding.Settings;
 using UnityEngine;
 
-namespace PathFinding.Algorithms
+namespace GENES.PathFinding.Algorithms
 {
 	// ALGORTIMO A*
 	public class AstarDirectional : Astar

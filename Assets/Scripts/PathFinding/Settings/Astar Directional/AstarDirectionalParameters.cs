@@ -1,9 +1,8 @@
 using System.Linq;
-using DavidUtils;
 using DavidUtils.Collections;
 using UnityEngine;
 
-namespace PathFinding.Settings.Astar_Directional
+namespace GENES.PathFinding.Settings.Astar_Directional
 {
 
     [CreateAssetMenu(fileName = "Astar Directional Parameters", menuName = "PathFinding/Astar Directional Parameters")]

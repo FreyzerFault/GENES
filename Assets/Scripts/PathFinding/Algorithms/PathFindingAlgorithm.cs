@@ -2,10 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using DavidUtils.ExtensionMethods;
-using PathFinding.Settings;
+using GENES.PathFinding.Settings;
 using UnityEngine;
 
-namespace PathFinding.Algorithms
+namespace GENES.PathFinding.Algorithms
 {
 	public enum PathFindingAlgorithmType
 	{

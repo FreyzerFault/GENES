@@ -2,7 +2,7 @@
 using DavidUtils.ExtensionMethods;
 using DavidUtils.Rendering;
 
-namespace TreesGeneration.Rendering
+namespace GENES.TreesGeneration.Rendering
 {
     public class RegionsRenderer: DynamicRenderer<RegionRenderer>
     {

@@ -1,11 +1,11 @@
 using System;
-using PathFinding.Algorithms;
-using PathFinding.Settings.Astar;
-using PathFinding.Settings.Astar_Directional;
-using PathFinding.Settings.Dijkstra;
+using GENES.PathFinding.Algorithms;
+using GENES.PathFinding.Settings.Astar;
+using GENES.PathFinding.Settings.Astar_Directional;
+using GENES.PathFinding.Settings.Dijkstra;
 using UnityEngine;
 
-namespace PathFinding.Settings
+namespace GENES.PathFinding.Settings
 {
 	[CreateAssetMenu(fileName = "PathFinding Config", menuName = "PathFinding/PathFinding Configuration", order = 1)]
 	public class PathFindingSettings : ScriptableObject

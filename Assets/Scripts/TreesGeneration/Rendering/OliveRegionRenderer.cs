@@ -1,7 +1,7 @@
 ﻿using DavidUtils.Rendering;
 using UnityEngine;
 
-namespace TreesGeneration.Rendering
+namespace GENES.TreesGeneration.Rendering
 {
     [RequireComponent(typeof(PointsRenderer))]
     public class OliveRegionRenderer : RegionRenderer

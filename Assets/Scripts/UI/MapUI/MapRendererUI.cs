@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using Core;
 using DavidUtils.ExtensionMethods;
 using Markers;
@@ -7,7 +6,7 @@ using Procrain.Core;
 using Procrain.MapDisplay;
 using UnityEngine;
 
-namespace UI.MapUI
+namespace GENES.UI.MapUI
 {
     public class MapRendererUI : MapDisplayInTexture
     {

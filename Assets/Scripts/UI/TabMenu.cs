@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI
+namespace GENES.UI
 {
     public class TabMenu : MonoBehaviour
     {

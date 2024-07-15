@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Vehicle
+namespace GENES.Vehicle
 {
     public class Wheel : MonoBehaviour
     {

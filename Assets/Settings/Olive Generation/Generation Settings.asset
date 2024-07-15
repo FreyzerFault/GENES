@@ -12,22 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7d1130026fdad84bb59a2ebc9f297f2, type: 3}
   m_Name: Generation Settings
   m_EditorClassIdentifier: 
-  globalParams:
-    lindeWidth: 10
-    defaultCropType: 0
-    probTraditionalCrop: 0.5
-    probIntensiveCrop: 0.3
-    probSuperIntensiveCrop: 0.2
-  cropTypeParams:
-  - type: 0
-    separationMin: {x: 10, y: 10}
-    separationMax: {x: 12, y: 12}
-    scale: 6
-  - type: 1
-    separationMin: {x: 3, y: 6}
-    separationMax: {x: 6, y: 6}
-    scale: 3
-  - type: 2
-    separationMin: {x: 1, y: 4}
-    separationMax: {x: 2, y: 4}
-    scale: 1
+  regionSettings:
+    list:
+    - key: 0
+    - key: 1
+  regionTypeProbabilities:
+    list:
+    - key: 0
+      value: 1
+    - key: 1
+      value: 0

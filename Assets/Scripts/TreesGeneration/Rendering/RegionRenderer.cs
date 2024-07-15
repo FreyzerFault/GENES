@@ -1,8 +1,6 @@
 ﻿using DavidUtils.Rendering;
-using GluonGui.WorkspaceWindow.Views.WorkspaceExplorer.Explorer;
-using UnityEngine;
 
-namespace TreesGeneration.Rendering
+namespace GENES.TreesGeneration.Rendering
 {
     public abstract class RegionRenderer : PolygonRenderer
     {

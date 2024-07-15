@@ -1,6 +1,6 @@
 using DavidUtils;
 
-namespace PathFinding
+namespace GENES.PathFinding
 {
 	public class PathFindingManager : Singleton<PathFindingManager>
 	{

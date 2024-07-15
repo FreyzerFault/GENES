@@ -7,7 +7,7 @@ using Markers;
 using Procrain.Core;
 using UnityEngine;
 
-namespace PathFinding
+namespace GENES.PathFinding
 {
 	public class PathGenerator : MonoBehaviour
 	{

@@ -7,7 +7,7 @@ using DavidUtils.Geometry.Bounding_Box;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-namespace TreesGeneration
+namespace GENES.TreesGeneration
 {
 	public static class OliveGroveGenerator
 	{

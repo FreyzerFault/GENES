@@ -1,10 +1,10 @@
 using DavidUtils.ExtensionMethods;
+using GENES.PathFinding;
 using Markers;
-using PathFinding;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace UI.MapUI
+namespace GENES.UI.MapUI
 {
     public class MapRendererUIEditable
         : MapRendererUI,

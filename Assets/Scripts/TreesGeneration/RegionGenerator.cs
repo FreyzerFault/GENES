@@ -6,10 +6,10 @@ using DavidUtils;
 using DavidUtils.ExtensionMethods;
 using DavidUtils.Geometry;
 using DavidUtils.Geometry.Generators;
-using TreesGeneration.Rendering;
+using GENES.TreesGeneration.Rendering;
 using UnityEngine;
 
-namespace TreesGeneration
+namespace GENES.TreesGeneration
 {
     // Generación de una región a partir del Voronoi
     // De esto heredan todas los generadores más específicos con las reglas de cada tipo de "bioma"

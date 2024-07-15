@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace PathFinding.Rendering
+namespace GENES.PathFinding.Rendering
 {
     public interface IPathRenderer<T> where T : Object
     {

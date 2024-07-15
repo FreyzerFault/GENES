@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
 
-namespace Vehicle
+namespace GENES.Vehicle
 {
     public class VehicleController : MonoBehaviour
     {

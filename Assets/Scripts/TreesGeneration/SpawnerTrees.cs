@@ -2,7 +2,7 @@ using System.Linq;
 using DavidUtils.Spawning;
 using UnityEngine;
 
-namespace TreesGeneration
+namespace GENES.TreesGeneration
 {
 	public class SpawnerTrees : SpawnerBoxInTerrain
 	{

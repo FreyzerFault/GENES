@@ -2,7 +2,7 @@ using DavidUtils.ExtensionMethods;
 using DavidUtils.Geometry.MeshExtensions;
 using UnityEngine;
 
-namespace Utils
+namespace GENES.Utils
 {
 	public class ProjectedMeshOnTerrain : MonoBehaviour
 	{

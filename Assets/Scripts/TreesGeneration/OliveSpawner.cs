@@ -1,7 +1,7 @@
 ﻿using DavidUtils.Spawning;
 using UnityEngine;
 
-namespace TreesGeneration
+namespace GENES.TreesGeneration
 {
 	[RequireComponent(typeof(OliveGroveGenerator))]
 	public class OliveSpawner : SpawnerBoxInTerrain

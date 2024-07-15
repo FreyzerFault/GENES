@@ -1,11 +1,11 @@
 using System.Collections.Generic;
-using PathFinding;
-using PathFinding.Settings;
+using GENES.PathFinding;
+using GENES.PathFinding.Settings;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI
+namespace GENES.UI
 {
     public class FineTuningMenu : MonoBehaviour
     {
@@ -26,14 +26,14 @@ namespace UI
         private void Awake()
         {
             _parameterControllers = new Dictionary<ParamType, ParameterController>();
-            foreach (var pair in Parameters.parameters.pairElements)
+            foreach (ParamType paramType in Parameters.parameters.Keys)
                 _parameterControllers.Add(
-                    pair.key,
+                    paramType,
                     new ParameterController
                     {
-                        labelText = parameterControllerObjects[(int)pair.key].GetComponentsInChildren<TMP_Text>()[0],
-                        valueText = parameterControllerObjects[(int)pair.key].GetComponentsInChildren<TMP_Text>()[1],
-                        slider = parameterControllerObjects[(int)pair.key].GetComponentInChildren<Slider>()
+                        labelText = parameterControllerObjects[(int)paramType].GetComponentsInChildren<TMP_Text>()[0],
+                        valueText = parameterControllerObjects[(int)paramType].GetComponentsInChildren<TMP_Text>()[1],
+                        slider = parameterControllerObjects[(int)paramType].GetComponentInChildren<Slider>()
                     }
                 );
         }
@@ -42,8 +42,8 @@ namespace UI
         {
             foreach (var controller in _parameterControllers)
             {
-                float value = Parameters.parameters.GetValue(controller.Key).value;
-                string displayName = Parameters.parameters.GetValue(controller.Key).displayName;
+                float value = Parameters.parameters[controller.Key].value;
+                string displayName = Parameters.parameters[controller.Key].displayName;
 
                 controller.Value.labelText.text = displayName;
                 controller.Value.valueText.text = value.ToString("F2");
@@ -57,7 +57,7 @@ namespace UI
 
         private void OnValueChange(float value, string displayName, ParamType parameter)
         {
-            Parameters.parameters.SetValue(parameter, new ParamValue { value = value, displayName = displayName });
+            Parameters.parameters[parameter] = new ParamValue { value = value, displayName = displayName };
             
             updateButton.gameObject.SetActive(true);
 

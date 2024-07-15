@@ -4,7 +4,7 @@ using System.Linq;
 using DavidUtils.ExtensionMethods;
 using UnityEngine;
 
-namespace PathFinding
+namespace GENES.PathFinding
 {
 	[Serializable]
 	public class Path

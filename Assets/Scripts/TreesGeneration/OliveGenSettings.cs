@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using DavidUtils.Collections;
+using DavidUtils.Editor.DevTools.CustomAttributes;
 using DavidUtils.ExtensionMethods;
 using UnityEngine;
-using UnityEngine.Serialization;
 
-namespace TreesGeneration
+namespace GENES.TreesGeneration
 {
     [Serializable]
 	public class OliveGenSettings: TreesGenSettings
@@ -42,13 +42,11 @@ namespace TreesGeneration
 		
 		
 		#region CROP TYPE
-
-		private DictionarySerializable<OliveType, OliveTypeParams> _cropTypeParamsDictionary = 
-			new (typeof(OliveType).GetEnumValues<OliveType>(), OliveTypeParams.GetDefaultParams());
-
-		public OliveGenSettings()
-		{
-		}
+		
+		[SerializeField] [ArrayElementTitle]
+		private OliveTypeParams[] _cropTypeParams = OliveTypeParams.GetDefaultParams();
+		
+		public OliveGenSettings() {}
 
 		public OliveGenSettings(float probTraditionalCrop, float probIntensiveCrop, float probSuperIntensiveCrop, float lindeWidth, float maxSlopeAngle)
 		{
@@ -56,11 +54,10 @@ namespace TreesGeneration
 			this.probIntensiveCrop = probIntensiveCrop;
 			this.probSuperIntensiveCrop = probSuperIntensiveCrop;
 			this.lindeWidth = lindeWidth;
-			base.maxSlopeAngle = maxSlopeAngle;
+			this.maxSlopeAngle = maxSlopeAngle;
 		}
-
-
-		public OliveTypeParams GetCropTypeParams(OliveType type) => _cropTypeParamsDictionary.GetValue(type);
+		
+		public OliveTypeParams GetCropTypeParams(OliveType type) => _cropTypeParams.First(p => p.type == type);
 
 		#endregion
 	}
@@ -73,13 +70,16 @@ namespace TreesGeneration
 	}
 	
 	[Serializable]
-	public struct OliveTypeParams
+	public struct OliveTypeParams: ArrayElementTitleAttribute.IArrayElementTitle
 	{
+		[HideInInspector]
 		public OliveType type;
 		// X: Separacion entre olivos, Y: Separacion entre hileras
 		public Vector2 separationMin;
 		public Vector2 separationMax;
 		public float scale;
+
+		public string Name => type.ToString();
 		
 		
 		public static OliveTypeParams DefaultTraditionalParams => new()

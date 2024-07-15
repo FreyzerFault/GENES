@@ -4,9 +4,8 @@ using System.Linq;
 using DavidUtils.ExtensionMethods;
 using DavidUtils.Geometry;
 using UnityEngine;
-using UnityEngine.Serialization;
 
-namespace TreesGeneration
+namespace GENES.TreesGeneration
 {
 	public enum RegionType { Olive, Forest }
 	

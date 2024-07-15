@@ -1,8 +1,8 @@
 using System;
-using PathFinding.Settings;
+using GENES.PathFinding.Settings;
 using UnityEngine;
 
-namespace PathFinding.Algorithms
+namespace GENES.PathFinding.Algorithms
 {
 	public class DijkstraAlg : PathFindingAlgorithm
 	{

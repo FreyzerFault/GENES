@@ -1,4 +1,4 @@
-using TreesGeneration;
+using GENES.TreesGeneration;
 using UnityEditor;
 using UnityEngine;
 

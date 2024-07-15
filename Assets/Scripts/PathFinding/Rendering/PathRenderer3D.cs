@@ -4,7 +4,7 @@ using UnityEngine;
 #if UNITY_EDITOR
 #endif
 
-namespace PathFinding.Rendering
+namespace GENES.PathFinding.Rendering
 {
     public class PathRenderer3D : MonoBehaviour, IPathRenderer<PathObject>
     {
