@@ -1,7 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using DavidUtils.Collections;
-using DavidUtils.Editor.DevTools.CustomAttributes;
 using DavidUtils.ExtensionMethods;
 using UnityEngine;
 
@@ -10,43 +8,67 @@ namespace GENES.TreesGeneration
 	[CreateAssetMenu(fileName = "Generation Settings", menuName = "Generation/Generation Settings")]
 	public class GenerationSettingsSO : ScriptableObject
 	{
-		// TODO Probabilidades de cada tipo
-		
-		// RegionType Enum as keys
-		[SerializeField] private DictionarySerializable<RegionType, TreesGenSettings> regionSettings = 
-			new(typeof(RegionType).GetEnumValues<RegionType>());
-		
-		[SerializeField] private DictionarySerializable<RegionType, float> regionTypeProbabilities = 
-			new(typeof(RegionType).GetEnumValues<RegionType>(), new []{1f});
-
-		public TreesGenSettings GenSettings(RegionType type) => regionSettings[type];
-		public OliveGenSettings OliveGenSettings => (OliveGenSettings) GenSettings(RegionType.Olive);
-		public ForestGenSettings ForestGenSettings => (ForestGenSettings) GenSettings(RegionType.Forest);
+		[Range(0,1)] public float oliveProbability = 1;
+		[Range(0,1)] public float forestProbability = 1;
 
 		public OliveGenSettings oliveSettings;
 		public ForestGenSettings forestSettings;
 		
+		public Dictionary<RegionType, float> regionProbabilities = new();
+		public Dictionary<RegionType, TreesGenSettings> regionSettings = new();
+
+		public float GetProbability(RegionType type) => regionProbabilities[type];
+		public TreesGenSettings this[RegionType type] => regionSettings[type];
+
+		public OliveGenSettings OliveSettings => this[RegionType.Olive] as OliveGenSettings;
+		public ForestGenSettings ForestSettings => this[RegionType.Forest] as ForestGenSettings;
+
+
 		private void OnValidate()
 		{
+			SincronizeDictionaries();
 			NormalizeProbabilities();
 			
-			// OLIVE SubType Probabilities
-			// TODO
-			// OliveGenSettings.NormalizeProbabilities();
+			OliveSettings.NormalizeProbabilities();
 		}
+		
 
 		public RegionType GetRandomType() => 
-            regionTypeProbabilities.Keys.PickByProbability(regionTypeProbabilities.Values.ToArray());
+            regionProbabilities.Keys.PickByProbability(regionProbabilities.Values.ToArray());
 
-		private void NormalizeProbabilities()
+		
+		public void NormalizeProbabilities()
 		{
-			if (regionTypeProbabilities.Values.Sum() <= 1) return;
+			if (Mathf.Approximately(regionProbabilities.Values.Sum(), 1)) return;
 			
-			float[] newProbs = regionTypeProbabilities.Values.NormalizeProbabilities().ToArray();
+			float[] newProbs = regionProbabilities.Values.NormalizeProbabilities().ToArray();
 
 			typeof(RegionType).GetEnumValues<RegionType>().ForEach(
 				(type, i) =>
-					regionTypeProbabilities[type] = newProbs[i]);
+					regionProbabilities[type] = newProbs[i]);
+
+			SincronizeProbabilities();
+		}
+
+		private void SincronizeDictionaries()
+		{
+			regionProbabilities = new Dictionary<RegionType, float>
+			{
+				{RegionType.Olive, oliveProbability},
+				{RegionType.Forest, forestProbability}
+			};
+
+			regionSettings = new Dictionary<RegionType, TreesGenSettings>
+			{
+				{ RegionType.Olive, oliveSettings },
+				{ RegionType.Forest, forestSettings }
+			};
+		}
+
+		private void SincronizeProbabilities()
+		{
+			oliveProbability = regionProbabilities[RegionType.Olive];
+			forestProbability = regionProbabilities[RegionType.Forest];
 		}
 	}
 }

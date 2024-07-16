@@ -12,13 +12,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7d1130026fdad84bb59a2ebc9f297f2, type: 3}
   m_Name: Generation Settings
   m_EditorClassIdentifier: 
-  regionSettings:
-    list:
-    - key: 0
-    - key: 1
-  regionTypeProbabilities:
-    list:
-    - key: 0
-      value: 1
-    - key: 1
-      value: 0
+  oliveProbability: 0.67330635
+  forestProbability: 0.3266936
+  oliveSettings:
+    maxSlopeAngle: 30
+    lindeWidth: 12
+    defaultOliveType: 0
+    probTraditionalCrop: 0.86244917
+    probIntensiveCrop: 0.14910173
+    probSuperIntensiveCrop: 0
+    _cropTypeParams:
+    - type: 0
+      separationMin: {x: 10, y: 10}
+      separationMax: {x: 12, y: 12}
+      scale: 2
+    - type: 1
+      separationMin: {x: 3, y: 6}
+      separationMax: {x: 6, y: 6}
+      scale: 1
+    - type: 2
+      separationMin: {x: 1, y: 4}
+      separationMax: {x: 2, y: 4}
+      scale: 0.5
+  forestSettings:
+    maxSlopeAngle: 30
+    minSeparation: 0
+    density: 0

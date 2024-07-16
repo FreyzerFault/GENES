@@ -1085,8 +1085,7 @@ MonoBehaviour:
   generationSettings: {fileID: 11400000, guid: 3045c29b6b9eefe4cbc3ea900ddbdd62, type: 2}
   numRegions: 5
   iterations: 0
-  _drawRegions: 1
-  regionsRenderer: {fileID: 0}
+  regionsRenderer: {fileID: 851716335}
   drawOBBs: 0
 --- !u!1 &544560023
 GameObject:

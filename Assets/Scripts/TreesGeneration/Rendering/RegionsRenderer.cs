@@ -29,12 +29,7 @@ namespace GENES.TreesGeneration.Rendering
 
         private void InstantiateRendererWithData(RegionData data)
         {
-            RegionRenderer rr = InstantiateObj(objName: data switch
-            {
-                OliveRegionData regionData => regionData.Name,
-                ForestRegionData regionData => regionData.Name,
-                _ => data.Name
-            });
+            RegionRenderer rr = InstantiateObj(objName:data.Name);
             rr.Data = data;
             renderObjs.Add(rr);
         }

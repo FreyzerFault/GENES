@@ -8,6 +8,7 @@ using DavidUtils.Geometry;
 using DavidUtils.Geometry.Generators;
 using GENES.TreesGeneration.Rendering;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace GENES.TreesGeneration
 {
@@ -24,8 +25,8 @@ namespace GENES.TreesGeneration
         [Header("SETTINGS")]
         public GenerationSettingsSO generationSettings;
 
-        public OliveGenSettings oliveSettings => generationSettings.OliveGenSettings;
-        public ForestGenSettings forestSettings => generationSettings.ForestGenSettings;
+        public OliveGenSettings OliveSettings => generationSettings.OliveSettings;
+        public ForestGenSettings ForestSettings => generationSettings.ForestSettings;
         
         protected readonly Dictionary<Polygon, RegionData> regionsData = new();
         
@@ -174,7 +175,7 @@ namespace GENES.TreesGeneration
         {
             // TODO Elegir un tipo de Region
             
-            OliveRegionData data = OliveGroveGenerator.PopulateRegion(region, BoundsComp, oliveSettings);
+            OliveRegionData data = OliveGroveGenerator.PopulateRegion(region, BoundsComp, OliveSettings);
 
             regionsData.Add(region, data);
 
@@ -187,8 +188,6 @@ namespace GENES.TreesGeneration
 
 
         #region RENDERING
-
-        [SerializeField] private bool _drawRegions = true;
 
         [SerializeField]
         private RegionsRenderer regionsRenderer;

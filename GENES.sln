@@ -65,6 +65,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DavidUtils.Audio", "DavidUt
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DavidUtils.Geometry.Algorithms", "DavidUtils.Geometry.Algorithms.csproj", "{9b43e8f1-1b63-f280-8803-3155a3f4a29a}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DavidUtils.Editor.DevTools", "DavidUtils.Editor.DevTools.csproj", "{49764650-4dd3-8034-9e40-bd17b45004a9}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DavidUtils.Threading", "DavidUtils.Threading.csproj", "{b647af4b-ef80-451c-7ac5-ca3ff87e99c0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DavidUtils.Collections", "DavidUtils.Collections.csproj", "{b0607898-33bc-36e8-fe1f-2890de9892f5}"
@@ -76,8 +78,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BezierCurves.Editor", "BezierCurves.Editor.csproj", "{7c331c10-1890-d1f6-9da1-8d9eca9f5bb0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DavidUtils.Spawning", "DavidUtils.Spawning.csproj", "{13d4e1d0-0b5e-01ba-6e9a-aa8a60e3dc5a}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DavidUtils.Editor.DevTools", "DavidUtils.Editor.DevTools.csproj", "{49764650-4dd3-8034-9e40-bd17b45004a9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Procrain.Noise", "Procrain.Noise.csproj", "{d5a5fa5a-4b04-4653-2cd5-44f0fc1a6994}"
 EndProject
@@ -202,6 +202,8 @@ Global
 		{2a04e2b7-3610-b9fb-2395-f9457bd188a1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9b43e8f1-1b63-f280-8803-3155a3f4a29a}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{9b43e8f1-1b63-f280-8803-3155a3f4a29a}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{49764650-4dd3-8034-9e40-bd17b45004a9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{49764650-4dd3-8034-9e40-bd17b45004a9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{b647af4b-ef80-451c-7ac5-ca3ff87e99c0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{b647af4b-ef80-451c-7ac5-ca3ff87e99c0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{b0607898-33bc-36e8-fe1f-2890de9892f5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -214,8 +216,6 @@ Global
 		{7c331c10-1890-d1f6-9da1-8d9eca9f5bb0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{13d4e1d0-0b5e-01ba-6e9a-aa8a60e3dc5a}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{13d4e1d0-0b5e-01ba-6e9a-aa8a60e3dc5a}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{49764650-4dd3-8034-9e40-bd17b45004a9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{49764650-4dd3-8034-9e40-bd17b45004a9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{d5a5fa5a-4b04-4653-2cd5-44f0fc1a6994}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{d5a5fa5a-4b04-4653-2cd5-44f0fc1a6994}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{db236e53-a3c8-d523-9135-606fc5324a38}.Debug|Any CPU.ActiveCfg = Debug|Any CPU

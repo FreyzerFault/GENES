@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using DavidUtils.Collections;
-using DavidUtils.Editor.DevTools.CustomAttributes;
+using DavidUtils.DevTools.CustomAttributes;
 using DavidUtils.ExtensionMethods;
 using UnityEngine;
 
@@ -11,6 +11,9 @@ namespace GENES.TreesGeneration
     [Serializable]
 	public class OliveGenSettings: TreesGenSettings
 	{
+		public override RegionType RegionType => RegionType.Olive;
+		public override string Name => RegionType.ToString();
+		
 		// MAIN PARAMETERS
 		[Range(0.1f, 30)] public float lindeWidth = 12;
 
