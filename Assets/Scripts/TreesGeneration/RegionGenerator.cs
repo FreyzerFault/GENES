@@ -56,7 +56,7 @@ namespace GENES.TreesGeneration
         public int iterations;
         private const int MaxIterations = 1000;
         
-        public bool Ended => regionsData.Count >= numRegions || iterations > MaxIterations;
+        public bool Ended => regionsData.Count >= regions.Length || iterations > MaxIterations;
         
         private bool _animatedPopulation = true;
         public bool AnimatedPopulation
@@ -110,7 +110,7 @@ namespace GENES.TreesGeneration
             else if (!Ended)
             {
                 // Select random polygon not generated
-                var notGeneratedRegions = Polygons.Where(p => !regions.Contains(p));
+                var notGeneratedRegions = regions.Where(p => !regionsData.Keys.Contains(p));
                 Polygon regionPolygon = notGeneratedRegions.PickRandom();
                 
                 // Select random biome

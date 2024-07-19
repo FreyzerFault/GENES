@@ -1075,11 +1075,12 @@ MonoBehaviour:
   animatedVoronoi: 1
   _voronoiRenderer: {fileID: 1819664087}
   voronoiVoronoiRenderMode: 2
-  _hoverPolygon: 1
-  _selectPolygon: 1
+  canHoverPolygon: 1
+  canSelectPolygon: 1
   selectedPolygonIndex: -1
   selectedRenderer: {fileID: 0}
   hoverRenderer: {fileID: 0}
+  canDragPolygons: 0
   drawSelectedTriangles: 0
   regions: []
   generationSettings: {fileID: 11400000, guid: 3045c29b6b9eefe4cbc3ea900ddbdd62, type: 2}

@@ -54,7 +54,7 @@ namespace GENES.TreesGeneration
 			this.orientation = orientation;
 			this.olivosLinde = olivosLinde ?? new List<Vector2>();
 			this.interiorPolygon = interiorPolygon ?? polygon;
-			this.radiusByPoint = radius ?? DefaultScale.ToFilledArray(Olivos.Count()).ToArray();
+			radiusByPoint = radius ?? DefaultScale.ToFilledArray(Olivos.Count()).ToArray();
 		}
 
 		// Empty Region Data

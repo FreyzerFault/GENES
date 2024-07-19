@@ -22,6 +22,7 @@ namespace GENES.TreesGeneration
 			// CROP TYPE
 			OliveType cropType = settings.RandomizedType;
 			OliveTypeParams oliveParams = settings.GetCropTypeParams(cropType);
+			
 
 			// Separacion (Random [min - max])
 			Vector2 separation = Vector2.Lerp(oliveParams.separationMin, oliveParams.separationMax, Random.value);
@@ -30,6 +31,9 @@ namespace GENES.TreesGeneration
 			Vector2 orientation = GetRegionOrientation_ByAverage(region);
 
 			OliveRegionData data = new(region, cropType, orientation);
+			
+			// RADIUS / Size of the olive
+			data.radiusByPoint = oliveParams.scale.ToSingleArray().ToArray();
 			
 			switch (cropType)
 			{

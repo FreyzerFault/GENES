@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using DavidUtils.ExtensionMethods;
 using DavidUtils.Rendering;
 
@@ -29,7 +30,17 @@ namespace GENES.TreesGeneration.Rendering
 
         private void InstantiateRendererWithData(RegionData data)
         {
-            RegionRenderer rr = InstantiateObj(objName:data.Name);
+            RegionRenderer rr = null;
+            switch (data.type)
+            {
+                case RegionType.Olive:
+                    rr = InstantiateObj<OliveRegionRenderer>(objName: data.Name); 
+                    break;
+                case RegionType.Forest:
+                    rr = InstantiateObj<ForestRegionRenderer>(objName: data.Name); 
+                    break;
+            }
+            if (rr == null) throw new Exception("RegionRenderer not implemented for type " + data.type);
             rr.Data = data;
             renderObjs.Add(rr);
         }
