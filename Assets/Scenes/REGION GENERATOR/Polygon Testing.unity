@@ -38,7 +38,6 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -875,12 +874,12 @@ MonoBehaviour:
   m_RequiresColorTexture: 0
   m_Version: 2
   m_TaaSettings:
-    quality: 3
-    frameInfluence: 0.1
-    jitterScale: 1
-    mipBias: 0
-    varianceClampScale: 0.9
-    contrastAdaptiveSharpening: 0
+    m_Quality: 3
+    m_FrameInfluence: 0.1
+    m_JitterScale: 1
+    m_MipBias: 0
+    m_VarianceClampScale: 0.9
+    m_ContrastAdaptiveSharpening: 0
 --- !u!1 &363874487
 GameObject:
   m_ObjectHideFlags: 0
@@ -2517,8 +2516,9 @@ GameObject:
   - component: {fileID: 1473327788}
   - component: {fileID: 1473327787}
   - component: {fileID: 1473327786}
+  - component: {fileID: 1473327790}
   m_Layer: 0
-  m_Name: Polygon
+  m_Name: POLYGON
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2536,7 +2536,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05a9aa2ac7f3cec499dbf5e94af4cdae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  runOnStart: 1
+  runOnStart: 0
   autoRun: 1
   waitSeconds: 0.4
   seed: 994880160
@@ -2734,6 +2734,31 @@ MonoBehaviour:
   centeredScale: 1
   projectOnTerrain: 0
   terrainHeightOffset: 0.1
+--- !u!114 &1473327790
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1473327783}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bcdf6c616326c4aaeb610b335fbb67fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  useDefaultBackgroundColor: 0
+  backgroundColor:
+    serializedVersion: 2
+    rgba: 4278537984
+  useDefaultTextColor: 0
+  textColor:
+    serializedVersion: 2
+    rgba: 4294967295
+  font: {fileID: 0}
+  fontSize: 14
+  fontStyle: 1
+  alignment: 4
+  textDropShadow: 0
 --- !u!1 &1483291461
 GameObject:
   m_ObjectHideFlags: 0
@@ -3810,8 +3835,8 @@ CanvasRenderer:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
+  - {fileID: 1483291466}
+  - {fileID: 1473327785}
   - {fileID: 333714338}
   - {fileID: 1163055983}
-  - {fileID: 1473327785}
-  - {fileID: 1483291466}
   - {fileID: 553138211}
