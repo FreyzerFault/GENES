@@ -12,22 +12,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7d1130026fdad84bb59a2ebc9f297f2, type: 3}
   m_Name: Test Settings
   m_EditorClassIdentifier: 
-  globalParams:
-    lindeWidth: 10
-    defaultCropType: 0
-    probTraditionalCrop: 0.3467139
-    probIntensiveCrop: 0.3186948
-    probSuperIntensiveCrop: 0.33459136
-  cropTypeParams:
-  - type: 0
-    separationMin: {x: 10, y: 10}
-    separationMax: {x: 10, y: 10}
-    scale: 6
-  - type: 1
-    separationMin: {x: 6, y: 6}
-    separationMax: {x: 6, y: 6}
-    scale: 3
-  - type: 2
-    separationMin: {x: 1, y: 4}
-    separationMax: {x: 2, y: 4}
-    scale: 1
+  oliveProbability: 1
+  forestProbability: 0
+  oliveSettings:
+    maxSlopeAngle: 40
+    lindeWidth: 10.7
+    defaultOliveType: 0
+    probTraditionalCrop: 0.5
+    probIntensiveCrop: 0.3
+    probSuperIntensiveCrop: 0.2
+    _cropTypeParams:
+    - type: 0
+      separationMin: {x: 10, y: 10}
+      separationMax: {x: 12, y: 12}
+      scale: 5
+    - type: 1
+      separationMin: {x: 3, y: 6}
+      separationMax: {x: 6, y: 6}
+      scale: 2
+    - type: 2
+      separationMin: {x: 1, y: 4}
+      separationMax: {x: 2, y: 4}
+      scale: 1
+  forestSettings:
+    maxSlopeAngle: 30
+    minSeparation: 0
+    density: 0

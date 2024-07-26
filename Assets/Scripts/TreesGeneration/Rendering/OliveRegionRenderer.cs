@@ -1,4 +1,6 @@
-﻿using DavidUtils.Rendering;
+﻿using System.Linq;
+using DavidUtils.ExtensionMethods;
+using DavidUtils.Rendering;
 using UnityEngine;
 
 namespace GENES.TreesGeneration.Rendering
@@ -8,33 +10,52 @@ namespace GENES.TreesGeneration.Rendering
     {
         private OliveRegionData OliveData => (OliveRegionData) Data;
         
-        private PointsRenderer _olivesRenderer;
+        private PointsRenderer _pointsRenderer;
         
         protected override void Awake()
         {
             base.Awake();
             
-            _olivesRenderer = GetComponent<PointsRenderer>() ?? gameObject.AddComponent<PointsRenderer>();
+            _pointsRenderer = GetComponent<PointsRenderer>() ?? gameObject.AddComponent<PointsRenderer>();
         }
 
         protected override void UpdateData()
         {
-            _olivesRenderer.UpdateAllObj(OliveData.Olivos);
-            UpdateRadius();
+            base.UpdateData();
+
+            UpdatePointsPositions();
+            UpdatePointsRadius();
+            UpdatePointsColor();
         }
 
-        private void UpdateRadius() => _olivesRenderer.RadiusByPoint = OliveData.radiusByPoint;
+        private void UpdatePointsPositions() => _pointsRenderer.UpdateAllObj(OliveData.Olivos);
+        private void UpdatePointsRadius() => _pointsRenderer.RadiusByPoint = OliveData.radiusByPoint;
+        private void UpdatePointsColor() => 
+            _pointsRenderer.Colors = ColorByType(OliveData.oliveType).ToFilledArray(OliveData.OlivosCount).ToArray();
 
         public override void Clear()
         {
             base.Clear();
-            _olivesRenderer.Clear();
+            _pointsRenderer.Clear();
         }
 
         public override void ProjectOnTerrain(float offset = 0.1f, bool scaleToTerrainBounds = true)
         {
             base.ProjectOnTerrain(offset, scaleToTerrainBounds);
-            _olivesRenderer.ProjectedOnTerrain = true;
+            _pointsRenderer.ProjectedOnTerrain = true;
         }
+
+        #region COLORS
+
+        private Color ColorByType(OliveType type) =>
+            OliveData.oliveType switch
+            {
+                OliveType.Traditional => "#627b34".ToUnityColor(),
+                OliveType.Intesive => "#6cb74a".ToUnityColor(),
+                OliveType.SuperIntesive => "#36b733".ToUnityColor(),
+                _ => Color.white
+            };
+
+        #endregion
     }
 }

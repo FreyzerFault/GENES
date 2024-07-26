@@ -30,11 +30,12 @@ namespace GENES.TreesGeneration
 
 			Vector2 orientation = GetRegionOrientation_ByAverage(region);
 
-			OliveRegionData data = new(region, cropType, orientation);
-			
-			// RADIUS / Size of the olive
-			data.radiusByPoint = oliveParams.scale.ToSingleArray().ToArray();
-			
+			OliveRegionData data = new(region, cropType, orientation)
+			{
+				// RADIUS / Size of the olive
+				radiusByPoint = oliveParams.scale.ToSingleArray().ToArray()
+			};
+
 			switch (cropType)
 			{
 				case OliveType.Traditional:

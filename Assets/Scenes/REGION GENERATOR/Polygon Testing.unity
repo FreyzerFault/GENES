@@ -2536,7 +2536,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05a9aa2ac7f3cec499dbf5e94af4cdae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  runOnStart: 0
+  runOnStart: 1
   autoRun: 1
   waitSeconds: 0.4
   seed: 994880160

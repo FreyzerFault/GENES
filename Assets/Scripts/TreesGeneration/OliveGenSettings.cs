@@ -20,6 +20,7 @@ namespace GENES.TreesGeneration
 		// TIPO de CULTIVO
 		public OliveType defaultOliveType;
 		public OliveType[] Types => new[] { OliveType.Traditional, OliveType.Intesive, OliveType.SuperIntesive };
+		public OliveType RandomizedType => Types.PickByProbability(Probabilities);
 
 		// % de cada tipo
 		[Range(0, 1)] public float probTraditionalCrop = .5f;
@@ -38,12 +39,34 @@ namespace GENES.TreesGeneration
 			}
 		}
 
-		public OliveType RandomizedType => Types.PickByProbability(Probabilities);
+		private float[] lastNormalizedProbs = null;
 
-		public void NormalizeProbabilities() =>
-			Probabilities = Probabilities.NormalizeProbabilities().ToArray();
-		
-		
+
+		public void NormalizeProbabilities()
+		{
+			// Si no se normalizó nunca, se normaliza y se guarda como referencia para proximos cambios
+			if (lastNormalizedProbs == null)
+			{
+				Probabilities = Probabilities.NormalizeProbabilities().ToArray();
+				lastNormalizedProbs = Probabilities;
+				return;
+			}
+			
+			if (Mathf.Approximately(Probabilities.Sum(), 1)) return;
+			
+			// Si dejó de estar normalizado, se normaliza manteniendo el valor modificado
+			// Buscamos el valor modificado para ignorarlo
+			for (var i = 0; i < lastNormalizedProbs.Length; i++)
+			{
+				if (Mathf.Approximately(lastNormalizedProbs[i], Probabilities[i])) continue;
+				
+				Probabilities = Probabilities.NormalizeProbabilities(i).ToArray();
+				lastNormalizedProbs = Probabilities;
+				return;
+			}
+		}
+
+
 		#region CROP TYPE
 		
 		[SerializeField] [ArrayElementTitle]

@@ -12,15 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7d1130026fdad84bb59a2ebc9f297f2, type: 3}
   m_Name: Generation Settings
   m_EditorClassIdentifier: 
-  oliveProbability: 0.67330635
-  forestProbability: 0.3266936
+  oliveProbability: 1
+  forestProbability: 0.000000059604645
   oliveSettings:
-    maxSlopeAngle: 30
-    lindeWidth: 12
+    maxSlopeAngle: 40
+    lindeWidth: 9.2
     defaultOliveType: 0
-    probTraditionalCrop: 0.86244917
-    probIntensiveCrop: 0.14910173
-    probSuperIntensiveCrop: 0
+    probTraditionalCrop: 0.5345
+    probIntensiveCrop: 0.281
+    probSuperIntensiveCrop: 0.1845
     _cropTypeParams:
     - type: 0
       separationMin: {x: 10, y: 10}

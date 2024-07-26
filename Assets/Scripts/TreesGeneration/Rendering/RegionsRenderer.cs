@@ -2,6 +2,7 @@
 using System.Linq;
 using DavidUtils.ExtensionMethods;
 using DavidUtils.Rendering;
+using UnityEngine;
 
 namespace GENES.TreesGeneration.Rendering
 {
@@ -15,6 +16,8 @@ namespace GENES.TreesGeneration.Rendering
 
         private bool NoData => Data == null || Data.Length == 0;
 
+        private void OnValidate() => renderObjs.ForEach(SetCommonProperties);
+
         private void OnEnable()
         {
             regionGenerator.OnRegionPopulated += InstantiateRendererWithData;
@@ -27,6 +30,7 @@ namespace GENES.TreesGeneration.Rendering
             regionGenerator.OnRegionPopulated -= InstantiateRendererWithData;
             regionGenerator.OnClear -= Clear;
         }
+
 
         private void InstantiateRendererWithData(RegionData data)
         {
@@ -63,7 +67,8 @@ namespace GENES.TreesGeneration.Rendering
 
         #region COMMON PROP
 
-        private float thickness;
+        [Range(0,1)]
+        [SerializeField] private float thickness;
         public float Thickness
         {
             get => thickness;
@@ -86,10 +91,16 @@ namespace GENES.TreesGeneration.Rendering
 
         #endregion
 
+        #region INDIVIDUAL PROPS
+        
+        protected override void UpdateColor() => 
+            renderObjs.ForEach((r, i) => r.Color = GetColor(i));
+
+        #endregion
+
 
         #region TERRAIN PROJECTION
 
-        
         protected override void ProjectOnTerrain()
         {
             renderObjs.ForEach(r => r.ProjectOnTerrain());

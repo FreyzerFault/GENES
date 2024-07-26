@@ -1805,7 +1805,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &649240195
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1826,7 +1826,7 @@ MonoBehaviour:
     palletteRange: 20
   colors: []
   projectedOnTerrain: 0
-  radius: 0.135
+  radius: 0.515
   thickness: 0
   textureSize: 20
   drawGizmos: 0
@@ -2997,6 +2997,7 @@ MonoBehaviour:
   colors: []
   projectedOnTerrain: 0
   regionGenerator: {fileID: 2038673629}
+  thickness: 1.02
 --- !u!4 &1016936910
 Transform:
   m_ObjectHideFlags: 0
@@ -3457,7 +3458,7 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 1
+  m_HorizontalAlignment: 4
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
@@ -3877,7 +3878,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 85.082, y: 32.5734}
+  m_SizeDelta: {x: 109.63, y: 32.573}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1502075949
 MonoBehaviour:
@@ -3933,7 +3934,7 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 1
+  m_HorizontalAlignment: 4
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
@@ -4437,7 +4438,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 85.082, y: 32.5734}
+  m_SizeDelta: {x: 109.63, y: 32.573}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1699077220
 MonoBehaviour:
@@ -4493,7 +4494,7 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 1
+  m_HorizontalAlignment: 4
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
@@ -5229,11 +5230,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   randSeed: 10
-  numSeeds: 10
-  seedsDistribution: 0
+  numSeeds: 9
+  seedsDistribution: 1
   seeds: []
   seedsRenderer: {fileID: 649240195}
-  drawGizmos: 0
+  drawGizmos: 1
   drawGrid: 1
   delaunay:
     vertices: []
@@ -5260,8 +5261,8 @@ MonoBehaviour:
   canDragPolygons: 0
   drawSelectedTriangles: 0
   regions: []
-  generationSettings: {fileID: 11400000, guid: 3045c29b6b9eefe4cbc3ea900ddbdd62, type: 2}
-  numRegions: 5
+  generationSettings: {fileID: 11400000, guid: 73275cd3d91187249accafcb5f960518, type: 2}
+  numRegions: 9
   iterations: 0
   regionsRenderer: {fileID: 1016936909}
   drawOBBs: 0
@@ -5278,11 +5279,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   runOnStart: 1
-  autoRun: 1
+  autoRun: 0
   waitSeconds: 1
   initialSeed: 999
   numFincas: 9
-  mapSize: 100
+  mapSize: 200
 --- !u!4 &2038673631
 Transform:
   m_ObjectHideFlags: 0

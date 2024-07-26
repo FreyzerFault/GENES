@@ -26,7 +26,7 @@ namespace GENES.TreesGeneration
 	[Serializable]
 	public class OliveRegionData: RegionData
 	{
-		public const float DefaultScale = 1;
+		public const float DefaultScale = 10;
 		public override string Name => "Olivar";
 		
 		public OliveType oliveType;
@@ -42,6 +42,8 @@ namespace GENES.TreesGeneration
 		public IEnumerable<Vector2> Olivos =>
 			(olivosInterior ??= new List<Vector2>()).Concat(olivosLinde ??= new List<Vector2>());
 
+		public int OlivosCount => Olivos.Count();
+
 		// CON LINDE
 		private OliveRegionData(
 			Polygon polygon, OliveType oliveType, List<Vector2> olivosInterior, Vector2 orientation,
@@ -54,7 +56,8 @@ namespace GENES.TreesGeneration
 			this.orientation = orientation;
 			this.olivosLinde = olivosLinde ?? new List<Vector2>();
 			this.interiorPolygon = interiorPolygon ?? polygon;
-			radiusByPoint = radius ?? DefaultScale.ToFilledArray(Olivos.Count()).ToArray();
+			if (Olivos.IsNullOrEmpty()) radiusByPoint = DefaultScale.ToSingleArray().ToArray();
+			else radiusByPoint = radius ?? DefaultScale.ToFilledArray(Olivos.Count()).ToArray();
 		}
 
 		// Empty Region Data
