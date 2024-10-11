@@ -35,7 +35,7 @@ namespace GENES.TreesGeneration
 		private void HandleOnRegionPopulated(RegionData data)
 		{
 			if (data is OliveRegionData oliveData)
-				Spawn2D(oliveData.olivosInterior);
+				Spawn2D(oliveData.OlivosInterior);
 		}
 
 		// TODO Ya veremos que hago cuando se completa

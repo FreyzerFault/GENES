@@ -1819,15 +1819,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   renderObjs: []
-  useColor: 1
-  colorPallette:
-    initialColor: {r: 1, g: 0.95688176, b: 0, a: 1}
-    palletteStep: 0.05
-    palletteRange: 20
+  singleColor: 0
+  colorPaletteData:
+    baseColor: {r: 1, g: 1, b: 1, a: 1}
+    paletteStep: 0.05
+    paletteRange: 20
   colors: []
   projectedOnTerrain: 0
+  terrainHeightOffset: 0.1
   radius: 0.515
-  thickness: 0
+  pointThickness: 0
   textureSize: 20
   drawGizmos: 0
 --- !u!4 &649240196
@@ -2989,13 +2990,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   renderObjs: []
-  useColor: 1
-  colorPallette:
-    initialColor: {r: 0, g: 1, b: 0.6713879, a: 1}
-    palletteStep: 0.05
-    palletteRange: 20
+  singleColor: 0
+  colorPaletteData:
+    baseColor: {r: 0.22120541, g: 0.6509434, b: 0.21800464, a: 1}
+    paletteStep: 0.05
+    paletteRange: 20
   colors: []
   projectedOnTerrain: 0
+  terrainHeightOffset: 0.1
   regionGenerator: {fileID: 2038673629}
   thickness: 1.02
 --- !u!4 &1016936910
@@ -5251,7 +5253,7 @@ MonoBehaviour:
       ended: 0
     polygons: []
   animatedVoronoi: 1
-  _voronoiRenderer: {fileID: 2070962706}
+  voronoiRenderer: {fileID: 0}
   voronoiVoronoiRenderMode: 2
   canHoverPolygon: 1
   canSelectPolygon: 1
@@ -5333,19 +5335,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   renderObjs: []
-  useColor: 1
-  colorPallette:
-    initialColor: {r: 0, g: 0.88140154, b: 0.8433803, a: 1}
-    palletteStep: 0.05
-    palletteRange: 20
-  colors: []
+  singleColor: 0
+  colorPaletteData:
+    baseColor: {r: 1, g: 0.4448824, b: 0, a: 1}
+    paletteStep: 0.05
+    paletteRange: 20
+  colors:
+  - {r: 1, g: 0.4448824, b: 0, a: 1}
   projectedOnTerrain: 0
-  renderMode: 2
-  thickness: 1
-  polygonScale: 1
-  outlineColor: {r: 1, g: 1, b: 1, a: 1}
-  projectOnTerrain: 1
   terrainHeightOffset: 0.1
+  renderMode: 2
+  thickness: 0.01
+  polygonScale: 1
+  outlineColor: {r: 0.9339623, g: 0.9339623, b: 0.9339623, a: 1}
 --- !u!4 &2070962707
 Transform:
   m_ObjectHideFlags: 0

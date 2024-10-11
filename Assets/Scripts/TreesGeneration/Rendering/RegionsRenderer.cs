@@ -34,6 +34,7 @@ namespace GENES.TreesGeneration.Rendering
 
         private void InstantiateRendererWithData(RegionData data)
         {
+            Debug.Log("RegionRenderer Instantiated");
             RegionRenderer rr = null;
             switch (data.type)
             {
@@ -51,6 +52,7 @@ namespace GENES.TreesGeneration.Rendering
         
         public void UpdateAllRegions(RegionData[] data)
         {
+            Debug.Log($"Update All Regions (data: {data.Length})", this);
             if (data.Length < renderObjs.Count)
                 renderObjs.RemoveRange(data.Length, renderObjs.Count - data.Length);
             else
@@ -93,7 +95,7 @@ namespace GENES.TreesGeneration.Rendering
 
         #region INDIVIDUAL PROPS
         
-        protected override void UpdateColor() => 
+        public override void UpdateColor() => 
             renderObjs.ForEach((r, i) => r.Color = GetColor(i));
 
         #endregion

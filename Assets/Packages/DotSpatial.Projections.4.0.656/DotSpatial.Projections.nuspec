@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>DotSpatial.Projections</id>
+    <version>4.0.656</version>
+    <authors>DotSpatial Team</authors>
+    <license type="expression">MIT</license>
+    <licenseUrl>https://licenses.nuget.org/MIT</licenseUrl>
+    <projectUrl>https://github.com/DotSpatial/DotSpatial/</projectUrl>
+    <description>Package Description</description>
+    <copyright>Copyright © 2012 - 2022 DotSpatial Team</copyright>
+    <tags>Spatial GIS DotSpatial</tags>
+    <dependencies>
+      <group targetFramework="net6.0" />
+      <group targetFramework=".NETStandard2.0" />
+    </dependencies>
+  </metadata>
+</package>

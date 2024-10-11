@@ -33,7 +33,7 @@ namespace GENES.TreesGeneration
 			OliveRegionData data = new(region, cropType, orientation)
 			{
 				// RADIUS / Size of the olive
-				radiusByPoint = oliveParams.scale.ToSingleArray().ToArray()
+				radiusByTree = oliveParams.scale.ToSingleArray().ToArray()
 			};
 
 			switch (cropType)
@@ -44,8 +44,8 @@ namespace GENES.TreesGeneration
 
 					data.interiorPolygon = region.InteriorPolygon(lindeWidthLocal);
 
-					data.olivosInterior = PopulatePolygon(data.interiorPolygon, separationLocal, orientation).ToList();
-					data.olivosLinde = PopulateLinde(GetLinde(region, lindeWidthLocal), separationLocal.x).ToList();
+					data.OlivosInterior = PopulatePolygon(data.interiorPolygon, separationLocal, orientation).ToList();
+					data.OlivosLinde = PopulateLinde(GetLinde(region, lindeWidthLocal), separationLocal.x).ToList();
 
 					// Postprocesado
 					data = PostprocessOliveRegionData(data, Mathf.Min(separationLocal.x, separationLocal.y));
@@ -56,12 +56,13 @@ namespace GENES.TreesGeneration
 					// OLIVO EN INTENSIVO => NO hay Linde, pero procuramos una separacion con sus vecinos
 					float margin = separationLocal.y / 2;
 					Polygon marginPolygon = region.InteriorPolygon(margin);
-					data.olivosInterior = PopulatePolygon(marginPolygon, separationLocal, orientation).ToList();
+					data.OlivosInterior = PopulatePolygon(marginPolygon, separationLocal, orientation).ToList();
 					break;
 			}
 			
-			data.olivosInterior.RemoveAll(p => IsInvalidPosition(p, settings));
-			data.olivosLinde?.RemoveAll(p => IsInvalidPosition(p, settings));
+			data.OlivosInterior.RemoveAll(p => IsInvalidPosition(p, settings));
+			data.OlivosLinde?.RemoveAll(p => IsInvalidPosition(p, settings));
+			data.UpdateTreePositions();
 			
 			return data;
 		}
@@ -228,9 +229,9 @@ namespace GENES.TreesGeneration
 		/// </summary>
 		private static OliveRegionData PostprocessOliveRegionData(OliveRegionData data, float minSeparation)
 		{
-			data.olivosInterior.RemoveAll(
+			data.OlivosInterior.RemoveAll(
 				olivo =>
-					data.olivosLinde.Any(olivoLinde => Vector2.Distance(olivo, olivoLinde) < minSeparation)
+					data.OlivosLinde.Any(olivoLinde => Vector2.Distance(olivo, olivoLinde) < minSeparation)
 			);
 			return data;
 		}
@@ -263,7 +264,7 @@ namespace GENES.TreesGeneration
 				Gizmos.color = data.oliveType == OliveType.Traditional ? oliveColor : intensiveColor;
 				data.Olivos.ForEach(
 					(olivo, i) =>
-						Gizmos.DrawSphere(localToWorldMatrix.MultiplyPoint3x4(olivo), data.radiusByPoint[i])
+						Gizmos.DrawSphere(localToWorldMatrix.MultiplyPoint3x4(olivo), data.radiusByTree[i])
 				);
 
 

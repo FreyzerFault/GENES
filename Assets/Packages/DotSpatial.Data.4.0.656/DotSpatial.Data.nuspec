@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+  <metadata>
+    <id>DotSpatial.Data</id>
+    <version>4.0.656</version>
+    <authors>DotSpatial Team</authors>
+    <license type="expression">MIT</license>
+    <licenseUrl>https://licenses.nuget.org/MIT</licenseUrl>
+    <projectUrl>https://github.com/DotSpatial/DotSpatial/</projectUrl>
+    <description>GIS Data objects for DotSpatial.</description>
+    <copyright>Copyright © 2012 - 2022 DotSpatial Team</copyright>
+    <tags>Spatial GIS DotSpatial</tags>
+    <dependencies>
+      <group targetFramework="net6.0-windows7.0">
+        <dependency id="DotSpatial.NTSExtension" version="4.0.656" exclude="Build,Analyzers" />
+        <dependency id="DotSpatial.Projections" version="4.0.656" exclude="Build,Analyzers" />
+        <dependency id="DotSpatial.Serialization" version="4.0.656" exclude="Build,Analyzers" />
+        <dependency id="NetTopologySuite" version="2.4.0" exclude="Build,Analyzers" />
+        <dependency id="System.ComponentModel.Composition" version="6.0.0" exclude="Build,Analyzers" />
+        <dependency id="System.Data.OleDb" version="6.0.0" exclude="Build,Analyzers" />
+        <dependency id="System.Drawing.Common" version="6.0.0" exclude="Build,Analyzers" />
+      </group>
+    </dependencies>
+  </metadata>
+</package>

@@ -36,6 +36,8 @@ namespace GENES.TreesGeneration.Rendering
 
         protected override void Awake()
         {
+            base.Awake();
+            
             if (data == null) return;
             
             UpdateData();
