@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace GENES.Editor.Trees_Generation
 {
-	[CustomEditor(typeof(RegionGenerator))]
+	[CustomEditor(typeof(RegionGenerator), true)]
 	public class RegionGeneratorEditor : UnityEditor.Editor
 	{
 		public override void OnInspectorGUI()
@@ -31,6 +31,11 @@ namespace GENES.Editor.Trees_Generation
 			EditorGUILayout.Space();
 
 			base.OnInspectorGUI();
+		}
+
+		private void SeedSettingsGUI()
+		{
+			
 		}
 	}
 }

@@ -8,4 +8,5 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/REGION GENERATOR/Voronoi/Voronoi Testing.unity
     guid: 7097fe16c5834354cb55c297e9825461
-  m_configObjects: {}
+  m_configObjects:
+    com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 0d742649862137f4d8f57327ebae7d04, type: 3}
