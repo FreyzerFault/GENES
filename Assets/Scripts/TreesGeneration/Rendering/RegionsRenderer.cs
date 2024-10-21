@@ -16,7 +16,7 @@ namespace GENES.TreesGeneration.Rendering
 
         private bool NoData => Data == null || Data.Length == 0;
 
-        private void OnValidate() => renderObjs.ForEach(SetCommonProperties);
+        private void OnValidate() => renderObjs.ForEach(UpdateCommonProperties);
 
         private void OnEnable()
         {
@@ -86,7 +86,7 @@ namespace GENES.TreesGeneration.Rendering
         }
         
         
-        protected override void SetCommonProperties(RegionRenderer renderObj)
+        protected override void UpdateCommonProperties(RegionRenderer renderObj)
         {
             renderObj.Thickness = thickness;
         }
