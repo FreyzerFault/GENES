@@ -35,20 +35,5 @@ namespace GENES.Editor.Trees_Generation.Rendering
             if (EditorGUI.EndChangeCheck()) renderer.Thickness = thickness;
             EditorGUI.indentLevel--;
         }
-        
-        
-        
-        
-        #region UNDO
-
-        public override Undo.UndoRedoEventCallback UndoRedoEvent => delegate (in UndoRedoInfo info)
-        {
-            var regionsRenderer = (RegionsRenderer) target;
-            if (target == null) return;
-            if (info.undoName == "Color Changed") 
-                regionsRenderer.UpdateColor();
-        };
-
-        #endregion
     }
 }

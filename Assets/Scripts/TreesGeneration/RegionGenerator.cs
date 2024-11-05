@@ -65,26 +65,19 @@ namespace GENES.TreesGeneration
             set => _animatedPopulation = value;
         }
         
-        public override void Reset()
+        public override void Init()
         {
-            base.Reset();
-            ResetRegions();
-            Renderer.Clear();
-        }
-
-        protected  void ResetRegions()
-        {
+            base.Init();
+            
             regions = Array.Empty<Polygon>();
             regionsData.Clear();
             iterations = 0;
+            
             OnClear?.Invoke();
         }
-
+        
         public override void Run()
         {
-            ResetDelaunay();
-            ResetVoronoi();
-            ResetRegions();
             if (_animatedPopulation)
             {
                 animationCoroutine = StartCoroutine(RunCoroutine());
@@ -124,8 +117,6 @@ namespace GENES.TreesGeneration
         public override IEnumerator RunCoroutine()
         {
             yield return base.RunCoroutine();
-
-            ResetRegions();
             
             DefineRegions();
             OnAllPolygonsCreated();

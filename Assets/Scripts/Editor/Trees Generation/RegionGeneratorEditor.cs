@@ -24,7 +24,7 @@ namespace GENES.Editor.Trees_Generation
 			}
 
 			if (GUILayout.Button("Reset"))
-				spawnerOlivos.Reset();
+				spawnerOlivos.Init();
 
 			EditorGUILayout.EndHorizontal();
 

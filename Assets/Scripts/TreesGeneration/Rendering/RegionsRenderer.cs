@@ -34,7 +34,6 @@ namespace GENES.TreesGeneration.Rendering
 
         private void InstantiateRendererWithData(RegionData data)
         {
-            Debug.Log("RegionRenderer Instantiated");
             RegionRenderer rr = null;
             switch (data.type)
             {

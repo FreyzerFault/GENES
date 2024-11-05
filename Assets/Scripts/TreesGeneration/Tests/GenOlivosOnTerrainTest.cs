@@ -63,7 +63,7 @@ namespace GENES.TreesGeneration.Tests
 
 		private IEnumerator RunGenerator()
 		{
-			Generator.Reset();
+			Generator.Init();
 			if (iterations == 0) Generator.GenerateSeeds();
 			else Generator.RandomizeSeeds();
 

@@ -31,7 +31,7 @@ MonoBehaviour:
       separationMax: {x: 6, y: 6}
       scale: 2
     - type: 2
-      separationMin: {x: 1, y: 4}
+      separationMin: {x: 2, y: 4}
       separationMax: {x: 2, y: 4}
       scale: 1
   forestSettings:
