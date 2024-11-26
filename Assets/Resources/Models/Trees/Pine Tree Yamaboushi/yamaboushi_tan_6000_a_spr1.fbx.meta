@@ -3,7 +3,27 @@ guid: bd7030ac32e744d4a88a4892f33cafbb
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: yamaboushi_leaf_spr1_1_Mat
+    second: {fileID: 2100000, guid: 62666ec06150e014bbfa990a943a34ce, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: yamaboushi_leaf_spr1_2_Mat
+    second: {fileID: 2100000, guid: 1b4a5cfd3fd5ea541831949896f95621, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: yamaboushi_leaf_spr1_3_Mat
+    second: {fileID: 2100000, guid: 935b9864ff2350d499dc229716fd55e5, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: yamaboushi_tan_trunk_Mat
+    second: {fileID: 2100000, guid: 65d46de082cf52c4096f25d521e3885e, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
@@ -16,8 +36,6 @@ ModelImporter:
     optimizeGameObjects: 0
     removeConstantScaleCurves: 0
     motionNodeName: 
-    rigImportErrors: 
-    rigImportWarnings: 
     animationImportErrors: 
     animationImportWarnings: 
     animationRetargetingWarnings: 

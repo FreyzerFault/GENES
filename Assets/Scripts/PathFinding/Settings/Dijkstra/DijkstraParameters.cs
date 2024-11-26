@@ -1,27 +1,27 @@
-using System.Linq;
-using DavidUtils.Collections;
+using System.Collections.Generic;
+using DavidUtils.ExtensionMethods;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 namespace GENES.PathFinding.Settings.Dijkstra
 {
 	[CreateAssetMenu(fileName = "Dijkstra Parameters", menuName = "PathFinding/Dijkstra Parameters")]
 	public class DijkstraParameters : AlgorithmParams
 	{
-		private const float DefaultValue = 1f;
-		private static readonly string[] _displayNames = { "Distance", "Height" };
-
-		private static readonly ParamType[] _paramsKeys =
+		protected override float[] DefaultValue => new [] { 1f, 1f };
+		public override string[] DisplayNames => new [] { "Distance", "Height" };
+		public override ParamType[] Types => new []
 		{
 			ParamType.DistanceCost,
 			ParamType.HeightCost
 		};
 
-		public DijkstraParameters(DictionarySerializable<ParamType, ParamValue> parameters = null)
+		public DijkstraParameters(IDictionary<ParamType, ParamValue> parameters = null)
 		{
-			ParamValue[] values = _displayNames
-				.Select(displayName => new ParamValue { value = DefaultValue, displayName = displayName })
-				.ToArray();
-			this.parameters = parameters ?? new DictionarySerializable<ParamType, ParamValue>(_paramsKeys, values);
+			if (parameters != null)
+				SetParameters(parameters);
+			else
+				SetDefaultValues();
 		}
 
 		// Escalado de Coste y Heurística

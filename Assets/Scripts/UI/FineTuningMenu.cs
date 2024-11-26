@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using GENES.PathFinding;
 using GENES.PathFinding.Settings;
+using GENES.PathFinding.Settings.Astar;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -26,7 +27,7 @@ namespace GENES.UI
         private void Awake()
         {
             _parameterControllers = new Dictionary<ParamType, ParameterController>();
-            foreach (ParamType paramType in Parameters.parameters.Keys)
+            foreach (ParamType paramType in Parameters.Types)
                 _parameterControllers.Add(
                     paramType,
                     new ParameterController

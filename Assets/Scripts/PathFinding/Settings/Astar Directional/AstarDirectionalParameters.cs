@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using DavidUtils.Collections;
 using UnityEngine;
@@ -8,10 +10,10 @@ namespace GENES.PathFinding.Settings.Astar_Directional
     [CreateAssetMenu(fileName = "Astar Directional Parameters", menuName = "PathFinding/Astar Directional Parameters")]
     public class AstarDirectionalParameters: AlgorithmParams
     {
-        private const float DefaultValue = 1f;
-        private static string[] _displayNames = { "Distance", "Height", "Turn", "Distance", "Height", "Slope" };
-
-        private static ParamType[] _paramsKeys =
+        protected override float[] DefaultValue => new [] { 1f, 1f, 1f, 1f, 1f, 1f };
+        
+        public override string[] DisplayNames => new [] { "Distance", "Height", "Turn", "Distance", "Height", "Slope" };
+        public override ParamType[] Types => new []
         {
             ParamType.DistanceCost,
             ParamType.HeightCost,
@@ -21,14 +23,16 @@ namespace GENES.PathFinding.Settings.Astar_Directional
             ParamType.SlopeHeuristic
         };
 
-        public AstarDirectionalParameters(DictionarySerializable<ParamType, ParamValue> parameters = null)
+        public AstarDirectionalParameters(IDictionary<ParamType, ParamValue> parameters = null)
         {
-            var values = _displayNames
-                .Select(displayName => new ParamValue { value = DefaultValue, displayName = displayName })
-                .ToArray();
-            this.parameters = parameters ?? new DictionarySerializable<ParamType, ParamValue>(_paramsKeys, values);
+            if (parameters != null)
+                SetParameters(parameters);
+            else
+                SetDefaultValues();
         }
-
+        
+        
+        
         // Escalado de Coste y Heurística
         // Ajusta la penalización o recompensa de cada parámetro
 

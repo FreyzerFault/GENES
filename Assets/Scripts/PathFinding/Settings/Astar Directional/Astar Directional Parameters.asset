@@ -12,29 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f053c84d0f457a448fc2f0812bb5571, type: 3}
   m_Name: Astar Directional Parameters
   m_EditorClassIdentifier: 
-  parameters:
-    pairElements:
-    - key: 0
-      value:
-        value: 1
-        displayName: Distance
-    - key: 1
-      value:
-        value: 1
-        displayName: Height
-    - key: 2
-      value:
-        value: 1
-        displayName: Turn
-    - key: 3
-      value:
-        value: 1
-        displayName: Distance
-    - key: 4
-      value:
-        value: 1
-        displayName: Height
-    - key: 5
-      value:
-        value: 1
-        displayName: Slope
+  parameters: {fileID: 0}

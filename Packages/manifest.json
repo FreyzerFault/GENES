@@ -2,7 +2,7 @@
   "dependencies": {
     "com.atteneder.gltfast": "https://github.com/atteneder/glTFast.git",
     "com.unity.2d.sprite": "1.0.0",
-    "com.unity.cinemachine": "2.10.1",
+    "com.unity.cinemachine": "2.10.3",
     "com.unity.collab-proxy": "2.5.2",
     "com.unity.feature.development": "1.0.2",
     "com.unity.ide.rider": "3.0.31",
@@ -13,7 +13,7 @@
     "com.unity.terrain-tools": "5.1.2",
     "com.unity.timeline": "1.8.7",
     "com.unity.ugui": "2.0.0",
-    "com.unity.visualscripting": "1.9.4",
+    "com.unity.visualscripting": "1.9.5",
     "com.unity.modules.accessibility": "1.0.0",
     "com.unity.modules.ai": "1.0.0",
     "com.unity.modules.androidjni": "1.0.0",

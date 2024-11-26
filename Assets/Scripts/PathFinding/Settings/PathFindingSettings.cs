@@ -1,4 +1,5 @@
 using System;
+using DavidUtils.ExtensionMethods;
 using GENES.PathFinding.Algorithms;
 using GENES.PathFinding.Settings.Astar;
 using GENES.PathFinding.Settings.Astar_Directional;
