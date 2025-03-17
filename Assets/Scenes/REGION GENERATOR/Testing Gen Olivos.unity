@@ -1840,7 +1840,7 @@ MonoBehaviour:
   - {r: 0.23875391, g: 1, b: 0, a: 1}
   - {r: 0.23875391, g: 1, b: 0, a: 1}
   terrainHeightOffset: 0.1
-  spherePrefab: {fileID: 8275781882222613945, guid: 626c4feb343a78b4d9fec25f1cc79f14, type: 3}
+  spherePrefab: {fileID: 8275781882222613945, guid: 9820b02272b39c04db85ec7ddb241ac4, type: 3}
   pointPrefab: {fileID: 2056056856686600614, guid: 73ef3babd79182541b0828d62b3e0d74, type: 3}
   circlePrefab: {fileID: 2189909995984353592, guid: d7dc7256122350f4590787a93fdb0238, type: 3}
   renderMode: 2
@@ -3057,7 +3057,7 @@ MonoBehaviour:
     paletteRange: 20
   colors: []
   terrainHeightOffset: 0.1
-  spherePrefab: {fileID: 8275781882222613945, guid: 626c4feb343a78b4d9fec25f1cc79f14, type: 3}
+  spherePrefab: {fileID: 8275781882222613945, guid: 9820b02272b39c04db85ec7ddb241ac4, type: 3}
   pointPrefab: {fileID: 2056056856686600614, guid: 73ef3babd79182541b0828d62b3e0d74, type: 3}
   circlePrefab: {fileID: 2189909995984353592, guid: d7dc7256122350f4590787a93fdb0238, type: 3}
   renderMode: 2
@@ -5324,7 +5324,7 @@ MonoBehaviour:
       ended: 0
     polygons: []
   animatedVoronoi: 1
-  voronoiRenderer: {fileID: 0}
+  voronoiRenderer: {fileID: 2070962706}
   voronoiRenderMode: 2
   canHoverPolygon: 1
   canSelectPolygon: 1
@@ -5352,7 +5352,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   runOnStart: 1
-  autoRun: 0
+  autoRun: 1
   waitSeconds: 1
   initialSeed: 999
   numFincas: 9

@@ -43,7 +43,7 @@ namespace GENES.TreesGeneration.Tests
 
 		protected override void InitializeTests() => AddTest(
 			RunGenerator,
-			new TestInfo("TestCoroutine", GeneratorSuccessCondition)
+			new TestInfo("Generate Regions", GeneratorSuccessCondition)
 		);
 
 		private IEnumerator RunGenerator()

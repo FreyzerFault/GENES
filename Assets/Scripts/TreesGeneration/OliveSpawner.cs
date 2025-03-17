@@ -1,12 +1,17 @@
-﻿using DavidUtils.Spawning;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using DavidUtils.ExtensionMethods;
+using DavidUtils.Spawning;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace GENES.TreesGeneration
 {
-	[RequireComponent(typeof(OliveGroveGenerator))]
+	[RequireComponent(typeof(RegionGenerator))]
 	public class OliveSpawner : SpawnerBoxInTerrain
 	{
-		[SerializeField] private Spawneable[] olivoPrefabs;
+		[SerializeField] private Spawneable[] olivoPrefabs = Array.Empty<Spawneable>();
 
 		private RegionGenerator _generator;
 
@@ -19,7 +24,6 @@ namespace GENES.TreesGeneration
 		protected override void OnEnable()
 		{
 			base.OnEnable();
-			_generator.OnEndedGeneration += HandleOnEndedGeneration;
 			_generator.OnRegionPopulated += HandleOnRegionPopulated;
 			_generator.OnClear += Clear;
 		}
@@ -27,23 +31,24 @@ namespace GENES.TreesGeneration
 		protected override void OnDisable()
 		{
 			base.OnDisable();
-			_generator.OnEndedGeneration -= HandleOnEndedGeneration;
 			_generator.OnRegionPopulated -= HandleOnRegionPopulated;
 			_generator.OnClear -= Clear;
 		}
 
 		private void HandleOnRegionPopulated(RegionData data)
 		{
-			if (data is OliveRegionData oliveData)
-				Spawn2D(oliveData.OlivosInterior);
+			if (data is OliveRegionData oliveData) 
+				Spawn2D(oliveData.treePositions.Select(t => AABB2D.NormalizedToBoundsSpace(t)));
 		}
 
-		// TODO Ya veremos que hago cuando se completa
-		private void HandleOnEndedGeneration(RegionData[] data) => Debug.Log("Ended Generation");
-
-		protected override Spawneable InstantiateItem(Spawneable prefab = null) =>
+		protected override Spawneable InstantiateItem(Spawneable prefab = null) => 
 			base.InstantiateItem(prefab ?? GetRandomModel());
 
-		private Spawneable GetRandomModel() => olivoPrefabs[Random.Range(0, olivoPrefabs.Length)];
+		private Spawneable GetRandomModel()
+		{
+			if (olivoPrefabs.IsNullOrEmpty())
+				Debug.LogError("No hay prefabs de olivos asignados, asignalos en el inspector", this);
+			return olivoPrefabs?[Random.Range(0, olivoPrefabs.Length)];
+		}
 	}
 }

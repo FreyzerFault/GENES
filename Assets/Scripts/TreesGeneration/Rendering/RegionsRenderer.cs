@@ -18,11 +18,17 @@ namespace GENES.TreesGeneration.Rendering
 
         private void OnValidate() => renderObjs.ForEach(UpdateCommonProperties);
 
-        private void OnEnable()
+        private void Start()
         {
             regionGenerator.OnRegionPopulated += InstantiateRendererWithData;
             regionGenerator.OnClear += Clear;
-            // regionGenerator.OnEndedGeneration += ;
+        }
+
+        private void OnEnable()
+        {
+            if (regionGenerator == null) return;
+            regionGenerator.OnRegionPopulated += InstantiateRendererWithData;
+            regionGenerator.OnClear += Clear;
         }
 
         private void OnDisable()
@@ -51,7 +57,6 @@ namespace GENES.TreesGeneration.Rendering
         
         public void UpdateAllRegions(RegionData[] data)
         {
-            Debug.Log($"Update All Regions (data: {data.Length})", this);
             if (data.Length < renderObjs.Count)
                 renderObjs.RemoveRange(data.Length, renderObjs.Count - data.Length);
             else

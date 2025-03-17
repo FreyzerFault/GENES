@@ -10,7 +10,7 @@ using UnityEngine;
 
 namespace GENES.TreesGeneration.Tests
 {
-	[RequireComponent(typeof(OliveGroveGenerator))]
+	[RequireComponent(typeof(OliveSpawner))]
 	public class GenOlivosOnTerrainTest : TestRunner
 	{
 		private RegionGenerator _generator;

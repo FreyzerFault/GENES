@@ -190,12 +190,20 @@ namespace GENES.TreesGeneration
             regionsRenderer ??= Renderer ?? UnityUtils.InstantiateObject<RegionsRenderer>(transform, "Regions Renderer");
             regionsRenderer.ProjectedOnTerrain = true;
             regionsRenderer.regionGenerator = this;
+            
+            if (Terrain.activeTerrain != null)
+                regionsRenderer.transform.position =
+                    Terrain.activeTerrain.transform.position + Vector3.up * Terrain.activeTerrain.terrainData.size.y;
+            else
+                regionsRenderer.transform.position += Vector3.up * 10;
+
         }
 
         protected override void UpdateRenderer()
         {
             base.UpdateRenderer();
-            Renderer.UpdateAllRegions(Data);
+            if (Renderer != null)
+                Renderer.UpdateAllRegions(Data);
         }
 
 
